@@ -1,8 +1,6 @@
 #include <iostream>
 #include <GaiaCore.h>
 
-
-
 #ifdef _DEBUG
 int main()
 #else
@@ -13,5 +11,9 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 {
     GaiaCore* g = new GaiaCore();
     g->init();
+	g->run();
+	g->close();
     std::cout << "Hello World!\n";
+
+	return 0;
 }

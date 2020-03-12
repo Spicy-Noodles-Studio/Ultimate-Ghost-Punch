@@ -102,16 +102,34 @@
     </Link>
     <PreLinkEvent>
       <Command>
-</Command>
+      </Command>
     </PreLinkEvent>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"</Command>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX_d.dll" "$(SolutionDir)Bin" /y
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -130,13 +148,31 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)B
       </Command>
     </PreLinkEvent>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"</Command>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX_d.dll" "$(SolutionDir)Bin" /y
+</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,16 +192,33 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)B
     </Link>
     <PreLinkEvent>
       <Command>
-</Command>
+      </Command>
     </PreLinkEvent>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"</Command>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX.dll" "$(SolutionDir)Bin" /y</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,13 +241,30 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bi
       </Command>
     </PreLinkEvent>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"
-xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"</Command>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX.dll" "$(SolutionDir)Bin" /y</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
