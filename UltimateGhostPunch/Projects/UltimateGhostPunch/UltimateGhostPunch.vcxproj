@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\HealthComponent.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\HealthComponent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -132,7 +136,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;%(AdditionalIncludeDirectories);$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Build\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Build\dependencies\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>Gaia_d_$(Platform).lib</AdditionalDependencies>
     </Link>
