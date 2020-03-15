@@ -1,6 +1,8 @@
 #include <iostream>
 #include <GaiaCore.h>
 
+#include "Attack.h"
+
 #ifdef _DEBUG
 int main()
 #else
@@ -9,11 +11,14 @@ int WINAPI
 WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
+	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
+
     GaiaCore* g = new GaiaCore();
     g->init();
 	g->run();
 	g->close();
-    std::cout << "Hello World!\n";
+
+	delete g;
 
 	return 0;
 }
