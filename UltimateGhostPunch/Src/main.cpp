@@ -2,6 +2,7 @@
 #include <GaiaCore.h>
 
 #include "Attack.h"
+#include "Movement.h"
 
 #ifdef _DEBUG
 int main()
@@ -12,6 +13,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 #endif
 {
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
+	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
 
     GaiaCore* g = new GaiaCore();
     g->init();

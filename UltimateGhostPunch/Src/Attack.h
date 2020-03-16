@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef ATTACK_H
 #define ATTACK_H
 
@@ -9,7 +8,7 @@
 class Attack : public UserComponent
 {
 public:
-	Attack(GameObject* g);
+	Attack(GameObject* gameObject);
 };
 
-#endif 
+#endif
