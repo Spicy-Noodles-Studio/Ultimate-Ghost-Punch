@@ -12,6 +12,7 @@ int WINAPI
 WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
+	ComponentManager::GetInstance()->registerComponent<GhostMovement>("GhostMovement");
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
 	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
 	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");

@@ -48,8 +48,14 @@
         {
             "ComponentName": "PlayerController",
             "ComponentProperties": {
-                "keyboard": "0",
+                "keyboard": "1",
                 "index": "0"
+            }
+        },
+        {
+            "ComponentName": "GhostMovement",
+            "ComponentProperties": {
+                "maxSpeed": "10"
             }
         }
     ]
