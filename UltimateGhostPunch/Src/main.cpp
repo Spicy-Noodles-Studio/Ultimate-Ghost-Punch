@@ -2,7 +2,6 @@
 #include <GaiaCore.h>
 
 #include "Attack.h"
-#include "GhostMovement.h"
 #include "PlayerController.h"
 
 #ifdef _DEBUG

@@ -10,6 +10,8 @@ PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameO
 void PlayerController::start()
 {
 	movement = gameObject->getComponent<Movement>();
+	ghostMovement = gameObject->getComponent<GhostMovement>();
+	ghost = false;
 }
 
 void PlayerController::update(float deltaTime)
@@ -20,10 +22,18 @@ void PlayerController::update(float deltaTime)
 
 	if (usingKeyboard)
 	{
+
 		if (InputSystem::GetInstance()->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
 		else if (InputSystem::GetInstance()->isKeyPressed("D"))
 			dir = Vector3(1, 0, 0);
+
+		if (ghost) {
+			if (InputSystem::GetInstance()->isKeyPressed("W"))
+				dir += Vector3(0, -1, 0);
+			else if (InputSystem::GetInstance()->isKeyPressed("S"))
+				dir += Vector3(0, 1, 0);
+		}
 	}
 	else
 	{
@@ -31,9 +41,20 @@ void PlayerController::update(float deltaTime)
 			dir = Vector3(-1, 0, 0);
 		else if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).first > 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Right"))
 			dir = Vector3(1, 0, 0);
+
+		if (ghost) {
+			if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).second < 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Up"))
+				dir += Vector3(0, -1, 0);
+			else if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).second > 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Down"))
+				dir += Vector3(0, 1, 0);
+		}
 	}
 
-	movement->move(dir);
+	if (!ghost) {
+		movement->move(dir);
+	}
+	else
+		ghostMovement->move(dir);
 }
 
 void PlayerController::handleData(ComponentData* data)

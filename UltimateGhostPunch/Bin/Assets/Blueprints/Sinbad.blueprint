@@ -48,24 +48,8 @@
         {
             "ComponentName": "PlayerController",
             "ComponentProperties": {
-                "keyboard": "0",
+                "keyboard": "1",
                 "index": "0"
-            }
-        },
-        {
-            "ComponentName": "RigidBody",
-            "ComponentProperties": {
-                "shape": "Box",
-                "mass": "3",
-                "friction": "0",
-                "restitution": "0",
-                "damping": "0",
-                "angularDamping": "0",
-                "gravity": "0 0 0",
-                "offset": "0 0 0",
-                "size": "1 1 1",
-                "kinematic": "0",
-                "trigger": "1"
             }
         },
         {

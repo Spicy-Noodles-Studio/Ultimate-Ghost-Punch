@@ -6,6 +6,7 @@
 #include <GameObject.h>
 
 #include "Movement.h"
+#include "GhostMovement.h"
 
 class PlayerController : public UserComponent
 {
@@ -13,7 +14,10 @@ private:
 	int playerIndex;
 	bool usingKeyboard;
 
+	bool ghost;
+
 	Movement* movement;
+	GhostMovement* ghostMovement;
 
 public:
 	PlayerController(GameObject* gameObject);
