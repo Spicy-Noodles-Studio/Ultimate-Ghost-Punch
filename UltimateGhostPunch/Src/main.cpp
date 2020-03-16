@@ -3,6 +3,7 @@
 
 #include "Attack.h"
 #include "GhostMovement.h"
+#include "PlayerController.h"
 
 #ifdef _DEBUG
 int main()
@@ -14,6 +15,8 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 {
 	ComponentManager::GetInstance()->registerComponent<GhostMovement>("GhostMovement");
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
+	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
+	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");
 
     GaiaCore* g = new GaiaCore();
     g->init();

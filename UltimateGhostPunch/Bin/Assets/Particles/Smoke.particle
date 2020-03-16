@@ -1,5 +1,6 @@
 particle_system Smoke
-{ // p. s. attributes
+{ 
+  // p. s. attributes
     renderer billboard
     billboard_type point
     // billboard_rotation_type texcoord
@@ -9,36 +10,41 @@ particle_system Smoke
     quota 500
 
     emitter Point
-    { // e. attributes
-     direction 0 1 0
-     angle 35
+    { 
+      // e. attributes
+      direction 0 1 0
+      angle 35
       emission_rate 15
-     time_to_live 6
-     velocity_min 50
-     velocity_max 80
+      time_to_live 6
+      velocity_min 50
+      velocity_max 80
     }
 
 
     affector ColourImage
-    { // a. attributes
+    { 
+      // a. attributes
       image smokecolors.png
     }
 
     affector Rotator // la textura
-    { // a. attributes
-    rotation_range_start 0
-    rotation_range_end 360
+    { 
+      // a. attributes
+      rotation_range_start 0
+      rotation_range_end 360
       rotation_speed_range_start -60
       rotation_speed_range_end 200
     }
 
     affector Scaler
-    { // a. attributes
+    { 
+      // a. attributes
       rate 50
     }
     
     affector DirectionRandomiser
-    { // a. attributes
+    { 
+      // a. attributes
       randomness 5
     }
 }

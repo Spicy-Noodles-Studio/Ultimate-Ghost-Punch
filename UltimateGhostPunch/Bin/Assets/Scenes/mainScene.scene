@@ -51,13 +51,14 @@
                 {
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": {
-                        "mesh": "knot cube.mesh"
+                        "mesh": "cube cube.mesh"
                     }
                 },
                 {
                     "ComponentName": "RigidBody",
                     "ComponentProperties": {
                         "shape": "Box",
+                        "scale": "50 50 50",
                         "mass": "0"
                     }
                 }
@@ -65,41 +66,23 @@
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Nudo 1",
-            "Tag": "nudo1",
-            "BlueprintPath": "Nudo",
-            "Children": [
+            "ObjectName": "Cubo 1",
+            "Tag": "cubo1",
+            "BlueprintPath": "Cubo",
+            "ComponentModifications": [
                 {
-                    "ObjectType": "BLUEPRINT",
-                    "ObjectName": "Nudo 2",
-                    "Tag": "nudo2",
-                    "BlueprintPath": "Nudo",
-                    "ComponentModifications": [
-                        {
-                            "ComponentName": "RigidBody",
-                            "ComponentProperties":{
-                                "kinematic" : "0",
-                                "size": "1 1 1"
-                            }
-                        },
-                        {
-                            "ComponentName": "Transform",
-                            "ComponentProperties":{
-                                "position" : "-150 0 -400",
-                                "scale" : "1 1 1",
-                                "rotation" : " 45 0 45"
-                            }
-                        }
-                    ]
+                    "ComponentName": "Transform",
+                    "ComponentProperties": {
+                        "position" : "-150 -10 -500"
+                    }
                 }
             ]
-            
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Nudo 3",
-            "Tag": "nudo3",
-            "BlueprintPath": "Nudo",
+            "ObjectName": "Cubo 2",
+            "Tag": "cubo2",
+            "BlueprintPath": "Cubo",
             "ComponentModifications": [
                 {
                     "ComponentName": "Transform",
@@ -113,17 +96,7 @@
             "ObjectType": "BLUEPRINT",
             "ObjectName": "Sinbad",
             "Tag": "sinbad",
-            "BlueprintPath": "Sinbad",
-            "Components" : [
-                {
-                    "ComponentName": "SoundEmitter",
-                    "ComponentProperties": {
-                        "volume" : "1",
-                        "pitch" : "1",
-                        "playSound" : "prueba2"
-                    }
-                }
-            ]
+            "BlueprintPath": "Sinbad"
         }
     ]
 }
