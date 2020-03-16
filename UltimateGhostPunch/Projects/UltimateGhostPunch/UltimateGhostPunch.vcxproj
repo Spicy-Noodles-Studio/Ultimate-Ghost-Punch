@@ -22,10 +22,12 @@
     <ClCompile Include="..\..\Src\Attack.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
     <ClCompile Include="..\..\Src\Movement.cpp" />
+    <ClCompile Include="..\..\Src\PlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
+    <ClInclude Include="..\..\Src\PlayerController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -15,10 +15,10 @@ private:
 public:
 	Movement(GameObject* gameObject);
 
-	virtual void update(float deltaTime);
+	void move(Vector3 dir);
+	
+	virtual void start();
 	virtual void handleData(ComponentData* data);
-
-	void move(Vector3 force);
 };
 
 #endif

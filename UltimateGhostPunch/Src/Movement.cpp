@@ -1,24 +1,19 @@
 #include "Movement.h"
-#include <InputSystem.h>
 #include <sstream>
 
 Movement::Movement(GameObject* gameObject) : UserComponent(gameObject)
 {
-	rigidBody = gameObject->getComponent<RigidBody>();
+
 }
 
-void Movement::update(float deltaTime)
+void Movement::move(Vector3 dir)
 {
-	UserComponent::update(deltaTime);
+	rigidBody->addForce(dir * force);
+}
 
-	Vector3 dir = Vector3(0, 0, 0);
-
-	if (InputSystem::GetInstance()->isKeyPressed("A"))
-		dir = Vector3(-1, 0, 0);
-	else if (InputSystem::GetInstance()->isKeyPressed("D"))
-		dir = Vector3(1, 0, 0);
-
-	move(dir * force);
+void Movement::start()
+{
+	rigidBody = gameObject->getComponent<RigidBody>();
 }
 
 void Movement::handleData(ComponentData* data)
@@ -32,9 +27,4 @@ void Movement::handleData(ComponentData* data)
 			ss >> force;
 		}
 	}
-}
-
-void Movement::move(Vector3 force)
-{
-	rigidBody->addForce(force);
 }

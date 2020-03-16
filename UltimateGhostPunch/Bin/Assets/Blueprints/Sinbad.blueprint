@@ -44,6 +44,13 @@
             "ComponentProperties": {
                 "force": "100"
             }
+        },
+        {
+            "ComponentName": "PlayerController",
+            "ComponentProperties": {
+                "keyboard": "0",
+                "index": "0"
+            }
         }
     ]
 }
