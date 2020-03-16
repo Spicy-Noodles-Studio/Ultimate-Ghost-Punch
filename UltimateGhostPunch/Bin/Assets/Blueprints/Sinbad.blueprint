@@ -57,6 +57,15 @@
             "ComponentProperties": {
                 "maxSpeed": "10"
             }
+        },
+        {
+            "ComponentName": "Health",
+            "ComponentProperties": {
+                "health": "50",
+                "resHealth": "10",
+                "ghostTime": "7",
+                "invTime": "3"
+            }
         }
     ]
 }

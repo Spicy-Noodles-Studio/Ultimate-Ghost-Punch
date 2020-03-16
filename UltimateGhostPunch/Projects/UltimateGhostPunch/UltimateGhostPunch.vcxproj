@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Health.cpp" />
     <ClCompile Include="..\..\Src\Attack.cpp" />
     <ClCompile Include="..\..\Src\GhostMovement.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
@@ -30,6 +31,9 @@
     <ClInclude Include="..\..\Src\GhostMovement.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Health.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

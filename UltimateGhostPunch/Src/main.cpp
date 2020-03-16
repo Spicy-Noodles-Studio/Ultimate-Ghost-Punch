@@ -1,8 +1,9 @@
 #include <iostream>
-#include <GaiaCore.h>
+#include "GaiaCore.h"
 
 #include "Attack.h"
 #include "PlayerController.h"
+#include "Health.h"
 
 #ifdef _DEBUG
 int main()
@@ -16,9 +17,10 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
 	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
 	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");
+	ComponentManager::GetInstance()->registerComponent<Health>("Health");
 
-    GaiaCore* g = new GaiaCore();
-    g->init();
+	GaiaCore* g = new GaiaCore();
+	g->init();
 	g->run();
 	g->close();
 
