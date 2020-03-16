@@ -19,11 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\HealthComponent.cpp" />
+    <ClCompile Include="..\..\Src\Health.cpp" />
+    <ClCompile Include="..\..\Src\Attack.cpp" />
+    <ClCompile Include="..\..\Src\GhostMovement.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
+    <ClCompile Include="..\..\Src\Movement.cpp" />
+    <ClCompile Include="..\..\Src\PlayerController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\HealthComponent.h" />
+    <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\GhostMovement.h" />
+    <ClInclude Include="..\..\Src\Movement.h" />
+    <ClInclude Include="..\..\Src\PlayerController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Health.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -111,9 +121,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SDL_MAIN_HANDLED;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\inlcude;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Buildx86\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Buildx86\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Src\$(ProjectName);$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\inlcude;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Buildx86\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Buildx86\dependencies\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,9 +141,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;%(AdditionalIncludeDirectories);$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Build\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Build\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Src\$(ProjectName);$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Build\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Build\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,9 +163,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SDL_MAIN_HANDLED;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\inlcude;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Buildx86\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Buildx86\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Src\$(ProjectName);$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\inlcude;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Buildx86\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Buildx86\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Buildx86\dependencies\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -177,9 +187,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SDL_MAIN_HANDLED;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Build\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Build\dependencies\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Src\$(ProjectName);$(SolutionDir)Dependencies\Gaia\MotorGaia\Src\Gaia\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\OgreMain\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Components\RTShaderSystem\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\bullet3-2.89\src;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\fmod-2.00.07\build\core\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\json-3.7.3\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\ogre-1.12.5\Build\Dependencies\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\Build\cegui\include;$(SolutionDir)Dependencies\Gaia\MotorGaia\Dependencies\cegui-0.8.7\dependencies\Build\dependencies\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

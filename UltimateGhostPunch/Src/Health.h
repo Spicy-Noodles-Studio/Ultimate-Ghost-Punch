@@ -2,11 +2,11 @@
 
 #include "UserComponent.h"
 
-class HealthComponent : public UserComponent
+class Health : public UserComponent
 {
 public:
-	HealthComponent(GameObject* gameObject);
-	virtual ~HealthComponent();
+	Health(GameObject* gameObject);
+	virtual ~Health();
 
 	int getHealth();
 	void setHealth(int health);
@@ -26,7 +26,8 @@ private:
 	int health; // 1 life = 10 health points
 	int resurrectionHealth;
 
-	int invencibleTime;
+	float ghostTime;
+	float invencibleTime;
 
 	bool alive; // player alive
 
