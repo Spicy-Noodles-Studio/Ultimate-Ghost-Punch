@@ -7,21 +7,20 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "0 0 -200",
-                "scale": "10 10 10",
-                "rotation": "-90 180 0"
+                "position": "200 0 -400",
+                "scale": "10 10 10"
             }
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": {
-                "mesh": "sinbad Sphere.mesh"
+                "mesh": "sinbad Sinbad.mesh"
             }
         },
         {
             "ComponentName": "Animator",
             "ComponentProperties": {
-                "anim": "Run sinbad"
+                "anim": "Dance sinbad"
             }
         }
     ]

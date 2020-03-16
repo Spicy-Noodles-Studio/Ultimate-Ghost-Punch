@@ -51,13 +51,14 @@
                 {
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": {
-                        "mesh": "knot cube.mesh"
+                        "mesh": "cube cube.mesh"
                     }
                 },
                 {
                     "ComponentName": "RigidBody",
                     "ComponentProperties": {
                         "shape": "Box",
+                        "scale": "50 50 50",
                         "mass": "0"
                     }
                 }
@@ -65,21 +66,20 @@
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Nudo 1",
-            "Tag": "nudo1",
-            "BlueprintPath": "Nudo",
+            "ObjectName": "Cubo 1",
+            "Tag": "cubo1",
+            "BlueprintPath": "Cubo",
             "Children": [
                 {
                     "ObjectType": "BLUEPRINT",
-                    "ObjectName": "Nudo 2",
-                    "Tag": "nudo2",
-                    "BlueprintPath": "Nudo",
+                    "ObjectName": "Cubo 2",
+                    "Tag": "cubo2",
+                    "BlueprintPath": "Cubo",
                     "ComponentModifications": [
                         {
                             "ComponentName": "RigidBody",
                             "ComponentProperties":{
-                                "kinematic" : "0",
-                                "size": "1 1 1"
+                                "kinematic" : "0"
                             }
                         },
                         {
@@ -93,13 +93,12 @@
                     ]
                 }
             ]
-            
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Nudo 3",
-            "Tag": "nudo3",
-            "BlueprintPath": "Nudo",
+            "ObjectName": "Cubo 3",
+            "Tag": "cubo3",
+            "BlueprintPath": "Cubo",
             "ComponentModifications": [
                 {
                     "ComponentName": "Transform",
@@ -121,6 +120,13 @@
                         "volume" : "1",
                         "pitch" : "1",
                         "playSound" : "prueba2"
+                    }
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties": {
+                        "emitter":"Smoke",
+                        "start":"true"
                     }
                 }
             ]
