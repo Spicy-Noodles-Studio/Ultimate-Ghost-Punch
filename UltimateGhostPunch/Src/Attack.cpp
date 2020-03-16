@@ -1,5 +1,6 @@
 #include "Attack.h"
 
-Attack::Attack(GameObject* g) : UserComponent(g)
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
+
 }
