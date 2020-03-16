@@ -7,7 +7,7 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "0 0 -200",
+                "position": "0 0 -300",
                 "scale": "10 10 10",
                 "rotation": "-90 180 0"
             }
@@ -22,6 +22,28 @@
             "ComponentName": "Animator",
             "ComponentProperties": {
                 "anim": "Run sinbad"
+            }
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties": {
+                "shape": "Box",
+                "mass": "3",
+                "friction": "0",
+                "restitution": "0",
+                "damping": "0",
+                "angularDamping": "0",
+                "gravity": "0 0 0",
+                "offset": "0 0 0",
+                "size": "1 1 1",
+                "kinematic": "0",
+                "trigger": "1"
+            }
+        },
+        {
+            "ComponentName": "GhostMovement",
+            "ComponentProperties": {
+                "maxSpeed": "10"
             }
         }
     ]

@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Attack.cpp" />
+    <ClCompile Include="..\..\Src\GhostMovement.cpp" />
     <ClCompile Include="..\..\Src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\GhostMovement.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

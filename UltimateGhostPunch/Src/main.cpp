@@ -2,6 +2,7 @@
 #include <GaiaCore.h>
 
 #include "Attack.h"
+#include "GhostMovement.h"
 
 #ifdef _DEBUG
 int main()
@@ -11,6 +12,7 @@ int WINAPI
 WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
+	ComponentManager::GetInstance()->registerComponent<GhostMovement>("GhostMovement");
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
 
     GaiaCore* g = new GaiaCore();
