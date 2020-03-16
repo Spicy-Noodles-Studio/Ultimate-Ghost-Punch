@@ -8,12 +8,29 @@ public:
 	HealthComponent(GameObject* gameObject);
 	virtual ~HealthComponent();
 
+	int getHealth();
+	void setHealth(int health);
+
+	bool isAlive();
+	bool isGhost();
+	bool isInvencible();
+
 private:
-	float health;
+	void recieveDamage(int damage);
+	void die();
+	void resurrect();
 
-	bool alive;
+	void activateGhost();
+
+private:
+	int health; // 1 life = 10 health points
+	int resurrectionHealth;
+
+	int invencibleTime;
+
+	bool alive; // player alive
+
+	bool ghost; // !knight alive
 	bool hasGhost;
-
-	void changeHealth(float value);
-
+	bool invencible;
 };
