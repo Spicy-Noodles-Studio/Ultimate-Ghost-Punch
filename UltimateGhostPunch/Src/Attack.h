@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef ATTACK_H
 #define ATTACK_H
 
@@ -29,8 +28,7 @@ private:
 
 	void attack(float newCooldown);
 public:
-	Attack(GameObject* g);
-
+	Attack(GameObject* gameObject);
 
 	virtual void start();
 	virtual void update(float deltaTime);
@@ -40,4 +38,4 @@ public:
 	void strongAttack();
 };
 
-#endif 
+#endif

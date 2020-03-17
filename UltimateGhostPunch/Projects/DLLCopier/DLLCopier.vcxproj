@@ -120,6 +120,7 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y
@@ -163,6 +164,7 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y

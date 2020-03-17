@@ -7,21 +7,64 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "0 0 -200",
-                "scale": "10 10 10",
-                "rotation": "-90 180 0"
+                "position": "0 0 -400",
+                "scale": "10 10 10"
             }
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": {
-                "mesh": "sinbad Sphere.mesh"
+                "mesh": "sinbad Sinbad.mesh"
             }
         },
         {
             "ComponentName": "Animator",
             "ComponentProperties": {
-                "anim": "Run sinbad"
+                "anim": "Dance sinbad"
+            }
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties": {
+                "shape": "Box",
+                "mass": "4",
+                "friction": "1",
+                "restitution": "0",
+                "damping": "0.4",
+                "angularDamping": "0",
+                "gravity": "0 -10 0",
+                "offset": "0 0 0",
+                "scale": "5 5 5",
+                "kinematic": "0",
+                "trigger": "0"
+            }
+        },
+        {
+            "ComponentName": "Movement",
+            "ComponentProperties": {
+                "force": "100"
+            }
+        },
+        {
+            "ComponentName": "PlayerController",
+            "ComponentProperties": {
+                "keyboard": "1",
+                "index": "0"
+            }
+        },
+        {
+            "ComponentName": "GhostMovement",
+            "ComponentProperties": {
+                "maxSpeed": "10"
+            }
+        },
+        {
+            "ComponentName": "Health",
+            "ComponentProperties": {
+                "health": "50",
+                "resHealth": "10",
+                "ghostTime": "7",
+                "invTime": "3"
             }
         }
     ]

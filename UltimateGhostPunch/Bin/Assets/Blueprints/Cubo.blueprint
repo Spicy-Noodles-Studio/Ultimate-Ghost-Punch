@@ -1,7 +1,7 @@
 {
     "ObjectType": "GAMEOBJECT",
-    "ObjectName": "Nudo",
-    "Tag": "nudo",
+    "ObjectName": "Cubo",
+    "Tag": "cubo",
     "Components":
     [
         {
@@ -15,7 +15,7 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": {
-                "mesh": "knot cube.mesh"
+                "mesh": "cube cube.mesh"
             }
         },
         {
@@ -29,7 +29,7 @@
                 "angularDamping": "0",
                 "gravity": "0 -10 0",
                 "offset": "0 0 0",
-                "scale": "100 100 100",
+                "scale": "50 50 50",
                 "kinematic": "0",
                 "trigger": "0"
             }
