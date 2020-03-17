@@ -3,8 +3,9 @@
 #define ATTACK_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
 
+class RigidBody;
+class GameObject;
 
 class Attack : public UserComponent
 {
@@ -26,13 +27,15 @@ private:
 
 	AttackType currentAttack = NOT_ATTACKING;
 
+	RigidBody* attackTrigger;
+
 	void attack(float newCooldown);
 public:
 	Attack(GameObject* gameObject);
 
 	virtual void start();
 	virtual void update(float deltaTime);
-	virtual void onTriggerEnter(GameObject* other);
+	virtual void onObjectStay(GameObject* other);
 
 	void quickAttack();
 	void strongAttack();

@@ -1,6 +1,12 @@
 #include "PlayerController.h"
-#include <InputSystem.h>
 #include <sstream>
+#include <GameObject.h>
+
+#include "InputSystem.h"
+#include "Movement.h"
+#include "GhostMovement.h"
+#include "Attack.h"
+#include "GhostManager.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -9,9 +15,14 @@ PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameO
 
 void PlayerController::start()
 {
+	inputSystem = InputSystem::GetInstance();
+
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
-	ghost = false;
+	ghost = gameObject->getComponent<GhostManager>();
+
+	GameObject* aux = gameObject->findChildrenWithTag("attackCollider")[0];
+	if (aux != nullptr) attack = aux->getComponent<Attack>();
 }
 
 void PlayerController::update(float deltaTime)
@@ -23,38 +34,54 @@ void PlayerController::update(float deltaTime)
 	if (usingKeyboard)
 	{
 
-		if (InputSystem::GetInstance()->isKeyPressed("A"))
+		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
-		else if (InputSystem::GetInstance()->isKeyPressed("D"))
+		else if (inputSystem->isKeyPressed("D"))
 			dir = Vector3(1, 0, 0);
 
-		if (ghost) {
-			if (InputSystem::GetInstance()->isKeyPressed("W"))
-				dir += Vector3(0, -1, 0);
-			else if (InputSystem::GetInstance()->isKeyPressed("S"))
+		if (ghost != nullptr && ghost->isGhost()) {
+			if (inputSystem->isKeyPressed("W"))
 				dir += Vector3(0, 1, 0);
+			else if (inputSystem->isKeyPressed("S"))
+				dir += Vector3(0, -1, 0);
+		}
+
+		if (inputSystem->getMouseButtonClick('l')) {
+			attack->quickAttack();
+		}
+
+		else if (inputSystem->getMouseButtonClick('r')) {
+			if (attack != nullptr) attack->strongAttack();
 		}
 	}
 	else
 	{
-		if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).first < 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Left"))
+		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left"))
 			dir = Vector3(-1, 0, 0);
-		else if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).first > 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Right"))
+		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right"))
 			dir = Vector3(1, 0, 0);
 
-		if (ghost) {
-			if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).second < 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Up"))
-				dir += Vector3(0, -1, 0);
-			else if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).second > 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Down"))
+		if (ghost != nullptr && ghost->isGhost()) {
+			if (inputSystem->getLeftJoystick(playerIndex).second < 0 || inputSystem->isButtonPressed(playerIndex, "Up"))
 				dir += Vector3(0, 1, 0);
+			else if (inputSystem->getLeftJoystick(playerIndex).second > 0 || inputSystem->isButtonPressed(playerIndex, "Down"))
+				dir += Vector3(0, -1, 0);
+		}
+
+		if (inputSystem->getButtonPress(playerIndex, "X")) {
+			if (attack != nullptr) attack->quickAttack();
+		}
+
+		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
+			if (attack != nullptr) attack->strongAttack();
 		}
 	}
 
 	if (!ghost) {
-		movement->move(dir);
+		if (movement != nullptr) movement->move(dir);
 	}
 	else
-		ghostMovement->move(dir);
+		if (ghostMovement != nullptr) ghostMovement->move(dir);
 }
 
 void PlayerController::handleData(ComponentData* data)

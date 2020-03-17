@@ -3,10 +3,13 @@
 #define PLAYER_CONTROLLER_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
 
-#include "Movement.h"
-#include "GhostMovement.h"
+class GameObject;
+class InputSystem;
+class GhostMovement;
+class Movement;
+class Attack;
+class GhostManager;
 
 class PlayerController : public UserComponent
 {
@@ -14,10 +17,12 @@ private:
 	int playerIndex;
 	bool usingKeyboard;
 
-	bool ghost;
-
 	Movement* movement;
 	GhostMovement* ghostMovement;
+	Attack* attack;
+
+	InputSystem* inputSystem;
+	GhostManager* ghost;
 
 public:
 	PlayerController(GameObject* gameObject);

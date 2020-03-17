@@ -4,8 +4,9 @@
 #define GHOSTMOVE_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
-#include <RigidBody.h>
+
+class RigidBody;
+class GameObject;
 
 class GhostMovement : public UserComponent
 {
@@ -15,7 +16,7 @@ private:
 public:
 	GhostMovement(GameObject* g);
 
-	virtual void awake();
+	virtual void start();
 	void move(Vector3 dir);
 	virtual void handleData(ComponentData* data);
 

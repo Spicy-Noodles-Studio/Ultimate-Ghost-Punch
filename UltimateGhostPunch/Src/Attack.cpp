@@ -1,6 +1,8 @@
+#include <GameObject.h>
+#include <RigidBody.h>
+
+#include "Health.h"
 #include "Attack.h"
-#include "RigidBody.h"
-#include "InputSystem.h"
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -8,21 +10,14 @@ Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 
 void Attack::start()
 {
+	attackTrigger = gameObject->getComponent<RigidBody>();
+
 	// Deactivate the trigger until the attack is used
-	gameObject->getComponent<RigidBody>()->setActive(false);
+	if (attackTrigger != nullptr) attackTrigger->setActive(false);
 }
 
 void Attack::update(float deltaTime)
 {
-	/////	PRUEBAS
-	if (InputSystem::GetInstance()->getKeyPress("z"))
-		quickAttack();
-
-	if (InputSystem::GetInstance()->getKeyPress("x"))
-		strongAttack();
-	/////
-
-
 	// Update the cooldown
 	if (cooldown > 0.0f)
 	{
@@ -39,7 +34,7 @@ void Attack::update(float deltaTime)
 		if (currentAttack != NOT_ATTACKING)
 		{
 			// Deactivate the trigger until the next attack is used
-			gameObject->getComponent<RigidBody>()->setActive(false);
+			attackTrigger->setActive(false);
 
 			// Reset the current attack mode
 			currentAttack = NOT_ATTACKING;
@@ -49,7 +44,7 @@ void Attack::update(float deltaTime)
 
 void Attack::attack(float newCooldown)
 {
-	gameObject->getComponent<RigidBody>()->setActive(true);
+	if(attackTrigger!= nullptr) attackTrigger->setActive(true);
 	cooldown = newCooldown;
 	activeTime = attackDuration;
 	printf("Attack!\n");
@@ -78,12 +73,13 @@ void Attack::strongAttack()
 		printf("Attack on CD...\n");
 }
 
-void Attack::onTriggerEnter(GameObject* other)
+void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "player")
+	if (other->getTag() == "player" && other != gameObject->getParent() && currentAttack != NOT_ATTACKING)//If it hits a player different than myself
 	{
-		printf("You hit a player!\n");
-		float damage;
+		printf("You hit player %s!\n", other->getName().c_str());
+		float damage = 0;
+
 		switch (currentAttack)
 		{
 		case Attack::QUICK:
@@ -94,6 +90,7 @@ void Attack::onTriggerEnter(GameObject* other)
 			break;
 		}
 
-		// other->getComponent<Vida>().receiveDamage(damage);
+		Health* enemyHealth = other->getComponent<Health>();
+		if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
 	}
 }
