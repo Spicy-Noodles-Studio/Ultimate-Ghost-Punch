@@ -32,12 +32,17 @@ void Jump::update(float deltaTime)
 	if (!isGrounded && rigidBody->getTotalForce().y == 0) isGrounded = true;
 	if (isGrounded && rigidBody->getTotalForce().y <= jumpMargin) isGrounded = false;
 
-	if (isJumping && jumpVector != Vector3(0,0,0)) {
-		rigidBody->addForce(jumpVector * jumpForce);
-		jumpForce -= 0.5f;
-		jumpVector = { 0,0,0 };
-		if (jumpForce <= 0.0f) {
-			jumpForce = 0.0f;
+	if (isJumping) {
+		if (jumpVector != Vector3(0, 0, 0)) {
+			rigidBody->addForce(jumpVector * jumpForce);
+			jumpForce -= 0.5f;
+			jumpVector = { 0,0,0 };
+			if (jumpForce <= 0.0f) {
+				jumpForce = 0.0f;
+				isJumping = false;
+			}
+		}
+		else {
 			isJumping = false;
 		}
 	}
