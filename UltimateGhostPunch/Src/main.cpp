@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <GaiaCore.h>
 
@@ -17,7 +18,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
     g->init();
 	g->run();
 	g->close();
-
+	
 	delete g;
 
 	return 0;

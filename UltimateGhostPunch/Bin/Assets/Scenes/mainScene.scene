@@ -14,7 +14,11 @@
                     }
                 },
                 {
-                    "ComponentName": "Transform"
+                    "ComponentName": "Transform",
+                    "ComponentProperties": {
+                        "position": "0 200 60",
+                        "rotation": "-20 0 0"
+                    }
                 },
                 {
                     "ComponentName": "Light",
@@ -58,7 +62,9 @@
                     "ComponentName": "RigidBody",
                     "ComponentProperties": {
                         "shape": "Box",
-                        "mass": "0"
+                        "mass": "0",
+                        "scale": "50 50 50",
+                        "trigger": "0"
                     }
                 }
             ]
@@ -104,26 +110,16 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": {
-                        "position" : "150 -10 -500"
+                        "position" : "50 100 -500"
                     }
                 }
             ]
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Sinbad",
-            "Tag": "sinbad",
-            "BlueprintPath": "Sinbad",
-            "Components" : [
-                {
-                    "ComponentName": "SoundEmitter",
-                    "ComponentProperties": {
-                        "volume" : "1",
-                        "pitch" : "1",
-                        "playSound" : "prueba2"
-                    }
-                }
-            ]
+            "ObjectName": "Player",
+            "Tag": "player",
+            "BlueprintPath": "Player"
         }
     ]
 }

@@ -7,7 +7,7 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "0 0 -400",
+                "position": "0 200 -400",
                 "scale": "0.5 0.5 0.5",
                 "rotation" : "0 45 0"
             }
@@ -17,9 +17,6 @@
             "ComponentProperties": {
                 "mesh": "knot cube.mesh"
             }
-        },
-        {
-            "ComponentName": "Attack"
         },
         {
             "ComponentName": "RigidBody",
@@ -32,7 +29,7 @@
                 "angularDamping": "0",
                 "gravity": "0 -10 0",
                 "offset": "0 0 0",
-                "size": "1 1 1",
+                "scale": "100 100 100",
                 "kinematic": "0",
                 "trigger": "0"
             }

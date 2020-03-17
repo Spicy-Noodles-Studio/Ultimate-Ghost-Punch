@@ -1,0 +1,77 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Player",
+    "Tag": "player",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": {
+                "position": "-50 10 -500",
+                "scale": "10 10 10",
+                "rotation": "-90 180 0"
+            }
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": {
+                "mesh": "sinbad Sphere.mesh"
+            }
+        },
+        {
+            "ComponentName": "Animator",
+            "ComponentProperties": {
+                "anim": "Run sinbad"
+            }
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties": {
+                "shape": "Box",
+                "mass": "3",
+                "friction": "0",
+                "restitution": "0",
+                "damping": "0",
+                "angularDamping": "0",
+                "gravity": "0 0 0",
+                "offset": "0 20 0",
+                "scale": "1 1 2",
+                "kinematic": "0",
+                "trigger": "0"
+            }
+        }
+    ],
+    "Children": [
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Attack Collider",
+            "Tag": "attackCollider",
+            "BlueprintPath": "Nudo",
+            "ComponentModifications": [
+                {
+                    "ComponentName": "RigidBody",
+                    "ComponentProperties":{
+                        "kinematic" : "0",
+                        "trigger": "1",
+                        "scale": "3000 3000 100",
+                        "gravity": "0 0 0"
+                    }
+                },
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":{
+                        "position": "-5 0 0",
+                        "scale": "0.001 0.001 0.05",
+                        "rotation" : "0 0 0"
+                    }
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Attack"
+                }
+            ]
+        }
+    ]
+}
