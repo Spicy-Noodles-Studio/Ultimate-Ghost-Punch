@@ -25,12 +25,14 @@
     <ClCompile Include="..\..\Src\main.cpp" />
     <ClCompile Include="..\..\Src\Movement.cpp" />
     <ClCompile Include="..\..\Src\PlayerController.cpp" />
+    <ClCompile Include="..\..\Src\Jump.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\GhostMovement.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
+    <ClInclude Include="..\..\Src\Jump.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Health.h" />

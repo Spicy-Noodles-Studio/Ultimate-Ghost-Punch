@@ -11,6 +11,7 @@ void PlayerController::start()
 {
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
+	jump = gameObject->getComponent<Jump>();
 	ghost = false;
 }
 
@@ -34,6 +35,7 @@ void PlayerController::update(float deltaTime)
 			else if (InputSystem::GetInstance()->isKeyPressed("S"))
 				dir += Vector3(0, 1, 0);
 		}
+		else if (InputSystem::GetInstance()->isKeyPressed("W")) jump->salta();
 	}
 	else
 	{
@@ -48,6 +50,7 @@ void PlayerController::update(float deltaTime)
 			else if (InputSystem::GetInstance()->getLeftJoystick(playerIndex).second > 0 || InputSystem::GetInstance()->isButtonPressed(playerIndex, "Down"))
 				dir += Vector3(0, 1, 0);
 		}
+		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A")) jump->salta();
 	}
 
 	if (!ghost) {

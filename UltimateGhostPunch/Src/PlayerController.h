@@ -7,6 +7,7 @@
 
 #include "Movement.h"
 #include "GhostMovement.h"
+#include "Jump.h"
 
 class PlayerController : public UserComponent
 {
@@ -18,6 +19,7 @@ private:
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
+	Jump* jump;
 
 public:
 	PlayerController(GameObject* gameObject);
