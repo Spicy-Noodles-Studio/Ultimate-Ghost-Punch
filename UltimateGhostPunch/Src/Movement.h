@@ -3,8 +3,9 @@
 #define MOVEMENT_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
-#include <RigidBody.h>
+
+class RigidBody;
+class GameObject;
 
 class Movement : public UserComponent
 {
