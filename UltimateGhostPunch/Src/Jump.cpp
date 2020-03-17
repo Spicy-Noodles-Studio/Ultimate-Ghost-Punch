@@ -14,7 +14,7 @@ bool Jump::salta()
 	if (isGrounded && !isJumping) {
 		isGrounded = false;
 		isJumping = true;
-		jumpForce = 3.0;
+		jumpForce = maxForce;
 	}
 
 	if(isJumping) jumpVector = { 0,1,0 };
@@ -45,13 +45,13 @@ void Jump::update(float deltaTime)
 
 void Jump::handleData(ComponentData* data)
 {
-	//for (auto prop : data->getProperties())
-	//{
-	//	std::stringstream ss(prop.second);
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
 
-	//	if (prop.first == "maxJump")
-	//	{
-	//		ss >> jumpForce;
-	//	}
-	//}
+		if (prop.first == "maxJump")
+		{
+			ss >> maxForce;
+		}
+	}
 }

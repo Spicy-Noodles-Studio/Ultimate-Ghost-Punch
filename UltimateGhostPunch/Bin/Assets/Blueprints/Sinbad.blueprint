@@ -58,6 +58,12 @@
                 "maxSpeed": "10"
             }
         },
+		{
+            "ComponentName": "Jump",
+            "ComponentProperties": {
+                "maxForce": "3"
+            }
+        },
         {
             "ComponentName": "Health",
             "ComponentProperties": {

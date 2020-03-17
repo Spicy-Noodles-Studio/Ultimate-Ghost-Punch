@@ -13,6 +13,7 @@ private:
 
 	Vector3 jumpVector;
 	float jumpForce;
+	float maxForce;
 
 	bool isGrounded;
 	bool isJumping;
