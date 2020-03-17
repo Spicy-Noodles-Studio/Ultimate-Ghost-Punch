@@ -14,28 +14,39 @@ private:
 	float quickAttackCooldown = 0.50f;
 	float strongAttackCooldown = 2.00f;
 
-	float quickAttackDamage = 1.0f;
-	float strongAttackDamage = 2.0f;
+	float quickChargeTime = 0.5f;
+	float strongChargeTime = 0.75f;
+	float chargeTime = 0.0f;
+
+	int quickAttackDamage = 1;
+	int strongAttackDamage = 2;
 
 	float attackDuration = 0.5f; // The time that the attack remains active
 	float activeTime = 0.0f;
-	
+
 	enum AttackType
 	{
-		NOT_ATTACKING, QUICK, STRONG
+		QUICK, STRONG, NONE
+	};
+	enum AttackState {
+		NOT_ATTACKING, CHARGING, ATTACKING
 	};
 
-	AttackType currentAttack = NOT_ATTACKING;
+	AttackType currentAttack = NONE;
+	AttackState state = NOT_ATTACKING;
 
 	RigidBody* attackTrigger;
 
-	void attack(float newCooldown);
+	void charge(float newCooldown, float newChargeTime);
+	void attack();
 public:
 	Attack(GameObject* gameObject);
 
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void onObjectStay(GameObject* other);
+
+	virtual void handleData(ComponentData* data);
 
 	void quickAttack();
 	void strongAttack();

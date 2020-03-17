@@ -26,7 +26,10 @@ void Movement::handleData(ComponentData* data)
 
 		if (prop.first == "force")
 		{
-			ss >> force;
+			if(!(ss >> force))
+				LOG("MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else
+			LOG("MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }

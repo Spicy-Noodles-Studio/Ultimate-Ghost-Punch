@@ -92,11 +92,15 @@ void PlayerController::handleData(ComponentData* data)
 
 		if (prop.first == "keyboard")
 		{
-			ss >> usingKeyboard;
+			if(!(ss >> usingKeyboard))
+				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		if (prop.first == "index")
 		{
-			ss >> playerIndex;
+			if(!(ss >> playerIndex))
+				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else
+			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }

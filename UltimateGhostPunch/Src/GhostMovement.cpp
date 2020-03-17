@@ -24,12 +24,12 @@ void GhostMovement::handleData(ComponentData* data)
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "maxSpeed")
-			ss >> maxSpeed;
-		else
-		{
-			printf("GHOST MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
+		if (prop.first == "maxSpeed") {
+			if (!(ss >> maxSpeed))
+				LOG("GHOST MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else
+			LOG("GHOST MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 

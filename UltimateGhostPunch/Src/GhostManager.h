@@ -23,6 +23,10 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
+	virtual void handleData(ComponentData* data);
+
+	virtual void OnObjectEnter(GameObject* other);//Para desactivar el fantasma
+
 	bool isGhost();
 	bool hasGhost();
 

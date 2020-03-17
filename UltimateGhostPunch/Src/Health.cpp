@@ -28,21 +28,19 @@ void Health::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "health") {
-			int health; ss >> health;
-			this->health = health;
+			if (!(ss >> health))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "resHealth") {
-			int resHealth; ss >> resHealth;
-			this->resurrectionHealth = resHealth;
+			if (!(ss >> resurrectionHealth))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "invTime") {
-			float invTime; ss >> invTime;
-			this->invencibleTime = invTime;
+			if (!(ss >> invencibleTime))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
-		{
-			printf("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
-		}
+			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 
@@ -56,8 +54,8 @@ void Health::receiveDamage(int damage)
 	health -= damage;
 	if (health <= 0)
 	{
-		if(ghost != nullptr && ghost->hasGhost())
-			ghost->activateGhost(); 
+		if (ghost != nullptr && ghost->hasGhost())
+			ghost->activateGhost();
 		else
 			die();
 	}

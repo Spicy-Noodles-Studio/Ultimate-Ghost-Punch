@@ -1,6 +1,8 @@
 #include "GhostManager.h"
 
 #include <GameObject.h>
+#include <sstream>
+
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Health.h"
@@ -28,6 +30,28 @@ void GhostManager::update(float deltaTime)
 		ghostTime -= deltaTime;
 	else if (ghost && ghostTime <= 0)
 		if(health != nullptr) health->die();
+}
+
+void GhostManager::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties()) {
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "ghostTime") {
+			if (!(ss >> ghostTime))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else
+			LOG("GHOST MANAGER: Invalid property name \"%s\"", prop.first.c_str());
+	}
+}
+
+void GhostManager::OnObjectEnter(GameObject* other)
+{
+	//if (other->getTag() == "player") {
+	//	deactivateGhost();
+	//	if (health != nullptr) health->resurrect();
+	//}
 }
 
 bool GhostManager::isGhost()
