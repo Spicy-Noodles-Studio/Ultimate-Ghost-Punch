@@ -2,10 +2,7 @@
 #include <sstream>
 #include "GameObject.h"
 
-#include "GhostMovement.h"
-#include "Movement.h"
-#include "PlayerController.h"
-#include "Attack.h"
+#include "GhostManager.h"
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -20,9 +17,9 @@ Health::~Health()
 void Health::start()
 {
 	alive = true;
-	ghost = false;
-	hasGhost = true;
 	invencible = false;
+
+	ghost = gameObject->getComponent<GhostManager>();
 }
 
 void Health::handleData(ComponentData* data)
@@ -31,39 +28,25 @@ void Health::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "health") {
-			int health; ss >> health;
-			this->health = health;
+			if (!(ss >> health))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "resHealth") {
-			int resHealth; ss >> resHealth;
-			this->resurrectionHealth = resHealth;
-		}
-		else if (prop.first == "ghostTime") {
-			float ghostTime; ss >> ghostTime;
-			this->ghostTime = ghostTime;
+			if (!(ss >> resurrectionHealth))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "invTime") {
-			float invTime; ss >> invTime;
-			this->invencibleTime = invTime;
+			if (!(ss >> invencibleTime))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
-		{
-			printf("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
-		}
+			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 
-void Health::onTriggerEnter(GameObject* other)
+void Health::receiveDamage(int damage)
 {
-	// seria algo asi??
-	//recieveDamage(other->getComponent<Attack>()->quickAttackDamage());
-
-	recieveDamage(10);
-}
-
-void Health::recieveDamage(int damage)
-{
-	if (ghost || invencible)
+	if ((ghost != nullptr && ghost->isGhost()) || invencible)
 		return;
 
 	// update UI health
@@ -71,8 +54,8 @@ void Health::recieveDamage(int damage)
 	health -= damage;
 	if (health <= 0)
 	{
-		if (hasGhost)
-			activateGhost();
+		if (ghost != nullptr && ghost->hasGhost())
+			ghost->activateGhost();
 		else
 			die();
 	}
@@ -83,9 +66,6 @@ void Health::die()
 	alive = false;
 
 	// update UI
-
-	// deactivate controllers
-	gameObject->getComponent<PlayerController>()->setActive(false);
 
 	// deactivate gameObject
 	gameObject->setActive(false);
@@ -105,21 +85,6 @@ void Health::resurrect()
 	//invencibleTimer->start() (???)
 }
 
-void Health::activateGhost()
-{
-	hasGhost = false;
-	// TODO:
-	// movement components
-	gameObject->getComponent<Movement>()->setActive(false);
-	gameObject->getComponent<GhostMovement>()->setActive(true);
-
-	// render components
-	//gameObject->getComponent<RenderComponent>()->changeMesh();
-	//gameObject->getComponent<ParticleEmitter>()->stop();
-
-	//...
-}
-
 int Health::getHealth()
 {
 	return health;
@@ -133,11 +98,6 @@ void Health::setHealth(int health)
 bool Health::isAlive()
 {
 	return alive;
-}
-
-bool Health::isGhost()
-{
-	return ghost;
 }
 
 bool Health::isInvencible()

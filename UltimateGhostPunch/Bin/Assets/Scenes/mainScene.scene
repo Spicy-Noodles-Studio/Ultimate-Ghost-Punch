@@ -14,7 +14,11 @@
                     }
                 },
                 {
-                    "ComponentName": "Transform"
+                    "ComponentName": "Transform",
+                    "ComponentProperties": {
+                        "position": "0 200 60",
+                        "rotation": "-20 0 0"
+                    }
                 },
                 {
                     "ComponentName": "Light",
@@ -61,35 +65,34 @@
 						"mass": "1",
                         "scale": "50 50 50",
 						"gravity": "0 0 0",
-                        "mass": "0"
+                        "friction": "0.5"
                     }
                 }
             ]
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Sinbad",
-            "Tag": "sinbad",
-            "BlueprintPath": "Sinbad",
-			"ComponentModifications": [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "150 -10 -500"
-                    }
-                }
-				]
+            "ObjectName": "Player",
+            "Tag": "player",
+            "BlueprintPath": "Player"
         },
-		{
+        {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Sinbad 2",
-            "Tag": "sinbad",
-            "BlueprintPath": "Sinbad",
-			"ComponentModifications": [
+            "ObjectName": "Player",
+            "Tag": "player",
+            "BlueprintPath": "Player",
+            "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": {
-                        "position" : "-150 -10 -500"
+                        "position" : "50 10 -200",
+                        "rotation" : "-90 -90 0"
+                    }
+                },
+                {
+                    "ComponentName": "PlayerController",
+                    "ComponentProperties": {
+                         "keyboard": "0"
                     }
                 }
             ]

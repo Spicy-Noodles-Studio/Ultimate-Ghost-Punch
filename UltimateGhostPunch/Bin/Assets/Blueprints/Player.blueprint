@@ -1,0 +1,106 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Player",
+    "Tag": "player",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": {
+                "position": "-50 10 -200",
+                "scale": "10 10 10",
+                "rotation": "-90 90 0"
+            }
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": {
+                "mesh": "sinbad Sphere.mesh"
+            }
+        },
+        {
+            "ComponentName": "Animator",
+            "ComponentProperties": {
+                "anim": "Idle sinbad"
+            }
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties": {
+                "shape": "Box",
+                "mass": "3",
+                "friction": "0",
+                "restitution": "0",
+                "damping": "0.4",
+                "angularDamping": "0",
+                "gravity": "0 0 0",
+                "offset": "0 20 0",
+                "scale": "1 1 2",
+                "kinematic": "0",
+                "trigger": "0"
+            }
+        },
+        {
+            "ComponentName": "Movement",
+            "ComponentProperties": {
+                "force": "1000"
+            }
+        },
+        {  
+            "ComponentName": "PlayerController",
+            "ComponentProperties": {
+                "keyboard": "1",
+                "index": "0"
+            }
+        },
+        {
+            "ComponentName": "GhostMovement",
+            "ComponentProperties": {
+                "maxSpeed": "100"
+            }
+        },
+        {
+            "ComponentName": "Health",
+            "ComponentProperties": {
+                "health": "epe",
+                "resHealth": "10",
+                "ghostTime": "7",
+                "invTime": "3"
+            }
+        },
+        {
+            "ComponentName": "GhostManager"
+        }
+    ],
+    "Children": [
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Attack Collider",
+            "Tag": "attackCollider",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":{
+                        "position": "0 -3 2.5",
+                        "scale": "1 1 1",
+                        "rotation" : "0 0 0"
+                    }
+                },
+                {
+                    "ComponentName": "RigidBody",
+                    "ComponentProperties":{
+                        "shape": "Box",
+                        "mass": "3",
+                        "kinematic" : "1",
+                        "trigger": "1",
+                        "scale": "1 2 1"
+                    }
+                },
+                {
+                    "ComponentName": "Attack"
+                }
+            ]
+        }
+    ]
+}

@@ -38,34 +38,6 @@
                 "kinematic": "0",
                 "trigger": "0"
             }
-        },
-        {
-            "ComponentName": "Movement",
-            "ComponentProperties": {
-                "force": "100"
-            }
-        },
-        {
-            "ComponentName": "PlayerController",
-            "ComponentProperties": {
-                "keyboard": "1",
-                "index": "0"
-            }
-        },
-        {
-            "ComponentName": "GhostMovement",
-            "ComponentProperties": {
-                "maxSpeed": "10"
-            }
-        },
-        {
-            "ComponentName": "Health",
-            "ComponentProperties": {
-                "health": "50",
-                "resHealth": "10",
-                "ghostTime": "7",
-                "invTime": "3"
-            }
         }
     ],
 	"Children":[
