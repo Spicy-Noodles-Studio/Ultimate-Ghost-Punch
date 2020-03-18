@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 #include "GhostManager.h"
+#include "UILayout.h"
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -22,6 +23,20 @@ void Health::start()
 	ghost = gameObject->getComponent<GhostManager>();
 }
 
+void Health::update(float deltaTime)
+{
+	if (invencible)
+	{
+		if (time > 0.0f)
+		{
+			time -= deltaTime;
+		}
+		else
+			invencible = false;
+	}
+
+}
+
 void Health::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {
@@ -36,7 +51,7 @@ void Health::handleData(ComponentData* data)
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "invTime") {
-			if (!(ss >> invencibleTime))
+			if (!(ss >> invencibleDamageTime))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -49,9 +64,14 @@ void Health::receiveDamage(int damage)
 	if ((ghost != nullptr && ghost->isGhost()) || invencible)
 		return;
 
-	// update UI health
-
 	health -= damage;
+
+	invencible = true;
+	time = invencibleDamageTime;
+
+	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
+		getUIElement("StaticImage").getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health));
+
 	if (health <= 0)
 	{
 		if (ghost != nullptr && ghost->hasGhost())

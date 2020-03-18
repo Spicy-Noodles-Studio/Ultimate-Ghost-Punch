@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="root" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        <Window type="TaharezLook/StaticImage" name="StaticImage" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Player1Text" >
+                <Property name="Area" value="{{0.3,0},{0.6,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="[colour='FFFF0000']P1" />
+            </Window>
+            <Window type="TaharezLook/StaticText" name="Player1HealthText" >
+               <Property name="Area" value="{{0.3,0},{0.65,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Health: 10" />
+            </Window>
+            <Window type="TaharezLook/StaticText" name="Player2Text" >
+                <Property name="Area" value="{{0.6,0},{0.6,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="[colour='FF0000FF']P2" />
+            </Window>
+            <Window type="TaharezLook/StaticText" name="Player2HealthText" >
+               <Property name="Area" value="{{0.6,0},{0.65,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Health: 10" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>

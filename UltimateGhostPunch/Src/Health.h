@@ -11,6 +11,7 @@ public:
 	virtual ~Health();
 
 	virtual void start();
+	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	int getHealth();
@@ -25,7 +26,9 @@ private:
 	int health; // 1 life = 10 health points
 	int resurrectionHealth;
 
-	float invencibleTime;
+	float time = 0.0f;
+	float invencibleResurrectionTime;
+	float invencibleDamageTime = 0.2f;
 
 	bool alive; // player alive
 

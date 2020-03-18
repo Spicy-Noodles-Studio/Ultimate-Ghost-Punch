@@ -36,6 +36,12 @@
                         "preset" : "mountains",
                         "maxDistance" : "100000"
                     }
+                },
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": {
+                        "layout" : "Fight.layout"
+                    }
                 }
             ]
         },
@@ -99,13 +105,13 @@
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player",
+            "ObjectName": "Player1",
             "Tag": "player",
             "BlueprintPath": "Player"
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player",
+            "ObjectName": "Player2",
             "Tag": "player",
             "BlueprintPath": "Player",
             "ComponentModifications" : [
