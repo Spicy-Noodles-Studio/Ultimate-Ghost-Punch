@@ -11,7 +11,7 @@ void PlayerController::start()
 {
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
-	jump = gameObject->getComponent<Jump>();
+	jump = gameObject->findChildrenWithTag("sensorCollider")[0]->getComponent<Jump>();
 	ghost = false;
 }
 
