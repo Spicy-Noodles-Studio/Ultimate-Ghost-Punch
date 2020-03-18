@@ -6,6 +6,7 @@
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Attack.h"
+#include "Jump.h"
 #include "GhostManager.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
@@ -21,11 +22,11 @@ void PlayerController::start()
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
 
-	GameObject* aux = gameObject->findChildrenWithTag("sensorCollider")[0];
-	if(aux != nullptr) jump = aux->getComponent<Jump>();
+	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
+	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
 
-	aux = gameObject->findChildrenWithTag("attackCollider")[0];
-	if (aux != nullptr) attack = aux->getComponent<Attack>();
+	aux = gameObject->findChildrenWithTag("attackSensor");
+	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
 }
 
 void PlayerController::update(float deltaTime)
@@ -56,7 +57,8 @@ void PlayerController::update(float deltaTime)
 		else if (inputSystem->getMouseButtonClick('r')) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isKeyPressed("W")) jump->salta();
+		else if (InputSystem::GetInstance()->isKeyPressed("Space")) 
+			if(jump != nullptr) jump->salta();
 	}
 	else
 	{
@@ -79,7 +81,8 @@ void PlayerController::update(float deltaTime)
 		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A")) jump->salta();
+		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
+			if(jump != nullptr) jump->salta();
 	}
 
 	if (!ghost) {

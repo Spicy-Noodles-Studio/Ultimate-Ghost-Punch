@@ -49,7 +49,7 @@
                     "ComponentName": "Transform",
                     "ComponentProperties": {
                         "scale" : "5 0.05 5",
-                        "position" : "0 -100 -500"
+                        "position" : "0 0 -400"
                     }
                 },
                 {
@@ -62,9 +62,8 @@
                     "ComponentName": "RigidBody",
                     "ComponentProperties": {
                         "shape": "Box",
-						"mass": "1",
+						"mass": "0",
                         "scale": "50 50 50",
-						"gravity": "0 0 0",
                         "friction": "0.5"
                     }
                 }

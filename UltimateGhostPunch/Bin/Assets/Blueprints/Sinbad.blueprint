@@ -39,41 +39,5 @@
                 "trigger": "0"
             }
         }
-    ],
-	"Children":[
-	{
-	"ObjectType": "GAMEOBJECT",
-	"ObjectName": "Sensor Collider",
-	"Tag": "sensorCollider",
-	"Components":
-		[
-			{
-				"ComponentName": "Transform",
-				"ComponentProperties":{
-					"position": "0 -4 0",
-					"scale": "1 1 1",
-					"rotation" : "0 0 0"
-				}
-			},
-			{
-				"ComponentName": "RigidBody",
-				"ComponentProperties":{
-					"shape": "Box",
-					"mass": "1",
-					"kinematic" : "1",
-					"trigger": "1",
-					"scale": "5 1 1"
-				}
-			},
-			{
-            "ComponentName": "Jump",
-            "ComponentProperties": {
-                "maxForce": "200",
-				"jumpDecay": "1"
-            }
-			}
-		]
-	}
-	]
-	
+    ]
 }
