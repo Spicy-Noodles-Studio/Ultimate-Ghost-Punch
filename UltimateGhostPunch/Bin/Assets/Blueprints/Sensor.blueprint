@@ -1,0 +1,26 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Sensor",
+    "Tag": "sensor",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties":{
+                "position": "0 0 0",
+                "scale": "1 1 1",
+                "rotation" : "0 0 0"
+            }
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties":{
+                "shape": "Box",
+                "mass": "1",
+                "kinematic" : "1",
+                "trigger": "1",
+                "scale": "1 1 1"
+            }
+        }
+    ]
+}

@@ -10,6 +10,7 @@ class GhostMovement;
 class Movement;
 class Attack;
 class GhostManager;
+class Jump;
 
 class PlayerController : public UserComponent
 {
@@ -19,6 +20,7 @@ private:
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
+	Jump* jump;
 	Attack* attack;
 
 	InputSystem* inputSystem;
