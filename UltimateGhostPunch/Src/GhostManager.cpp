@@ -71,7 +71,10 @@ void GhostManager::activateGhost()
 
 	if(mov != nullptr) mov->setActive(false);
 	if(gMov != nullptr) gMov->setActive(true);
-	if(rb != nullptr) rb->setTrigger(true);
+	if (rb != nullptr) {
+		rb->setTrigger(true);
+		rb->setGravity({ 0,0,0 });
+	}
 }
 
 void GhostManager::deactivateGhost()
@@ -80,6 +83,9 @@ void GhostManager::deactivateGhost()
 
 	if (mov != nullptr) mov->setActive(true);
 	if (gMov != nullptr) gMov->setActive(false);
-	if (rb != nullptr) rb->setTrigger(false);
+	if (rb != nullptr) {
+		rb->setTrigger(false);
+		rb->setGravity({ 0,-10,0 });
+	}
 }
 
