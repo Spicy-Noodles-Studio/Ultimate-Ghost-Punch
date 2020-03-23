@@ -134,7 +134,7 @@ void PlayerController::update(float deltaTime)
 				charge = true;
 
 				punchDir.x = inputSystem->getRightJoystick(playerIndex).first;
-				punchDir.y = inputSystem->getRightJoystick(playerIndex).second;
+				punchDir.y = -inputSystem->getRightJoystick(playerIndex).second;
 				punchDir.z = 0;
 
 				punchDir.normalize();
