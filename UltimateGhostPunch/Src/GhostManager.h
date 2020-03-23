@@ -1,5 +1,6 @@
 #pragma once
 #include <UserComponent.h>
+#include <string>
 
 class Movement;
 class Health;
@@ -17,6 +18,10 @@ private:
 	Health* health;
 	RigidBody* rb;
 
+	std::string ghostMeshId, ghostMeshName;
+	std::string aliveMeshId, aliveMeshName;
+
+	void changeMesh(std::string id, std::string name);
 public:
 	GhostManager(GameObject* gameObject);
 
@@ -26,11 +31,13 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	virtual void OnObjectEnter(GameObject* other);//Para desactivar el fantasma
+	virtual void onTriggerEnter(GameObject* other);
 
 	bool isGhost();
 	bool hasGhost();
 
 	void activateGhost();
 	void deactivateGhost();
+
 };
 

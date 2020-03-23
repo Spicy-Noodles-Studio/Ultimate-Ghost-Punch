@@ -9,6 +9,9 @@
 #include "Jump.h"
 #include "GhostManager.h"
 
+// BORRAR
+#include "Health.h"
+
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
 
@@ -37,6 +40,9 @@ void PlayerController::update(float deltaTime)
 
 	if (usingKeyboard)
 	{
+		// BORRAR
+		if (inputSystem->isKeyPressed("F"))
+			gameObject->getComponent<Health>()->receiveDamage(4);
 
 		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
@@ -111,4 +117,9 @@ void PlayerController::handleData(ComponentData* data)
 		else
 			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+int PlayerController::getPlayerIndex () const
+{
+	return playerIndex;
 }

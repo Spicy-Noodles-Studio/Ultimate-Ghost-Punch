@@ -32,6 +32,8 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+	int getPlayerIndex() const;
 };
 
 #endif
