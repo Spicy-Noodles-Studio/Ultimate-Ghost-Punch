@@ -61,6 +61,13 @@
                 "maxSpeed": "100"
             }
         },
+         {
+            "ComponentName": "UltimateGhostPunch",
+            "ComponentProperties": {
+                "force": "3000",
+                "duration" : "0.333"
+            }
+        },
         {
             "ComponentName": "Health",
             "ComponentProperties": {
@@ -117,7 +124,7 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": {
-                        "maxForce": "2000",
+                        "maxForce": "1500",
 				        "jumpDecay": "2"
                     }       
                 }
