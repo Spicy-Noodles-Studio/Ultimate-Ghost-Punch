@@ -62,7 +62,7 @@
         {
             "ComponentName": "Health",
             "ComponentProperties": {
-                "health": "10",
+                "health": "4",
                 "resHealth": "2",
                 "ghostTime": "7",
                 "invTime": "3"

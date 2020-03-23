@@ -69,6 +69,8 @@ void GhostManager::activateGhost()
 	ghost = true;
 	ghostAble = false;
 
+
+
 	if(mov != nullptr) mov->setActive(false);
 	if(gMov != nullptr) gMov->setActive(true);
 	if(rb != nullptr) rb->setTrigger(true);

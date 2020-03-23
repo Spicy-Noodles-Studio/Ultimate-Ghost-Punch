@@ -23,7 +23,8 @@ public:
 	void die();
 
 private:
-	int health; // 1 life = 10 health points
+	int maxHealth;
+	int health; // 1 life = 2 health points
 	int resurrectionHealth;
 
 	float time = 0.0f;
