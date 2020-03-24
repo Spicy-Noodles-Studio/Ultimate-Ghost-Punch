@@ -8,7 +8,6 @@
 #include "Health.h"
 #include "RigidBody.h"
 #include "PlayerController.h"
-#include "PhysicsSystem.h"
 #include "MeshRenderer.h"
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject)
@@ -22,9 +21,16 @@ void GhostManager::start()
 	gMov = gameObject->getComponent<GhostMovement>();
 	health = gameObject->getComponent<Health>();
 	rb = gameObject->getComponent<RigidBody>();
+	transform = gameObject->getComponent<Transform>();
 
 	ghost = false;
 	ghostAble = true;
+
+	// Store some data for player resurrection
+	playerGravity = gameObject->getComponent<RigidBody>()->getGravity().y;
+	aliveMeshId = gameObject->getComponent<MeshRenderer>()->getMeshId();
+	aliveMeshName = gameObject->getComponent<MeshRenderer>()->getMeshName();
+	aliveScale = transform->getScale();
 }
 
 void GhostManager::update(float deltaTime)
@@ -92,7 +98,6 @@ bool GhostManager::hasGhost()
 
 void GhostManager::activateGhost()
 {
-	Transform* t = gameObject->getComponent<Transform>();
 	ghost = true;
 	ghostAble = false;
 
@@ -103,15 +108,12 @@ void GhostManager::activateGhost()
 		rb->setGravity({ 0,0,0 });
 	}
 
-	aliveMeshId = gameObject->getComponent<MeshRenderer>()->getMeshId();
-	aliveMeshName = gameObject->getComponent<MeshRenderer>()->getMeshName();
-	aliveScale = t->getScale();
 	// Change player's mesh -> ghost mesh
 	gameObject->getComponent<MeshRenderer>()->changeMesh(ghostMeshId, ghostMeshName);
 	// Change scale
-	t->setScale(ghostScale);
+	transform->setScale(ghostScale);
 	// Apply position offset
-	t->setPosition({ t->getPosition().x + ghostSpawnOffset.x, t->getPosition().y + ghostSpawnOffset.y, t->getPosition().z + ghostSpawnOffset.z });
+	transform->setPosition({ transform->getPosition().x + ghostSpawnOffset.x, transform->getPosition().y + ghostSpawnOffset.y, transform->getPosition().z + ghostSpawnOffset.z });
 }
 
 void GhostManager::deactivateGhost()
@@ -122,7 +124,7 @@ void GhostManager::deactivateGhost()
 	if (gMov != nullptr) gMov->setActive(false);
 	if (rb != nullptr) {
 		rb->setTrigger(false);
-		rb->setGravity({ 0, PhysicsSystem::GetInstance()->getWorldGravity().y,0 });
+		rb->setGravity({ 0, playerGravity, 0 });
 	}
 
 	// Change player's mesh -> alive mesh

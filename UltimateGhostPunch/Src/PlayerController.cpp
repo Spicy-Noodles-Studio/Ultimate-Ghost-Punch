@@ -44,6 +44,8 @@ void PlayerController::update(float deltaTime)
 		if (inputSystem->isKeyPressed("F"))
 			gameObject->getComponent<Health>()->receiveDamage(4);
 
+		printf("PLAYER %d: %f\n\n", playerIndex, gameObject->getComponent<RigidBody>()->getGravity().y);
+
 		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
 		else if (inputSystem->isKeyPressed("D"))

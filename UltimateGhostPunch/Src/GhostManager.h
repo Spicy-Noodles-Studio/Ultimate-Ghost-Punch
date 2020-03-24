@@ -6,6 +6,7 @@ class Movement;
 class Health;
 class GhostMovement;
 class RigidBody;
+class Transform;
 
 class GhostManager : public UserComponent
 {
@@ -18,11 +19,13 @@ private:
 	GhostMovement* gMov;
 	Health* health;
 	RigidBody* rb;
+	Transform* transform;
 
 	std::string ghostMeshId, ghostMeshName;
-	Vector3 ghostScale = {1,1,1};
+	Vector3 ghostScale = { 1,1,1 };
 	std::string aliveMeshId, aliveMeshName;
 	Vector3 aliveScale;
+	float playerGravity;
 
 	void changeMesh(std::string id, std::string name);
 public:
