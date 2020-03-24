@@ -71,14 +71,19 @@
         {
             "ComponentName": "Health",
             "ComponentProperties": {
-                "health": "epe",
-                "resHealth": "10",
+                "health": "4",
+                "resHealth": "4",
                 "ghostTime": "7",
                 "invTime": "3"
             }
         },
         {
-            "ComponentName": "GhostManager"
+            "ComponentName": "GhostManager",
+            "ComponentProperties": {
+                "ghostMesh": "ghost knot.mesh",
+                "ghostScale": "0.15 0.15 0.15",
+                "spawnOffset": "0 20 0"
+            }
         }
     ],
     "Children": [
