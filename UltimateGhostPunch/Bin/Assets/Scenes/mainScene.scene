@@ -2,103 +2,16 @@
     "SceneName": "MainScene",
     "SceneObjects": [
         {
-            "ObjectType": "GAMEOBJECT",
+            "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
-            "Tag": "MainCamera",
-            "Components":
-            [
-                {
-                    "ComponentName": "Camera",
-                    "ComponentProperties": {
-                        "main": "true"
-                    }
-                },
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position": "0 200 60",
-                        "rotation": "-20 0 0"
-                    }
-                },
-                {
-                    "ComponentName": "Light",
-                    "ComponentProperties": {
-                        "type": "Point",
-                        "colour": "1 1 1"
-                    }
-                },
-                {
-                    "ComponentName": "SoundListener"
-                },
-                {
-                    "ComponentName": "Reverb",
-                    "ComponentProperties": {
-                        "preset" : "mountains",
-                        "maxDistance" : "100000"
-                    }
-                }
-            ]
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera"
         },
-         {
-            "ObjectType": "GAMEOBJECT",
+        {
+            "ObjectType": "BLUEPRINT",
             "ObjectName": "Suelo",
             "Tag": "suelo",
-            "Components":
-            [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "scale" : "5 0.05 5",
-                        "position" : "0 0 -400"
-                    }
-                },
-                {
-                    "ComponentName": "MeshRenderer",
-                    "ComponentProperties": {
-                        "mesh": "cube cube.mesh"
-                    }
-                },
-                {
-                    "ComponentName": "RigidBody",
-                    "ComponentProperties": {
-                        "shape": "Box",
-						"mass": "0",
-                        "scale": "50 50 50",
-                        "friction": "0.5"
-                    }
-                }
-            ]
-        },
-         {
-            "ObjectType": "GAMEOBJECT",
-            "ObjectName": "Suelo",
-            "Tag": "suelo",
-            "Components":
-            [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "scale" : "5 0.05 5",
-                        "position" : "-100 0 -400",
-                        "rotation" : "0 0 90"
-                    }
-                },
-                {
-                    "ComponentName": "MeshRenderer",
-                    "ComponentProperties": {
-                        "mesh": "cube cube.mesh"
-                    }
-                },
-                {
-                    "ComponentName": "RigidBody",
-                    "ComponentProperties": {
-                        "shape": "Box",
-						"mass": "0",
-                        "scale": "50 50 50",
-                        "friction": "0.5"
-                    }
-                }
-            ]
+            "BlueprintPath": "Suelo"
         },
         {
             "ObjectType": "BLUEPRINT",
@@ -115,14 +28,14 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": {
-                        "position" : "50 10 -200",
+                        "position" : "50 200 -200",
                         "rotation" : "-90 -90 0"
                     }
                 },
                 {
                     "ComponentName": "PlayerController",
                     "ComponentProperties": {
-                         "keyboard": "1"
+                         "keyboard": "0"
                     }
                 }
             ]

@@ -13,6 +13,7 @@ bool Jump::salta()
 {
 	if (isGrounded && !isJumping) {
 		isJumping = true;
+		printf("salta\n");
 		jumpForce = maxForce;
 	}
 
@@ -30,7 +31,7 @@ void Jump::update(float deltaTime)
 {
 	if (isJumping) {
 		if (jumpVector != Vector3(0, 0, 0)) {
-			rigidBody->addForce(jumpVector * jumpForce);
+			rigidBody->addImpulse(jumpVector * jumpForce);
 			jumpForce -= jumpDecay;
 			
 			jumpVector = { 0,0,0 };
