@@ -130,9 +130,9 @@ void PlayerController::update(float deltaTime)
 	}
 	else
 	{
-		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left"))
+		if ( ( inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left") ) && !isBlocking)
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right"))
+		else if ( ( inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right") ) && !isBlocking)
 			dir = Vector3(1, 0, 0);
 
 		if (ghost != nullptr && ghost->isGhost()) {
@@ -170,8 +170,17 @@ void PlayerController::update(float deltaTime)
 		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
+		else if (inputSystem->isButtonPressed(playerIndex, "A") && !isBlocking)
 			if(jump != nullptr) jump->salta();
+
+		if (inputSystem->isButtonPressed(playerIndex, "B")) if (block != nullptr) {
+			isBlocking = true;
+			block->block();
+		}
+		if (isBlocking && !inputSystem->isButtonPressed(playerIndex, "B")) {
+			isBlocking = false;
+			block->unblock();
+		}
 	}
 
 	if (!ghost->isGhost()) {
