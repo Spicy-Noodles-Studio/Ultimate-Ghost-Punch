@@ -11,6 +11,7 @@
 #include "Jump.h"
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
+#include "Block.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -27,7 +28,9 @@ void PlayerController::start()
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
+	if(aux.size() > 0) jump = aux[0]->getComponent<Jump>();
+
+	if (aux.size() > 0) block = aux[0]->getComponent<Block>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
@@ -42,9 +45,9 @@ void PlayerController::update(float deltaTime)
 	if (usingKeyboard)
 	{
 
-		if (inputSystem->isKeyPressed("A"))
+		if (inputSystem->isKeyPressed("A") && !isBlocking)
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->isKeyPressed("D"))
+		else if (inputSystem->isKeyPressed("D") && !isBlocking)
 			dir = Vector3(1, 0, 0);
 
 		if (ghost != nullptr && ghost->isGhost()) {
@@ -113,8 +116,17 @@ void PlayerController::update(float deltaTime)
 		else if (inputSystem->getMouseButtonClick('r')) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isKeyPressed("Space")) 
+		else if (inputSystem->isKeyPressed("Space") && !isBlocking)
 			if(jump != nullptr) jump->salta();
+
+		if (inputSystem->isKeyPressed("F")) if (block != nullptr) {
+			isBlocking = true;
+			block->block();
+		}
+		if (isBlocking && !inputSystem->isKeyPressed("F")) {
+			isBlocking = false;
+			block->unblock();
+		}
 	}
 	else
 	{

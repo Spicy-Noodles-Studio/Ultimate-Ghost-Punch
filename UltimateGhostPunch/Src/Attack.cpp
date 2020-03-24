@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "Health.h"
+#include "Block.h"
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -105,8 +106,21 @@ void Attack::onObjectStay(GameObject* other)
 			break;
 		}
 
-		Health* enemyHealth = other->getComponent<Health>();
-		if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
+		Block* enemyBlock = nullptr;
+		if(aux.size()>0) enemyBlock = aux[0]->getComponent<Block>();
+		if (enemyBlock != nullptr) {
+			enemyBlock->blockAttack(damage, gameObject->transform->getPosition());
+		}
+		else {
+			Health* enemyHealth = other->getComponent<Health>();
+			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+		}
+
+		attackTrigger->setActive(false);
+
+		// Reset the current attack state
+		state = NOT_ATTACKING;
 	}
 }
 

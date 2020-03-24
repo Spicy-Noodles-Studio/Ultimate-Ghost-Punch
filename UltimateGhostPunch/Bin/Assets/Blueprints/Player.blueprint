@@ -127,7 +127,14 @@
                         "maxForce": "1500",
 				        "jumpDecay": "2"
                     }       
-                }
+                },
+				{
+					"ComponentName": "Block",
+					"ComponentProperties": {
+						"maxBlockTime": "3",
+						"blockRegenTime": "1"
+					}
+				}
             ]
         }
     ]

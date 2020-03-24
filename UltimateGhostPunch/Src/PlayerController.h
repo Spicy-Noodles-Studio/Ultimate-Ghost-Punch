@@ -12,6 +12,7 @@ class Attack;
 class GhostManager;
 class Jump;
 class UltimateGhostPunch;
+class Block;
 
 class PlayerController : public UserComponent
 {
@@ -19,13 +20,14 @@ private:
 	int playerIndex;
 	bool usingKeyboard;
 	bool charge = false;
-
+	bool isBlocking = false;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
 	Jump* jump;
 	Attack* attack;
 	UltimateGhostPunch* ghostPunch;
+	Block* block;
 
 	InputSystem* inputSystem;
 	GhostManager* ghost;

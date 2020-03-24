@@ -58,6 +58,8 @@ void Health::receiveDamage(int damage)
 			ghost->activateGhost();
 		else
 			die();
+
+		LOG("HE MUERTO");
 	}
 }
 
