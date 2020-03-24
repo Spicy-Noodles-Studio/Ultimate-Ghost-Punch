@@ -27,11 +27,13 @@
     <ClCompile Include="..\..\Src\Movement.cpp" />
     <ClCompile Include="..\..\Src\PlayerController.cpp" />
     <ClCompile Include="..\..\Src\Jump.cpp" />
+    <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />
     <ClInclude Include="..\..\Src\GhostMovement.h" />
+    <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
     <ClInclude Include="..\..\Src\Jump.h" />

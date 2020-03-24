@@ -69,6 +69,37 @@
                 }
             ]
         },
+         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Suelo",
+            "Tag": "suelo",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": {
+                        "scale" : "5 0.05 5",
+                        "position" : "-100 0 -400",
+                        "rotation" : "0 0 90"
+                    }
+                },
+                {
+                    "ComponentName": "MeshRenderer",
+                    "ComponentProperties": {
+                        "mesh": "cube cube.mesh"
+                    }
+                },
+                {
+                    "ComponentName": "RigidBody",
+                    "ComponentProperties": {
+                        "shape": "Box",
+						"mass": "0",
+                        "scale": "50 50 50",
+                        "friction": "0.5"
+                    }
+                }
+            ]
+        },
         {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "Player",
@@ -91,8 +122,7 @@
                 {
                     "ComponentName": "PlayerController",
                     "ComponentProperties": {
-                        "keyboard": "0",
-                        "index": "1"
+                         "keyboard": "1"
                     }
                 }
             ]
