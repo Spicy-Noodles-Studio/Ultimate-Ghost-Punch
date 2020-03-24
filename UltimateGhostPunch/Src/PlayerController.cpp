@@ -7,6 +7,7 @@
 #include "GhostMovement.h"
 #include "Attack.h"
 #include "GhostManager.h"
+#include "Dodge.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -20,6 +21,7 @@ void PlayerController::start()
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
+	dodge = gameObject->getComponent<Dodge>();
 
 	GameObject* aux = gameObject->findChildrenWithTag("attackCollider")[0];
 	if (aux != nullptr) attack = aux->getComponent<Attack>();
@@ -33,6 +35,13 @@ void PlayerController::update(float deltaTime)
 
 	if (usingKeyboard)
 	{
+		//Pruebas dodge
+		if (inputSystem->isKeyPressed("H"))
+			dodge->dodgeL();
+		else if (inputSystem->isKeyPressed("J"))
+			dodge->dodgeR();
+
+
 
 		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);

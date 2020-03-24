@@ -10,6 +10,7 @@ class GhostMovement;
 class Movement;
 class Attack;
 class GhostManager;
+class Dodge;
 
 class PlayerController : public UserComponent
 {
@@ -23,6 +24,8 @@ private:
 
 	InputSystem* inputSystem;
 	GhostManager* ghost;
+
+	Dodge* dodge;
 
 public:
 	PlayerController(GameObject* gameObject);

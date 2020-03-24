@@ -70,7 +70,11 @@
         },
         {
             "ComponentName": "GhostManager"
-        }
+        },
+		
+		{
+		"ComponentName": "Dodge"
+		}
     ],
     "Children": [
         {
