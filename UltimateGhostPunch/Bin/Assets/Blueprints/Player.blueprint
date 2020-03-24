@@ -73,7 +73,9 @@
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": {
-                "ghostMesh": "ghost knot.mesh"
+                "ghostMesh": "ghost knot.mesh",
+                "ghostScale": "0.15 0.15 0.15",
+                "spawnOffset": "0 20 0"
             }
         }
     ],
