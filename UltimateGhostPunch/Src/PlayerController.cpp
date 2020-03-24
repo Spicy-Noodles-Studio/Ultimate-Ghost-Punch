@@ -12,9 +12,6 @@
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
 
-// BORRAR
-#include "Health.h"
-
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
 
@@ -44,11 +41,6 @@ void PlayerController::update(float deltaTime)
 	Vector3 punchDir;
 	if (usingKeyboard)
 	{
-		// BORRAR
-		if (inputSystem->isKeyPressed("F"))
-			gameObject->getComponent<Health>()->receiveDamage(4);
-
-		printf("PLAYER %d: %f\n\n", playerIndex, gameObject->getComponent<RigidBody>()->getGravity().y);
 
 		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
