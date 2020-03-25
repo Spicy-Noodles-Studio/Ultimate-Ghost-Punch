@@ -56,8 +56,12 @@ void Health::handleData(ComponentData* data)
 			if (!(ss >> resurrectionHealth))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
-		else if (prop.first == "invTime") {
+		else if (prop.first == "invDamTime") {
 			if (!(ss >> invencibleDamageTime))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "invResTime") {
+			if (!(ss >> invencibleResurrectionTime))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -71,24 +75,25 @@ void Health::receiveDamage(int damage)
 		return;
 
 	health -= damage;
-
-	invencible = true;
-	time = invencibleDamageTime;
+	if (health < 0) health = 0;
 
 	playerUI->updateHealth();
 
-	if (health <= 0)
+	if (health == 0)
 	{
 		if (ghost != nullptr && ghost->hasGhost())
 		{
 			playerUI->updateState("Ghost");
-
+			ghost->activateGhost();
 		}
 		else
-		{
 			die();
-
-		}
+	}
+	else
+	{
+		invencible = true;
+		time = invencibleDamageTime;
+		playerUI->updateState("Invencible");
 	}
 }
 
@@ -111,9 +116,11 @@ void Health::resurrect()
 {
 	health = resurrectionHealth;
 
+	playerUI->updateHealth();
+
 	// activate invencibility for a specified time
 	invencible = true;
-
+	time = invencibleResurrectionTime;
 	playerUI->updateState("Invencible");
 }
 

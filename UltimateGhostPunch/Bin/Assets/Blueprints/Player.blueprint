@@ -45,20 +45,20 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": {
-                "force": "1000"
+                "force": "3000"
             }
         },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties": {
-                "keyboard": "1",
+                "keyboard": "0",
                 "index": "0"
             }
         },
         {
             "ComponentName": "GhostMovement",
             "ComponentProperties": {
-                "maxSpeed": "100"
+                "maxSpeed": "800"
             }
         },
         {
@@ -74,7 +74,8 @@
                 "health": "4",
                 "resHealth": "2",
                 "ghostTime": "7",
-                "invTime": "3"
+                "invDamTime": "2",
+                "invResTime": "3"
             }
         },
         {
@@ -132,7 +133,7 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": {
-                        "maxForce": "1500",
+                        "maxForce": "4500",
 				        "jumpDecay": "2"
                     }       
                 }

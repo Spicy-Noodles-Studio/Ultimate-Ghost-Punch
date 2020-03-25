@@ -9,57 +9,119 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             ## PLAYER 1 INFO
             <Window type="TaharezLook/StaticImage" name="Player1Background" >
-                <Property name="Area" value="{{0.29,0},{0.88,0},{0.45,0},{1,0}}" />
+                <Property name="Area" value="{{0.1,0},{0.88,0},{0.25,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Alpha" value="0.3" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player1Text" >
-                <Property name="Area" value="{{0.3,0},{0.8,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="[colour='FFFF0000']P1" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player1HealthText" >
-               <Property name="Area" value="{{0.3,0},{0.85,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="Health: 10" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player1StateText" >
-               <Property name="Area" value="{{0.3,0},{0.9,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="State: Alive" />
+                <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="Player1Text" >
+                    <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                    <Property name="Text" value="[colour='FFFF0000']P1" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player1HealthText" >
+                <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Health: 10" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player1StateText" >
+                <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="State: Alive" />
+                </Window>
             </Window>
             ## PLAYER 1 INDICATOR
             <Window type="TaharezLook/StaticText" name="Player1Indicator" >
-               <Property name="Area" value="{{0.3,0},{0.7,0},{1,0},{1,0}}" />
+               <Property name="Area" value="{{0.4,0},{0.7,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Visible" value="False" />
                 <Property name="Text" value="[colour='FFFF0000']P1" />
             </Window>
             ## PLAYER 2 INFO
             <Window type="TaharezLook/StaticImage" name="Player2Background" >
-                <Property name="Area" value="{{0.59,0},{0.88,0},{0.75,0},{1,0}}" />
+                <Property name="Area" value="{{0.3,0},{0.88,0},{0.45,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Alpha" value="0.3" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player2Text" >
-                <Property name="Area" value="{{0.6,0},{0.8,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="[colour='FF0000FF']P2" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player2HealthText" >
-               <Property name="Area" value="{{0.6,0},{0.85,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="Health: 10" />
-            </Window>
-            <Window type="TaharezLook/StaticText" name="Player2StateText" >
-               <Property name="Area" value="{{0.6,0},{0.9,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="State: Alive" />
+                <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="Player2Text" >
+                    <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                    <Property name="Text" value="[colour='FF0000FF']P2" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player2HealthText" >
+                <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Health: 10" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player2StateText" >
+                <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="State: Alive" />
+                </Window>
             </Window>
             ## PLAYER 2 INDICATOR
             <Window type="TaharezLook/StaticText" name="Player2Indicator" >
                <Property name="Area" value="{{0.6,0},{0.7,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Visible" value="False" />
                 <Property name="Text" value="[colour='FF0000FF']P2" />
+            </Window>
+            ## PLAYER 3 INFO
+            <Window type="TaharezLook/StaticImage" name="Player3Background" >
+                <Property name="Area" value="{{0.5,0},{0.88,0},{0.65,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Alpha" value="0.3" />
+                <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="Player3Text" >
+                    <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                    <Property name="Text" value="[colour='FFFF0000']P3" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player3HealthText" >
+                <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Health: 10" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player3StateText" >
+                <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="State: Alive" />
+                </Window>
+            </Window>
+            ## PLAYER 3 INDICATOR
+            <Window type="TaharezLook/StaticText" name="Player3Indicator" >
+               <Property name="Area" value="{{0.7,0},{0.7,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Visible" value="False" />
+                <Property name="Text" value="[colour='FFFF0000']P3" />
+            </Window>
+            ## PLAYER 4 INFO
+            <Window type="TaharezLook/StaticImage" name="Player4Background" >
+                <Property name="Area" value="{{0.7,0},{0.88,0},{0.85,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Alpha" value="0.3" />
+                <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="Player4Text" >
+                    <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                    <Property name="Text" value="[colour='FF00FFFF']P4" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player4HealthText" >
+                <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Health: 10" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="Player4StateText" >
+                <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="State: Alive" />
+                </Window>
+            </Window>
+            ## PLAYER 4 INDICATOR
+            <Window type="TaharezLook/StaticText" name="Player4Indicator" >
+               <Property name="Area" value="{{0.8,0},{0.7,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Visible" value="False" />
+                <Property name="Text" value="[colour='FF00FFFF']P4" />
             </Window>
         </Window>
     </Window>

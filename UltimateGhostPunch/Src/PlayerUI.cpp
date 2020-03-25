@@ -3,10 +3,11 @@
 
 #include "UILayout.h"
 #include "Health.h"
+
 #include "Scene.h"
 #include "Camera.h"
 
-PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject)
+PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr)
 {
 
 }
@@ -18,36 +19,48 @@ PlayerUI::~PlayerUI()
 
 void PlayerUI::start()
 {
+	health = gameObject->getComponent<Health>();
+
+	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
+		getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
+
+	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
+		getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
+
+	playerHUD.setVisible(true);
+	playerIndicator.setVisible(true);
+
+	for (int i = 0; i < playerHUD.getChildCount(); i++)
+		playerHUD.getChildAtIndex(i).setInheritsAlpha(false);
+
 	createHearts();
 	updateHealth();
 }
 
 void PlayerUI::createHearts()
 {
-	float posX = 0.4f;
+	float posX = 0.3f;
 
 	for (int i = 1; i <= gameObject->getComponent<Health>()->getHealth(); i++)
 	{
-		UIElement heart = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			createChild("TaharezLook/StaticImage", gameObject->getName() + "Heart" + std::to_string(i));
+		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
+			gameObject->getName() + "Heart" + std::to_string(i));
 
-		heart.setPosition(posX, 0.05f);
+		heart.setPosition(posX, 0.1f);
 		heart.setSize(0.05f, 0.2f);
-
-		if (i % 2 == 0)
+		if (i % 2 != 0)
 			heart.flipHorizontal();
+		else
+			posX += 0.03f;
 
-		posX += 0.05f;
+		posX += 0.02f;
 	}
 }
 
 void PlayerUI::updateIndicator()
 {
 	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->getComponent<Transform>()->getPosition());
-
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator").setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
+	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
 }
 
 void PlayerUI::update(float deltaTime)
@@ -57,25 +70,23 @@ void PlayerUI::update(float deltaTime)
 
 void PlayerUI::updateState(const std::string state)
 {
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "StateText").setText("State: " + state);
+	playerHUD.getChild(gameObject->getName() + "StateText").setText("State: " + state);
 }
 
 void PlayerUI::updateHealth()
 {
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "HealthText").setText("Health: " +
-			std::to_string(gameObject->getComponent<Health>()->getHealth()));
+	playerHUD.getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
 }
 
 void PlayerUI::updateHearts()
 {
-	for (int i = gameObject->getComponent<Health>()->getHealth() + 1; i <= gameObject->getComponent<Health>()->getMaxHealth(); i++)
+	for (int i = 1; i <= health->getMaxHealth(); i++)
 	{
-		findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(false);
+		if (i > health->getHealth())
+			playerHUD.getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(false);
+		else
+			playerHUD.getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(true);
 	}
 }
