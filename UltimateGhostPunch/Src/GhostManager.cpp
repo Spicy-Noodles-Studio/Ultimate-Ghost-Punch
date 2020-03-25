@@ -7,6 +7,8 @@
 #include "GhostMovement.h"
 #include "Health.h"
 #include "RigidBody.h"
+#include "PlayerController.h"
+#include "MeshRenderer.h"
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -19,9 +21,16 @@ void GhostManager::start()
 	gMov = gameObject->getComponent<GhostMovement>();
 	health = gameObject->getComponent<Health>();
 	rb = gameObject->getComponent<RigidBody>();
+	transform = gameObject->getComponent<Transform>();
 
 	ghost = false;
 	ghostAble = true;
+
+	// Store some data for player resurrection
+	playerGravity = gameObject->getComponent<RigidBody>()->getGravity().y;
+	aliveMeshId = gameObject->getComponent<MeshRenderer>()->getMeshId();
+	aliveMeshName = gameObject->getComponent<MeshRenderer>()->getMeshName();
+	aliveScale = transform->getScale();
 }
 
 void GhostManager::update(float deltaTime)
@@ -30,6 +39,7 @@ void GhostManager::update(float deltaTime)
 		ghostTime -= deltaTime;
 	else if (ghost && ghostTime <= 0)
 		if(health != nullptr) health->die();
+
 }
 
 void GhostManager::handleData(ComponentData* data)
@@ -41,17 +51,39 @@ void GhostManager::handleData(ComponentData* data)
 			if (!(ss >> ghostTime))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else if (prop.first == "ghostMesh") {
+			if (!(ss >> ghostMeshId >> ghostMeshName))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "ghostScale") {
+			double x, y, z;
+			if (!(ss >> x >> y >> z))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			else
+				ghostScale = { x,y,z };
+		}
+		else if (prop.first == "spawnOffset") {
+			double x, y, z;
+			if (!(ss >> x >> y >> z))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			else
+				ghostSpawnOffset = { x,y,z };
+		}
 		else
 			LOG("GHOST MANAGER: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 
-void GhostManager::OnObjectEnter(GameObject* other)
+void GhostManager::onTriggerEnter(GameObject* other)
 {
-	//if (other->getTag() == "player") {
-	//	deactivateGhost();
-	//	if (health != nullptr) health->resurrect();
-	//}
+	if (!ghost	// If this player is in ghost mode
+		&& other->getTag() == "player" // and other is a player
+		&& health->getHealth() > 0) { // and it is alive
+		
+		other->getComponent<GhostManager>()->deactivateGhost();
+		if (other->getComponent<Health>() != nullptr) other->getComponent<Health>()->resurrect();
+		
+	}
 }
 
 bool GhostManager::isGhost()
@@ -73,7 +105,17 @@ void GhostManager::activateGhost()
 
 	if(mov != nullptr) mov->setActive(false);
 	if(gMov != nullptr) gMov->setActive(true);
-	if(rb != nullptr) rb->setTrigger(true);
+	if (rb != nullptr) {
+		rb->setTrigger(true);
+		rb->setGravity({ 0,0,0 });
+	}
+
+	// Change player's mesh -> ghost mesh
+	gameObject->getComponent<MeshRenderer>()->changeMesh(ghostMeshId, ghostMeshName);
+	// Change scale
+	transform->setScale(ghostScale);
+	// Apply position offset
+	transform->setPosition({ transform->getPosition().x + ghostSpawnOffset.x, transform->getPosition().y + ghostSpawnOffset.y, transform->getPosition().z + ghostSpawnOffset.z });
 }
 
 void GhostManager::deactivateGhost()
@@ -82,6 +124,18 @@ void GhostManager::deactivateGhost()
 
 	if (mov != nullptr) mov->setActive(true);
 	if (gMov != nullptr) gMov->setActive(false);
-	if (rb != nullptr) rb->setTrigger(false);
+	if (rb != nullptr) {
+		rb->setTrigger(false);
+		rb->setGravity({ 0, playerGravity, 0 });
+	}
+
+	// Change player's mesh -> alive mesh
+	gameObject->getComponent<MeshRenderer>()->changeMesh(aliveMeshId, aliveMeshName);
+	gameObject->getComponent<Transform>()->setScale(aliveScale);
+}
+
+void GhostManager::changeMesh(std::string id, std::string name)
+{
+
 }
 

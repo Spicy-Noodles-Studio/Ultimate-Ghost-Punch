@@ -39,10 +39,16 @@
     <ClCompile Include="..\..\Src\Health.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Jump.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\GhostManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\PlayerUI.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,10 +68,16 @@
     <ClInclude Include="..\..\Src\Health.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Jump.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Src\GhostManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\PlayerUI.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\UltimateGhostPunch.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>
