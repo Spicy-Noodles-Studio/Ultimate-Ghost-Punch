@@ -166,3 +166,8 @@ void PlayerController::handleData(ComponentData* data)
 			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
+
+int PlayerController::getPlayerIndex () const
+{
+	return playerIndex;
+}
