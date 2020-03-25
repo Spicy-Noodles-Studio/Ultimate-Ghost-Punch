@@ -113,7 +113,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":{
-                        "position": "0 0 -0.15",
+                        "position": "0 0 0",
                         "scale": "0.75 0.75 0.75"
                     }
                 }
@@ -123,8 +123,8 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": {
-                        "maxForce": "200",
-				        "jumpDecay": "5"
+                        "maxForce": "750",
+				        "jumpDecay": "85"
                     }       
                 }
             ]

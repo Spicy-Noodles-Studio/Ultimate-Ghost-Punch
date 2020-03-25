@@ -13,11 +13,10 @@ bool Jump::salta()
 {
 	if (isGrounded && !isJumping) {
 		isJumping = true;
-		printf("salta\n");
 		jumpForce = maxForce;
 	}
 
-	if(isJumping) jumpVector = { 0,1,0 };
+	if (isJumping) jumpVector = { 0,1,0 };
 
 	return isJumping;
 }
@@ -33,7 +32,7 @@ void Jump::update(float deltaTime)
 		if (jumpVector != Vector3(0, 0, 0)) {
 			rigidBody->addImpulse(jumpVector * jumpForce);
 			jumpForce -= jumpDecay;
-			
+
 			jumpVector = { 0,0,0 };
 			if (jumpForce <= 0.0f) {
 				jumpForce = 0.0f;
@@ -65,7 +64,6 @@ void Jump::handleData(ComponentData* data)
 void Jump::onObjectEnter(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
-		printf("%s en suelo\n", gameObject->getParent()->getName().c_str());
 		isGrounded = true;
 	}
 }
@@ -73,7 +71,6 @@ void Jump::onObjectEnter(GameObject* other)
 void Jump::onObjectExit(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
-		printf("%s no en suelo\n", gameObject->getParent()->getName().c_str());
 		isGrounded = false;
 	}
 }

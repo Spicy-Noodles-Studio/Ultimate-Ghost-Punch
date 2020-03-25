@@ -8,52 +8,51 @@
 #include "Health.h"
 
 
-UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject)
+UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), body(nullptr)
 {
 }
 
 void UltimateGhostPunch::start()
 {
 	body = gameObject->getComponent<RigidBody>();
+	state = AVAILABLE;
 }
 
-void UltimateGhostPunch::ghostPunch(const Vector3 & dir)
+void UltimateGhostPunch::charge()
 {
-	
-	Vector3 dirr = dir * force;
-	if (body != nullptr)body->addImpulse(dirr);
-	punching = true;
-	
-	available = false;
+	state = CHARGING;
+	if (body != nullptr) body->setLinearVelocity({ 0,0,0 });
+}
+
+void UltimateGhostPunch::aim(double x, double y)
+{
+	dir = { x, y, 0 };
+	dir.normalize();
+}
+
+void UltimateGhostPunch::ghostPunch()
+{
+	if (body != nullptr) body->addImpulse(dir * force);
+	state = PUNCHING;
 }
 
 void UltimateGhostPunch::update(float deltaTime)
 {
 	// Update the cooldown
-	if (duration > 0.0f && punching)
-	{
+	if (duration > 0.0f && state == PUNCHING)
 		duration -= deltaTime;
-	}
-	else {
-		
-		punching = false;
-	}
-
-	//Attack charge time
-	
-
-	
-
+	else if (duration <= 0.0f)
+		state = USED;
 }
 
-bool UltimateGhostPunch::isAvailable()
+State UltimateGhostPunch::getState()
 {
-	return available;
+	return state;
 }
 
-bool UltimateGhostPunch::isPunching()
+const Vector3& UltimateGhostPunch::getDir()
 {
-	return punching;
+	return dir;
 }
 
 void UltimateGhostPunch::handleData(ComponentData* data)
@@ -67,7 +66,7 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 		}
 		else if (prop.first == "duration") {
 			if (!(ss >> duration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
 			LOG("ULTIMATE GHOST PUNCH: Invalid property name \"%s\"", prop.first.c_str());

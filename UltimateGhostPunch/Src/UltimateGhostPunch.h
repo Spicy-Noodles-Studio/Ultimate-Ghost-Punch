@@ -7,29 +7,30 @@
 class RigidBody;
 class GameObject;
 
+enum State {AVAILABLE, CHARGING, PUNCHING, USED};
+
 class UltimateGhostPunch : public UserComponent
 {
 private:
-
-	bool available = true;
 	RigidBody* body;
-	float duration = 0;
-	float force = 0;
-	bool punching = false;
-
+	Vector3 dir = { 0,0,0 };
+	State state;
+	float duration = 0, force = 0;
 
 public:
 	UltimateGhostPunch(GameObject* gameObject);
 
 	virtual void update(float deltaTime);
 	virtual void start();
-	void ghostPunch(const Vector3 & dir);
 
-	bool isAvailable();
-	bool isPunching();
+	virtual void charge();
+	virtual void aim(double mousePosX, double mousePosY);
+	void ghostPunch();
+
+	State getState();
+	const Vector3& getDir();
+
 	virtual void handleData(ComponentData* data);
-
-
 };
 
 #endif
