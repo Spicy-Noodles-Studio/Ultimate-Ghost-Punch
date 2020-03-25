@@ -65,6 +65,7 @@ void Jump::handleData(ComponentData* data)
 void Jump::onObjectEnter(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
+		printf("%s en suelo\n", gameObject->getParent()->getName().c_str());
 		isGrounded = true;
 	}
 }
@@ -72,6 +73,7 @@ void Jump::onObjectEnter(GameObject* other)
 void Jump::onObjectExit(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
+		printf("%s no en suelo\n", gameObject->getParent()->getName().c_str());
 		isGrounded = false;
 	}
 }

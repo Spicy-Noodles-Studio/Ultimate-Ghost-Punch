@@ -7,21 +7,22 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "0 0 -200",
-                "scale": "10 20 10",
-                "rotation": "-90 0 0"
+                "position": "0 -225 0",
+                "scale": "10 10 10",
+                "rotation": "0 90 0"
             }
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": {
-                "mesh": "suelo testLevel.mesh"
+                "mesh": "suelo Nivel1.mesh"
             }
         },
         {
             "ComponentName": "Strider",
             "ComponentProperties": {
-                "mesh": "suelo"
+                "mesh": "suelo",
+                "friction": "0.5"
             }
         }
     ]

@@ -13,7 +13,7 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "50 50 200"
+                "position": "0 0 900"
             }
         },
         {

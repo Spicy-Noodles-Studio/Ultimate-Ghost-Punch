@@ -7,7 +7,7 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": {
-                "position": "-50 200 -200",
+                "position": "-50 200 0",
                 "scale": "10 10 10",
                 "rotation": "-90 90 0"
             }
@@ -19,13 +19,19 @@
             }
         },
         {
+            "ComponentName": "Animator",
+            "ComponentProperties": {
+                "anim": "Idle player"
+            }
+        },
+        {
             "ComponentName": "RigidBody",
             "ComponentProperties": {
                 "shape": "Box",
                 "mass": "5",
-                "friction": "0",
+                "friction": "0.1",
                 "restitution": "0",
-                "damping": "0",
+                "damping": "0.4",
                 "angularDamping": "0",
                 "gravity": "0 -1000 0",
                 "offset": "0 20 0",
@@ -117,8 +123,8 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": {
-                        "maxForce": "100",
-				        "jumpDecay": "2"
+                        "maxForce": "200",
+				        "jumpDecay": "5"
                     }       
                 }
             ]
