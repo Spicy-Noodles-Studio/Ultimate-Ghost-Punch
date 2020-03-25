@@ -3,6 +3,7 @@
 #include "UserComponent.h"
 
 class GhostManager;
+class PlayerUI;
 
 class Health : public UserComponent
 {
@@ -15,9 +16,11 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	int getHealth();
+	int getMaxHealth();
 	void setHealth(int health);
 	bool isAlive();
 	bool isInvencible();
+
 	void receiveDamage(int damage);
 	void resurrect();
 	void die();
@@ -36,4 +39,5 @@ private:
 	bool invencible;
 
 	GhostManager* ghost;
+	PlayerUI* playerUI;
 };

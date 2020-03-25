@@ -10,6 +10,7 @@
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "GhostManager.h"
+#include "PlayerUI.h"
 
 #ifdef _DEBUG
 int main()
@@ -25,6 +26,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");
 	ComponentManager::GetInstance()->registerComponent<Health>("Health");
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
+	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 
 	GaiaCore* g = new GaiaCore();
 	g->init();

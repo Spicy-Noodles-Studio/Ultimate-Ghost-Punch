@@ -70,6 +70,9 @@
         },
         {
             "ComponentName": "GhostManager"
+        },
+        {
+            "ComponentName": "PlayerUI"
         }
     ],
     "Children": [

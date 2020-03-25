@@ -3,10 +3,7 @@
 #include "GameObject.h"
 
 #include "GhostManager.h"
-#include "UILayout.h"
-
-#include "Scene.h"
-#include "Camera.h"
+#include "PlayerUI.h"
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -26,32 +23,7 @@ void Health::start()
 	maxHealth = health;
 
 	ghost = gameObject->getComponent<GhostManager>();
-
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health));
-
-	// ------hearts creation
-
-	float posX = 0.4f;
-
-	for (int i = 1; i <= health; i++)
-	{
-		findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			createChild("TaharezLook/StaticImage", gameObject->getName() + "Heart" + std::to_string(i));
-
-		findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			getChild(gameObject->getName() + "Heart" + std::to_string(i)).setPosition(posX, 0.05f);
-
-		findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			getChild(gameObject->getName() + "Heart" + std::to_string(i)).setSize(0.05f, 0.2f);
-
-		posX += 0.05f;
-	}
-
-	// ------
+	playerUI = gameObject->getComponent<PlayerUI>();
 }
 
 void Health::update(float deltaTime)
@@ -66,35 +38,9 @@ void Health::update(float deltaTime)
 		{
 			invencible = false;
 
-			findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-				getUIElement("StaticImage").getChild(gameObject->getName() + "StateText").setText("State: Alive");
+			playerUI->updateState("Alive");
 		}
 	}
-
-	// ----update cursor
-
-	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->getComponent<Transform>()->getPosition());
-
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Cursor").setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
-
-
-
-	// ----
-
-	// ----update hearts
-
-	for (int i = health + 1; i <= maxHealth; i++)
-	{
-		findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-			getUIElement("StaticImage").getChild(gameObject->getName() + "Background").
-			getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(false);
-
-	}
-
-
-	// ----
-
 }
 
 void Health::handleData(ComponentData* data)
@@ -129,16 +75,13 @@ void Health::receiveDamage(int damage)
 	invencible = true;
 	time = invencibleDamageTime;
 
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health));
+	playerUI->updateHealth();
 
 	if (health <= 0)
 	{
 		if (ghost != nullptr && ghost->hasGhost())
 		{
-			ghost->activateGhost();
-			findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-				getUIElement("StaticImage").getChild(gameObject->getName() + "StateText").setText("State: Ghost");
+			playerUI->updateState("Ghost");
 
 		}
 		else
@@ -153,9 +96,7 @@ void Health::die()
 {
 	alive = false;
 
-	// update UI
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "StateText").setText("State: Dead");
+	playerUI->updateState("Dead");
 
 	// deactivate gameObject
 	gameObject->setActive(false);
@@ -173,13 +114,17 @@ void Health::resurrect()
 	// activate invencibility for a specified time
 	invencible = true;
 
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "StateText").setText("State: Invencible");
+	playerUI->updateState("Invencible");
 }
 
 int Health::getHealth()
 {
 	return health;
+}
+
+int Health::getMaxHealth()
+{
+	return maxHealth;
 }
 
 void Health::setHealth(int health)

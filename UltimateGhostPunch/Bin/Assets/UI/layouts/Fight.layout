@@ -28,8 +28,8 @@
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
             </Window>
-            ## PLAYER 1 CURSOR
-            <Window type="TaharezLook/StaticText" name="Player1Cursor" >
+            ## PLAYER 1 INDICATOR
+            <Window type="TaharezLook/StaticText" name="Player1Indicator" >
                <Property name="Area" value="{{0.3,0},{0.7,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="[colour='FFFF0000']P1" />
@@ -55,8 +55,8 @@
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
             </Window>
-            ## PLAYER 2 CURSOR
-            <Window type="TaharezLook/StaticText" name="Player2Cursor" >
+            ## PLAYER 2 INDICATOR
+            <Window type="TaharezLook/StaticText" name="Player2Indicator" >
                <Property name="Area" value="{{0.6,0},{0.7,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="[colour='FF0000FF']P2" />
