@@ -1,5 +1,8 @@
 #include "Jump.h"
+
 #include <sstream>
+#include <GameObject.h>
+#include <RigidBody.h>
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
 {

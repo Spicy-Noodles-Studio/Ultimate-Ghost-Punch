@@ -30,7 +30,7 @@ void GhostManager::start()
 	// Store some data for player resurrection
 	if (rb != nullptr) playerGravity = rb->getGravity().y;
 	if (mesh != nullptr) aliveMeshId = mesh->getMeshId();
-	if(mesh!= nullptr) aliveMeshName = mesh->getMeshName();
+	if (mesh != nullptr) aliveMeshName = mesh->getMeshName();
 	aliveScale = transform->getScale();
 }
 
@@ -56,6 +56,10 @@ void GhostManager::handleData(ComponentData* data)
 			if (!(ss >> ghostMeshId >> ghostMeshName))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else if (prop.first == "ghostDamage") {
+			if (!(ss >> ghostDamage))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
 		else if (prop.first == "ghostScale") {
 			double x, y, z;
 			if (!(ss >> x >> y >> z))
@@ -77,11 +81,14 @@ void GhostManager::handleData(ComponentData* data)
 
 void GhostManager::onObjectEnter(GameObject* other)
 {
-	if (ghost	// If this player is in ghost mode
-		&& other->getTag() == "player" // and other is a player
-		&& other->getComponent<Health>() != nullptr && other->getComponent<Health>()->getHealth() > 0) { // and it is alive
-
-		deactivateGhost();
+	// If this player is in ghost mode and other is a player
+	if (ghost && other->getTag() == "player") {
+		Health* aux = other->getComponent<Health>();
+		//If the other player is alive
+		if (aux != nullptr && aux->getHealth() > 0) {
+			deactivateGhost();
+			aux->receiveDamage(ghostDamage);
+		}
 	}
 }
 
@@ -108,7 +115,7 @@ void GhostManager::activateGhost()
 	}
 
 	// Change player's mesh -> ghost mesh
-	if(mesh!=nullptr) mesh->changeMesh(ghostMeshId, ghostMeshName);
+	if (mesh != nullptr) mesh->changeMesh(ghostMeshId, ghostMeshName);
 	// Change scale
 	transform->setScale(ghostScale);
 	// Apply position offset
@@ -127,7 +134,7 @@ void GhostManager::deactivateGhost()
 	}
 
 	// Change player's mesh -> alive mesh
-	if(mesh!=nullptr) mesh->changeMesh(aliveMeshId, aliveMeshName);
+	if (mesh != nullptr) mesh->changeMesh(aliveMeshId, aliveMeshName);
 	if (health != nullptr) health->resurrect();
 	transform->setScale(aliveScale);
 }

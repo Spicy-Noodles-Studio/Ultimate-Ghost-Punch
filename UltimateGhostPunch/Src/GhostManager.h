@@ -14,6 +14,7 @@ class GhostManager : public UserComponent
 private:
 	bool ghost, ghostAble;
 	float ghostTime = 10;
+	int ghostDamage = 1;
 	Vector3 ghostSpawnOffset = { 0,0,0 };
 
 	Movement* mov;

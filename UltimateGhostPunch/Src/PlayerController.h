@@ -4,7 +4,6 @@
 
 #include <UserComponent.h>
 
-class GameObject;
 class InputSystem;
 class GhostMovement;
 class Movement;

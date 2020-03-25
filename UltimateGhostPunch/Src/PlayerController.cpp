@@ -41,10 +41,14 @@ void PlayerController::update(float deltaTime)
 	if (usingKeyboard)
 	{
 
-		if (inputSystem->isKeyPressed("A"))
+		if (inputSystem->isKeyPressed("A")) {
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->isKeyPressed("D"))
+			gameObject->transform->setRotation({ -90,-90,0 });
+		}
+		else if (inputSystem->isKeyPressed("D")) {
 			dir = Vector3(1, 0, 0);
+			gameObject->transform->setRotation({ -90,90,0 });
+		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->isKeyPressed("W"))
@@ -94,10 +98,14 @@ void PlayerController::update(float deltaTime)
 	//Controles con mando
 	else
 	{
-		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left"))
+		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left")){
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right"))
+			gameObject->transform->setRotation({ -90,-90,0 });
+		}
+		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right")){
 			dir = Vector3(1, 0, 0);
+			gameObject->transform->setRotation({ -90,90,0 });
+		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->getLeftJoystick(playerIndex).second < 0 || inputSystem->isButtonPressed(playerIndex, "Up"))

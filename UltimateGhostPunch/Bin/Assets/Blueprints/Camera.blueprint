@@ -32,6 +32,12 @@
                 "preset" : "mountains",
                 "maxDistance" : "100000"
             }
+        },
+        {
+            "ComponentName": "UILayout",
+            "ComponentProperties": {
+                "layout" : "Fight.layout"
+            }
         }
     ]
 }

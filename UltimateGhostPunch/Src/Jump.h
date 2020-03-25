@@ -3,8 +3,8 @@
 #define JUMP_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
-#include <RigidBody.h>
+
+class RigidBody;
 
 class Jump : public UserComponent
 {
