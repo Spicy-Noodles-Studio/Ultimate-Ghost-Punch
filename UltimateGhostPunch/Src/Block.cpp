@@ -12,8 +12,7 @@ bool Block::block()
 	if (!isBlocking && blockTime > 0 && isGrounded) {
 		isBlocking = true;
 		timeElapsed = 0;
-		blockDirection = rigidBody->getOrientation();
-		blockDirection.normalize();
+		blockDirection = gameObject->getParent()->transform->getRotation().y;
 		LOG("BLOCKING\n");
 	}
 	return isBlocking;
@@ -27,8 +26,8 @@ bool Block::unblock()
 
 bool Block::blockAttack(float damage, Vector3 otherPosition)
 {
-	if (isBlocking && ((blockDirection.x < 0 && otherPosition.x > gameObject->getParent()->transform->getPosition().x) ||
-		(blockDirection.x > 0 && otherPosition.x < gameObject->getParent()->transform->getPosition().x))) {
+	if (isBlocking && ((blockDirection > 0 && otherPosition.x > gameObject->getParent()->transform->getPosition().x) ||
+		(blockDirection < 0 && otherPosition.x < gameObject->getParent()->transform->getPosition().x))) {
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
 		if (blockTime <= 0) {
@@ -38,7 +37,7 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 		return true;
 	}
 	else {
-		Health* health = gameObject->getComponent<Health>();
+		Health* health = gameObject->getParent()->getComponent<Health>();
 		if (health != nullptr) health->receiveDamage(damage);
 		LOG("Attack received\n");
 	}

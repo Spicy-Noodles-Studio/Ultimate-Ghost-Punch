@@ -20,7 +20,8 @@ private:
 	bool isGrounded;
 	bool isBlocking;
 
-	Vector3 blockDirection;
+	float blockDirection;
+	GameObject* attackCollider;
 
 public:
 	Block(GameObject* gameObject);
