@@ -66,6 +66,13 @@ void GhostManager::handleData(ComponentData* data)
 			else
 				ghostScale = { x,y,z };
 		}
+		else if (prop.first == "deathPosition") {
+			double x, y, z;
+			if (!(ss >> x >> y >> z))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			else
+				deathPos = { x,y,z };
+		}
 		else if (prop.first == "spawnOffset") {
 			double x, y, z;
 			if (!(ss >> x >> y >> z))
@@ -137,6 +144,11 @@ void GhostManager::deactivateGhost()
 	// Change player's mesh -> alive mesh
 	gameObject->getComponent<MeshRenderer>()->changeMesh(aliveMeshId, aliveMeshName);
 	gameObject->getComponent<Transform>()->setScale(aliveScale);
+}
+
+void GhostManager::setDeathPosition(const Vector3& dPos)
+{
+	deathPos = dPos;
 }
 
 void GhostManager::changeMesh(std::string id, std::string name)

@@ -19,7 +19,8 @@ private:
 	int playerIndex;
 	bool usingKeyboard;
 	bool charge = false;
-
+	// Initial position of the player
+	Vector3 iniPosition = {0,0,0};
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -33,6 +34,12 @@ private:
 	// Will ignore input if frozen is true
 	bool frozen = false;
 
+	// Limit of the world in the Y axis (HAY QUE METERLO EN EL GAMEMANAGER)
+	float bottomLimit = -500.0f;
+
+	// Damage taken when falling out of the world
+	float fallDamage = 2.0f;
+
 public:
 	PlayerController(GameObject* gameObject);
 
@@ -40,9 +47,16 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
-	int getPlayerIndex() const;
-	void respawn(const Vector3& respawnPos);
+	// Manages player's input and generates a movement direction
+	void checkInput(Vector3 &dir);
+	// Respawn and damage the player if it falls out of the world,
+	// and returns true in that case
+	bool checkOutsideLimits();
 
+	int getPlayerIndex() const;
+	Vector3 getInitialPosition() const;
+
+	void respawn(const Vector3& respawnPos);
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
 };

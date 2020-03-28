@@ -46,5 +46,6 @@ public:
 	void activateGhost();
 	void deactivateGhost();
 
+	void setDeathPosition(const Vector3& dPos);
 };
 
