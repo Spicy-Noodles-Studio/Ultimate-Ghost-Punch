@@ -1,0 +1,50 @@
+{
+    "SceneName": "MainScene",
+    "SceneObjects": [
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "MainCamera",
+            "Tag": "MainCamera",
+            "Components":
+            [
+                {
+                    "ComponentName": "Camera",
+                    "ComponentProperties": {
+                        "main": "true"
+                    }
+                },
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": {
+                        "position": "0 200 60",
+                        "rotation": "-20 0 0"
+                    }
+                },
+                {
+                    "ComponentName": "Light",
+                    "ComponentProperties": {
+                        "type": "Point",
+                        "colour": "1 1 1"
+                    }
+                },
+                {
+                    "ComponentName": "SoundListener"
+                },
+                {
+                    "ComponentName": "Reverb",
+                    "ComponentProperties": {
+                        "preset" : "mountains",
+                        "maxDistance" : "100000"
+                    }
+                },
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": {
+                        "layout" : "mainMenu.layout",
+                        "event" : "SinglePlayerButton singlePlayerClick"
+                    }
+                }
+            ]
+        }
+    ]
+}

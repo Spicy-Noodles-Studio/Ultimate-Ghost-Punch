@@ -12,7 +12,7 @@ Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 
 Health::~Health()
 {
-
+	
 }
 
 void Health::start()

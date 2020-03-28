@@ -40,7 +40,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": {
-                        "layout" : "Fight.layout"
+                        "layout" : "fight.layout"
                     }
                 }
             ]

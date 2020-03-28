@@ -14,6 +14,18 @@
 #include "PlayerUI.h"
 #include "UltimateGhostPunch.h"
 
+#include "InterfaceSystem.h"
+#include "SceneManager.h"
+
+using namespace CEGUI;
+
+bool singlePlayerClick(const EventArgs& eventArgs)
+{
+	SceneManager::GetInstance()->changeScene("mainScene");
+	return false;
+}
+
+
 #ifdef _DEBUG
 int main()
 #else
@@ -31,6 +43,8 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
 	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
+
+	InterfaceSystem::GetInstance()->registerEvent("singlePlayerClick", UIEvent("singlePlayerClick", &singlePlayerClick));
 
 	GaiaCore* g = new GaiaCore();
 	g->init();
