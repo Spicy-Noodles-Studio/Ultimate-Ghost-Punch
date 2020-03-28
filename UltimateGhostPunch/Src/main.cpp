@@ -17,14 +17,46 @@
 #include "InterfaceSystem.h"
 #include "SceneManager.h"
 
-using namespace CEGUI;
+//#include "GameManager.h"
 
-bool singlePlayerClick(const EventArgs& eventArgs)
+//------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
+
+
+// MAIN MENU EVENTS
+bool singlePlayerButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("mainScene");
 	return false;
 }
 
+bool multiplayerButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("fightConfig");
+	return false;
+}
+
+bool optionsButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("optionsScene");
+	return false;
+}
+
+bool exitButtonClick()
+{
+	
+	return false;
+}
+
+// FIGHT CONFIG EVENTS
+bool fightButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("mainScene");
+	return false;
+}
+
+
+
+//-------------
 
 #ifdef _DEBUG
 int main()
@@ -34,6 +66,7 @@ int WINAPI
 WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
+	// ---Components registering
 	ComponentManager::GetInstance()->registerComponent<GhostMovement>("GhostMovement");
 	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
 	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
@@ -44,7 +77,16 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
 
-	InterfaceSystem::GetInstance()->registerEvent("singlePlayerClick", UIEvent("singlePlayerClick", &singlePlayerClick));
+	// ---Events registering
+	// mainMenu
+	InterfaceSystem::GetInstance()->registerEvent("singlePlayerButtonClick", UIEvent("ButtonClicked", &singlePlayerButtonClick));
+	InterfaceSystem::GetInstance()->registerEvent("multiplayerButtonClick", UIEvent("ButtonClicked", &multiplayerButtonClick));
+	InterfaceSystem::GetInstance()->registerEvent("optionsButtonClick", UIEvent("ButtonClicked", &optionsButtonClick));
+	InterfaceSystem::GetInstance()->registerEvent("exitButtonClick", UIEvent("ButtonClicked", &exitButtonClick));
+
+	// fightConfigMenu
+	InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", &fightButtonClick));
+
 
 	GaiaCore* g = new GaiaCore();
 	g->init();

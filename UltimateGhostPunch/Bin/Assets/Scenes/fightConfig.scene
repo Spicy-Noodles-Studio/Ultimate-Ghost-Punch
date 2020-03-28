@@ -40,8 +40,9 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": {
-                        "layout" : "mainMenu.layout",
-                        "event" : "SinglePlayerButton singlePlayerButtonClick | MultiplayerButton multiplayerButtonClick | OptionsButton optionsButtonClick | ExitButton exitButtonClick"
+                        "layout" : "fightConfig.layout",
+                        "event" : "FightButton fightButtonClick"
+
                     }
                 }
             ]

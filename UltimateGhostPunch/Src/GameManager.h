@@ -17,14 +17,15 @@ private:
 
 	bool paused;
 
-
 	// FIGHT DATA
 	int nPlayers;
-	//std::vector<GameObject*> knights;
+	std::vector<GameObject*> knights;
 	int winner;
 
 	std::string level;
 	std::string song;
+
+	// OPTIONS DATA
 
 
 public:

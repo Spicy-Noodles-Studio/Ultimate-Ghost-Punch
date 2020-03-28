@@ -21,11 +21,9 @@ void PlayerUI::start()
 {
 	health = gameObject->getComponent<Health>();
 
-	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
+	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Background");
 
-	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
+	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Indicator");
 
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
