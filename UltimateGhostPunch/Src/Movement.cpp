@@ -13,6 +13,15 @@ void Movement::move(Vector3 dir)
 	if(rigidBody != nullptr) rigidBody->addForce(dir * force);
 }
 
+void Movement::stop()
+{
+	if (rigidBody != nullptr)
+	{
+		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->clearForces();
+	}
+}
+
 void Movement::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();

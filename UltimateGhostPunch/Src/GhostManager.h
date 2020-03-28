@@ -13,6 +13,7 @@ class GhostManager : public UserComponent
 private:
 	bool ghost, ghostAble;
 	float ghostTime = 10;
+	int ghostDamage = 1;
 	Vector3 ghostSpawnOffset = { 0,0,0 };
 
 	Movement* mov;
@@ -26,6 +27,7 @@ private:
 	std::string aliveMeshId, aliveMeshName;
 	Vector3 aliveScale;
 	float playerGravity;
+	Vector3 deathPos = {0,0,0};
 
 	void changeMesh(std::string id, std::string name);
 public:
@@ -36,7 +38,7 @@ public:
 
 	virtual void handleData(ComponentData* data);
 
-	virtual void onTriggerEnter(GameObject* other);
+	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
 	bool hasGhost();

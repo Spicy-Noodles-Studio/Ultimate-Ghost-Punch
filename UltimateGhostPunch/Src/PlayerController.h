@@ -30,6 +30,9 @@ private:
 	InputSystem* inputSystem;
 	GhostManager* ghost;
 
+	// Will ignore input if frozen is true
+	bool frozen = false;
+
 public:
 	PlayerController(GameObject* gameObject);
 
@@ -38,6 +41,10 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	int getPlayerIndex() const;
+	void respawn(const Vector3& respawnPos);
+
+	// Freezes / Reenables the movement 
+	void setFrozen(bool freeze);
 };
 
 #endif

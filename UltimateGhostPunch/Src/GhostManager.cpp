@@ -55,6 +55,10 @@ void GhostManager::handleData(ComponentData* data)
 			if (!(ss >> ghostMeshId >> ghostMeshName))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else if (prop.first == "ghostDamage") {
+			if (!(ss >> ghostDamage))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
 		else if (prop.first == "ghostScale") {
 			double x, y, z;
 			if (!(ss >> x >> y >> z))
@@ -74,15 +78,17 @@ void GhostManager::handleData(ComponentData* data)
 	}
 }
 
-void GhostManager::onTriggerEnter(GameObject* other)
+void GhostManager::onObjectEnter(GameObject* other)
 {
-	if (!ghost	// If this player is in ghost mode
-		&& other->getTag() == "player" // and other is a player
-		&& health->getHealth() > 0) { // and it is alive
-		
-		other->getComponent<GhostManager>()->deactivateGhost();
-		if (other->getComponent<Health>() != nullptr) other->getComponent<Health>()->resurrect();
-		
+	// If this player is in ghost mode and other is a player
+	if (ghost && other->getTag() == "player") {
+		Health* aux = other->getComponent<Health>();
+		//If the other player is alive
+		if (aux != nullptr && aux->getHealth() > 0) {
+			deactivateGhost();
+			aux->receiveDamage(ghostDamage);
+			gameObject->getComponent<PlayerController>()->respawn(deathPos);
+		}
 	}
 }
 
@@ -98,6 +104,7 @@ bool GhostManager::hasGhost()
 
 void GhostManager::activateGhost()
 {
+	deathPos = transform->getPosition();
 	ghost = true;
 	ghostAble = false;
 

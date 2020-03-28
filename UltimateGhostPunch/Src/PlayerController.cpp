@@ -11,6 +11,7 @@
 #include "Jump.h"
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
+#include "Health.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -36,6 +37,8 @@ void PlayerController::start()
 void PlayerController::update(float deltaTime)
 {
 	UserComponent::update(deltaTime);
+
+	if (frozen) return;
 
 	Vector3 dir = Vector3(0, 0, 0);
 	Vector3 punchDir;
@@ -200,4 +203,19 @@ void PlayerController::handleData(ComponentData* data)
 int PlayerController::getPlayerIndex () const
 {
 	return playerIndex;
+}
+
+void PlayerController::respawn(const Vector3& respawnPos)
+{
+	Health* health = gameObject->getComponent<Health>();
+	if (health != nullptr) health->resurrect();
+
+	gameObject->transform->setPosition(respawnPos);
+	movement->stop();
+}
+
+
+void PlayerController::setFrozen(bool freeze)
+{
+	frozen = freeze;
 }

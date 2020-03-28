@@ -83,6 +83,7 @@
             "ComponentProperties": {
                 "ghostMesh": "ghost knot.mesh",
                 "ghostScale": "0.15 0.15 0.15",
+                "ghostDamage": "2",
                 "spawnOffset": "0 20 0"
             }
         },

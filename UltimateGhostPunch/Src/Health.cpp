@@ -4,6 +4,7 @@
 
 #include "GhostManager.h"
 #include "PlayerUI.h"
+#include "PlayerController.h"
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -37,8 +38,14 @@ void Health::update(float deltaTime)
 		else
 		{
 			invencible = false;
-
 			playerUI->updateState("Alive");
+			if (respawning) 
+			{
+				respawning = false;
+				// reactivate movement
+				PlayerController* input = gameObject->getComponent<PlayerController>();
+				if (input != nullptr) input->setFrozen(false);
+			}
 		}
 	}
 }
@@ -121,7 +128,12 @@ void Health::resurrect()
 	// activate invencibility for a specified time
 	invencible = true;
 	time = invencibleResurrectionTime;
-	playerUI->updateState("Invencible");
+	playerUI->updateState("Respawning");
+	respawning = true;
+
+	// deactivate movement while reapearing
+	PlayerController* input = gameObject->getComponent<PlayerController>();
+	if (input != nullptr) input->setFrozen(true);
 }
 
 int Health::getHealth()
