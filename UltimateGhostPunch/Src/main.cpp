@@ -17,7 +17,7 @@
 #include "InterfaceSystem.h"
 #include "SceneManager.h"
 
-//#include "GameManager.h"
+#include "GameManager.h"
 
 //------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
 
@@ -76,6 +76,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
 	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
+	ComponentManager::GetInstance()->registerComponent<GameManager>("GameManager");
 
 	// ---Events registering
 	// mainMenu

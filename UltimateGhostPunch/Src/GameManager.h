@@ -3,13 +3,14 @@
 #define GAMEMANAGER_H
 
 #include "Singleton.h"
+#include "UserComponent.h"
 
 #include <vector>
 #include <string>
 
 class GameObject;
 
-class GameManager : public Singleton<GameManager>
+class GameManager : public Singleton<GameManager>, public UserComponent
 {
 private:
 
@@ -29,9 +30,11 @@ private:
 
 
 public:
-	GameManager();
+	GameManager(GameObject* gameObject);
 	~GameManager();
 
+	virtual void start();
+	virtual void update();
 };
 
 #endif

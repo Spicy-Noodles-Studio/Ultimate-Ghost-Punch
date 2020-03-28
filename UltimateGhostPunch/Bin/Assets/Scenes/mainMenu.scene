@@ -3,6 +3,17 @@
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
+            "ObjectName": "GameManager",
+            "Tag": "GameManager",
+            "Components":
+            [
+                {
+                    "ComponentName": "GameManager"
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
             "ObjectName": "MainCamera",
             "Tag": "MainCamera",
             "Components":
