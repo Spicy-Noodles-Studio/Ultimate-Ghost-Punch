@@ -1,17 +1,6 @@
 {
-    "SceneName": "MainMenu",
+    "SceneName": "Options",
     "SceneObjects": [
-        {
-            "ObjectType": "GAMEOBJECT",
-            "ObjectName": "GameManager",
-            "Tag": "GameManager",
-            "Components":
-            [
-                {
-                    "ComponentName": "GameManager"
-                }
-            ]
-        },
         {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "MainCamera",
@@ -39,7 +28,7 @@
                     ]
                 },
                 {
-                    "ComponentName": "SoundListener"
+                    "ComponentName", "SoundListener"
                 },
                 {
                     "ComponentName": "Reverb",
@@ -51,8 +40,8 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "mainMenu.layout"],
-                        ["event" , "SinglePlayerButton singlePlayerButtonClick | MultiplayerButton multiplayerButtonClick | OptionsButton optionsButtonClick | ExitButton exitButtonClick"]
+                        ["layout" , "options.layout"],
+                        ["event" , "BackButton backButtonClick"]
                     ]
                 }
             ]

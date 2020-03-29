@@ -12,6 +12,8 @@
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
 
+#include "PlayerUI.h"
+
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
 
@@ -25,9 +27,10 @@ void PlayerController::start()
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
+	playerUI = gameObject->getComponent<PlayerUI>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
+	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
@@ -42,6 +45,9 @@ void PlayerController::update(float deltaTime)
 	if (usingKeyboard)
 	{
 
+		if (inputSystem->getKeyPress("ESCAPE"))
+			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
+
 		if (inputSystem->isKeyPressed("A"))
 			dir = Vector3(-1, 0, 0);
 		else if (inputSystem->isKeyPressed("D"))
@@ -55,7 +61,7 @@ void PlayerController::update(float deltaTime)
 		}
 
 		if (inputSystem->getMouseButtonClick('l')) {
-			if(ghost == nullptr || !ghost->isGhost())
+			if (ghost == nullptr || !ghost->isGhost())
 				attack->quickAttack();
 			else
 			{
@@ -69,7 +75,7 @@ void PlayerController::update(float deltaTime)
 		if (inputSystem->getMouseButtonHold('l'))
 		{
 			if (ghost != nullptr || ghost->isGhost())
-				if (ghostPunch != nullptr && ghostPunch->isAvailable()&& charge)
+				if (ghostPunch != nullptr && ghostPunch->isAvailable() && charge)
 				{
 					std::pair<int, int> mousePos = inputSystem->getMousePosition();
 
@@ -83,13 +89,13 @@ void PlayerController::update(float deltaTime)
 					punchDir.z = 0;
 
 					punchDir.normalize();
-					
+
 				}
 		}
 		if (inputSystem->getMouseButtonRelease('l'))
 		{
 			if (ghost != nullptr || ghost->isGhost())
-				if (ghostPunch != nullptr && ghostPunch->isAvailable() && charge )
+				if (ghostPunch != nullptr && ghostPunch->isAvailable() && charge)
 				{
 					std::pair<int, int> mousePos = inputSystem->getMousePosition();
 
@@ -106,15 +112,15 @@ void PlayerController::update(float deltaTime)
 					ghostPunch->ghostPunch(punchDir);
 					charge = false;
 				}
-			
+
 		}
-		
+
 
 		else if (inputSystem->getMouseButtonClick('r')) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isKeyPressed("Space")) 
-			if(jump != nullptr) jump->salta();
+		else if (InputSystem::GetInstance()->isKeyPressed("Space"))
+			if (jump != nullptr) jump->salta();
 	}
 	else
 	{
@@ -144,22 +150,19 @@ void PlayerController::update(float deltaTime)
 					ghostPunch->ghostPunch(punchDir);
 					charge = false;
 				}
-
 			}
 		}
 
-		
-
 		if (inputSystem->getButtonPress(playerIndex, "X")) {
-			if(ghost == nullptr || !ghost->isGhost())
-			if (attack != nullptr) attack->quickAttack();
+			if (ghost == nullptr || !ghost->isGhost())
+				if (attack != nullptr) attack->quickAttack();
 		}
 
 		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
 			if (attack != nullptr) attack->strongAttack();
 		}
 		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
-			if(jump != nullptr) jump->salta();
+			if (jump != nullptr) jump->salta();
 	}
 
 	if (!ghost->isGhost()) {
@@ -167,10 +170,10 @@ void PlayerController::update(float deltaTime)
 	}
 	else {
 		if (ghostMovement != nullptr) {
-			
-			if (ghostPunch != nullptr && !ghostPunch->isPunching() &&! charge)
-			ghostMovement->move(dir);
-			else if(ghostPunch == nullptr)
+
+			if (ghostPunch != nullptr && !ghostPunch->isPunching() && !charge)
+				ghostMovement->move(dir);
+			else if (ghostPunch == nullptr)
 				ghostMovement->move(dir);
 		}
 	}
@@ -184,12 +187,12 @@ void PlayerController::handleData(ComponentData* data)
 
 		if (prop.first == "keyboard")
 		{
-			if(!(ss >> usingKeyboard))
+			if (!(ss >> usingKeyboard))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		if (prop.first == "index")
 		{
-			if(!(ss >> playerIndex))
+			if (!(ss >> playerIndex))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -197,7 +200,7 @@ void PlayerController::handleData(ComponentData* data)
 	}
 }
 
-int PlayerController::getPlayerIndex () const
+int PlayerController::getPlayerIndex() const
 {
 	return playerIndex;
 }

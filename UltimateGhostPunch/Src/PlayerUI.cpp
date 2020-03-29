@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "Camera.h"
 
-PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr)
+PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), pauseMenu(nullptr)
 {
 
 }
@@ -24,6 +24,8 @@ void PlayerUI::start()
 	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Background");
 
 	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Indicator");
+
+	pauseMenu = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("PauseBackground");
 
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
@@ -76,6 +78,16 @@ void PlayerUI::updateHealth()
 	playerHUD.getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
+}
+
+void PlayerUI::setPauseMenuVisible(bool show)
+{
+	pauseMenu.setVisible(show);
+}
+
+bool PlayerUI::isPauseMenuVisible()
+{
+	return pauseMenu.isVisible();
 }
 
 void PlayerUI::updateHearts()

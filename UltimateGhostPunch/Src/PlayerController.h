@@ -12,6 +12,7 @@ class Attack;
 class GhostManager;
 class Jump;
 class UltimateGhostPunch;
+class PlayerUI;
 
 class PlayerController : public UserComponent
 {
@@ -29,6 +30,8 @@ private:
 
 	InputSystem* inputSystem;
 	GhostManager* ghost;
+
+	PlayerUI* playerUI;
 
 public:
 	PlayerController(GameObject* gameObject);

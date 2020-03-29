@@ -1,5 +1,5 @@
 {
-    "SceneName": "MainScene",
+    "SceneName": "FightConfig",
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
@@ -9,41 +9,41 @@
             [
                 {
                     "ComponentName": "Camera",
-                    "ComponentProperties": {
-                        "main": "true"
-                    }
+                    "ComponentProperties": [
+                        ["main", "true"]
+                    ]
                 },
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position": "0 200 60",
-                        "rotation": "-20 0 0"
-                    }
+                    "ComponentProperties": [
+                        ["position", "0 200 60"],
+                        ["rotation", "-20 0 0"]
+                    ]
                 },
                 {
                     "ComponentName": "Light",
-                    "ComponentProperties": {
-                        "type": "Point",
-                        "colour": "1 1 1"
-                    }
+                    "ComponentProperties": [
+                        ["type", "Point"],
+                        ["colour", "1 1 1"]
+                    ]
                 },
                 {
                     "ComponentName": "SoundListener"
                 },
                 {
                     "ComponentName": "Reverb",
-                    "ComponentProperties": {
-                        "preset" : "mountains",
-                        "maxDistance" : "100000"
-                    }
+                    "ComponentProperties": [
+                        ["preset" , "mountains"],
+                        ["maxDistance" , "100000"]
+                    ]
                 },
                 {
                     "ComponentName": "UILayout",
-                    "ComponentProperties": {
-                        "layout" : "fightConfig.layout",
-                        "event" : "FightButton fightButtonClick"
+                    "ComponentProperties": [
+                        ["layout" , "fightConfig.layout"],
+                        ["event" , "FightButton fightButtonClick | BackButton backButtonClick"]
 
-                    }
+                    ]
                 }
             ]
         }

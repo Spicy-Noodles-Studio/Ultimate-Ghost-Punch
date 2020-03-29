@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="optionsRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        # RESOLUTION TEXT
+        <Window type="TaharezLook/StaticText" name="ResolutionText" >
+            <Property name="Area" value="{{0.2,0},{0.3,0},{0.5,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{0.3,0}}" />
+            <Property name="Text" value="RESOLUTION" />
+        </Window>
+        # GAMMA TEXT
+        <Window type="TaharezLook/StaticText" name="GammaText" >
+            <Property name="Area" value="{{0.2,0},{0.4,0},{0.5,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{0.3,0}}" />
+            <Property name="Text" value="GAMMA" />
+        </Window>
+        # MUSIC VOLUME TEXT
+        <Window type="TaharezLook/StaticText" name="MusicVolumeText" >
+            <Property name="Area" value="{{0.2,0},{0.5,0},{0.5,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{0.3,0}}" />
+            <Property name="Text" value="MUSIC VOLUME" />
+        </Window>
+        # SOUND VOLUME TEXT
+        <Window type="TaharezLook/StaticText" name="SoundVolumeText" >
+            <Property name="Area" value="{{0.2,0},{0.6,0},{0.5,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{0.3,0}}" />
+            <Property name="Text" value="SOUND VOLUME" />
+        </Window>
+        # DEFAULT OPTIONS BUTTON
+        <Window type="TaharezLook/Button" name="DefaultOptionsButton" >
+            <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="DEFAULT OPTIONS" />
+        </Window>
+        # BACK BUTTON
+        <Window type="TaharezLook/Button" name="BackButton" >
+            <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="BACK" />
+        </Window>
+    </Window>
+</GUILayout>

@@ -21,6 +21,12 @@
 
 //------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
 
+// GENERIC EVENTS
+bool backButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
 
 // MAIN MENU EVENTS
 bool singlePlayerButtonClick()
@@ -37,7 +43,7 @@ bool multiplayerButtonClick()
 
 bool optionsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("optionsScene");
+	SceneManager::GetInstance()->changeScene("options");
 	return false;
 }
 
@@ -79,6 +85,10 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<GameManager>("GameManager");
 
 	// ---Events registering
+
+	// generic
+	InterfaceSystem::GetInstance()->registerEvent("backButtonClick", UIEvent("ButtonClicked", &backButtonClick));
+
 	// mainMenu
 	InterfaceSystem::GetInstance()->registerEvent("singlePlayerButtonClick", UIEvent("ButtonClicked", &singlePlayerButtonClick));
 	InterfaceSystem::GetInstance()->registerEvent("multiplayerButtonClick", UIEvent("ButtonClicked", &multiplayerButtonClick));

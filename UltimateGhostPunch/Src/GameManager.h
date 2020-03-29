@@ -34,7 +34,7 @@ public:
 	~GameManager();
 
 	virtual void start();
-	virtual void update();
+	virtual void update(float deltaTime);
 };
 
 #endif

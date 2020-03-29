@@ -9,39 +9,39 @@
             [
                 {
                     "ComponentName": "Camera",
-                    "ComponentProperties": {
-                        "main": "true"
-                    }
+                    "ComponentProperties": [
+                        ["main", "true"]
+                    ]
                 },
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position": "0 200 60",
-                        "rotation": "-20 0 0"
-                    }
+                    "ComponentProperties": [
+                        ["position", "0 200 60"],
+                        ["rotation", "-20 0 0"]
+                    ]
                 },
                 {
                     "ComponentName": "Light",
-                    "ComponentProperties": {
-                        "type": "Point",
-                        "colour": "1 1 1"
-                    }
+                    "ComponentProperties": [
+                        ["type", "Point"],
+                        ["colour", "1 1 1"]
+                    ]
                 },
                 {
                     "ComponentName": "SoundListener"
                 },
                 {
                     "ComponentName": "Reverb",
-                    "ComponentProperties": {
-                        "preset" : "mountains",
-                        "maxDistance" : "100000"
-                    }
+                    "ComponentProperties": [
+                        ["preset" , "mountains"],
+                        ["maxDistance" , "100000"]
+                    ]
                 },
                 {
                     "ComponentName": "UILayout",
-                    "ComponentProperties": {
-                        "layout" : "fight.layout"
-                    }
+                    "ComponentProperties": [
+                        ["layout" , "fight.layout"]
+                    ]
                 }
             ]
         },
@@ -53,56 +53,54 @@
             [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "scale" : "5 0.05 5",
-                        "position" : "0 0 -400"
-                    }
+                    "ComponentProperties": [
+                        ["scale" , "5 0.05 5"],
+                        ["position" , "0 0 -400"]
+                    ]
                 },
                 {
                     "ComponentName": "MeshRenderer",
-                    "ComponentProperties": {
-                        "mesh": "cube cube.mesh"
-                    }
+                    "ComponentProperties": [
+                        ["mesh", "cube cube.mesh"]
+                    ]
                 },
                 {
                     "ComponentName": "RigidBody",
-                    "ComponentProperties": {
-                        "shape": "Box",
-						"mass": "0",
-                        "scale": "50 50 50",
-                        "friction": "0.5"
-                    }
+                    "ComponentProperties": [
+                        ["shape", "Box"],
+						["mass", "0"],
+                        ["friction", "0.5"]
+                    ]
                 }
             ]
         },
          {
             "ObjectType": "GAMEOBJECT",
-            "ObjectName": "Suelo",
-            "Tag": "suelo",
+            "ObjectName": "Pared",
+            "Tag": "pared",
             "Components":
             [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "scale" : "5 0.05 5",
-                        "position" : "-100 0 -400",
-                        "rotation" : "0 0 90"
-                    }
+                    "ComponentProperties": [
+                        ["scale" , "5 0.05 5"],
+                        ["position" , "-100 0 -400"],
+                        ["rotation" , "0 0 90"]
+                    ]
                 },
                 {
                     "ComponentName": "MeshRenderer",
-                    "ComponentProperties": {
-                        "mesh": "cube cube.mesh"
-                    }
+                    "ComponentProperties": [
+                        ["mesh", "cube cube.mesh"]
+                    ]
                 },
                 {
                     "ComponentName": "RigidBody",
-                    "ComponentProperties": {
-                        "shape": "Box",
-						"mass": "0",
-                        "scale": "50 50 50",
-                        "friction": "0.5"
-                    }
+                    "ComponentProperties": [
+                        ["shape", "Box"],
+						["mass", "0"],
+                        ["friction", "0.5"]
+                    ]
                 }
             ]
         },
@@ -120,16 +118,16 @@
             "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "50 10 -200",
-                        "rotation" : "-90 -90 0"
-                    }
+                    "ComponentProperties": [
+                        ["position" , "50 10 -200"],
+                        ["rotation" , "-90 -90 0"]
+                    ]
                 },
                 {
                     "ComponentName": "PlayerController",
-                    "ComponentProperties": {
-                         "keyboard": "1"
-                    }
+                    "ComponentProperties": [
+                        ["keyboard", "1"]
+                    ]
                 }
             ]
         }

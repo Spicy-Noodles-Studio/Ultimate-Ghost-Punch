@@ -16,5 +16,11 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="FIGHT!" />
         </Window>
+        # BACK BUTTON
+        <Window type="TaharezLook/Button" name="BackButton" >
+            <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="BACK" />
+        </Window>
     </Window>
 </GUILayout>
