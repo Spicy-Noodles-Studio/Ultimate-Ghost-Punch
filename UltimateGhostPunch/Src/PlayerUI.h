@@ -23,6 +23,8 @@ public:
 private:
 	Health* health;
 
+	std::string name;
+
 	UIElement playerHUD;
 	UIElement playerIndicator;
 

@@ -28,13 +28,22 @@ private:
 
 	// OPTIONS DATA
 
-
 public:
+	GameManager();
 	GameManager(GameObject* gameObject);
 	~GameManager();
 
 	virtual void start();
 	virtual void update(float deltaTime);
+
+	void setLevel(std::string level);
+	void setSong(std::string song);
+
+	void setNPlayers(int nPlayers);
+	int getNPlayers();
+	
+	std::vector<GameObject*>& getKnights();
+
 };
 
 #endif

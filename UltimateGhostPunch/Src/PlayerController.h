@@ -41,6 +41,7 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	int getPlayerIndex() const;
+	void setPlayerIndex(int index);
 };
 
 #endif

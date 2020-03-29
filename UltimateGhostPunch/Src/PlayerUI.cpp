@@ -7,6 +7,8 @@
 #include "Scene.h"
 #include "Camera.h"
 
+#include "PlayerController.h"
+
 PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), pauseMenu(nullptr)
 {
 
@@ -19,11 +21,13 @@ PlayerUI::~PlayerUI()
 
 void PlayerUI::start()
 {
+	name = gameObject->getTag() + std::to_string(gameObject->getComponent<PlayerController>()->getPlayerIndex());
+
 	health = gameObject->getComponent<Health>();
 
-	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Background");
+	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(name + "Background");
 
-	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(gameObject->getName() + "Indicator");
+	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(name + "Indicator");
 
 	pauseMenu = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("PauseBackground");
 
@@ -44,7 +48,7 @@ void PlayerUI::createHearts()
 	for (int i = 1; i <= gameObject->getComponent<Health>()->getHealth(); i++)
 	{
 		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
-			gameObject->getName() + "Heart" + std::to_string(i));
+			name + "Heart" + std::to_string(i));
 
 		heart.setPosition(posX, 0.1f);
 		heart.setSize(0.05f, 0.2f);
@@ -70,12 +74,12 @@ void PlayerUI::update(float deltaTime)
 
 void PlayerUI::updateState(const std::string state)
 {
-	playerHUD.getChild(gameObject->getName() + "StateText").setText("State: " + state);
+	playerHUD.getChild(name + "StateText").setText("State: " + state);
 }
 
 void PlayerUI::updateHealth()
 {
-	playerHUD.getChild(gameObject->getName() + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
+	playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
 }
@@ -95,8 +99,8 @@ void PlayerUI::updateHearts()
 	for (int i = 1; i <= health->getMaxHealth(); i++)
 	{
 		if (i > health->getHealth())
-			playerHUD.getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(false);
+			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(false);
 		else
-			playerHUD.getChild(gameObject->getName() + "Heart" + std::to_string(i)).setVisible(true);
+			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(true);
 	}
 }

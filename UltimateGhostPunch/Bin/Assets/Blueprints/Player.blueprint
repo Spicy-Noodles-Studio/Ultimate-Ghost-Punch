@@ -1,7 +1,7 @@
 {
     "ObjectType": "GAMEOBJECT",
     "ObjectName": "Player",
-    "Tag": "player",
+    "Tag": "Player",
     "Components":
     [
         {

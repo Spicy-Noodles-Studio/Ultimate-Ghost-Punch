@@ -41,8 +41,11 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "fight.layout"],
-                        ["event" , "BackButton backButtonClick"]
+                        ["event" , "BackButton backButtonClick | ResumeButton resumeButtonClick"]
                     ]
+                },
+                {
+                    "ComponentName": "FightManager"
                 }
             ]
         },
@@ -103,33 +106,6 @@
 						["mass", "0"],
                         ["scale" , "1 1 1"],
                         ["friction", "0.5"]
-                    ]
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player1",
-            "Tag": "player",
-            "BlueprintPath": "Player"
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player2",
-            "Tag": "player",
-            "BlueprintPath": "Player",
-            "ComponentModifications" : [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position" , "50 10 -200"],
-                        ["rotation" , "-90 -90 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "PlayerController",
-                    "ComponentProperties": [
-                        ["keyboard", "1"]
                     ]
                 }
             ]

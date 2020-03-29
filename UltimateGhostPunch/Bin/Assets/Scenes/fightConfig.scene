@@ -37,6 +37,9 @@
                         ["maxDistance" , "100000"]
                     ]
                 },
+                                {
+                    "ComponentName": "FightConfiguration"
+                },
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [

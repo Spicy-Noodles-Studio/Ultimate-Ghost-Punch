@@ -204,3 +204,8 @@ int PlayerController::getPlayerIndex() const
 {
 	return playerIndex;
 }
+
+void PlayerController::setPlayerIndex(int index)
+{
+	playerIndex = index;
+}

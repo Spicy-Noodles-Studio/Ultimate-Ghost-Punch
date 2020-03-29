@@ -18,7 +18,9 @@
 #include "SceneManager.h"
 
 #include "GameManager.h"
+#include "FightConfiguration.h"
 
+#include "FightManager.h"
 
 //------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
 
@@ -54,13 +56,6 @@ bool exitButtonClick()
 	return false;
 }
 
-// FIGHT CONFIG EVENTS
-bool fightButtonClick()
-{
-	SceneManager::GetInstance()->changeScene("mainScene");
-	return false;
-}
-
 // PAUSE MENU EVENTS
 bool resumeButtonClick()
 {
@@ -91,6 +86,8 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
 	ComponentManager::GetInstance()->registerComponent<GameManager>("GameManager");
+	ComponentManager::GetInstance()->registerComponent<FightConfiguration>("FightConfiguration");
+	ComponentManager::GetInstance()->registerComponent<FightManager>("FightManager");
 
 	// ---Events registering
 
@@ -104,7 +101,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	InterfaceSystem::GetInstance()->registerEvent("exitButtonClick", UIEvent("ButtonClicked", &exitButtonClick));
 
 	// fightConfigMenu
-	InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", &fightButtonClick));
+	//InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", &fightButtonClick));
 
 	// pauseMenu
 	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", &resumeButtonClick));

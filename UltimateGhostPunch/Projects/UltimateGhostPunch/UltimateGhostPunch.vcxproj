@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
+    <ClCompile Include="..\..\Src\FightManager.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
     <ClCompile Include="..\..\Src\PlayerUI.cpp" />
     <ClCompile Include="..\..\Src\GhostManager.cpp" />
@@ -33,6 +35,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\FightConfiguration.h" />
+    <ClInclude Include="..\..\Src\FightManager.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
     <ClInclude Include="..\..\Src\PlayerUI.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />
