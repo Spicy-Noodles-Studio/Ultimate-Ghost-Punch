@@ -43,11 +43,11 @@ void PlayerController::update(float deltaTime)
 
 		if (inputSystem->isKeyPressed("A")) {
 			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ -90,-90,0 });
+			gameObject->transform->setRotation({ 0,-90,0 });
 		}
 		else if (inputSystem->isKeyPressed("D")) {
 			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ -90,90,0 });
+			gameObject->transform->setRotation({ 0,90,0 });
 		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
@@ -100,11 +100,11 @@ void PlayerController::update(float deltaTime)
 	{
 		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left")){
 			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ -90,-90,0 });
+			gameObject->transform->setRotation({ 0,-90,0 });
 		}
 		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right")){
 			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ -90,90,0 });
+			gameObject->transform->setRotation({ 0,90,0 });
 		}
 
 		if (ghost != nullptr && ghost->isGhost()) {

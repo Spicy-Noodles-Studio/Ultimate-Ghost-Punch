@@ -21,10 +21,10 @@ void PlayerUI::start()
 {
 	health = gameObject->getComponent<Health>();
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	playerHUD = cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
-
-	playerIndicator =cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
-
+	if (cameraLayout != nullptr) {
+		playerHUD = cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
+		playerIndicator = cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
+	}
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
 
@@ -59,7 +59,7 @@ void PlayerUI::createHearts()
 void PlayerUI::updateIndicator()
 {
 	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->transform->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
+	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.27f);
 }
 
 void PlayerUI::update(float deltaTime)

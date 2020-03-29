@@ -6,24 +6,24 @@
     [
         {
             "ComponentName": "Transform",
-            "ComponentProperties": {
-                "position": "0 -225 0",
-                "scale": "10 10 10",
-                "rotation": "0 90 0"
-            }
+            "ComponentProperties": [
+                ["position", "0 0 0"],
+                ["scale", "0.5 0.5 0.5"],
+                ["rotation", "0 90 0"]
+            ]
         },
         {
             "ComponentName": "MeshRenderer",
-            "ComponentProperties": {
-                "mesh": "suelo Nivel1.mesh"
-            }
+            "ComponentProperties": [
+                ["mesh", "suelo Nivel1.mesh"]
+            ]
         },
         {
             "ComponentName": "Strider",
-            "ComponentProperties": {
-                "mesh": "suelo",
-                "friction": "0.5"
-            }
+            "ComponentProperties": [
+                ["mesh", "suelo"],
+                ["friction", "0.5"]
+            ]
         }
     ]
 }

@@ -27,16 +27,16 @@
             "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "400 200 0",
-                        "rotation" : "-90 -90 0"
-                    }
+                    "ComponentProperties": [
+                        ["position" , "-20 30 0"],
+                        ["rotation" , "0 -90 0"]
+                    ]
                 },
                 {
                     "ComponentName": "PlayerController",
-                    "ComponentProperties": {
-                         "keyboard": "1"
-                    }
+                    "ComponentProperties": [
+                         ["keyboard", "1"]
+                    ]
                 }
             ]
         },
@@ -48,16 +48,16 @@
             "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "325 -150 0",
-                        "rotation" : "-90 -90 0"
-                    }
+                    "ComponentProperties": [
+                       [ "position" , "17.5 10 0"],
+                       [ "rotation" , "0 -90 0"]
+                    ]
                 },
                 {
                     "ComponentName": "PlayerController",
-                    "ComponentProperties": {
-                         "index": "1"
-                    }
+                    "ComponentProperties": [
+                         ["index", "1"]
+                    ]
                 }
             ]
         },
@@ -69,16 +69,16 @@
             "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "-325 -150 0",
-                        "rotation" : "-90 -90 0"
-                    }
+                    "ComponentProperties": [
+                        ["position" , "-17.5 10 0"],
+                        ["rotation" , "0 -90 0"]
+                    ]
                 },
                 {
                     "ComponentName": "PlayerController",
-                    "ComponentProperties": {
-                         "index": "2"
-                    }
+                    "ComponentProperties": [
+                         ["index", "2"]
+                    ]
                 }
             ]
         }
