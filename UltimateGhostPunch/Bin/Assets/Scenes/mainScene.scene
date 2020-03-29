@@ -40,7 +40,8 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "fight.layout"]
+                        ["layout" , "fight.layout"],
+                        ["event" , "BackButton backButtonClick"]
                     ]
                 }
             ]
@@ -54,7 +55,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": [
-                        ["scale" , "5 0.05 5"],
+                        ["scale" , "500 5 500"],
                         ["position" , "0 0 -400"]
                     ]
                 },
@@ -69,6 +70,7 @@
                     "ComponentProperties": [
                         ["shape", "Box"],
 						["mass", "0"],
+                        ["scale" , "1 1 1"],
                         ["friction", "0.5"]
                     ]
                 }
@@ -83,7 +85,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": [
-                        ["scale" , "5 0.05 5"],
+                        ["scale" , "500 5 500"],
                         ["position" , "-100 0 -400"],
                         ["rotation" , "0 0 90"]
                     ]
@@ -99,6 +101,7 @@
                     "ComponentProperties": [
                         ["shape", "Box"],
 						["mass", "0"],
+                        ["scale" , "1 1 1"],
                         ["friction", "0.5"]
                     ]
                 }

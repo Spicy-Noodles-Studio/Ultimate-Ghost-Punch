@@ -16,5 +16,5 @@ void GameManager::start()
 
 void GameManager::update(float deltaTime)
 {
-	LOG("je");
+	//LOG("je");
 }

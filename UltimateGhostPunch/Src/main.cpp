@@ -19,6 +19,7 @@
 
 #include "GameManager.h"
 
+
 //------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
 
 // GENERIC EVENTS
@@ -49,7 +50,7 @@ bool optionsButtonClick()
 
 bool exitButtonClick()
 {
-	
+	//close application
 	return false;
 }
 
@@ -60,6 +61,13 @@ bool fightButtonClick()
 	return false;
 }
 
+// PAUSE MENU EVENTS
+bool resumeButtonClick()
+{
+	// hide pause menu
+	//findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("PauseBackground");
+	return false;
+}
 
 
 //-------------
@@ -97,6 +105,9 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 
 	// fightConfigMenu
 	InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", &fightButtonClick));
+
+	// pauseMenu
+	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", &resumeButtonClick));
 
 
 	GaiaCore* g = new GaiaCore();

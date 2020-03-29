@@ -4,11 +4,15 @@
     <Window type="DefaultWindow" name="fightConfigRoot" >
         <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property name="MaxSize" value="{{1,0},{1,0}}" />
-        # INFO TEXT
-        <Window type="TaharezLook/StaticText" name="InfoText" >
-            <Property name="Area" value="{{0.2,0},{0.95,0},{0.9,0},{1,0}}" />
+        # SLOT 1
+        <Window type="TaharezLook/StaticImage" name="Slot1" >
+            <Property name="Area" value="{{0.1,0},{0.1,0},{0.3,0},{0.3,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="Ultimate Ghost Punch is powered by Gaia. All rights reserved to Spicy Noodles (C) 2020." />
+            <Window type="TaharezLook/StaticText" name="Text1" >
+                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="PRESS A BUTTON TO JOIN" />
+            </Window>
         </Window>
         # FIGHT BUTTON
         <Window type="TaharezLook/Button" name="FightButton" >

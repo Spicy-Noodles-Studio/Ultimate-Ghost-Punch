@@ -28,7 +28,7 @@
                     ]
                 },
                 {
-                    "ComponentName", "SoundListener"
+                    "ComponentName": "SoundListener"
                 },
                 {
                     "ComponentName": "Reverb",
