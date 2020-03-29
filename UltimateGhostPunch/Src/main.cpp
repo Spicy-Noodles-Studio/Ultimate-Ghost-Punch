@@ -13,6 +13,7 @@
 #include "GhostManager.h"
 #include "PlayerUI.h"
 #include "UltimateGhostPunch.h"
+#include "Obstacle.h"
 
 #ifdef _DEBUG
 int main()
@@ -31,6 +32,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
 	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
+	ComponentManager::GetInstance()->registerComponent<Obstacle>("Obstacle");
 
 	GaiaCore* g = new GaiaCore();
 	g->init();

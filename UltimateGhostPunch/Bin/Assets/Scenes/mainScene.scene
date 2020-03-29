@@ -110,7 +110,15 @@
             "ObjectType": "BLUEPRINT",
             "ObjectName": "Player1",
             "Tag": "player",
-            "BlueprintPath": "Player"
+            "BlueprintPath": "Player",
+            "ComponentModifications" : [
+                {
+                    "ComponentName": "PlayerController",
+                    "ComponentProperties": {
+                         "keyboard": "1"
+                    }
+                }
+            ]
         },
         {
             "ObjectType": "BLUEPRINT",
@@ -121,14 +129,21 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": {
-                        "position" : "50 10 -200",
-                        "rotation" : "-90 -90 0"
+                        "position" : "100 80 -200"
                     }
-                },
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "spikeObstacle1",
+            "Tag": "spikeObstacle",
+            "BlueprintPath": "Spikes",
+            "ComponentModifications" : [
                 {
-                    "ComponentName": "PlayerController",
+                    "ComponentName": "Transform",
                     "ComponentProperties": {
-                         "keyboard": "1"
+                        "position" : "50 80 -200"
                     }
                 }
             ]
