@@ -13,6 +13,7 @@
 #include "GhostManager.h"
 #include "PlayerUI.h"
 #include "UltimateGhostPunch.h"
+#include "DynamicCamController.h"
 
 #include "InterfaceSystem.h"
 #include "SceneManager.h"
@@ -88,6 +89,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<GameManager>("GameManager");
 	ComponentManager::GetInstance()->registerComponent<FightConfiguration>("FightConfiguration");
 	ComponentManager::GetInstance()->registerComponent<FightManager>("FightManager");
+	ComponentManager::GetInstance()->registerComponent<DynamicCamController>("DynamicCamController");
 
 	// ---Events registering
 

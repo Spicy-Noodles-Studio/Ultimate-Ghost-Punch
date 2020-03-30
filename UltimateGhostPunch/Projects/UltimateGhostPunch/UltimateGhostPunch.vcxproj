@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\DynamicCamController.cpp" />
     <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
     <ClCompile Include="..\..\Src\FightManager.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
@@ -35,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\DynamicCamController.h" />
     <ClInclude Include="..\..\Src\FightConfiguration.h" />
     <ClInclude Include="..\..\Src\FightManager.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
