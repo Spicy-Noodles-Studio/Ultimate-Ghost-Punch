@@ -1,16 +1,21 @@
 #include "PlayerController.h"
+
 #include <sstream>
 #include <GameObject.h>
+#include <InputSystem.h>
+#include <Scene.h>
+#include <Camera.h>
+#include <Light.h>
 
-#include "InputSystem.h"
-#include "Scene.h"
-#include "Camera.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Attack.h"
 #include "Jump.h"
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {

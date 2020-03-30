@@ -5,8 +5,11 @@
 #include <sstream>
 #include <Scene.h>
 #include <Camera.h>
-#include "Health.h"
 
+#include "Health.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(UltimateGhostPunch);
 
 UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), body(nullptr)
 {

@@ -9,6 +9,9 @@
 #include "RigidBody.h"
 #include "PlayerController.h"
 #include "MeshRenderer.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject)
 {

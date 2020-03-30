@@ -4,6 +4,10 @@
 #include <GameObject.h>
 #include <RigidBody.h>
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Jump);
+
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
 {
 	jumpVector = { 0,0,0 };
@@ -56,10 +60,12 @@ void Jump::handleData(ComponentData* data)
 
 		if (prop.first == "maxForce")
 		{
-			ss >> maxForce;
+			if(!(ss >> maxForce))
+				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
-		if (prop.first == "jumpDecay") {
-			ss >> jumpDecay;
+		else if (prop.first == "jumpDecay") {
+			if(!(ss >> jumpDecay))
+				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
 	}
 }

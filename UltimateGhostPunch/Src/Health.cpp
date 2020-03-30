@@ -1,9 +1,12 @@
 #include "Health.h"
 #include <sstream>
-#include "GameObject.h"
+#include <GameObject.h>
 
 #include "GhostManager.h"
 #include "PlayerUI.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Health);
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {

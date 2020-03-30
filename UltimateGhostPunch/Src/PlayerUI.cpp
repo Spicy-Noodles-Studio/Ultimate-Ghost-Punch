@@ -1,11 +1,14 @@
 #include "PlayerUI.h"
-#include "GameObject.h"
+
+#include <Scene.h>
+#include <Camera.h>
+#include <GameObject.h>
 
 #include "UILayout.h"
 #include "Health.h"
+#include "ComponentRegister.h"
 
-#include "Scene.h"
-#include "Camera.h"
+REGISTER_FACTORY(PlayerUI);
 
 PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr)
 {

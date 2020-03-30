@@ -22,15 +22,6 @@ int WINAPI
 WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
-	ComponentManager::GetInstance()->registerComponent<GhostMovement>("GhostMovement");
-	ComponentManager::GetInstance()->registerComponent<Attack>("Attack");
-	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
-	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");
-	ComponentManager::GetInstance()->registerComponent<Health>("Health");
-	ComponentManager::GetInstance()->registerComponent<Jump>("Jump");
-	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
-	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
-	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
 
 	GaiaCore* g = new GaiaCore();
 	g->init();
