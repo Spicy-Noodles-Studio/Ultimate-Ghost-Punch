@@ -4,7 +4,6 @@
 
 #include <UserComponent.h>
 
-class GameObject;
 class InputSystem;
 class GhostMovement;
 class Movement;
@@ -13,6 +12,7 @@ class GhostManager;
 class Jump;
 class UltimateGhostPunch;
 class PlayerUI;
+class Vector3;
 
 class PlayerController : public UserComponent
 {
@@ -22,6 +22,7 @@ private:
 	bool charge = false;
 
 	int playerIndex;
+	Vector3 dir;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -39,6 +40,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void fixedUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	int getPlayerIndex() const;

@@ -7,65 +7,65 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-                ["position", "-50 10 -200"],
-                ["scale", "10 10 10"],
-                ["rotation", "-90 90 0"]
+               [ "position", "20 30 0"],
+               [ "scale", "1 1 1"],
+               [ "rotation", "0 90 0"]
             ]
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "sinbad Sphere.mesh"]
+               [ "mesh", "player Knight.mesh"]
             ]
         },
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-                ["anim", "Idle sinbad"]
+               [ "anim", "Idle player"]
             ]
         },
         {
             "ComponentName": "RigidBody",
-            "ComponentProperties": [
-                ["shape", "Box"],
-                ["mass", "5"],
-                ["friction", "1"],
-                ["restitution", "0"],
-                ["damping", "0"],
-                ["angularDamping", "0"],
-                ["gravity", "0 -1000 0"],
-                ["offset", "0 20 0"],
-                ["scale", "1 1 2"],
-                ["kinematic", "0"],
-                ["trigger", "0"],
-                ["movementConstraints", "1 1 1"],
-                ["rotationConstraints", "0 0 0"]
+            "ComponentProperties":[ 
+               [ "shape", "Box"],
+               [ "mass", "5"],
+               [ "friction", "0.1"],
+               [ "restitution", "0"],
+               [ "damping", "0.4"],
+               [ "angularDamping", "0"],
+               [ "gravity", "0 -10 0"],
+               [ "offset", "0 0 0"],
+               [ "scale", "1 2 1"],
+               [ "kinematic", "0"],
+               [ "trigger", "0"],
+               [ "movementConstraints", "1 1 0"],
+               [ "rotationConstraints", "0 0 0"]
             ]
         },
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-                ["force", "3000"]
+              [  "force", "20"]
             ]
         },
         {  
             "ComponentName": "PlayerController",
-            "ComponentProperties": [
-                ["keyboard", "0"],
-                ["index", "0"]
+            "ComponentProperties":[ 
+               [ "keyboard", "0"],
+               [ "index", "0"]
             ]
         },
         {
             "ComponentName": "GhostMovement",
-            "ComponentProperties": [
-                ["maxSpeed", "800"]
+            "ComponentProperties":[ 
+               [ "maxSpeed", "6"]
             ]
         },
         {
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": [
-                ["force", "3000"],
-                ["duration", "0.333"]
+               [ "force", "200"],
+                ["duration" , "0.333"]
             ]
         },
         {
@@ -73,7 +73,6 @@
             "ComponentProperties": [
                 ["health", "4"],
                 ["resHealth", "2"],
-                ["ghostTime", "7"],
                 ["invDamTime", "2"],
                 ["invResTime", "3"]
             ]
@@ -81,9 +80,10 @@
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
-                ["ghostMesh", "ghost knot.mesh"],
-                ["ghostScale", "0.15 0.15 0.15"],
-                ["spawnOffset", "0 20 0"]
+                ["ghostMesh", "ghost Espada.mesh"],
+                ["ghostScale", "1 1 1"],
+                ["spawnOffset", "0 1.25 0"],
+                ["ghostDamage", "1"]
             ]
         },
         {
@@ -101,8 +101,8 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                        ["position", "0 -3 2.5"],
-                        ["scale", "1 2 1"]
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
                     ]
                 }
             ],
@@ -123,7 +123,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                        ["position", "0 0 -0.5"],
+                       [ "position", "0 -0.9 0"],
                         ["scale", "0.75 0.75 0.75"]
                     ]
                 }
@@ -133,8 +133,8 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "4500"],
-				        ["jumpDecay", "2"]
+                        ["maxForce", "12"],
+				        ["jumpDecay", "1.5"]
                     ]       
                 }
             ]

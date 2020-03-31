@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugStatic|Win32">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugStatic|x64">
+      <Configuration>DebugStatic</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|Win32">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseStatic|x64">
+      <Configuration>ReleaseStatic</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
@@ -31,7 +47,20 @@
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|Win32'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -44,7 +73,20 @@
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|x64'" Label="Configuration">
     <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
@@ -59,17 +101,34 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Bin</OutDir>
+    <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Bin</OutDir>
     <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
@@ -79,12 +138,27 @@
     <OutDir>$(SolutionDir)Bin</OutDir>
     <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Bin</OutDir>
+    <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin</OutDir>
     <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Bin</OutDir>
+    <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Bin</OutDir>
+    <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Bin</OutDir>
     <IntDir>$(SolutionDir)Inter\$(Platform)\$(Configuration)\$(ProjectName)</IntDir>
@@ -133,7 +207,95 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX_d.dll" "$
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX_d.dll" "$(SolutionDir)Bin" /y
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_d_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL_d.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmodL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat_d.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX_d.dll" "$(SolutionDir)Bin" /y
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugStatic|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
@@ -223,7 +385,99 @@ xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat.dll" "$(SolutionDi
 xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX.dll" "$(SolutionDir)Bin" /y</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX.dll" "$(SolutionDir)Bin" /y</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Gaia_$(Platform).dll" "$(SolutionDir)Bin" /y
+
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreMain.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\OgreRTShaderSystem.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_Direct3D11.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\RenderSystem_GL.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Codec_STBI.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SDL2.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\fmod.dll" "$(SolutionDir)Bin"  /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIBase-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIOgreRenderer-0.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUIExpatParser.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUICoreWindowRendererSet.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\CEGUISILLYImageCodec.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\SILLY.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\zlib.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libpng.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\jpeg.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\freetype.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\pcre.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glew.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\glfw.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\libexpat.dll" "$(SolutionDir)Bin" /y
+xcopy "$(SolutionDir)Dependencies\Gaia\MotorGaia\Bin\Plugin_ParticleFX.dll" "$(SolutionDir)Bin" /y</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseStatic|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>

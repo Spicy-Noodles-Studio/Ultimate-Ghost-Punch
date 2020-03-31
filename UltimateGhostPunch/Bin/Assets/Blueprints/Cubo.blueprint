@@ -5,33 +5,20 @@
     "Components":
     [
         {
-            "ComponentName": "Transform",
-            "ComponentProperties": [
-                ["position", "0 200 -400"],
-                ["scale", "0.5 0.5 0.5"],
-                ["rotation", "0 45 0"]
+            "ComponentName": "Transform"
+        },
+        {
+            "ComponentName" : "MeshRenderer",
+            "ComponentProperties" : [
+                ["mesh", "Cube Cube.mesh"]
             ]
         },
         {
-            "ComponentName": "MeshRenderer",
-            "ComponentProperties": [
-                ["mesh", "cube cube.mesh"]
-            ]
-        },
-        {
-            "ComponentName": "RigidBody",
-            "ComponentProperties": [
+            "ComponentName" : "RigidBody",
+            "ComponentProperties" : [
                 ["shape", "Box"],
-                ["mass", "3"],
-                ["friction", "0"],
-                ["restitution", "0"],
-                ["damping", "0"],
-                ["angularDamping", "0"],
-                ["gravity", "0 -10 0"],
-                ["offset", "0 0 0"],
-                ["scale", "50 50 50"],
-                ["kinematic", "0"],
-                ["trigger", "0"]
+                ["mass", "1"],
+                ["scale", "1 1 1"]
             ]
         }
     ]

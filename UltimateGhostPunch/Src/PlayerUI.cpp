@@ -1,11 +1,14 @@
 #include "PlayerUI.h"
-#include "GameObject.h"
+
+#include <Scene.h>
+#include <Camera.h>
+#include <GameObject.h>
 
 #include "UILayout.h"
 #include "Health.h"
+#include "ComponentRegister.h"
 
-#include "Scene.h"
-#include "Camera.h"
+REGISTER_FACTORY(PlayerUI);
 
 #include "PlayerController.h"
 
@@ -25,11 +28,13 @@ void PlayerUI::start()
 
 	health = gameObject->getComponent<Health>();
 
-	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(name + "Background");
-
-	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild(name + "Indicator");
-
-	pauseMenu = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("PauseBackground");
+	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	if (cameraLayout != nullptr) 
+	{
+		playerHUD = cameraLayout->getRoot().getChild(name + "Background");
+		playerIndicator = cameraLayout->getRoot().getChild(name + "Indicator");
+		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+	}
 
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
@@ -45,7 +50,9 @@ void PlayerUI::createHearts()
 {
 	float posX = 0.3f;
 
-	for (int i = 1; i <= gameObject->getComponent<Health>()->getHealth(); i++)
+if (health != nullptr)
+{
+	for (int i = 1; i <= health->getHealth(); i++)
 	{
 		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
 			name + "Heart" + std::to_string(i));
@@ -60,11 +67,12 @@ void PlayerUI::createHearts()
 		posX += 0.02f;
 	}
 }
+}
 
 void PlayerUI::updateIndicator()
 {
-	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->getComponent<Transform>()->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
+	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->transform->getPosition());
+	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.27f);
 }
 
 void PlayerUI::update(float deltaTime)

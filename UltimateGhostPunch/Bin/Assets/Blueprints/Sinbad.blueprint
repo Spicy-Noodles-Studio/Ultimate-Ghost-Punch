@@ -7,7 +7,7 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-                ["position", "0 0 -400"],
+                ["position", "200 0 -400"],
                 ["scale", "10 10 10"]
             ]
         },
@@ -26,7 +26,7 @@
         {
             "ComponentName": "RigidBody",
             "ComponentProperties": [
-                ["shape", "Box"],
+               ["shape", "Box"],
                 ["mass", "4"],
                 ["friction", "0"],
                 ["restitution", "0"],

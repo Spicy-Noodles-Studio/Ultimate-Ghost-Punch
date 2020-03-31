@@ -1,5 +1,12 @@
 #include "Jump.h"
+
 #include <sstream>
+#include <GameObject.h>
+#include <RigidBody.h>
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Jump);
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -16,7 +23,7 @@ bool Jump::salta()
 		jumpForce = maxForce;
 	}
 
-	if(isJumping) jumpVector = { 0,1,0 };
+	if (isJumping) jumpVector = { 0,1,0 };
 
 	return isJumping;
 }
@@ -26,13 +33,13 @@ void Jump::start()
 	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
 }
 
-void Jump::update(float deltaTime)
+void Jump::fixedUpdate(float deltaTime)
 {
 	if (isJumping) {
 		if (jumpVector != Vector3(0, 0, 0)) {
-			rigidBody->addForce(jumpVector * jumpForce);
+			rigidBody->addImpulse(jumpVector * jumpForce);
 			jumpForce -= jumpDecay;
-			
+
 			jumpVector = { 0,0,0 };
 			if (jumpForce <= 0.0f) {
 				jumpForce = 0.0f;
@@ -53,10 +60,12 @@ void Jump::handleData(ComponentData* data)
 
 		if (prop.first == "maxForce")
 		{
-			ss >> maxForce;
+			if(!(ss >> maxForce))
+				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
-		if (prop.first == "jumpDecay") {
-			ss >> jumpDecay;
+		else if (prop.first == "jumpDecay") {
+			if(!(ss >> jumpDecay))
+				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
 	}
 }

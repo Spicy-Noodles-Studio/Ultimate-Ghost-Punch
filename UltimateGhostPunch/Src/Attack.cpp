@@ -5,6 +5,9 @@
 #include <sstream>
 
 #include "Health.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Attack);
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
