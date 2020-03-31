@@ -1,11 +1,14 @@
 #include "PlayerUI.h"
-#include "GameObject.h"
+
+#include <Scene.h>
+#include <Camera.h>
+#include <GameObject.h>
 
 #include "UILayout.h"
 #include "Health.h"
+#include "ComponentRegister.h"
 
-#include "Scene.h"
-#include "Camera.h"
+REGISTER_FACTORY(PlayerUI);
 
 PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr)
 {
@@ -20,13 +23,11 @@ PlayerUI::~PlayerUI()
 void PlayerUI::start()
 {
 	health = gameObject->getComponent<Health>();
-
-	playerHUD = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
-
-	playerIndicator = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->
-		getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
-
+	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	if (cameraLayout != nullptr) {
+		playerHUD = cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Background");
+		playerIndicator = cameraLayout->getUIElement("StaticImage").getChild(gameObject->getName() + "Indicator");
+	}
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
 
@@ -41,26 +42,28 @@ void PlayerUI::createHearts()
 {
 	float posX = 0.3f;
 
-	for (int i = 1; i <= gameObject->getComponent<Health>()->getHealth(); i++)
-	{
-		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
-			gameObject->getName() + "Heart" + std::to_string(i));
+	if (health != nullptr) {
+		for (int i = 1; i <= health->getHealth(); i++)
+		{
+			UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
+				gameObject->getName() + "Heart" + std::to_string(i));
 
-		heart.setPosition(posX, 0.1f);
-		heart.setSize(0.05f, 0.2f);
-		if (i % 2 != 0)
-			heart.flipHorizontal();
-		else
-			posX += 0.03f;
+			heart.setPosition(posX, 0.1f);
+			heart.setSize(0.05f, 0.2f);
+			if (i % 2 != 0)
+				heart.flipHorizontal();
+			else
+				posX += 0.03f;
 
-		posX += 0.02f;
+			posX += 0.02f;
+		}
 	}
 }
 
 void PlayerUI::updateIndicator()
 {
-	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->getComponent<Transform>()->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.4f);
+	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->transform->getPosition());
+	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.27f);
 }
 
 void PlayerUI::update(float deltaTime)

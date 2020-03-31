@@ -3,8 +3,8 @@
 #define JUMP_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
-#include <RigidBody.h>
+
+class RigidBody;
 
 class Jump : public UserComponent
 {
@@ -28,7 +28,7 @@ public:
 	bool salta();
 	
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void fixedUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);

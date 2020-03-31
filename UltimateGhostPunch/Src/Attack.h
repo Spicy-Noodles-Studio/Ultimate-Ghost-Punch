@@ -5,7 +5,6 @@
 #include <UserComponent.h>
 
 class RigidBody;
-class GameObject;
 
 class Attack : public UserComponent
 {

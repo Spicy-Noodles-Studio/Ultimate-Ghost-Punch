@@ -7,6 +7,10 @@
 #include "Health.h"
 #include "Block.h"
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Attack);
+
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
 }

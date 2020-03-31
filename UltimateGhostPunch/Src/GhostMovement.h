@@ -6,7 +6,6 @@
 #include <UserComponent.h>
 
 class RigidBody;
-class GameObject;
 
 class GhostMovement : public UserComponent
 {

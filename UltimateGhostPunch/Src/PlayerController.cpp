@@ -1,10 +1,12 @@
 #include "PlayerController.h"
+
 #include <sstream>
 #include <GameObject.h>
+#include <InputSystem.h>
+#include <Scene.h>
+#include <Camera.h>
+#include <Light.h>
 
-#include "InputSystem.h"
-#include "Scene.h"
-#include "Camera.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Attack.h"
@@ -12,6 +14,10 @@
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
 #include "Block.h"
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -28,7 +34,7 @@ void PlayerController::start()
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
+	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
@@ -36,86 +42,63 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	UserComponent::update(deltaTime);
+	dir = Vector3(0, 0, 0);
 
-	Vector3 dir = Vector3(0, 0, 0);
-	Vector3 punchDir;
+	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-
-		if (inputSystem->isKeyPressed("A") && !isBlocking)
+		if (inputSystem->isKeyPressed("A") && !isBlocking) {
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->isKeyPressed("D") && !isBlocking)
+			gameObject->transform->setRotation({ 0,-90,0 });
+		}
+		else if (inputSystem->isKeyPressed("D") && !isBlocking) {
 			dir = Vector3(1, 0, 0);
+			gameObject->transform->setRotation({ 0,90,0 });
+		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->isKeyPressed("W"))
 				dir += Vector3(0, 1, 0);
 			else if (inputSystem->isKeyPressed("S"))
 				dir += Vector3(0, -1, 0);
-		}
-
-		if (inputSystem->getMouseButtonClick('l')) {
-			if(ghost == nullptr || !ghost->isGhost() && !isBlocking)
-				attack->quickAttack();
-			else
+			else if (inputSystem->getMouseButtonHold('l'))
 			{
-				if (ghostPunch != nullptr && ghostPunch->isAvailable())
+				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
 				{
-					charge = true;
+					std::pair<int, int> mousePos = inputSystem->getMousePosition();
+					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
+					ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
+				}
+			}
+
+			else if (inputSystem->getMouseButtonRelease('l'))
+			{
+				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
+				{
+					std::pair<int, int> mousePos = inputSystem->getMousePosition();
+					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
+					ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
+
+					ghostPunch->ghostPunch();
 				}
 			}
 		}
 
-		if (inputSystem->getMouseButtonHold('l'))
-		{
-			if (ghost != nullptr || ghost->isGhost())
-				if (ghostPunch != nullptr && ghostPunch->isAvailable()&& charge)
-				{
-					std::pair<int, int> mousePos = inputSystem->getMousePosition();
-
-					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->getComponent<Transform>()->getPosition());
-
-					//std::cout << thisOnScreen->x << " " << thisOnScreen->y << " " << std::endl;
-
-
-					punchDir.x = mousePos.first - thisOnScreen->x;
-					punchDir.y = thisOnScreen->y - mousePos.second;
-					punchDir.z = 0;
-
-					punchDir.normalize();
-					
-				}
+		if (inputSystem->getMouseButtonClick('l')) {
+			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
+				attack->quickAttack();
+			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
+				ghostPunch->charge();
 		}
-		if (inputSystem->getMouseButtonRelease('l'))
-		{
-			if (ghost != nullptr || ghost->isGhost())
-				if (ghostPunch != nullptr && ghostPunch->isAvailable() && charge )
-				{
-					std::pair<int, int> mousePos = inputSystem->getMousePosition();
-
-					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->getComponent<Transform>()->getPosition());
-
-					//std::cout << thisOnScreen->x << " " << thisOnScreen->y << " " << std::endl;
-
-
-					punchDir.x = mousePos.first - thisOnScreen->x;
-					punchDir.y = thisOnScreen->y - mousePos.second;
-					punchDir.z = 0;
-
-					punchDir.normalize();
-					ghostPunch->ghostPunch(punchDir);
-					charge = false;
-				}
-			
-		}
-		
 
 		else if (inputSystem->getMouseButtonClick('r') && !isBlocking) {
-			if (attack != nullptr) attack->strongAttack();
+			if (ghost == nullptr || !ghost->isGhost())
+				if (attack != nullptr) attack->strongAttack();
 		}
+
 		else if (InputSystem::GetInstance()->isKeyPressed("Space") && !isBlocking)
-			if(jump != nullptr) jump->salta();
+			if (ghost == nullptr || !ghost->isGhost())
+				if (jump != nullptr) jump->salta();
 
 		if (inputSystem->isKeyPressed("F")) if (block != nullptr) {
 			isBlocking = true;
@@ -124,14 +107,18 @@ void PlayerController::update(float deltaTime)
 		if (isBlocking && !inputSystem->isKeyPressed("F")) {
 			isBlocking = false;
 			block->unblock();
-		}
 	}
+	//Controles con mando
 	else
 	{
-		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left") && !isBlocking)
+		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left") && !isBlocking) {
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right") && !isBlocking)
+			gameObject->transform->setRotation({ 0,-90,0 });
+		}
+		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right") && !isBlocking) {
 			dir = Vector3(1, 0, 0);
+			gameObject->transform->setRotation({ 0,90,0 });
+		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->getLeftJoystick(playerIndex).second < 0 || inputSystem->isButtonPressed(playerIndex, "Up"))
@@ -139,59 +126,48 @@ void PlayerController::update(float deltaTime)
 			else if (inputSystem->getLeftJoystick(playerIndex).second > 0 || inputSystem->isButtonPressed(playerIndex, "Down"))
 				dir += Vector3(0, -1, 0);
 
-			if (inputSystem->getRightJoystick(playerIndex).second != 0 || inputSystem->getRightJoystick(playerIndex).first != 0)
+			if (inputSystem->getRightJoystick(playerIndex).first != 0 || inputSystem->getRightJoystick(playerIndex).second != 0)
 			{
-				charge = true;
-
-				punchDir.x = inputSystem->getRightJoystick(playerIndex).first;
-				punchDir.y = -inputSystem->getRightJoystick(playerIndex).second;
-				punchDir.z = 0;
-
-				punchDir.normalize();
-
-				if (inputSystem->getButtonPress(playerIndex, "X"))
+				if (ghostPunch != nullptr)
 				{
-					ghostPunch->ghostPunch(punchDir);
-					charge = false;
-				}
+					if (ghostPunch->getState() == AVAILABLE) ghostPunch->charge();
+					else if (ghostPunch->getState() == CHARGING)
+					{
+						ghostPunch->aim(inputSystem->getRightJoystick(playerIndex).first, -inputSystem->getRightJoystick(playerIndex).second);
 
+						if (inputSystem->getButtonPress(playerIndex, "X"))
+							ghostPunch->ghostPunch();
+					}
+				}
 			}
 		}
 
-		
-
 		if (inputSystem->getButtonPress(playerIndex, "X")) {
-			if(ghost == nullptr || !ghost->isGhost())
-			if (attack != nullptr && !isBlocking) attack->quickAttack();
+			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
+				if (attack != nullptr) attack->quickAttack();
 		}
 
-		else if (inputSystem->getButtonPress(playerIndex, "Y") && !isBlocking) {
-			if (attack != nullptr) attack->strongAttack();
+		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
+			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
+				if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A") && !isBlocking)
-			if(jump != nullptr) jump->salta();
 
-		if (inputSystem->isButtonPressed(playerIndex, "B")) if (block != nullptr) {
-			isBlocking = true;
-			block->block();
-		}
-		if (isBlocking && !inputSystem->isButtonPressed(playerIndex, "B")) {
-			isBlocking = false;
-			block->unblock();
-		}
+		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
+			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
+				if (jump != nullptr) jump->salta();
 	}
 
-	if (!ghost->isGhost()) {
+	if (ghost != nullptr && ghost->isGhost()) {
+		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+			if (ghostMovement != nullptr) ghostMovement->move(dir);
+	}
+}
+
+void PlayerController::fixedUpdate(float deltaTime)
+{
+	//Movimiento
+	if (ghost == nullptr || !ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
-	}
-	else {
-		if (ghostMovement != nullptr) {
-			
-			if (ghostPunch != nullptr && !ghostPunch->isPunching() &&! charge)
-			ghostMovement->move(dir);
-			else if(ghostPunch == nullptr)
-				ghostMovement->move(dir);
-		}
 	}
 }
 
@@ -203,12 +179,12 @@ void PlayerController::handleData(ComponentData* data)
 
 		if (prop.first == "keyboard")
 		{
-			if(!(ss >> usingKeyboard))
+			if (!(ss >> usingKeyboard))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		if (prop.first == "index")
 		{
-			if(!(ss >> playerIndex))
+			if (!(ss >> playerIndex))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -216,7 +192,8 @@ void PlayerController::handleData(ComponentData* data)
 	}
 }
 
-int PlayerController::getPlayerIndex () const
+int PlayerController::getPlayerIndex() const
+
 {
 	return playerIndex;
 }
