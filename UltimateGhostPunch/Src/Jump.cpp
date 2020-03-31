@@ -33,7 +33,7 @@ void Jump::start()
 	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
 }
 
-void Jump::update(float deltaTime)
+void Jump::fixedUpdate(float deltaTime)
 {
 	if (isJumping) {
 		if (jumpVector != Vector3(0, 0, 0)) {

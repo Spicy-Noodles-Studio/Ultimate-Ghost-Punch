@@ -1,18 +1,4 @@
-
-#include <iostream>
 #include "GaiaCore.h"
-
-#include <ComponentManager.h>
-
-#include "Attack.h"
-#include "PlayerController.h"
-#include "Health.h"
-#include "Jump.h"
-#include "Movement.h"
-#include "GhostMovement.h"
-#include "GhostManager.h"
-#include "PlayerUI.h"
-#include "UltimateGhostPunch.h"
 
 #ifdef _DEBUG
 int main()

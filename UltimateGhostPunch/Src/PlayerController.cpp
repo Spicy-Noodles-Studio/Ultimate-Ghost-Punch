@@ -40,7 +40,7 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	Vector3 dir = Vector3(0, 0, 0);
+	dir = Vector3(0, 0, 0);
 
 	//Controles con teclado y raton
 	if (usingKeyboard)
@@ -103,11 +103,11 @@ void PlayerController::update(float deltaTime)
 	//Controles con mando
 	else
 	{
-		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left")){
+		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left")) {
 			dir = Vector3(-1, 0, 0);
 			gameObject->transform->setRotation({ 0,-90,0 });
 		}
-		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right")){
+		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right")) {
 			dir = Vector3(1, 0, 0);
 			gameObject->transform->setRotation({ 0,90,0 });
 		}
@@ -149,13 +149,17 @@ void PlayerController::update(float deltaTime)
 				if (jump != nullptr) jump->salta();
 	}
 
-	//Movimiento
-	if (!ghost->isGhost()) {
-		if (movement != nullptr) movement->move(dir);
-	}
-	else {
+	if (ghost != nullptr && ghost->isGhost()) {
 		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(dir);
+	}
+}
+
+void PlayerController::fixedUpdate(float deltaTime)
+{
+	//Movimiento
+	if (ghost == nullptr || !ghost->isGhost()) {
+		if (movement != nullptr) movement->move(dir);
 	}
 }
 
@@ -180,7 +184,7 @@ void PlayerController::handleData(ComponentData* data)
 	}
 }
 
-int PlayerController::getPlayerIndex () const
+int PlayerController::getPlayerIndex() const
 {
 	return playerIndex;
 }
