@@ -1,7 +1,10 @@
 #include "Block.h"
 #include <sstream>
+#include <ComponentRegister.h>
 
 #include "Health.h"
+
+REGISTER_FACTORY(Block);
 
 Block::Block(GameObject* gameObject) : UserComponent(gameObject)
 {

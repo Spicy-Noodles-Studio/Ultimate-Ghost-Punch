@@ -107,6 +107,7 @@ void PlayerController::update(float deltaTime)
 		if (isBlocking && !inputSystem->isKeyPressed("F")) {
 			isBlocking = false;
 			block->unblock();
+		}
 	}
 	//Controles con mando
 	else
@@ -155,6 +156,15 @@ void PlayerController::update(float deltaTime)
 		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
 			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
 				if (jump != nullptr) jump->salta();
+
+		if (inputSystem->isButtonPressed(playerIndex, "B")) if (block != nullptr) {
+			isBlocking = true;
+			block->block();
+		}
+		if (isBlocking && !inputSystem->isButtonPressed(playerIndex, "B")) {
+			isBlocking = false;
+			block->unblock();
+		}
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {

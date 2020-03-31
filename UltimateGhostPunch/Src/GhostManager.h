@@ -34,13 +34,6 @@ private:
 	Vector3 aliveScale;
 	float playerGravity;
 
-
-	std::string ghostMeshId, ghostMeshName;
-	Vector3 ghostScale = { 1,1,1 };
-	std::string aliveMeshId, aliveMeshName;
-	Vector3 aliveScale;
-	float playerGravity;
-
 	void changeMesh(std::string id, std::string name);
 public:
 	GhostManager(GameObject* gameObject);
