@@ -1,8 +1,13 @@
 #include "GhostMovement.h"
+
 #include <InputSystem.h>
 #include <RigidBody.h>
 #include <sstream>
 #include <GameObject.h>
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(GhostMovement);
 
 GhostMovement::GhostMovement(GameObject* g) :UserComponent(g)
 {

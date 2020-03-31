@@ -1,7 +1,12 @@
 #include "Movement.h"
+
 #include <sstream>
 #include <RigidBody.h>
 #include <GameObject.h>
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Movement);
 
 Movement::Movement(GameObject* gameObject) : UserComponent(gameObject)
 {

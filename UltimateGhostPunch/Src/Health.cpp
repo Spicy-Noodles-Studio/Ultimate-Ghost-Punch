@@ -1,10 +1,13 @@
 #include "Health.h"
 #include <sstream>
-#include "GameObject.h"
+#include <GameObject.h>
 
 #include "GhostManager.h"
 #include "PlayerUI.h"
 #include "PlayerController.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Health);
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -32,13 +35,11 @@ void Health::update(float deltaTime)
 	if (invencible)
 	{
 		if (time > 0.0f)
-		{
 			time -= deltaTime;
-		}
 		else
 		{
 			invencible = false;
-			playerUI->updateState("Alive");
+			if(playerUI!=nullptr) playerUI->updateState("Alive");
 			if (respawning) 
 			{
 				respawning = false;
@@ -84,13 +85,13 @@ void Health::receiveDamage(int damage)
 	health -= damage;
 	if (health < 0) health = 0;
 
-	playerUI->updateHealth();
+	if (playerUI != nullptr) playerUI->updateHealth();
 
 	if (health == 0)
 	{
 		if (ghost != nullptr && ghost->hasGhost())
 		{
-			playerUI->updateState("Ghost");
+			if (playerUI != nullptr) playerUI->updateState("Ghost");
 			ghost->activateGhost();
 		}
 		else
@@ -100,7 +101,7 @@ void Health::receiveDamage(int damage)
 	{
 		invencible = true;
 		time = invencibleDamageTime;
-		playerUI->updateState("Invencible");
+		if (playerUI != nullptr) playerUI->updateState("Invencible");
 	}
 }
 
@@ -108,7 +109,7 @@ void Health::die()
 {
 	alive = false;
 
-	playerUI->updateState("Dead");
+	if (playerUI != nullptr) playerUI->updateState("Dead");
 
 	// deactivate gameObject
 	gameObject->setActive(false);
@@ -123,17 +124,21 @@ void Health::resurrect()
 {
 	health = resurrectionHealth;
 
-	playerUI->updateHealth();
-
 	// activate invencibility for a specified time
 	invencible = true;
 	time = invencibleResurrectionTime;
-	playerUI->updateState("Respawning");
+	//update UI
+	if (playerUI != nullptr) {
+		playerUI->updateHealth();
+		playerUI->updateState("Respawning");
+	}
 	respawning = true;
 
 	// deactivate movement while reapearing
 	PlayerController* input = gameObject->getComponent<PlayerController>();
 	if (input != nullptr) input->setFrozen(true);
+	
+	
 }
 
 int Health::getHealth()

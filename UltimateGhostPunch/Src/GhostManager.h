@@ -7,6 +7,7 @@ class Health;
 class GhostMovement;
 class RigidBody;
 class Transform;
+class MeshRenderer;
 
 class GhostManager : public UserComponent
 {
@@ -21,6 +22,7 @@ private:
 	Health* health;
 	RigidBody* rb;
 	Transform* transform;
+	MeshRenderer* mesh;
 
 	std::string ghostMeshId, ghostMeshName;
 	Vector3 ghostScale = { 1,1,1 };
@@ -29,7 +31,6 @@ private:
 	float playerGravity;
 	Vector3 deathPos = {0,0,0};
 
-	void changeMesh(std::string id, std::string name);
 public:
 	GhostManager(GameObject* gameObject);
 

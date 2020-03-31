@@ -4,7 +4,6 @@
 
 #include <UserComponent.h>
 
-class GameObject;
 class InputSystem;
 class GhostMovement;
 class Movement;
@@ -12,6 +11,7 @@ class Attack;
 class GhostManager;
 class Jump;
 class UltimateGhostPunch;
+class Vector3;
 
 class PlayerController : public UserComponent
 {
@@ -45,6 +45,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void fixedUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	// Manages player's input and generates a movement direction
