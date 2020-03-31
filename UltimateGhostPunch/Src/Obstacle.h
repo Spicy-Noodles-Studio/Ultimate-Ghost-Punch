@@ -21,5 +21,6 @@ public:
 
 	virtual void onCollisionEnter(GameObject* other);
 	virtual void handleData(ComponentData* data);
+	virtual void start();
 };
 

@@ -5,10 +5,13 @@
 #include "Health.h"
 #include "RigidBody.h"
 #include "GhostManager.h"
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Obstacle);
+
 
 Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject)
 {
-	
 }
 
 void Obstacle::handleData(ComponentData* data)
@@ -31,13 +34,18 @@ void Obstacle::handleData(ComponentData* data)
 		else if (prop.first == "respawnOffset") {
 			double x, y, z;
 			if (!(ss >> x >> y >> z))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("OBSTACLE: Invalid property with name \"%s\"", prop.first.c_str());
 			else
 				respawnOffset = { x,y,z };
 		}
 		else
 			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+void Obstacle::start()
+{
+	printf("ME HE CREADO\n");
 }
 
 

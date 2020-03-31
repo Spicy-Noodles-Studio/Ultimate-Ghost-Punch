@@ -19,6 +19,8 @@ private:
 	int playerIndex;
 	bool usingKeyboard;
 	bool charge = false;
+	Vector3 dir;
+
 	// Initial position of the player
 	Vector3 iniPosition = {0,0,0};
 

@@ -90,9 +90,9 @@
             "ComponentModifications" : [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties": {
-                        "position" : "50 80 -200"
-                    }
+                    "ComponentProperties": [
+                        ["position", "0 23 0"]
+                    ]
                 }
             ]
         }

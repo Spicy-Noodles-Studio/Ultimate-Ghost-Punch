@@ -159,8 +159,4 @@ void GhostManager::setDeathPosition(const Vector3& dPos)
 	deathPos = dPos;
 }
 
-void GhostManager::changeMesh(std::string id, std::string name)
-{
-
-}
 

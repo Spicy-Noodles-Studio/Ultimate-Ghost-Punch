@@ -6,42 +6,44 @@
     [
         {
             "ComponentName": "Transform",
-            "ComponentProperties": {
-                "position": "-50 10 -200",
-                "scale": "0.5 0.5 0.5",
-                "rotation": "0 0 0"
-            }
+            "ComponentProperties": [
+                ["position", "-50 10 -200"],
+                ["scale", "1 1 1"],
+                ["rotation", "0 0 0"]
+            ]
         },
         {
             "ComponentName": "MeshRenderer",
-            "ComponentProperties": {
-                "mesh": "spikes knot.mesh"
-            }
+            "ComponentProperties": [
+                ["mesh", "spikes Cube.mesh"]
+            ]
         },
         {
             "ComponentName": "RigidBody",
-            "ComponentProperties": {
-                "shape": "Box",
-                "mass": "0",
-                "friction": "1",
-                "restitution": "0",
-                "damping": "0",
-                "angularDamping": "0",
-                "gravity": "0 0 0",
-                "offset": "0 20 0",
-                "scale": "50 100 100",
-                "kinematic": "0",
-                "trigger": "0",
-                "movementConstraints": "1 1 1",
-                "rotationConstraints": "0 0 0"
-            }
+            "ComponentProperties": [
+                ["shape", "Box"],
+                ["mass", "0"],
+                ["friction", "1"],
+                ["restitution", "0"],
+                ["damping", "0"],
+                ["angularDamping", "0"],
+                ["gravity", "0 0 0"],
+                ["offset", "0 0 0"],
+                ["scale", "1 1 1"],
+                ["kinematic", "0"],
+                ["trigger", "0"],
+                ["movementConstraints", "1 1 1"],
+                ["rotationConstraints", "0 0 0"]
+            ]
         },
         {
             "ComponentName": "Obstacle",
-            "ComponentProperties": {
-                "damage": "2",
-                "pushStrength": "4000"
-            }
+            "ComponentProperties": [
+                ["damage", "2"],
+                ["pushStrength", "100"],
+                ["verticalPush", "5"],
+                ["respawnOffset", "1 0 0"]
+            ]
         }
     ]
 }

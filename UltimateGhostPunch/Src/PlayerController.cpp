@@ -43,26 +43,15 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	dir = Vector3(0, 0, 0);
-
 	// Ignore input if:
 	if (frozen) return; // Player is frozen
 	if (checkOutsideLimits()) return; // Player has fallen off limits
-
-	Vector3 dir = Vector3(0, 0, 0);
+	
 	checkInput(dir);
 
-	if (!ghost->isGhost()) {
-		if (movement != nullptr) movement->move(dir);
-	}
-	else {
-		if (ghostMovement != nullptr) {
-
-			if (ghostPunch != nullptr && !ghostPunch->isPunching() && !charge)
-				ghostMovement->move(dir);
-			else if (ghostPunch == nullptr)
-				ghostMovement->move(dir);
-		}
+	if (ghost != nullptr && ghost->isGhost()) {
+		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+			if (ghostMovement != nullptr) ghostMovement->move(dir);
 	}
 }
 
@@ -94,6 +83,7 @@ void PlayerController::handleData(ComponentData* data)
 
 void PlayerController::checkInput(Vector3& dir)
 {
+	dir = Vector3(0, 0, 0);
 	Vector3 punchDir;
 	//Controles con teclado y raton
 	if (usingKeyboard)
