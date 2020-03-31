@@ -96,6 +96,7 @@ StyleCopReport.xml
 *.dll
 *.lib
 *.exe
+*.exp
 
 # Chutzpah Test files
 _Chutzpah*
