@@ -44,7 +44,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "fightConfig.layout"],
-                        ["event" , "FightButton fightButtonClick | BackButton backButtonClick"]
+                        ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | -HealthButton -healthButtonClick | +HealthButton +healthButtonClick | -TimeButton -timeButtonClick | +TimeButton +timeButtonClick | FightButton fightButtonClick | BackButton backButtonClick"]
 
                     ]
                 }

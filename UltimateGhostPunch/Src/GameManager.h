@@ -2,7 +2,6 @@
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 
-#include "Singleton.h"
 #include "UserComponent.h"
 
 #include <vector>
@@ -10,39 +9,53 @@
 
 class GameObject;
 
-class GameManager : public Singleton<GameManager>, public UserComponent
+class GameManager : public UserComponent
 {
 private:
-
-	int currentScene;
+	static GameManager* instance;
 
 	bool paused;
 
-	// FIGHT DATA
 	int nPlayers;
+
+	std::vector<int> playerIndexes;
 	std::vector<GameObject*> knights;
-	int winner;
 
 	std::string level;
 	std::string song;
 
-	// OPTIONS DATA
+	int health;
+	int time;
 
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
 	~GameManager();
 
+	static GameManager* GetInstance();
+
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void setLevel(std::string level);
-	void setSong(std::string song);
-
 	void setNPlayers(int nPlayers);
 	int getNPlayers();
-	
+
 	std::vector<GameObject*>& getKnights();
+
+	void setLevel(std::string level);
+	std::string getLevel();
+
+	void setSong(std::string song);
+	std::string getSong();
+
+	void setHealth(int health);
+	int getHealth();
+
+	void setTime(int time);
+	int getTime();
+
+	void setPlayerIndexes(std::vector<int> playerIndexes);
+	std::vector<int>& getPlayerIndexes();
 
 };
 

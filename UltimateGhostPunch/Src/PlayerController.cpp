@@ -124,28 +124,28 @@ void PlayerController::update(float deltaTime)
 	}
 	else
 	{
-		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left"))
+		if (inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left"))
 			dir = Vector3(-1, 0, 0);
-		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right"))
+		else if (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right"))
 			dir = Vector3(1, 0, 0);
 
 		if (ghost != nullptr && ghost->isGhost()) {
-			if (inputSystem->getLeftJoystick(playerIndex).second < 0 || inputSystem->isButtonPressed(playerIndex, "Up"))
+			if (inputSystem->getLeftJoystick(controllerIndex).second < 0 || inputSystem->isButtonPressed(controllerIndex, "Up"))
 				dir += Vector3(0, 1, 0);
-			else if (inputSystem->getLeftJoystick(playerIndex).second > 0 || inputSystem->isButtonPressed(playerIndex, "Down"))
+			else if (inputSystem->getLeftJoystick(controllerIndex).second > 0 || inputSystem->isButtonPressed(controllerIndex, "Down"))
 				dir += Vector3(0, -1, 0);
 
-			if (inputSystem->getRightJoystick(playerIndex).second != 0 || inputSystem->getRightJoystick(playerIndex).first != 0)
+			if (inputSystem->getRightJoystick(controllerIndex).second != 0 || inputSystem->getRightJoystick(controllerIndex).first != 0)
 			{
 				charge = true;
 
-				punchDir.x = inputSystem->getRightJoystick(playerIndex).first;
-				punchDir.y = -inputSystem->getRightJoystick(playerIndex).second;
+				punchDir.x = inputSystem->getRightJoystick(controllerIndex).first;
+				punchDir.y = -inputSystem->getRightJoystick(controllerIndex).second;
 				punchDir.z = 0;
 
 				punchDir.normalize();
 
-				if (inputSystem->getButtonPress(playerIndex, "X"))
+				if (inputSystem->getButtonPress(controllerIndex, "X"))
 				{
 					ghostPunch->ghostPunch(punchDir);
 					charge = false;
@@ -153,15 +153,15 @@ void PlayerController::update(float deltaTime)
 			}
 		}
 
-		if (inputSystem->getButtonPress(playerIndex, "X")) {
+		if (inputSystem->getButtonPress(controllerIndex, "X")) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->quickAttack();
 		}
 
-		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
+		else if (inputSystem->getButtonPress(controllerIndex, "Y")) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
+		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A"))
 			if (jump != nullptr) jump->salta();
 	}
 
@@ -192,7 +192,7 @@ void PlayerController::handleData(ComponentData* data)
 		}
 		if (prop.first == "index")
 		{
-			if (!(ss >> playerIndex))
+			if (!(ss >> controllerIndex))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -208,4 +208,14 @@ int PlayerController::getPlayerIndex() const
 void PlayerController::setPlayerIndex(int index)
 {
 	playerIndex = index;
+}
+
+void PlayerController::setControllerIndex(int index)
+{
+	controllerIndex = index;
+}
+
+void PlayerController::setUsingKeyboard(bool usingKeyboard)
+{
+	this->usingKeyboard = usingKeyboard;
 }

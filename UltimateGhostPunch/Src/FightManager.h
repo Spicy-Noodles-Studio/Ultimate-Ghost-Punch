@@ -7,17 +7,29 @@
 #include <vector>
 #include <string>
 
+#include "UIElement.h"
+
 class InputSystem;
-class UIElement;
 
 class FightManager : public UserComponent
 {
 private:
+	UIElement winnerPanel;
+	UIElement winnerText;
 
+	std::vector<int> playerIndexes;
+
+	float time;
+	bool timed;
+
+	int winner;
 
 private:
 	void createLevel();
 	void createKnights();
+	void playSong();
+
+	void chooseWinner();
 
 public:
 	FightManager(GameObject* gameObject);

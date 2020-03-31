@@ -17,10 +17,11 @@ class PlayerUI;
 class PlayerController : public UserComponent
 {
 private:
-	int playerIndex;
+	int controllerIndex;
 	bool usingKeyboard;
 	bool charge = false;
 
+	int playerIndex;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -42,6 +43,10 @@ public:
 
 	int getPlayerIndex() const;
 	void setPlayerIndex(int index);
+
+	void setControllerIndex(int index);
+
+	void setUsingKeyboard(bool usingKeyboard);
 };
 
 #endif
