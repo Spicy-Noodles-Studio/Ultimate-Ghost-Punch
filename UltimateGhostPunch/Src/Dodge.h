@@ -13,8 +13,8 @@ class Dodge : public UserComponent
 private:
 	//VARIABLES A BALANCEAR
 	float COOLDOWN = 0.5f;
-	float DURATION = 0.2f;
-	float VELOCITY = 10.0f;
+	float DURATION = 0.15f;
+	float VELOCITY = 13.0f;
 
 	//otras variables
 	float cd = 0.0f;

@@ -17,6 +17,7 @@ void Dodge::start()
 
 void Dodge::update(float deltaTime)
 {
+
 	// Update the cooldown
 	if (cd > 0.0f)
 	{
@@ -68,36 +69,7 @@ void Dodge::handleData(ComponentData* data)
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
 
-		/*if (prop.first == "quickCooldown") {
-			if (!(ss >> quickAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongCooldown") {
-			if (!(ss >> strongAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "quickDamage") {
-			if (!(ss >> quickAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongDamage") {
-			if (!(ss >> strongAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "attackDuration") {
-			if (!(ss >> attackDuration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "quickCharge") {
-			if (!(ss >> quickChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongCharge") {
-			if (!(ss >> strongChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else
-			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());*/
+		
 	}
 }
 

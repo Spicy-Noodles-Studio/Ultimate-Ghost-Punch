@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\GhostManager.cpp" />
+    <ClCompile Include="..\..\Src\Grab.cpp" />
     <ClCompile Include="..\..\Src\Health.cpp" />
     <ClCompile Include="..\..\Src\Attack.cpp" />
     <ClCompile Include="..\..\Src\GhostMovement.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />
     <ClInclude Include="..\..\Src\GhostMovement.h" />
+    <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
   </ItemGroup>

@@ -86,7 +86,7 @@ void PlayerController::update(float deltaTime)
 		}
 	}
 
-	if (!ghost) {
+	if (!ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
 	}
 	else
