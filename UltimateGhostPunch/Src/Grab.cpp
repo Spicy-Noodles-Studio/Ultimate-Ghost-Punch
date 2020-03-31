@@ -82,5 +82,8 @@ void Grab::grab()
 void Grab::drop()
 {
 	gameObject->removeChild(enemy);
+
+	//lanzar enemigo
+
 	enemy = nullptr;
 }
