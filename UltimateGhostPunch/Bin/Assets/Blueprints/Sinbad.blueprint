@@ -6,38 +6,38 @@
     [
         {
             "ComponentName": "Transform",
-            "ComponentProperties": {
-                "position": "0 0 -400",
-                "scale": "10 10 10"
-            }
+            "ComponentProperties": [
+                ["position", "200 0 -400"],
+                ["scale", "10 10 10"]
+            ]
         },
         {
             "ComponentName": "MeshRenderer",
-            "ComponentProperties": {
-                "mesh": "sinbad Sinbad.mesh"
-            }
+            "ComponentProperties": [
+                ["mesh", "sinbad Sinbad.mesh"]
+            ]
         },
         {
             "ComponentName": "Animator",
-            "ComponentProperties": {
-                "anim": "Dance sinbad"
-            }
+            "ComponentProperties": [
+                ["anim", "Dance sinbad"]
+            ]
         },
         {
             "ComponentName": "RigidBody",
-            "ComponentProperties": {
-                "shape": "Box",
-                "mass": "4",
-                "friction": "0",
-                "restitution": "0",
-                "damping": "0.2",
-                "angularDamping": "0",
-                "gravity": "0 -20 0",
-                "offset": "0 0 0",
-                "scale": "5 5 5",
-                "kinematic": "0",
-                "trigger": "0"
-            }
+            "ComponentProperties": [
+               ["shape", "Box"],
+                ["mass", "4"],
+                ["friction", "0"],
+                ["restitution", "0"],
+                ["damping", "0.2"],
+                ["angularDamping", "0"],
+                ["gravity", "0 -20 0"],
+                ["offset", "0 0 0"],
+                ["scale", "5 5 5"],
+                ["kinematic", "0"],
+                ["trigger", "0"]
+            ]
         }
     ]
 }

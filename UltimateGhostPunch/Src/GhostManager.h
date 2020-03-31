@@ -7,12 +7,14 @@ class Health;
 class GhostMovement;
 class RigidBody;
 class Transform;
+class MeshRenderer;
 
 class GhostManager : public UserComponent
 {
 private:
 	bool ghost, ghostAble;
 	float ghostTime = 10;
+	int ghostDamage = 1;
 	Vector3 ghostSpawnOffset = { 0,0,0 };
 
 	Movement* mov;
@@ -20,6 +22,7 @@ private:
 	Health* health;
 	RigidBody* rb;
 	Transform* transform;
+	MeshRenderer* mesh;
 
 	std::string ghostMeshId, ghostMeshName;
 	Vector3 ghostScale = { 1,1,1 };
@@ -27,7 +30,6 @@ private:
 	Vector3 aliveScale;
 	float playerGravity;
 
-	void changeMesh(std::string id, std::string name);
 public:
 	GhostManager(GameObject* gameObject);
 
@@ -36,7 +38,7 @@ public:
 
 	virtual void handleData(ComponentData* data);
 
-	virtual void onTriggerEnter(GameObject* other);
+	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
 	bool hasGhost();

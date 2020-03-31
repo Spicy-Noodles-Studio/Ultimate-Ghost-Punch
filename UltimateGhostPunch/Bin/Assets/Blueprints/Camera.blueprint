@@ -1,0 +1,38 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Camera",
+    "Tag": "camera",
+    "Components":
+    [
+        {
+            "ComponentName": "Camera",
+            "ComponentProperties": [
+                ["main", "true"]
+            ]
+        },
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": [
+                ["position", "0 10 50"], 
+                ["rotation", "0 0 0"]
+            ]
+        },
+        {
+            "ComponentName": "Light",
+            "ComponentProperties": [
+                ["type", "Point"],
+                ["colour", "1 1 1"]
+            ]
+        },
+        {
+            "ComponentName": "SoundListener"
+        },
+        {
+            "ComponentName": "Reverb",
+            "ComponentProperties": [
+                ["preset" , "mountains"],
+                ["maxDistance" , "100000"]
+            ]
+        }
+    ]
+}
