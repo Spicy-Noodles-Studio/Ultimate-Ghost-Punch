@@ -58,6 +58,16 @@ void FightManager::update(float deltaTime)
 	}
 }
 
+void FightManager::playerDie()
+{
+	int nPlayers = GameManager::GetInstance()->getNPlayers();
+	nPlayers--;
+	if (nPlayers == 1)
+		chooseWinner();
+	else
+		GameManager::GetInstance()->setNPlayers(nPlayers);
+}
+
 void FightManager::createLevel()
 {
 	//instantiate(GameManager::GetInstance()->getLevel());
@@ -65,7 +75,7 @@ void FightManager::createLevel()
 
 void FightManager::playSong()
 {
-	// SoundSystem::GetInstance()->playMusic(song);
+	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
 }
 
 void FightManager::createKnights()

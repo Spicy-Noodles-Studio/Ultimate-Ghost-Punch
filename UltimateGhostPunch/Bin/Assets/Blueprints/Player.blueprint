@@ -45,7 +45,7 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "force", "20"]
+              [  "force", "50"]
             ]
         },
         {  

@@ -42,6 +42,7 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
+	void playerDie();
 };
 
 #endif

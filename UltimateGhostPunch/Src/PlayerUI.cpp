@@ -29,7 +29,7 @@ void PlayerUI::start()
 	health = gameObject->getComponent<Health>();
 
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	if (cameraLayout != nullptr) 
+	if (cameraLayout != nullptr)
 	{
 		playerHUD = cameraLayout->getRoot().getChild(name + "Background");
 		playerIndicator = cameraLayout->getRoot().getChild(name + "Indicator");
@@ -50,29 +50,29 @@ void PlayerUI::createHearts()
 {
 	float posX = 0.3f;
 
-if (health != nullptr)
-{
-	for (int i = 1; i <= health->getHealth(); i++)
+	if (health != nullptr)
 	{
-		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
-			name + "Heart" + std::to_string(i));
+		for (int i = 1; i <= health->getHealth(); i++)
+		{
+			UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
+				name + "Heart" + std::to_string(i));
 
-		heart.setPosition(posX, 0.1f);
-		heart.setSize(0.05f, 0.2f);
-		if (i % 2 != 0)
-			heart.flipHorizontal();
-		else
-			posX += 0.03f;
+			heart.setPosition(posX, 0.1f);
+			heart.setSize(0.05f, 0.2f);
+			if (i % 2 != 0)
+				heart.flipHorizontal();
+			else
+				posX += 0.03f;
 
-		posX += 0.02f;
+			posX += 0.02f;
+		}
 	}
-}
 }
 
 void PlayerUI::updateIndicator()
 {
 	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->transform->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.27f);
+	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.24f);
 }
 
 void PlayerUI::update(float deltaTime)
