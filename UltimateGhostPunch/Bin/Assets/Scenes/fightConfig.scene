@@ -3,49 +3,27 @@
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
-            "ObjectName": "MainCamera",
-            "Tag": "MainCamera",
+            "ObjectName": "FightConfiguration",
+            "Tag": "fightConfiguration",
             "Components":
             [
                 {
-                    "ComponentName": "Camera",
-                    "ComponentProperties": [
-                        ["main", "true"]
-                    ]
-                },
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position", "0 200 60"],
-                        ["rotation", "-20 0 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "Light",
-                    "ComponentProperties": [
-                        ["type", "Point"],
-                        ["colour", "1 1 1"]
-                    ]
-                },
-                {
-                    "ComponentName": "SoundListener"
-                },
-                {
-                    "ComponentName": "Reverb",
-                    "ComponentProperties": [
-                        ["preset" , "mountains"],
-                        ["maxDistance" , "100000"]
-                    ]
-                },
-                                {
-                    "ComponentName": "FightConfiguration"
-                },
+                    "ComponentName" : "FightConfiguration"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "MainCamera",
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera",
+            "Components":
+            [
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "fightConfig.layout"],
                         ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | -HealthButton -healthButtonClick | +HealthButton +healthButtonClick | -TimeButton -timeButtonClick | +TimeButton +timeButtonClick | FightButton fightButtonClick | BackButton backButtonClick"]
-
                     ]
                 }
             ]

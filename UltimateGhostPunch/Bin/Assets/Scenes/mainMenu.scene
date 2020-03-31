@@ -13,41 +13,12 @@
             ]
         },
         {
-            "ObjectType": "GAMEOBJECT",
+            "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
-            "Tag": "MainCamera",
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera",
             "Components":
             [
-                {
-                    "ComponentName": "Camera",
-                    "ComponentProperties": [
-                        ["main", "true"]
-                    ]
-                },
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position", "0 200 60"],
-                        ["rotation", "-20 0 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "Light",
-                    "ComponentProperties": [
-                        ["type", "Point"],
-                        ["colour", "1 1 1"]
-                    ]
-                },
-                {
-                    "ComponentName": "SoundListener"
-                },
-                {
-                    "ComponentName": "Reverb",
-                    "ComponentProperties": [
-                        ["preset" , "mountains"],
-                        ["maxDistance" , "100000"]
-                    ]
-                },
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [

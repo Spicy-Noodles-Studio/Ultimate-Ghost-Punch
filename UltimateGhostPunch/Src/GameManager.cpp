@@ -1,5 +1,9 @@
 #include "GameManager.h"
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(GameManager);
+
 GameManager* GameManager::instance = nullptr;
 
 GameManager::GameManager() : UserComponent(nullptr)

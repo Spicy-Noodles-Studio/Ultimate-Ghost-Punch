@@ -7,6 +7,10 @@
 #include "UILayout.h"
 #include "FightConfiguration.h"
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(FightManager);
+
 FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), winnerPanel(NULL), winnerText(NULL)
 {
 
@@ -70,7 +74,7 @@ void FightManager::createKnights()
 
 	for (int i = 0; i < nPlayers; i++)
 	{
-		GameObject* knight = instantiate("Player", { 50,10,-200 });
+		GameObject* knight = instantiate("Player", playerPositions[i]);
 		knight->getComponent<Health>()->setHealth(GameManager::GetInstance()->getHealth());
 
 		if (playerIndexes[i] == 5)

@@ -16,6 +16,8 @@ const int MIN_HEALTH = 1;
 const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
+const int MIN_PLAYERS = 1;
+
 class InputSystem;
 
 class FightConfiguration : public UserComponent

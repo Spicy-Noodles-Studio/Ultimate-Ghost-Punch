@@ -1,6 +1,6 @@
 {
     "ObjectType": "GAMEOBJECT",
-    "ObjectName": "Suelo",
+    "ObjectName": "Level",
     "Tag": "suelo",
     "Components":
     [

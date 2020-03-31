@@ -9,6 +9,10 @@
 #include <InterfaceSystem.h>
 #include "GameManager.h"
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(FightConfiguration);
+
 // EVENTS----
 
 bool FightConfiguration::fightButtonClick()
@@ -188,7 +192,7 @@ void FightConfiguration::fillSlot(int slotIndex, int deviceIndex)
 
 	nPlayers++;
 
-	if (!fightButton.isVisible() && nPlayers >= 2) fightButton.setVisible(true);
+	if (!fightButton.isVisible() && nPlayers >= MIN_PLAYERS) fightButton.setVisible(true);
 }
 
 void FightConfiguration::clearSlot(int index)
@@ -198,7 +202,7 @@ void FightConfiguration::clearSlot(int index)
 
 	nPlayers--;
 
-	if (fightButton.isVisible() && nPlayers < 2) fightButton.setVisible(false);
+	if (fightButton.isVisible() && nPlayers < MIN_PLAYERS) fightButton.setVisible(false);
 }
 
 int FightConfiguration::isIndexConnected(int index)

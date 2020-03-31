@@ -9,6 +9,8 @@
 
 #include "UIElement.h"
 
+#include "Vector3.h"
+
 class InputSystem;
 
 class FightManager : public UserComponent
@@ -18,6 +20,8 @@ private:
 	UIElement winnerText;
 
 	std::vector<int> playerIndexes;
+
+	std::vector<Vector3> playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
 
 	float time;
 	bool timed;
