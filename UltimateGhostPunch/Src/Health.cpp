@@ -3,6 +3,7 @@
 #include "GameObject.h"
 
 #include "GhostManager.h"
+#include "PlayerUI.h"
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -19,7 +20,27 @@ void Health::start()
 	alive = true;
 	invencible = false;
 
+	maxHealth = health;
+
 	ghost = gameObject->getComponent<GhostManager>();
+	playerUI = gameObject->getComponent<PlayerUI>();
+}
+
+void Health::update(float deltaTime)
+{
+	if (invencible)
+	{
+		if (time > 0.0f)
+		{
+			time -= deltaTime;
+		}
+		else
+		{
+			invencible = false;
+
+			playerUI->updateState("Alive");
+		}
+	}
 }
 
 void Health::handleData(ComponentData* data)
@@ -35,8 +56,12 @@ void Health::handleData(ComponentData* data)
 			if (!(ss >> resurrectionHealth))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
-		else if (prop.first == "invTime") {
-			if (!(ss >> invencibleTime))
+		else if (prop.first == "invDamTime") {
+			if (!(ss >> invencibleDamageTime))
+				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "invResTime") {
+			if (!(ss >> invencibleResurrectionTime))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -49,17 +74,26 @@ void Health::receiveDamage(int damage)
 	if ((ghost != nullptr && ghost->isGhost()) || invencible)
 		return;
 
-	// update UI health
-
 	health -= damage;
-	if (health <= 0)
+	if (health < 0) health = 0;
+
+	playerUI->updateHealth();
+
+	if (health == 0)
 	{
 		if (ghost != nullptr && ghost->hasGhost())
+		{
+			playerUI->updateState("Ghost");
 			ghost->activateGhost();
+		}
 		else
 			die();
-
-		LOG("HE MUERTO");
+	}
+	else
+	{
+		invencible = true;
+		time = invencibleDamageTime;
+		playerUI->updateState("Invencible");
 	}
 }
 
@@ -67,7 +101,7 @@ void Health::die()
 {
 	alive = false;
 
-	// update UI
+	playerUI->updateState("Dead");
 
 	// deactivate gameObject
 	gameObject->setActive(false);
@@ -82,14 +116,22 @@ void Health::resurrect()
 {
 	health = resurrectionHealth;
 
+	playerUI->updateHealth();
+
 	// activate invencibility for a specified time
 	invencible = true;
-	//invencibleTimer->start() (???)
+	time = invencibleResurrectionTime;
+	playerUI->updateState("Invencible");
 }
 
 int Health::getHealth()
 {
 	return health;
+}
+
+int Health::getMaxHealth()
+{
+	return maxHealth;
 }
 
 void Health::setHealth(int health)

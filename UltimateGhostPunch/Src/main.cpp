@@ -11,6 +11,7 @@
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "GhostManager.h"
+#include "PlayerUI.h"
 #include "UltimateGhostPunch.h"
 #include "Block.h"
 
@@ -29,6 +30,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<Health>("Health");
 	ComponentManager::GetInstance()->registerComponent<Jump>("Jump");
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
+	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
 	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
 	ComponentManager::GetInstance()->registerComponent<Block>("Block");
 

@@ -22,6 +22,7 @@ private:
 	bool charge = false;
 	bool isBlocking = false;
 
+
 	Movement* movement;
 	GhostMovement* ghostMovement;
 	Jump* jump;
@@ -38,6 +39,8 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+	int getPlayerIndex() const;
 };
 
 #endif

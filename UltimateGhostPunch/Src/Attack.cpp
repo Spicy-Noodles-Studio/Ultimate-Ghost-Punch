@@ -108,7 +108,7 @@ void Attack::onObjectStay(GameObject* other)
 
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 		Block* enemyBlock = nullptr;
-		if(aux.size()>0) enemyBlock = aux[0]->getComponent<Block>();
+		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
 			enemyBlock->blockAttack(damage, gameObject->transform->getPosition());
 		}
@@ -116,11 +116,6 @@ void Attack::onObjectStay(GameObject* other)
 			Health* enemyHealth = other->getComponent<Health>();
 			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
 		}
-
-		attackTrigger->setActive(false);
-
-		// Reset the current attack state
-		state = NOT_ATTACKING;
 	}
 }
 

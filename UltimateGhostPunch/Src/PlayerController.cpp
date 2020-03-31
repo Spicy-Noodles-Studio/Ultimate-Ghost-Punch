@@ -28,9 +28,7 @@ void PlayerController::start()
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if(aux.size() > 0) jump = aux[0]->getComponent<Jump>();
-
-	if (aux.size() > 0) block = aux[0]->getComponent<Block>();
+	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
@@ -58,7 +56,7 @@ void PlayerController::update(float deltaTime)
 		}
 
 		if (inputSystem->getMouseButtonClick('l')) {
-			if(ghost == nullptr || !ghost->isGhost())
+			if(ghost == nullptr || !ghost->isGhost() && !isBlocking)
 				attack->quickAttack();
 			else
 			{
@@ -113,10 +111,10 @@ void PlayerController::update(float deltaTime)
 		}
 		
 
-		else if (inputSystem->getMouseButtonClick('r')) {
+		else if (inputSystem->getMouseButtonClick('r') && !isBlocking) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (inputSystem->isKeyPressed("Space") && !isBlocking)
+		else if (InputSystem::GetInstance()->isKeyPressed("Space") && !isBlocking)
 			if(jump != nullptr) jump->salta();
 
 		if (inputSystem->isKeyPressed("F")) if (block != nullptr) {
@@ -130,9 +128,9 @@ void PlayerController::update(float deltaTime)
 	}
 	else
 	{
-		if ( ( inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left") ) && !isBlocking)
+		if (inputSystem->getLeftJoystick(playerIndex).first < 0 || inputSystem->isButtonPressed(playerIndex, "Left") && !isBlocking)
 			dir = Vector3(-1, 0, 0);
-		else if ( ( inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right") ) && !isBlocking)
+		else if (inputSystem->getLeftJoystick(playerIndex).first > 0 || inputSystem->isButtonPressed(playerIndex, "Right") && !isBlocking)
 			dir = Vector3(1, 0, 0);
 
 		if (ghost != nullptr && ghost->isGhost()) {
@@ -164,13 +162,13 @@ void PlayerController::update(float deltaTime)
 
 		if (inputSystem->getButtonPress(playerIndex, "X")) {
 			if(ghost == nullptr || !ghost->isGhost())
-			if (attack != nullptr) attack->quickAttack();
+			if (attack != nullptr && !isBlocking) attack->quickAttack();
 		}
 
-		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
+		else if (inputSystem->getButtonPress(playerIndex, "Y") && !isBlocking) {
 			if (attack != nullptr) attack->strongAttack();
 		}
-		else if (inputSystem->isButtonPressed(playerIndex, "A") && !isBlocking)
+		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A") && !isBlocking)
 			if(jump != nullptr) jump->salta();
 
 		if (inputSystem->isButtonPressed(playerIndex, "B")) if (block != nullptr) {
@@ -216,4 +214,9 @@ void PlayerController::handleData(ComponentData* data)
 		else
 			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+int PlayerController::getPlayerIndex () const
+{
+	return playerIndex;
 }

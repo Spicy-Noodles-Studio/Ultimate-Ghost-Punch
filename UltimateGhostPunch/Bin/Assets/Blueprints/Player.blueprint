@@ -45,23 +45,23 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": {
-                "force": "1000"
+                "force": "3000"
             }
         },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties": {
-                "keyboard": "1",
+                "keyboard": "0",
                 "index": "0"
             }
         },
         {
             "ComponentName": "GhostMovement",
             "ComponentProperties": {
-                "maxSpeed": "100"
+                "maxSpeed": "800"
             }
         },
-         {
+        {
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": {
                 "force": "3000",
@@ -71,14 +71,23 @@
         {
             "ComponentName": "Health",
             "ComponentProperties": {
-                "health": "epe",
-                "resHealth": "10",
+                "health": "4",
+                "resHealth": "2",
                 "ghostTime": "7",
-                "invTime": "3"
+                "invDamTime": "2",
+                "invResTime": "3"
             }
         },
         {
-            "ComponentName": "GhostManager"
+            "ComponentName": "GhostManager",
+            "ComponentProperties": {
+                "ghostMesh": "ghost knot.mesh",
+                "ghostScale": "0.15 0.15 0.15",
+                "spawnOffset": "0 20 0"
+            }
+        },
+        {
+            "ComponentName": "PlayerUI"
         }
     ],
     "Children": [
@@ -124,17 +133,17 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": {
-                        "maxForce": "1500",
+                        "maxForce": "4500",
 				        "jumpDecay": "2"
                     }       
                 },
 				{
-					"ComponentName": "Block",
-					"ComponentProperties": {
-						"maxBlockTime": "3",
-						"blockRegenTime": "1"
-					}
-				}
+                    "ComponentName": "Block",
+                    "ComponentProperties": {
+                        "maxBlockTime": "3.0",
+				        "blockRegenTime": "1.5"
+                    }       
+                }
             ]
         }
     ]
