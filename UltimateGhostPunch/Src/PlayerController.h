@@ -11,14 +11,17 @@ class Attack;
 class GhostManager;
 class Jump;
 class UltimateGhostPunch;
+class PlayerUI;
 class Vector3;
 
 class PlayerController : public UserComponent
 {
 private:
-	int playerIndex;
+	int controllerIndex;
 	bool usingKeyboard;
 	bool charge = false;
+
+	int playerIndex;
 	Vector3 dir;
 
 	Movement* movement;
@@ -30,6 +33,8 @@ private:
 	InputSystem* inputSystem;
 	GhostManager* ghost;
 
+	PlayerUI* playerUI;
+
 public:
 	PlayerController(GameObject* gameObject);
 
@@ -39,6 +44,11 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	int getPlayerIndex() const;
+	void setPlayerIndex(int index);
+
+	void setControllerIndex(int index);
+
+	void setUsingKeyboard(bool usingKeyboard);
 };
 
 #endif

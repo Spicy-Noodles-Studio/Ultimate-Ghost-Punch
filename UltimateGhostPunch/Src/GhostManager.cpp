@@ -85,7 +85,7 @@ void GhostManager::handleData(ComponentData* data)
 void GhostManager::onObjectEnter(GameObject* other)
 {
 	// If this player is in ghost mode and other is a player
-	if (ghost && other->getTag() == "player") {
+	if (ghost && other->getTag() == "Player") {
 		Health* aux = other->getComponent<Health>();
 		//If the other player is alive
 		if (aux != nullptr && aux->getHealth() > 0) {

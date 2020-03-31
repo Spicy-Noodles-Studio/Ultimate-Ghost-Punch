@@ -6,6 +6,8 @@
 #include "PlayerUI.h"
 #include "ComponentRegister.h"
 
+#include "FightManager.h"
+
 REGISTER_FACTORY(Health);
 
 Health::Health(GameObject* gameObject) : UserComponent(gameObject)
@@ -15,7 +17,7 @@ Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 
 Health::~Health()
 {
-
+	
 }
 
 void Health::start()
@@ -103,6 +105,8 @@ void Health::die()
 	alive = false;
 
 	if (playerUI != nullptr) playerUI->updateState("Dead");
+
+	findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
 
 	// deactivate gameObject
 	gameObject->setActive(false);

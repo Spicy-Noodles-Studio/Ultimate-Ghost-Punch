@@ -1,7 +1,7 @@
 {
     "ObjectType": "GAMEOBJECT",
     "ObjectName": "Player",
-    "Tag": "player",
+    "Tag": "Player",
     "Components":
     [
         {
@@ -45,7 +45,7 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "force", "20"]
+              [  "force", "50"]
             ]
         },
         {  
@@ -85,6 +85,9 @@
                 ["spawnOffset", "0 1.25 0"],
                 ["ghostDamage", "1"]
             ]
+        },
+        {
+            "ComponentName": "PlayerUI"
         }
     ],
     "Children": [
