@@ -36,6 +36,12 @@
                         "preset" : "mountains",
                         "maxDistance" : "100000"
                     }
+                },
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": {
+                        "layout" : "Fight.layout"
+                    }
                 }
             ]
         },
@@ -49,7 +55,7 @@
                     "ComponentName": "Transform",
                     "ComponentProperties": {
                         "scale" : "5 0.05 5",
-                        "position" : "0 -100 -500"
+                        "position" : "0 0 -400"
                     }
                 },
                 {
@@ -62,50 +68,53 @@
                     "ComponentName": "RigidBody",
                     "ComponentProperties": {
                         "shape": "Box",
+						"mass": "0",
                         "scale": "50 50 50",
-                        "friction": "0.5",
-                        "mass": "0"
+                        "friction": "0.5"
                     }
                 }
             ]
         },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Cubo 1",
-            "Tag": "cubo1",
-            "BlueprintPath": "Cubo",
-            "ComponentModifications": [
+         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Suelo",
+            "Tag": "suelo",
+            "Components":
+            [
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties": {
-                        "position" : "-150 -10 -500"
+                        "scale" : "5 0.05 5",
+                        "position" : "-100 0 -400",
+                        "rotation" : "0 0 90"
                     }
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Cubo 2",
-            "Tag": "cubo2",
-            "BlueprintPath": "Cubo",
-            "ComponentModifications": [
+                },
                 {
-                    "ComponentName": "Transform",
+                    "ComponentName": "MeshRenderer",
                     "ComponentProperties": {
-                        "position" : "50 100 -500"
+                        "mesh": "cube cube.mesh"
+                    }
+                },
+                {
+                    "ComponentName": "RigidBody",
+                    "ComponentProperties": {
+                        "shape": "Box",
+						"mass": "0",
+                        "scale": "50 50 50",
+                        "friction": "0.5"
                     }
                 }
             ]
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player",
+            "ObjectName": "Player1",
             "Tag": "player",
             "BlueprintPath": "Player"
         },
         {
             "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player",
+            "ObjectName": "Player2",
             "Tag": "player",
             "BlueprintPath": "Player",
             "ComponentModifications" : [
@@ -119,7 +128,7 @@
                 {
                     "ComponentName": "PlayerController",
                     "ComponentProperties": {
-                         "keyboard": "0"
+                         "keyboard": "1"
                     }
                 }
             ]

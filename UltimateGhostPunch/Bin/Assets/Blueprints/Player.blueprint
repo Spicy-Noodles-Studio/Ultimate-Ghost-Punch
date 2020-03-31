@@ -28,44 +28,54 @@
             "ComponentName": "RigidBody",
             "ComponentProperties": {
                 "shape": "Box",
-                "mass": "3",
-                "friction": "0",
+                "mass": "5",
+                "friction": "1",
                 "restitution": "0",
-                "damping": "0.4",
+                "damping": "0",
                 "angularDamping": "0",
-                "gravity": "0 0 0",
+                "gravity": "0 -1000 0",
                 "offset": "0 20 0",
                 "scale": "1 1 2",
                 "kinematic": "0",
-                "trigger": "0"
+                "trigger": "0",
+                "movementConstraints": "1 1 1",
+                "rotationConstraints": "0 0 0"
             }
         },
         {
             "ComponentName": "Movement",
             "ComponentProperties": {
-                "force": "1000"
+                "force": "3000"
             }
         },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties": {
-                "keyboard": "1",
+                "keyboard": "0",
                 "index": "0"
             }
         },
         {
             "ComponentName": "GhostMovement",
             "ComponentProperties": {
-                "maxSpeed": "100"
+                "maxSpeed": "800"
+            }
+        },
+        {
+            "ComponentName": "UltimateGhostPunch",
+            "ComponentProperties": {
+                "force": "3000",
+                "duration" : "0.333"
             }
         },
         {
             "ComponentName": "Health",
             "ComponentProperties": {
-                "health": "epe",
-                "resHealth": "10",
+                "health": "4",
+                "resHealth": "2",
                 "ghostTime": "7",
-                "invTime": "3"
+                "invDamTime": "2",
+                "invResTime": "3"
             }
         },
         {
@@ -74,35 +84,65 @@
 		
 		{
 		"ComponentName": "Dodge"
-		}
+		},
+        {
+            "ComponentName": "GhostManager",
+            "ComponentProperties": {
+                "ghostMesh": "ghost knot.mesh",
+                "ghostScale": "0.15 0.15 0.15",
+                "spawnOffset": "0 20 0"
+            }
+        },
+        {
+            "ComponentName": "PlayerUI"
+        }
     ],
     "Children": [
         {
-            "ObjectType": "GAMEOBJECT",
-            "ObjectName": "Attack Collider",
-            "Tag": "attackCollider",
-            "Components":
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Attack Sensor",
+            "Tag": "attackSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
             [
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":{
                         "position": "0 -3 2.5",
-                        "scale": "1 1 1",
-                        "rotation" : "0 0 0"
-                    }
-                },
-                {
-                    "ComponentName": "RigidBody",
-                    "ComponentProperties":{
-                        "shape": "Box",
-                        "mass": "3",
-                        "kinematic" : "1",
-                        "trigger": "1",
                         "scale": "1 2 1"
                     }
-                },
+                }
+            ],
+            "Components":
+            [
                 {
                     "ComponentName": "Attack"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Ground Sensor",
+            "Tag": "groundSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":{
+                        "position": "0 0 -0.5",
+                        "scale": "0.75 0.75 0.75"
+                    }
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Jump",
+                    "ComponentProperties": {
+                        "maxForce": "4500",
+				        "jumpDecay": "2"
+                    }       
                 }
             ]
         }

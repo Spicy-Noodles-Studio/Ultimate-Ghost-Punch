@@ -3,11 +3,15 @@
 #include <GameObject.h>
 
 #include "InputSystem.h"
+#include "Scene.h"
+#include "Camera.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Attack.h"
+#include "Jump.h"
 #include "GhostManager.h"
 #include "Dodge.h"
+#include "UltimateGhostPunch.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -22,9 +26,13 @@ void PlayerController::start()
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
 	dodge = gameObject->getComponent<Dodge>();
+	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 
-	GameObject* aux = gameObject->findChildrenWithTag("attackCollider")[0];
-	if (aux != nullptr) attack = aux->getComponent<Attack>();
+	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
+	if(aux.size() >0) jump = aux[0]->getComponent<Jump>();
+
+	aux = gameObject->findChildrenWithTag("attackSensor");
+	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
 }
 
 void PlayerController::update(float deltaTime)
@@ -32,7 +40,7 @@ void PlayerController::update(float deltaTime)
 	UserComponent::update(deltaTime);
 
 	Vector3 dir = Vector3(0, 0, 0);
-
+	Vector3 punchDir;
 	if (usingKeyboard)
 	{
 		//Pruebas dodge
@@ -56,12 +64,66 @@ void PlayerController::update(float deltaTime)
 		}
 
 		if (inputSystem->getMouseButtonClick('l')) {
-			attack->quickAttack();
+			if(ghost == nullptr || !ghost->isGhost())
+				attack->quickAttack();
+			else
+			{
+				if (ghostPunch != nullptr && ghostPunch->isAvailable())
+				{
+					charge = true;
+				}
+			}
 		}
+
+		if (inputSystem->getMouseButtonHold('l'))
+		{
+			if (ghost != nullptr || ghost->isGhost())
+				if (ghostPunch != nullptr && ghostPunch->isAvailable()&& charge)
+				{
+					std::pair<int, int> mousePos = inputSystem->getMousePosition();
+
+					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->getComponent<Transform>()->getPosition());
+
+					//std::cout << thisOnScreen->x << " " << thisOnScreen->y << " " << std::endl;
+
+
+					punchDir.x = mousePos.first - thisOnScreen->x;
+					punchDir.y = thisOnScreen->y - mousePos.second;
+					punchDir.z = 0;
+
+					punchDir.normalize();
+					
+				}
+		}
+		if (inputSystem->getMouseButtonRelease('l'))
+		{
+			if (ghost != nullptr || ghost->isGhost())
+				if (ghostPunch != nullptr && ghostPunch->isAvailable() && charge )
+				{
+					std::pair<int, int> mousePos = inputSystem->getMousePosition();
+
+					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->getComponent<Transform>()->getPosition());
+
+					//std::cout << thisOnScreen->x << " " << thisOnScreen->y << " " << std::endl;
+
+
+					punchDir.x = mousePos.first - thisOnScreen->x;
+					punchDir.y = thisOnScreen->y - mousePos.second;
+					punchDir.z = 0;
+
+					punchDir.normalize();
+					ghostPunch->ghostPunch(punchDir);
+					charge = false;
+				}
+			
+		}
+		
 
 		else if (inputSystem->getMouseButtonClick('r')) {
 			if (attack != nullptr) attack->strongAttack();
 		}
+		else if (InputSystem::GetInstance()->isKeyPressed("Space")) 
+			if(jump != nullptr) jump->salta();
 	}
 	else
 	{
@@ -75,22 +137,52 @@ void PlayerController::update(float deltaTime)
 				dir += Vector3(0, 1, 0);
 			else if (inputSystem->getLeftJoystick(playerIndex).second > 0 || inputSystem->isButtonPressed(playerIndex, "Down"))
 				dir += Vector3(0, -1, 0);
+
+			if (inputSystem->getRightJoystick(playerIndex).second != 0 || inputSystem->getRightJoystick(playerIndex).first != 0)
+			{
+				charge = true;
+
+				punchDir.x = inputSystem->getRightJoystick(playerIndex).first;
+				punchDir.y = -inputSystem->getRightJoystick(playerIndex).second;
+				punchDir.z = 0;
+
+				punchDir.normalize();
+
+				if (inputSystem->getButtonPress(playerIndex, "X"))
+				{
+					ghostPunch->ghostPunch(punchDir);
+					charge = false;
+				}
+
+			}
 		}
 
+		
+
 		if (inputSystem->getButtonPress(playerIndex, "X")) {
+			if(ghost == nullptr || !ghost->isGhost())
 			if (attack != nullptr) attack->quickAttack();
 		}
 
 		else if (inputSystem->getButtonPress(playerIndex, "Y")) {
 			if (attack != nullptr) attack->strongAttack();
 		}
+		else if (InputSystem::GetInstance()->isButtonPressed(playerIndex, "A"))
+			if(jump != nullptr) jump->salta();
 	}
 
 	if (!ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
 	}
-	else
-		if (ghostMovement != nullptr) ghostMovement->move(dir);
+	else {
+		if (ghostMovement != nullptr) {
+			
+			if (ghostPunch != nullptr && !ghostPunch->isPunching() &&! charge)
+			ghostMovement->move(dir);
+			else if(ghostPunch == nullptr)
+				ghostMovement->move(dir);
+		}
+	}
 }
 
 void PlayerController::handleData(ComponentData* data)
@@ -112,4 +204,9 @@ void PlayerController::handleData(ComponentData* data)
 		else
 			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+int PlayerController::getPlayerIndex () const
+{
+	return playerIndex;
 }

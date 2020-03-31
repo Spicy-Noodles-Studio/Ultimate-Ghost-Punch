@@ -7,10 +7,13 @@
 #include "Attack.h"
 #include "PlayerController.h"
 #include "Health.h"
+#include "Jump.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "GhostManager.h"
 #include "Dodge.h"
+#include "PlayerUI.h"
+#include "UltimateGhostPunch.h"
 
 #ifdef _DEBUG
 int main()
@@ -25,8 +28,11 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	ComponentManager::GetInstance()->registerComponent<Movement>("Movement");
 	ComponentManager::GetInstance()->registerComponent<PlayerController>("PlayerController");
 	ComponentManager::GetInstance()->registerComponent<Health>("Health");
+	ComponentManager::GetInstance()->registerComponent<Jump>("Jump");
 	ComponentManager::GetInstance()->registerComponent<GhostManager>("GhostManager");
 	ComponentManager::GetInstance()->registerComponent<Dodge>("Dodge");
+	ComponentManager::GetInstance()->registerComponent<PlayerUI>("PlayerUI");
+	ComponentManager::GetInstance()->registerComponent<UltimateGhostPunch>("UltimateGhostPunch");
 
 	GaiaCore* g = new GaiaCore();
 	g->init();
