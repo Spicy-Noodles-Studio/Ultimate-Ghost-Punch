@@ -47,7 +47,7 @@ void Obstacle::start()
 
 void Obstacle::onCollisionEnter(GameObject* other)
 {
-	if (other->getTag() == "player")
+	if (other->getTag() == "Player")
 	{
 		int xDir;
 		if (other->transform->getPosition().x < gameObject->transform->getPosition().x) // PLAYER --> OBSTACLE
