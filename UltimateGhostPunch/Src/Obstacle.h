@@ -11,8 +11,6 @@ private:
 	int damage = 0;
 	// Strength of the impulse to the player that collides
 	float pushStrength = 10.0f;
-	// Strength of the impulse vertically
-	float verticalPush = 3.0f;
 	// Offset for respawn used if the player dies from the obstacle's damage
 	Vector3 respawnOffset = { 50.0f, 0.0f, 0.0f };
 

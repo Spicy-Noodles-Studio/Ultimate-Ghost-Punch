@@ -27,10 +27,6 @@ void Obstacle::handleData(ComponentData* data)
 			if (!(ss >> pushStrength))
 				LOG("OBSTACLE: Invalid property with name \"%s\"", prop.first.c_str());
 		}
-		else if (prop.first == "verticalPush") {
-			if (!(ss >> verticalPush))
-				LOG("OBSTACLE: Invalid property with name \"%s\"", prop.first.c_str());
-		}
 		else if (prop.first == "respawnOffset") {
 			double x, y, z;
 			if (!(ss >> x >> y >> z))
@@ -59,6 +55,12 @@ void Obstacle::onCollisionEnter(GameObject* other)
 		else // OBSTACLE <-- PLAYER
 			xDir = 1;
 
+		int yDir;
+		if (other->transform->getPosition().y < gameObject->transform->getPosition().y) // OBSTACLE is over PLAYER
+			yDir = -1;
+		else // PLAYER is over OBSTACLE
+			yDir = 1;
+
 		// The player receives damage
 		Health* h = other->getComponent<Health>();
 		if (h == nullptr) return;
@@ -79,7 +81,7 @@ void Obstacle::onCollisionEnter(GameObject* other)
 			// The player gets pushed away of the obstacle
 			Vector3 pushDir;
 			
-			pushDir = { other->transform->getPosition().x * xDir, verticalPush, 0 };
+			pushDir = { double(xDir), double(yDir), 0.0f };
 			pushDir.normalize();
 
 			RigidBody* rb = other->getComponent<RigidBody>();

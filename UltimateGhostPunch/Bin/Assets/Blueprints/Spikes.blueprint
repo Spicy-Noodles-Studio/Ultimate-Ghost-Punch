@@ -8,7 +8,7 @@
             "ComponentName": "Transform",
             "ComponentProperties": [
                 ["position", "-50 10 -200"],
-                ["scale", "1 1 1"],
+                ["scale", "2 2 2"],
                 ["rotation", "0 0 0"]
             ]
         },
@@ -40,8 +40,7 @@
             "ComponentName": "Obstacle",
             "ComponentProperties": [
                 ["damage", "2"],
-                ["pushStrength", "100"],
-                ["verticalPush", "5"],
+                ["pushStrength", "40"],
                 ["respawnOffset", "1 0 0"]
             ]
         }
