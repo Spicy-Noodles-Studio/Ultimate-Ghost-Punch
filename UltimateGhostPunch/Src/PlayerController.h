@@ -11,14 +11,17 @@ class Attack;
 class GhostManager;
 class Jump;
 class UltimateGhostPunch;
+class PlayerUI;
 class Vector3;
 
 class PlayerController : public UserComponent
 {
 private:
-	int playerIndex;
+	int controllerIndex;
 	bool usingKeyboard;
 	bool charge = false;
+
+	int playerIndex;
 	Vector3 dir;
 
 	// Initial position of the player
@@ -41,6 +44,7 @@ private:
 
 	// Damage taken when falling out of the world
 	float fallDamage = 2.0f;
+	PlayerUI* playerUI;
 
 public:
 	PlayerController(GameObject* gameObject);
@@ -62,6 +66,11 @@ public:
 	void respawn(const Vector3& respawnPos);
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
+	void setPlayerIndex(int index);
+
+	void setControllerIndex(int index);
+
+	void setUsingKeyboard(bool usingKeyboard);
 };
 
 #endif

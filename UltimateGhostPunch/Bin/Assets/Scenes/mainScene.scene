@@ -5,82 +5,34 @@
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
             "Tag": "mainCamera",
-            "BlueprintPath": "Camera"
+            "BlueprintPath": "Camera",
+            "Components":
+            [
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": [
+                        ["layout" , "fight.layout"],
+                        ["event" , "BackButton backButtonClick | ResumeButton resumeButtonClick"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "FightManager",
+            "Tag": "fightManager",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "FightManager"
+                }
+            ]
         },
         {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "Suelo",
             "Tag": "suelo",
-            "BlueprintPath": "Suelo"
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player1",
-            "Tag": "player",
-            "BlueprintPath": "Player"
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player2",
-            "Tag": "player",
-            "BlueprintPath": "Player",
-            "ComponentModifications" : [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position" , "-20 30 0"],
-                        ["rotation" , "0 -90 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "PlayerController",
-                    "ComponentProperties": [
-                         ["keyboard", "1"]
-                    ]
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player3",
-            "Tag": "player",
-            "BlueprintPath": "Player",
-            "ComponentModifications" : [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                       [ "position" , "17.5 10 0"],
-                       [ "rotation" , "0 -90 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "PlayerController",
-                    "ComponentProperties": [
-                         ["index", "1"]
-                    ]
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Player4",
-            "Tag": "player",
-            "BlueprintPath": "Player",
-            "ComponentModifications" : [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position" , "-17.5 10 0"],
-                        ["rotation" , "0 -90 0"]
-                    ]
-                },
-                {
-                    "ComponentName": "PlayerController",
-                    "ComponentProperties": [
-                         ["index", "2"]
-                    ]
-                }
-            ]
+            "BlueprintPath": "Level"
         },
         {
             "ObjectType": "BLUEPRINT",
