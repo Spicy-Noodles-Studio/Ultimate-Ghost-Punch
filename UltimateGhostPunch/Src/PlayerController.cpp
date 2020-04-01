@@ -19,6 +19,7 @@
 REGISTER_FACTORY(PlayerController);
 
 #include "PlayerUI.h"
+#include "RigidBody.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -48,7 +49,6 @@ void PlayerController::update(float deltaTime)
 {
 	// Ignore input if:
 	if (frozen) return; // Player is frozen
-	if (checkOutsideLimits()) return; // Player has fallen off limits
 	
 	checkInput(dir);
 
@@ -196,13 +196,17 @@ void PlayerController::checkInput(Vector3& dir)
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+		if (ghostPunch == nullptr || (ghostPunch->getState() != PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(dir);
 	}
 }
 
 void PlayerController::fixedUpdate(float deltaTime)
 {
+	// Don't move if:
+	if (frozen) return; // Player is frozen
+	if (checkOutsideLimits()) return; // Player has fallen off limits
+
 	//Movimiento
 	if (ghost == nullptr || !ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
@@ -248,6 +252,7 @@ void PlayerController::respawn(const Vector3& respawnPos)
 	if (health != nullptr) health->resurrect();
 
 	gameObject->transform->setPosition(respawnPos);
+	LOG("{%f, %f, %f}\n", respawnPos.x, respawnPos.y, respawnPos.z);
 	movement->stop();
 }
 

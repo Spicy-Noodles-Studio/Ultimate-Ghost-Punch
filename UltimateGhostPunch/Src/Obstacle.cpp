@@ -41,7 +41,6 @@ void Obstacle::handleData(ComponentData* data)
 
 void Obstacle::start()
 {
-	printf("ME HE CREADO\n");
 }
 
 

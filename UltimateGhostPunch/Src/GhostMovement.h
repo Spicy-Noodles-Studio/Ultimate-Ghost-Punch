@@ -20,7 +20,7 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	void setSpeed(float speed);
-
+	float getSpeed() const;
 };
 
 #endif 

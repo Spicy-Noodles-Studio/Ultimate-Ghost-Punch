@@ -8,6 +8,7 @@
 
 #include "Health.h"
 #include "ComponentRegister.h"
+#include "GhostMovement.h"
 
 REGISTER_FACTORY(UltimateGhostPunch);
 
@@ -18,13 +19,15 @@ UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(g
 void UltimateGhostPunch::start()
 {
 	body = gameObject->getComponent<RigidBody>();
+	mov = gameObject->getComponent<GhostMovement>();
+	if(mov != nullptr)	ghostSpeed = mov->getSpeed();
 	state = AVAILABLE;
 }
 
 void UltimateGhostPunch::charge()
 {
 	state = CHARGING;
-	if (body != nullptr) body->setLinearVelocity({ 0,0,0 });
+	if (mov != nullptr) mov->setSpeed(mov->getSpeed() * chargeSpeedMult);
 }
 
 void UltimateGhostPunch::aim(double x, double y)
@@ -36,6 +39,7 @@ void UltimateGhostPunch::aim(double x, double y)
 void UltimateGhostPunch::ghostPunch()
 {
 	if (body != nullptr) body->addImpulse(dir * force);
+	if (mov != nullptr) mov->setSpeed(ghostSpeed);
 	state = PUNCHING;
 }
 
@@ -69,6 +73,10 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 		}
 		else if (prop.first == "duration") {
 			if (!(ss >> duration))
+				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "chargeSpeedMult") {
+			if (!(ss >> chargeSpeedMult))
 				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else

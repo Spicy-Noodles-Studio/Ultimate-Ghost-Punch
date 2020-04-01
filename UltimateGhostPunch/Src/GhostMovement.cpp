@@ -42,3 +42,8 @@ void GhostMovement::setSpeed(float speed)
 {
 	maxSpeed = speed;
 }
+
+float GhostMovement::getSpeed() const
+{
+	return maxSpeed;
+}

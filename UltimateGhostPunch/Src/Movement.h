@@ -10,7 +10,7 @@ class Movement : public UserComponent
 {
 private:
 	RigidBody* rigidBody;
-	int force;
+	float speed;
 
 public:
 	Movement(GameObject* gameObject);
@@ -21,6 +21,9 @@ public:
 	
 	virtual void start();
 	virtual void handleData(ComponentData* data);
+
+	void setSpeed(float spd);
+	float getSpeed() const;
 };
 
 #endif

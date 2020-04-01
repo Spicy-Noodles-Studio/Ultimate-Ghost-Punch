@@ -157,6 +157,7 @@ void GhostManager::deactivateGhost()
 void GhostManager::setDeathPosition(const Vector3& dPos)
 {
 	deathPos = dPos;
+	LOG("{%f, %f, %f}\n", dPos.x, dPos.y, dPos.z);
 }
 
 

@@ -45,7 +45,7 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "force", "50"]
+              [  "speed", "50"]
             ]
         },
         {  
@@ -65,7 +65,8 @@
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": [
                [ "force", "200"],
-                ["duration" , "0.333"]
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
             ]
         },
         {
