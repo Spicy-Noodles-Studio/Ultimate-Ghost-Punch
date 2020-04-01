@@ -39,8 +39,6 @@ private:
 	// Will ignore input if frozen is true
 	bool frozen = false;
 
-	// Limit of the world in the Y axis (HAY QUE METERLO EN EL GAMEMANAGER)
-	float bottomLimit = -500.0f;
 
 	// Damage taken when falling out of the world
 	float fallDamage = 2.0f;

@@ -15,11 +15,11 @@
 #include "UltimateGhostPunch.h"
 #include "Health.h"
 #include "ComponentRegister.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PlayerController);
 
 #include "PlayerUI.h"
-#include "RigidBody.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -211,11 +211,12 @@ void PlayerController::fixedUpdate(float deltaTime)
 	if (ghost == nullptr || !ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
 	}
+
 }
 
 bool PlayerController::checkOutsideLimits()
 {
-	bool out = gameObject->transform->getPosition().y <= bottomLimit;
+	bool out = gameObject->transform->getPosition().y <= GameManager::GetInstance()->getBottomLimit();
 	if (out)
 	{
 		Health* health = gameObject->getComponent<Health>();
