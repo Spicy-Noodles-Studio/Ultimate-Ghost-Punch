@@ -13,7 +13,9 @@
 #include "Jump.h"
 #include "GhostManager.h"
 #include "UltimateGhostPunch.h"
+#include "Health.h"
 #include "ComponentRegister.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PlayerController);
 
@@ -39,12 +41,53 @@ void PlayerController::start()
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
+
+	iniPosition = gameObject->transform->getPosition();
 }
 
 void PlayerController::update(float deltaTime)
 {
-	dir = Vector3(0, 0, 0);
+	// Ignore input if:
+	if (frozen) return; // Player is frozen
+	
+	checkInput(dir);
 
+	if (ghost != nullptr && ghost->isGhost()) {
+		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+			if (ghostMovement != nullptr) ghostMovement->move(dir);
+	}
+}
+
+void PlayerController::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "keyboard")
+		{
+			if (!(ss >> usingKeyboard))
+				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "index")
+		{
+			if (!(ss >> controllerIndex))
+				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "fallDamage")
+		{
+			if (!(ss >> fallDamage))
+				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else
+			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
+	}
+}
+
+void PlayerController::checkInput(Vector3& dir)
+{
+	dir = Vector3(0, 0, 0);
+	Vector3 punchDir;
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
@@ -76,7 +119,6 @@ void PlayerController::update(float deltaTime)
 					ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
 				}
 			}
-
 			else if (inputSystem->getMouseButtonRelease('l'))
 			{
 				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
@@ -96,12 +138,10 @@ void PlayerController::update(float deltaTime)
 			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
 				ghostPunch->charge();
 		}
-
 		else if (inputSystem->getMouseButtonClick('r')) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->strongAttack();
 		}
-
 		else if (InputSystem::GetInstance()->isKeyPressed("Space"))
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
@@ -156,43 +196,70 @@ void PlayerController::update(float deltaTime)
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+		if (ghostPunch == nullptr || (ghostPunch->getState() != PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(dir);
 	}
 }
 
 void PlayerController::fixedUpdate(float deltaTime)
 {
+	// Don't move if:
+	if (frozen) return; // Player is frozen
+	if (checkOutsideLimits()) return; // Player has fallen off limits
+
 	//Movimiento
 	if (ghost == nullptr || !ghost->isGhost()) {
 		if (movement != nullptr) movement->move(dir);
 	}
+
 }
 
-void PlayerController::handleData(ComponentData* data)
+bool PlayerController::checkOutsideLimits()
 {
-	for (auto prop : data->getProperties())
+	bool out = gameObject->transform->getPosition().y <= GameManager::GetInstance()->getBottomLimit();
+	if (out)
 	{
-		std::stringstream ss(prop.second);
+		Health* health = gameObject->getComponent<Health>();
+		health->receiveDamage(fallDamage);
 
-		if (prop.first == "keyboard")
-		{
-			if (!(ss >> usingKeyboard))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		if (prop.first == "index")
-		{
-			if (!(ss >> controllerIndex))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
+		// If the player is alive after falling it respawns
+		// else, it appears as a ghost at initial position
+		if (health->getHealth() > 0)
+			respawn(iniPosition);
 		else
-			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());
+		{
+			gameObject->transform->setPosition(iniPosition);
+			// Sets the initial position as the respawn if the player resurrects
+			ghost->setDeathPosition(iniPosition);
+		}
 	}
+
+	return out;
 }
 
 int PlayerController::getPlayerIndex() const
 {
 	return playerIndex;
+}
+
+Vector3 PlayerController::getInitialPosition() const
+{
+	return iniPosition;
+}
+
+void PlayerController::respawn(const Vector3& respawnPos)
+{
+	Health* health = gameObject->getComponent<Health>();
+	if (health != nullptr) health->resurrect();
+
+	gameObject->transform->setPosition(respawnPos);
+	LOG("{%f, %f, %f}\n", respawnPos.x, respawnPos.y, respawnPos.z);
+	movement->stop();
+}
+
+void PlayerController::setFrozen(bool freeze)
+{
+	frozen = freeze;
 }
 
 void PlayerController::setPlayerIndex(int index)

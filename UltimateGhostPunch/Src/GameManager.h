@@ -26,6 +26,8 @@ private:
 
 	int health;
 	int time;
+	// Bottom limit of the level 
+	float bottomLimit = -10;
 
 public:
 	GameManager();
@@ -53,6 +55,8 @@ public:
 
 	void setTime(int time);
 	int getTime();
+
+	float getBottomLimit() const;
 
 	void setPlayerIndexes(std::vector<int> playerIndexes);
 	std::vector<int>& getPlayerIndexes();

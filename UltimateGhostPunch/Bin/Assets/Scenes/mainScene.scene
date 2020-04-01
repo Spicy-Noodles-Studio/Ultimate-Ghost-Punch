@@ -33,6 +33,20 @@
             "ObjectName": "Suelo",
             "Tag": "suelo",
             "BlueprintPath": "Level"
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "spikeObstacle1",
+            "Tag": "spikeObstacle",
+            "BlueprintPath": "Spikes",
+            "ComponentModifications" : [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": [
+                        ["position", "0 24 0"]
+                    ]
+                }
+            ]
         }
     ]
 }

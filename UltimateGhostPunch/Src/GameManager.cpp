@@ -46,6 +46,9 @@ void GameManager::update(float deltaTime)
 void GameManager::setLevel(std::string level)
 {
 	this->level = level;
+	//todo:
+	//Leer archivo config del nivel y guardar las posiciones de players/obstáculos para crearlos
+	//Leer el límite inferior del nivel: bottomLimit = ...
 }
 
 std::string GameManager::getLevel()
@@ -81,6 +84,11 @@ void GameManager::setTime(int time)
 int GameManager::getTime()
 {
 	return time;
+}
+
+float GameManager::getBottomLimit() const
+{
+	return bottomLimit;
 }
 
 void GameManager::setPlayerIndexes(std::vector<int> playerIndexes)

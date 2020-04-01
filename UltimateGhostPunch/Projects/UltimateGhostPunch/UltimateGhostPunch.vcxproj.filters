@@ -51,6 +51,9 @@
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Obstacle.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\FightConfiguration.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -90,6 +93,9 @@
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Obstacle.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\FightConfiguration.h">
