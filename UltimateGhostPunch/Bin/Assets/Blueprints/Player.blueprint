@@ -1,82 +1,82 @@
 {
     "ObjectType": "GAMEOBJECT",
     "ObjectName": "Player",
-    "Tag": "player",
+    "Tag": "Player",
     "Components":
     [
         {
             "ComponentName": "Transform",
-            "ComponentProperties": {
-                "position": "-50 10 -200",
-                "scale": "10 10 10",
-                "rotation": "-90 90 0"
-            }
+            "ComponentProperties": [
+               [ "position", "20 30 0"],
+               [ "scale", "1 1 1"],
+               [ "rotation", "0 90 0"]
+            ]
         },
         {
             "ComponentName": "MeshRenderer",
-            "ComponentProperties": {
-                "mesh": "sinbad Sphere.mesh"
-            }
+            "ComponentProperties": [
+               [ "mesh", "player Knight.mesh"]
+            ]
         },
         {
             "ComponentName": "Animator",
-            "ComponentProperties": {
-                "anim": "Idle sinbad"
-            }
+            "ComponentProperties": [
+               [ "anim", "Idle player"]
+            ]
         },
         {
             "ComponentName": "RigidBody",
-            "ComponentProperties": {
-                "shape": "Box",
-                "mass": "5",
-                "friction": "1",
-                "restitution": "0",
-                "damping": "0",
-                "angularDamping": "0",
-                "gravity": "0 -1000 0",
-                "offset": "0 20 0",
-                "scale": "1 1 2",
-                "kinematic": "0",
-                "trigger": "0",
-                "movementConstraints": "1 1 1",
-                "rotationConstraints": "0 0 0"
-            }
+            "ComponentProperties":[ 
+               [ "shape", "Box"],
+               [ "mass", "5"],
+               [ "friction", "0.1"],
+               [ "restitution", "0"],
+               [ "damping", "0.4"],
+               [ "angularDamping", "0"],
+               [ "gravity", "0 -10 0"],
+               [ "offset", "0 0 0"],
+               [ "scale", "1 2 1"],
+               [ "kinematic", "0"],
+               [ "trigger", "0"],
+               [ "movementConstraints", "1 1 0"],
+               [ "rotationConstraints", "0 0 0"]
+            ]
         },
         {
             "ComponentName": "Movement",
-            "ComponentProperties": {
-                "force": "3000"
-            }
+            "ComponentProperties": [
+              [  "speed", "50"]
+            ]
         },
         {  
             "ComponentName": "PlayerController",
-            "ComponentProperties": {
-                "keyboard": "0",
-                "index": "0"
-            }
+            "ComponentProperties":[ 
+               [ "keyboard", "0"],
+               [ "index", "0"]
+            ]
         },
         {
             "ComponentName": "GhostMovement",
-            "ComponentProperties": {
-                "maxSpeed": "800"
-            }
+            "ComponentProperties":[ 
+               [ "maxSpeed", "6"]
+            ]
         },
         {
             "ComponentName": "UltimateGhostPunch",
-            "ComponentProperties": {
-                "force": "3000",
-                "duration" : "0.333"
-            }
+            "ComponentProperties": [
+               [ "force", "200"],
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
+            ]
         },
         {
             "ComponentName": "Health",
-            "ComponentProperties": {
-                "health": "4",
-                "resHealth": "2",
-                "ghostTime": "7",
-                "invDamTime": "2",
-                "invResTime": "3"
-            }
+            "ComponentProperties": [
+                ["health", "4"],
+                ["resHealth", "2"],
+                ["invDamTime", "2"],
+                ["invResTime", "3"]
+            ]
         },
         {
             "ComponentName": "GhostManager"
@@ -87,11 +87,12 @@
 		},
         {
             "ComponentName": "GhostManager",
-            "ComponentProperties": {
-                "ghostMesh": "ghost knot.mesh",
-                "ghostScale": "0.15 0.15 0.15",
-                "spawnOffset": "0 20 0"
-            }
+            "ComponentProperties": [
+                ["ghostMesh", "ghost Espada.mesh"],
+                ["ghostScale", "1 1 1"],
+                ["spawnOffset", "0 1.25 0"],
+                ["ghostDamage", "1"]
+            ]
         },
         {
             "ComponentName": "PlayerUI"
@@ -107,10 +108,10 @@
             [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties":{
-                        "position": "0 -3 2.5",
-                        "scale": "1 2 1"
-                    }
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
                 }
             ],
             "Components":
@@ -129,20 +130,20 @@
             [
                 {
                     "ComponentName": "Transform",
-                    "ComponentProperties":{
-                        "position": "0 0 -0.5",
-                        "scale": "0.75 0.75 0.75"
-                    }
+                    "ComponentProperties":[
+                       [ "position", "0 -0.9 0"],
+                        ["scale", "0.75 0.75 0.75"]
+                    ]
                 }
             ],
             "Components":
             [
                 {
                     "ComponentName": "Jump",
-                    "ComponentProperties": {
-                        "maxForce": "4500",
-				        "jumpDecay": "2"
-                    }       
+                    "ComponentProperties": [
+                        ["maxForce", "12"],
+				        ["jumpDecay", "1.5"]
+                    ]       
                 }
             ]
         }

@@ -6,7 +6,6 @@
 #include <UserComponent.h>
 
 class RigidBody;
-class GameObject;
 
 class GhostMovement : public UserComponent
 {
@@ -21,7 +20,7 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	void setSpeed(float speed);
-
+	float getSpeed() const;
 };
 
 #endif 

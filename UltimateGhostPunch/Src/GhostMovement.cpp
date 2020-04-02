@@ -1,8 +1,13 @@
 #include "GhostMovement.h"
+
 #include <InputSystem.h>
 #include <RigidBody.h>
 #include <sstream>
 #include <GameObject.h>
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(GhostMovement);
 
 GhostMovement::GhostMovement(GameObject* g) :UserComponent(g)
 {
@@ -36,4 +41,9 @@ void GhostMovement::handleData(ComponentData* data)
 void GhostMovement::setSpeed(float speed)
 {
 	maxSpeed = speed;
+}
+
+float GhostMovement::getSpeed() const
+{
+	return maxSpeed;
 }
