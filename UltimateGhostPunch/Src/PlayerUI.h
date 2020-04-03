@@ -1,8 +1,11 @@
 #pragma once
+#ifndef PLAYER_UI_H
+#define PLAYER_UI_H
 
 #include "UserComponent.h"
 #include "UIElement.h"
 
+class Camera;
 class Health;
 
 class PlayerUI : public UserComponent
@@ -17,22 +20,26 @@ public:
 	void updateState(const std::string state);
 	void updateHealth();
 
-	void setPauseMenuVisible(bool show);
-	bool isPauseMenuVisible();
-
-private:
-	Health* health;
-
-	std::string name;
-
-	UIElement playerHUD;
-	UIElement playerIndicator;
-
-	UIElement pauseMenu;
+	// TODO: quitar esto, aqui sobra
+	//void setPauseMenuVisible(bool show);
+	//bool isPauseMenuVisible();
 
 private:
 	void createHearts();
 
 	void updateHearts();
 	void updateIndicator();
+
+private:
+	Camera* mainCamera;
+	Health* health;
+
+	std::string name;
+	UIElement playerHUD;
+	UIElement playerIndicator;
+
+	// TODO: quitar esto, aqui sobra
+	//UIElement pauseMenu;
 };
+
+#endif

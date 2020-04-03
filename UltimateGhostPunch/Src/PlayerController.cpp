@@ -92,7 +92,7 @@ void PlayerController::checkInput(Vector3& dir)
 	if (usingKeyboard)
 	{
 		if (inputSystem->getKeyPress("ESCAPE"))
-			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
+			/*playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible())*/;
 
 		if (inputSystem->isKeyPressed("A"))
 		{
