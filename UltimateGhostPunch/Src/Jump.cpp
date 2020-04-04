@@ -1,31 +1,23 @@
 #include "Jump.h"
 
 #include <sstream>
+#include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
 
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(Jump);
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
 {
 	jumpVector = { 0,0,0 };
-	jumpMargin = 2;
-	isGrounded = false;
-	isJumping = false;
+	coyoteTime = 2;
+	grounded = false;
+	jumping = false;
 }
 
-bool Jump::salta()
+Jump::~Jump()
 {
-	if (isGrounded && !isJumping) {
-		isJumping = true;
-		jumpForce = maxForce;
-	}
-
-	if (isJumping) jumpVector = { 0,1,0 };
-
-	return isJumping;
 }
 
 void Jump::start()
@@ -33,9 +25,15 @@ void Jump::start()
 	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
 }
 
+void Jump::update(float deltaTime)
+{
+	// Manage coyote time so jumping is possible when not grounded for a certain time
+	if (coyoteTime >= 0.0f) coyoteTime -= deltaTime;
+}
+
 void Jump::fixedUpdate(float deltaTime)
 {
-	if (isJumping) {
+	if (jumping) {
 		if (jumpVector != Vector3(0, 0, 0)) {
 			rigidBody->addImpulse(jumpVector * jumpForce);
 			jumpForce -= jumpDecay;
@@ -43,11 +41,11 @@ void Jump::fixedUpdate(float deltaTime)
 			jumpVector = { 0,0,0 };
 			if (jumpForce <= 0.0f) {
 				jumpForce = 0.0f;
-				isJumping = false;
+				jumping = false;
 			}
 		}
 		else {
-			isJumping = false;
+			jumping = false;
 		}
 	}
 }
@@ -73,13 +71,61 @@ void Jump::handleData(ComponentData* data)
 void Jump::onObjectEnter(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
-		isGrounded = true;
+		grounded = true;
 	}
 }
 
 void Jump::onObjectExit(GameObject* other)
 {
 	if (other->getTag() == "suelo") {
-		isGrounded = false;
+		grounded = false;
 	}
+}
+
+bool Jump::jump()
+{
+	// TODO: cambiar para que aplique el impulso aqui
+	if (grounded && !jumping) {
+		jumping = true;
+		jumpForce = maxForce;
+	}
+
+	if (jumping) jumpVector = { 0,1,0 };
+
+	return jumping;
+}
+
+void Jump::cancelJump()
+{
+	if (!jumping) return;
+	float jumpAttenuation = 0.5f;
+	Vector3 velocity = rigidBody->getLinearVelocity();
+	velocity.y *= jumpAttenuation;
+
+	rigidBody->setLinearVelocity(velocity);
+}
+
+void Jump::setJumpForce(float force)
+{
+	jumpForce = force;
+}
+
+void Jump::setCoyoteTime(float time)
+{
+	coyoteTime = time;
+}
+
+bool Jump::isGrounded()
+{
+	return grounded;
+}
+
+bool Jump::isJumping()
+{
+	return jumping;
+}
+
+bool Jump::canJump()
+{
+	return grounded || coyoteTime > 0.0f;
 }

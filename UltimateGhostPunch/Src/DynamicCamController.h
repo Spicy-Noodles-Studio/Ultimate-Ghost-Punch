@@ -1,11 +1,10 @@
 #pragma once
+
 #include <UserComponent.h>
 
-class GameObject;
 class Movement;
 
-class DynamicCamController :
-	public UserComponent
+class DynamicCamController : public UserComponent
 {
 private:
 	Movement* camMove = nullptr;

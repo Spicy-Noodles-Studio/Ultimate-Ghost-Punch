@@ -28,8 +28,8 @@ void Health::start()
 
 	maxHealth = health;
 
-	ghost = gameObject->getComponent<GhostManager>();
-	playerUI = gameObject->getComponent<PlayerUI>();
+	ghostManager = gameObject->getComponent<GhostManager>();
+	//playerUI = gameObject->getComponent<PlayerUI>();
 }
 
 void Health::update(float deltaTime)
@@ -41,11 +41,13 @@ void Health::update(float deltaTime)
 		else
 		{
 			invencible = false;
-			if(playerUI!=nullptr) playerUI->updateState("Alive");
+			// TODO: quitar esto, aqui sobra
+			//if(playerUI!=nullptr) playerUI->updateState("Alive");
 			if (respawning) 
 			{
 				respawning = false;
 				// reactivate movement
+			// TODO: quitar esto, aqui sobra
 				PlayerController* input = gameObject->getComponent<PlayerController>();
 				if (input != nullptr) input->setFrozen(false);
 			}
@@ -81,20 +83,24 @@ void Health::handleData(ComponentData* data)
 
 void Health::receiveDamage(int damage)
 {
-	if ((ghost != nullptr && ghost->isGhost()) || invencible)
+	// TODO: esto esta feo
+	if ((ghostManager != nullptr && ghostManager->isGhost()) || invencible)
 		return;
 
 	health -= damage;
 	if (health < 0) health = 0;
 
-	if (playerUI != nullptr) playerUI->updateHealth();
+	// TODO: quitar esto, aqui sobra
+	//if (playerUI != nullptr) playerUI->updateHealth();
 
+	// TODO: esto se debe hacer desde fuera
 	if (health == 0)
 	{
-		if (ghost != nullptr && ghost->hasGhost())
+		if (ghostManager != nullptr && ghostManager->hasGhost())
 		{
-			if (playerUI != nullptr) playerUI->updateState("Ghost");
-			ghost->activateGhost();
+			// TODO: quitar esto, aqui sobra
+			//if (playerUI != nullptr) playerUI->updateState("Ghost");
+			ghostManager->activateGhost();
 		}
 		else
 			die();
@@ -103,7 +109,8 @@ void Health::receiveDamage(int damage)
 	{
 		invencible = true;
 		time = invencibleDamageTime;
-		if (playerUI != nullptr) playerUI->updateState("Invencible");
+		// TODO: quitar esto, aqui sobra
+		//if (playerUI != nullptr) playerUI->updateState("Invencible");
 	}
 }
 
@@ -111,7 +118,8 @@ void Health::die()
 {
 	alive = false;
 
-	if (playerUI != nullptr) playerUI->updateState("Dead");
+	// TODO: quitar esto, aqui sobra
+	//if (playerUI != nullptr) playerUI->updateState("Dead");
 
 	findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
 
@@ -131,18 +139,18 @@ void Health::resurrect()
 	// activate invencibility for a specified time
 	invencible = true;
 	time = invencibleResurrectionTime;
+	// TODO: quitar esto, aqui sobra
 	//update UI
-	if (playerUI != nullptr) {
+	/*if (playerUI != nullptr) {
 		playerUI->updateHealth();
 		playerUI->updateState("Respawning");
-	}
+	}*/
 	respawning = true;
 
+	// TODO: esto no es trabajo de HEALTH
 	// deactivate movement while reapearing
 	PlayerController* input = gameObject->getComponent<PlayerController>();
 	if (input != nullptr) input->setFrozen(true);
-	
-	
 }
 
 int Health::getHealth()

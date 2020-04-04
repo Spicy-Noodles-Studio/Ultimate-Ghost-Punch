@@ -53,7 +53,7 @@ void PlayerController::update(float deltaTime)
 	checkInput(dir);
 
 	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
+		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::CHARGING && ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(dir);
 	}
 }
@@ -112,7 +112,7 @@ void PlayerController::checkInput(Vector3& dir)
 
 			else if (inputSystem->getMouseButtonHold('l'))
 			{
-				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
+				if (ghostPunch != nullptr && ghostPunch->getState() == UltimateGhostPunch::State::CHARGING)
 				{
 					std::pair<int, int> mousePos = inputSystem->getMousePosition();
 					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
@@ -121,7 +121,7 @@ void PlayerController::checkInput(Vector3& dir)
 			}
 			else if (inputSystem->getMouseButtonRelease('l'))
 			{
-				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
+				if (ghostPunch != nullptr && ghostPunch->getState() == UltimateGhostPunch::State::CHARGING)
 				{
 					std::pair<int, int> mousePos = inputSystem->getMousePosition();
 					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
@@ -135,7 +135,7 @@ void PlayerController::checkInput(Vector3& dir)
 		if (inputSystem->getMouseButtonClick('l')) {
 			if (ghost == nullptr || !ghost->isGhost())
 				attack->quickAttack();
-			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
+			else if (ghostPunch != nullptr && ghostPunch->getState() == UltimateGhostPunch::State::AVAILABLE)
 				ghostPunch->charge();
 		}
 		else if (inputSystem->getMouseButtonClick('r')) {
@@ -144,7 +144,7 @@ void PlayerController::checkInput(Vector3& dir)
 		}
 		else if (InputSystem::GetInstance()->isKeyPressed("Space"))
 			if (ghost == nullptr || !ghost->isGhost())
-				if (jump != nullptr) jump->salta();
+				if (jump != nullptr) jump->jump();
 	}
 	//Controles con mando
 	else
@@ -168,8 +168,8 @@ void PlayerController::checkInput(Vector3& dir)
 			{
 				if (ghostPunch != nullptr)
 				{
-					if (ghostPunch->getState() == AVAILABLE) ghostPunch->charge();
-					else if (ghostPunch->getState() == CHARGING)
+					if (ghostPunch->getState() == UltimateGhostPunch::State::AVAILABLE) ghostPunch->charge();
+					else if (ghostPunch->getState() == UltimateGhostPunch::State::CHARGING)
 					{
 						ghostPunch->aim(inputSystem->getRightJoystick(controllerIndex).first, -inputSystem->getRightJoystick(controllerIndex).second);
 
@@ -192,11 +192,11 @@ void PlayerController::checkInput(Vector3& dir)
 
 		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A"))
 			if (ghost == nullptr || !ghost->isGhost())
-				if (jump != nullptr) jump->salta();
+				if (jump != nullptr) jump->jump();
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != PUNCHING))
+		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(dir);
 	}
 }

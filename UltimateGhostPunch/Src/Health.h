@@ -1,9 +1,9 @@
 #pragma once
-
-#include "UserComponent.h"
+#ifndef HEALTH_H
+#define HEALTH_H
+#include <UserComponent.h>
 
 class GhostManager;
-class PlayerUI;
 
 class Health : public UserComponent
 {
@@ -38,6 +38,7 @@ private:
 	bool respawning = false; // only true when respawning 
 	bool invencible;
 
-	GhostManager* ghost;
-	PlayerUI* playerUI;
+	GhostManager* ghostManager;
 };
+
+#endif

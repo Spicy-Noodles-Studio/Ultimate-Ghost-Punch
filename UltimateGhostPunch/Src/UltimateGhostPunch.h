@@ -1,40 +1,42 @@
 #pragma once
-#ifndef GHOSTPUNCH_H
-#define GHOSTPUNCH_H
+#ifndef ULTIMATE_GHOST_PUNCH_H
+#define ULTIMATE_GHOST_PUNCH_H
 
 #include <UserComponent.h>
 
 class RigidBody;
-class GameObject;
 class GhostMovement;
-
-enum State {AVAILABLE, CHARGING, PUNCHING, USED};
 
 class UltimateGhostPunch : public UserComponent
 {
+public:
+	enum class State { NONE, AVAILABLE, CHARGING, PUNCHING, USED };
+
 private:
-	RigidBody* body;
-	GhostMovement* mov;
-	Vector3 dir = { 0,0,0 };
+	RigidBody* rigidBody;
+	GhostMovement* ghostMovement;
+	Vector3 direction;
 	State state;
-	float duration = 0, force = 0;
-	float ghostSpeed, 
-		// Speed multiplyer for punch charging speed (from 0.0 to 1.0)
-		chargeSpeedMult = 0.0f;
+	float duration;
+	float force;
+	float ghostSpeed;
+	// Speed multiplyer for punch charging speed (from 0.0 to 1.0)
+	float chargeSpeedMult;
+
 public:
 	UltimateGhostPunch(GameObject* gameObject);
+	virtual ~UltimateGhostPunch();
 
-	virtual void update(float deltaTime);
 	virtual void start();
+	virtual void update(float deltaTime);
+	virtual void handleData(ComponentData* data);
 
-	virtual void charge();
-	virtual void aim(double mousePosX, double mousePosY);
+	void charge();
+	void aim(double x, double y);
 	void ghostPunch();
 
-	State getState();
-	const Vector3& getDir();
-
-	virtual void handleData(ComponentData* data);
+	const State& getState();
+	const Vector3& getDirection();
 };
 
 #endif

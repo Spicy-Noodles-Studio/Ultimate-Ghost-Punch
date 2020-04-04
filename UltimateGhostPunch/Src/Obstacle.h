@@ -1,24 +1,25 @@
 #pragma once
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
+
 #include <UserComponent.h>
 
-class GameObject;
 
-class Obstacle :
-	public UserComponent
+class Obstacle : public UserComponent
 {
 private:
 	// Damage dealt to the player that collides with this obstacle
-	int damage = 0;
+	int damage;
 	// Strength of the impulse to the player that collides
-	float pushStrength = 10.0f;
+	float pushStrength;
 	// Offset for respawn used if the player dies from the obstacle's damage
-	Vector3 respawnOffset = { 50.0f, 0.0f, 0.0f };
+	Vector3 respawnOffset;
 
 public:
 	Obstacle(GameObject* gameObject);
+	virtual ~Obstacle();
 
 	virtual void onCollisionEnter(GameObject* other);
 	virtual void handleData(ComponentData* data);
-	virtual void start();
 };
-
+#endif
