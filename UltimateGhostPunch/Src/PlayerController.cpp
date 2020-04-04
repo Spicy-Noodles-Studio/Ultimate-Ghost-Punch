@@ -17,6 +17,7 @@
 #include "Health.h"
 #include "ComponentRegister.h"
 #include "GameManager.h"
+#include "Grab.h"
 
 REGISTER_FACTORY(PlayerController);
 
@@ -38,11 +39,15 @@ void PlayerController::start()
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	playerUI = gameObject->getComponent<PlayerUI>();
 
+
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
+
+	aux = gameObject->findChildrenWithTag("grabSensor");
+	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
 
 	iniPosition = gameObject->transform->getPosition();
 }
@@ -93,11 +98,14 @@ void PlayerController::checkInput(Vector3& dir)
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-		//Pruebas dodge
+		//Pruebas dodge y grab
 		if (inputSystem->isKeyPressed("H"))
 			dodge->dodgeL();
 		else if (inputSystem->isKeyPressed("J"))
 			dodge->dodgeR();
+
+		if (inputSystem->isKeyPressed("M")) 
+			grab->grab();
 
 
 		if (inputSystem->getKeyPress("ESCAPE"))

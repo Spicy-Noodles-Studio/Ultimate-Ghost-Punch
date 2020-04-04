@@ -14,6 +14,7 @@ class Jump;
 class UltimateGhostPunch;
 class PlayerUI;
 class Vector3;
+class Grab;
 
 class PlayerController : public UserComponent
 {
@@ -38,6 +39,7 @@ private:
 	GhostManager* ghost;
 
 	Dodge* dodge;
+	Grab* grab;
 	// Will ignore input if frozen is true
 	bool frozen = false;
 

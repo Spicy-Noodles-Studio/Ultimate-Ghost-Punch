@@ -4,7 +4,10 @@
 #include <RigidBody.h>
 #include <sstream>
 
-#include "Health.h"
+
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -12,21 +15,27 @@ Grab::Grab(GameObject* gameObject) : UserComponent(gameObject)
 
 void Grab::start()
 {
+	
+
 	attackTrigger = gameObject->getComponent<RigidBody>();
 
 	// Deactivate the trigger until the attack is used
-	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	//if (attackTrigger != nullptr) attackTrigger->setActive(false);
 }
 
 void Grab::update(float deltaTime)
 {
 	if (state == GRABBING) {
-		state = IDLE;
+		//state = IDLE;
 	}
 
 	if (remain > 0.0f) remain -= deltaTime;
 
-	if (remain <= 0.0f) {
+	if (state == GRABBED) {
+		enemy->transform->setPosition(gameObject->getParent()->transform->getPosition() + enemyDiff);
+	}
+
+	if (remain <= 0.0f && state == GRABBED) {
 		state = IDLE;
 		drop();
 
@@ -41,28 +50,27 @@ void Grab::update(float deltaTime)
 
 void Grab::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "player" && other != gameObject->getParent() && state ==	GRABBING)//If it hits a player different than myself
-	{
+	if (state == GRABBING) {
+		if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
+		{
+			enemyDiff = other->transform->getPosition() - gameObject->getParent()->transform->getPosition();
+			
+			state = GRABBED;
+			remain = duration;
+			enemy = other;
 
-		gameObject->addChild(other);
-		state = GRABBED;
-		remain = duration;
-		enemy = other;
+		}
 	}
 }
 
 void Grab::onObjectEnter(GameObject* other)
 {
-	if (other->getTag() == "suelo") {
-		isGrounded = true;
-	}
+	
 }
 
 void Grab::onObjectExit(GameObject* other)
 {
-	if (other->getTag() == "suelo") {
-		isGrounded = false;
-	}
+	
 }
 
 void Grab::handleData(ComponentData* data)
@@ -77,13 +85,16 @@ void Grab::handleData(ComponentData* data)
 void Grab::grab()
 {
 	if (state == IDLE) state = GRABBING;
+	
 }
 
 void Grab::drop()
 {
-	gameObject->removeChild(enemy);
-
+	
 	//lanzar enemigo
+	enemy->getComponent<RigidBody>()->addForce(vDer * force);
+
+	
 
 	enemy = nullptr;
 }

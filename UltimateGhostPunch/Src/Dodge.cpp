@@ -4,7 +4,9 @@
 #include <RigidBody.h>
 #include <sstream>
 #include "Movement.h"
+#include "ComponentRegister.h"
 
+REGISTER_FACTORY(Dodge);
 
 Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject)
 {
