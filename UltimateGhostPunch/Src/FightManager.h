@@ -21,7 +21,9 @@ private:
 
 	std::vector<int> playerIndexes;
 
-	std::vector<Vector3> playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
+	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
+	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
+	int nSpikes;
 
 	float time;
 	bool timed;
@@ -31,6 +33,7 @@ private:
 private:
 	void createLevel();
 	void createKnights();
+	void createSpikes();
 	void playSong();
 
 	void chooseWinner();

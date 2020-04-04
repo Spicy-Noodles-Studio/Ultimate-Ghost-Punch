@@ -1,0 +1,13 @@
+{
+    "LevelBlueprint" : " Level.blueprint",
+    "PlayerPositions":[
+        "0 0 0",
+        "0 0 0",
+        "0 0 0",
+        "0 0 0"
+    ],
+    "SpikesPositions":[
+        "0 0 0",
+        "0 0 0"
+    ]
+}
