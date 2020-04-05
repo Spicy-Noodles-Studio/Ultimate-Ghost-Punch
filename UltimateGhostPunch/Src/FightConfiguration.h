@@ -1,11 +1,12 @@
 #pragma once
-#ifndef FIGHTCONFIGURATION_H
-#define FIGHTCONFIGURATION_H
+#ifndef FIGHT_CONFIGURATION_H
+#define FIGHT_CONFIGURATION_H
 
 #include "UserComponent.h"
 
 #include <vector>
 #include <string>
+
 #include "UIElement.h"
 
 const int MIN_TIME = 20;
@@ -16,7 +17,7 @@ const int MIN_HEALTH = 1;
 const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
-const int MIN_PLAYERS = 2;
+const int MIN_PLAYERS = 1;
 
 class InputSystem;
 
@@ -27,7 +28,7 @@ private:
 
 	UIElement fightButton;
 
-	int nPlayers;
+	int numPlayers;
 	std::vector<std::pair<int, UIElement>> slots;
 
 	int health;
@@ -45,18 +46,16 @@ private:
 
 	void fillSlot(int slotIndex, int deviceIndex);
 	void clearSlot(int index);
+	void reorderSlots(int index);
 
 	int isIndexConnected(int index);
 
-	void reorderSlots(int index);
-
 	// events
+	bool fightButtonClick();
 	bool changeHealth(int value);
 	bool changeTime(int value);
 	bool changeSong(int value);
 	bool changeLevel(int value);
-
-	bool fightButtonClick();
 
 public:
 	FightConfiguration(GameObject* gameObject);

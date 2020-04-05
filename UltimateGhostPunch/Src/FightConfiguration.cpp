@@ -1,13 +1,12 @@
 #include "FightConfiguration.h"
+#include <GameObject.h>
+#include <SceneManager.h>
+#include <InputSystem.h>
+#include <InterfaceSystem.h>
 
-#include "InputSystem.h"
-#include "GameObject.h"
+#include "GameManager.h"
 #include "UILayout.h"
 #include "UIElement.h"
-
-#include <SceneManager.h>
-#include <InterfaceSystem.h>
-#include "GameManager.h"
 
 #include "ComponentRegister.h"
 
@@ -20,11 +19,11 @@ bool FightConfiguration::fightButtonClick()
 	// set data
 	GameManager::GetInstance()->setLevel(levelNames[level]);
 	GameManager::GetInstance()->setSong(songNames[song]);
-	GameManager::GetInstance()->setNPlayers(nPlayers);
+	GameManager::GetInstance()->setNumPlayers(numPlayers);
 	GameManager::GetInstance()->setHealth(health);
 
 	std::vector<int> indexes;
-	for (int i = 0; i < nPlayers; i++)
+	for (int i = 0; i < numPlayers; i++)
 		indexes.push_back(slots[i].first);
 	GameManager::GetInstance()->setPlayerIndexes(indexes);
 
@@ -88,8 +87,7 @@ bool FightConfiguration::changeLevel(int value)
 
 // -----
 
-FightConfiguration::FightConfiguration(GameObject* gameObject) :
-	UserComponent(gameObject), fightButton(NULL)
+FightConfiguration::FightConfiguration(GameObject* gameObject) : UserComponent(gameObject), fightButton(NULL)
 {
 	InterfaceSystem::GetInstance()->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
 	InterfaceSystem::GetInstance()->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
@@ -133,15 +131,13 @@ void FightConfiguration::start()
 	song = 0;
 	time = 60;
 	health = 4;
-	nPlayers = 0;
+	numPlayers = 0;
 
 	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
 	for (int i = 0; i < 4; i++)
 	{
-		slots[i] = { -1 , findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Slot" + std::to_string(i + 1))
-			.getChild("Connected" + std::to_string(i + 1)) };
+		slots[i] = { -1 , findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Slot" + std::to_string(i + 1)).getChild("Connected" + std::to_string(i + 1)) };
 	}
-
 }
 
 void FightConfiguration::update(float deltaTime)
@@ -156,8 +152,8 @@ void FightConfiguration::checkController()
 	{
 		int slotIndex = isIndexConnected(i);
 
-		if (nPlayers < 4 && slotIndex == -1 && inputSystem->getButtonPress(i, "A"))
-			fillSlot(nPlayers, i);
+		if (numPlayers < 4 && slotIndex == -1 && inputSystem->getButtonPress(i, "A"))
+			fillSlot(numPlayers, i);
 		else if (slotIndex != -1 && (inputSystem->getButtonPress(i, "B") || !inputSystem->isControllerConnected(i)))
 		{
 			clearSlot(slotIndex);
@@ -170,8 +166,8 @@ void FightConfiguration::checkKeyboard()
 {
 	int slotIndex = isIndexConnected(5);
 
-	if (nPlayers < 4 && slotIndex == -1 && inputSystem->getKeyPress("SPACE"))
-		fillSlot(nPlayers, 5);
+	if (numPlayers < 4 && slotIndex == -1 && inputSystem->getKeyPress("SPACE"))
+		fillSlot(numPlayers, 5);
 	else if (slotIndex != -1 && inputSystem->getKeyPress("ESCAPE"))
 	{
 		clearSlot(slotIndex);
@@ -190,9 +186,9 @@ void FightConfiguration::fillSlot(int slotIndex, int deviceIndex)
 	if (deviceIndex == 5) slots[slotIndex].second.getChild("TypeText").setText("Keyboard");
 	else slots[slotIndex].second.getChild("TypeText").setText("Controller");
 
-	nPlayers++;
+	numPlayers++;
 
-	if (!fightButton.isVisible() && nPlayers >= MIN_PLAYERS) fightButton.setVisible(true);
+	if (!fightButton.isVisible() && numPlayers >= MIN_PLAYERS) fightButton.setVisible(true);
 }
 
 void FightConfiguration::clearSlot(int index)
@@ -200,15 +196,15 @@ void FightConfiguration::clearSlot(int index)
 	slots[index].first = -1;
 	slots[index].second.setVisible(false);
 
-	nPlayers--;
+	numPlayers--;
 
-	if (fightButton.isVisible() && nPlayers < MIN_PLAYERS) fightButton.setVisible(false);
+	if (fightButton.isVisible() && numPlayers < MIN_PLAYERS) fightButton.setVisible(false);
 }
 
 int FightConfiguration::isIndexConnected(int index)
 {
 	int i = 0;
-	while (i < nPlayers && slots[i].first != index)
+	while (i < numPlayers && slots[i].first != index)
 		i++;
 
 	if (slots[i].first == index)
@@ -219,7 +215,7 @@ int FightConfiguration::isIndexConnected(int index)
 
 void FightConfiguration::reorderSlots(int index)
 {
-	for (int i = index; i < nPlayers; i++)
+	for (int i = index; i < numPlayers; i++)
 	{
 		fillSlot(i, slots[i + 1].first);
 		clearSlot(i + 1);

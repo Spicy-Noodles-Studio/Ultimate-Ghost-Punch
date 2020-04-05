@@ -81,6 +81,7 @@
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
+                ["ghostTime", "10"],
                 ["ghostMesh", "ghost Espada.mesh"],
                 ["ghostScale", "1 1 1"],
                 ["spawnOffset", "0 1.25 0"],

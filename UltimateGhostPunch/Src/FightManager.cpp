@@ -1,11 +1,11 @@
 #include "FightManager.h"
+#include <GameObject.h>
 
 #include "GameManager.h"
-#include <GameObject.h>
-#include "Health.h"
-#include "PlayerController.h"
-#include "UILayout.h"
 #include "FightConfiguration.h"
+#include "PlayerController.h"
+#include "Health.h"
+#include "UILayout.h"
 
 #include "ComponentRegister.h"
 
@@ -23,11 +23,10 @@ FightManager::~FightManager()
 
 void FightManager::start()
 {
-	timed = true;
+	countingTime = true;
 
 	winnerPanel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("WinnerBackground");
 	winnerText = winnerPanel.getChild("Winner");
-
 	winnerPanel.setVisible(false);
 
 	playerIndexes = GameManager::GetInstance()->getPlayerIndexes();
@@ -37,13 +36,12 @@ void FightManager::start()
 	createKnights();
 
 	time = GameManager::GetInstance()->getTime();
-	if (time < 0) timed = false;
 	playSong();
 }
 
 void FightManager::update(float deltaTime)
 {
-	if (timed)
+	if (countingTime)
 	{
 		if (time > 0)
 		{
@@ -52,20 +50,10 @@ void FightManager::update(float deltaTime)
 		}
 		else
 		{
-			// end game
+			countingTime = false;
 			chooseWinner();
 		}
 	}
-}
-
-void FightManager::playerDie()
-{
-	int nPlayers = GameManager::GetInstance()->getNPlayers();
-	nPlayers--;
-	if (nPlayers == 1)
-		chooseWinner();
-	else
-		GameManager::GetInstance()->setNPlayers(nPlayers);
 }
 
 void FightManager::createLevel()
@@ -73,14 +61,9 @@ void FightManager::createLevel()
 	//instantiate(GameManager::GetInstance()->getLevel());
 }
 
-void FightManager::playSong()
-{
-	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
-}
-
 void FightManager::createKnights()
 {
-	int nPlayers = GameManager::GetInstance()->getNPlayers();
+	int nPlayers = GameManager::GetInstance()->getNumPlayers();
 
 	for (int i = 0; i < nPlayers; i++)
 	{
@@ -98,13 +81,20 @@ void FightManager::createKnights()
 	}
 }
 
+void FightManager::playSong()
+{
+	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
+}
+
 void FightManager::chooseWinner()
 {
 	std::vector<GameObject*> knights = GameManager::GetInstance()->getKnights();
 
 	bool tie = false;
+
 	int majorHealth = 0;
 	int majorIndex = 0;
+
 	for (int i = 0; i < knights.size(); i++)
 	{
 		Health* h = knights[i]->getComponent<Health>();
@@ -133,4 +123,15 @@ void FightManager::chooseWinner()
 		winner = majorIndex;
 		winnerText.setText("Winner: P" + std::to_string(winner + 1));
 	}
+}
+
+void FightManager::playerDie()
+{
+	int nPlayers = GameManager::GetInstance()->getNumPlayers();
+	nPlayers--;
+
+	if (nPlayers == 1)
+		chooseWinner();
+	else
+		GameManager::GetInstance()->setNumPlayers(nPlayers);
 }

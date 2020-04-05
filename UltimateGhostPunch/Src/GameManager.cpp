@@ -38,15 +38,35 @@ void GameManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
-void GameManager::update(float deltaTime)
+void GameManager::setNumPlayers(int nPlayers)
 {
+	this->numPlayers = nPlayers;
+}
 
+int GameManager::getNumPlayers()
+{
+	return numPlayers;
+}
+
+void GameManager::setPlayerIndexes(std::vector<int> playerIndexes)
+{
+	this->playerIndexes = playerIndexes;
+}
+
+std::vector<int>& GameManager::getPlayerIndexes()
+{
+	return playerIndexes;
+}
+
+std::vector<GameObject*>& GameManager::getKnights()
+{
+	return knights;
 }
 
 void GameManager::setLevel(std::string level)
 {
 	this->level = level;
-	//todo:
+
 	//Leer archivo config del nivel y guardar las posiciones de players/obstáculos para crearlos
 	//Leer el límite inferior del nivel: bottomLimit = ...
 }
@@ -89,29 +109,4 @@ int GameManager::getTime()
 float GameManager::getBottomLimit() const
 {
 	return bottomLimit;
-}
-
-void GameManager::setPlayerIndexes(std::vector<int> playerIndexes)
-{
-	this->playerIndexes = playerIndexes;
-}
-
-std::vector<int>& GameManager::getPlayerIndexes()
-{
-	return playerIndexes;
-}
-
-void GameManager::setNPlayers(int nPlayers)
-{
-	this->nPlayers = nPlayers;
-}
-
-int GameManager::getNPlayers()
-{
-	return nPlayers;
-}
-
-std::vector<GameObject*>& GameManager::getKnights()
-{
-	return knights;
 }

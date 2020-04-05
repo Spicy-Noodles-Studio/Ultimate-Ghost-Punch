@@ -5,11 +5,12 @@
 #include <UserComponent.h>
 
 class InputSystem;
-class GhostMovement;
 class Movement;
 class Attack;
-class GhostManager;
 class Jump;
+class Health;
+class GhostManager;
+class GhostMovement;
 class UltimateGhostPunch;
 class PlayerUI;
 class Vector3;
@@ -17,32 +18,37 @@ class Vector3;
 class PlayerController : public UserComponent
 {
 private:
+	// Indexes
+	int playerIndex;
 	int controllerIndex;
 	bool usingKeyboard;
-	bool charge = false;
-
-	int playerIndex;
-	Vector3 dir;
 
 	// Initial position of the player
-	Vector3 iniPosition = {0,0,0};
+	Vector3 iniPosition;
 
+	// Player direction
+	Vector3 direction;
+
+	// Components
 	Movement* movement;
-	GhostMovement* ghostMovement;
-	Jump* jump;
 	Attack* attack;
+	Jump* jump;
+	Health* health;
+
+	GhostManager* ghost;
+	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
 
+	PlayerUI* playerUI;
+
+	// Input
 	InputSystem* inputSystem;
-	GhostManager* ghost;
 
 	// Will ignore input if frozen is true
-	bool frozen = false;
-
+	bool frozen;
 
 	// Damage taken when falling out of the world
-	float fallDamage = 2.0f;
-	PlayerUI* playerUI;
+	float fallDamage;
 
 public:
 	PlayerController(GameObject* gameObject);
@@ -54,21 +60,21 @@ public:
 
 	// Manages player's input and generates a movement direction
 	void checkInput(Vector3 &dir);
-	// Respawn and damage the player if it falls out of the world,
+
+	// Respawn and damage the player if it falls out of the world
 	// and returns true in that case
 	bool checkOutsideLimits();
+	void respawn(const Vector3& respawnPos);
 
 	int getPlayerIndex() const;
+	void setPlayerIndex(int index);
+	void setControllerIndex(int index);
+	void setUsingKeyboard(bool keyboard);
+
 	Vector3 getInitialPosition() const;
 
-	void respawn(const Vector3& respawnPos);
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
-	void setPlayerIndex(int index);
-
-	void setControllerIndex(int index);
-
-	void setUsingKeyboard(bool usingKeyboard);
 };
 
 #endif

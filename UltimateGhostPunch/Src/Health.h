@@ -1,9 +1,8 @@
 #pragma once
 #ifndef HEALTH_H
 #define HEALTH_H
-#include <UserComponent.h>
 
-class GhostManager;
+#include <UserComponent.h>
 
 class Health : public UserComponent
 {
@@ -15,30 +14,36 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
-	int getHealth();
 	int getMaxHealth();
-	void setHealth(int health);
-	bool isAlive();
-	bool isInvencible();
+	int getHealth();
+	int getResurrectionHealth();
 
+	void setHealth(int health);
 	void receiveDamage(int damage);
-	void resurrect();
-	void die();
+
+	float getTime();
+	float getInvDamTime();
+	float getInvResTime();
+
+	void setTime(float time);
+
+	bool isAlive();
+	void setAlive(bool alive);
+
+	bool isInvencible();
+	void setInvencible(bool invencible);
 
 private:
 	int maxHealth;
 	int health; // 1 life = 2 health points
 	int resurrectionHealth;
 
-	float time = 0.0f;
+	float time;
+	float invencibleDamageTime;
 	float invencibleResurrectionTime;
-	float invencibleDamageTime = 0.2f;
 
 	bool alive; // player alive
-	bool respawning = false; // only true when respawning 
 	bool invencible;
-
-	GhostManager* ghostManager;
 };
 
 #endif
