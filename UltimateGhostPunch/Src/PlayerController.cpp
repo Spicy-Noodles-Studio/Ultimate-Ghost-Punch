@@ -1,7 +1,8 @@
 #include "PlayerController.h"
 
-#include <GameObject.h>
 #include <sstream>
+#include <ComponentRegister.h>
+#include <GameObject.h>
 
 #include <InputSystem.h>
 #include <Scene.h>
@@ -16,7 +17,6 @@
 #include "GhostMovement.h"
 #include "UltimateGhostPunch.h"
 
-#include "ComponentRegister.h"
 #include "GameManager.h"
 #include "PlayerUI.h"
 
@@ -25,6 +25,10 @@ REGISTER_FACTORY(PlayerController);
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
 
+}
+
+PlayerController::~PlayerController()
+{
 }
 
 void PlayerController::start()
@@ -46,7 +50,7 @@ void PlayerController::start()
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
 
-	iniPosition = gameObject->transform->getPosition();
+	initialPosition = gameObject->transform->getPosition();
 	frozen = false;
 }
 
@@ -95,12 +99,7 @@ void PlayerController::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "keyboard")
-		{
-			if (!(ss >> usingKeyboard))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "index")
+		if (prop.first == "index")
 		{
 			if (!(ss >> controllerIndex))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
@@ -121,7 +120,7 @@ void PlayerController::checkInput(Vector3& dir)
 	Vector3 punchDir;
 
 	//Controles con teclado y raton
-	if (usingKeyboard)
+	if (controllerIndex == 4)
 	{
 		if (inputSystem->getKeyPress("ESCAPE"))
 			/*playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible())*/;
@@ -255,14 +254,14 @@ bool PlayerController::checkOutsideLimits()
 		if (health != nullptr)
 		{
 			if (health->getHealth() > 0)
-				respawn(iniPosition);
+				respawn(initialPosition);
 			else
 			{
 				// Sets the initial position as the respawn if the player resurrects
-				ghost->setDeathPosition(iniPosition);
+				ghost->setDeathPosition(initialPosition);
 
 				gameObject->setActive(false);
-				gameObject->transform->setPosition(iniPosition);
+				gameObject->transform->setPosition(initialPosition);
 
 				//if (playerUI != nullptr) playerUI->updateState("Dead");
 				//findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
@@ -309,14 +308,9 @@ void PlayerController::setControllerIndex(int index)
 	controllerIndex = index;
 }
 
-void PlayerController::setUsingKeyboard(bool keyboard)
-{
-	usingKeyboard = keyboard;
-}
-
 Vector3 PlayerController::getInitialPosition() const
 {
-	return iniPosition;
+	return initialPosition;
 }
 
 void PlayerController::setFrozen(bool freeze)

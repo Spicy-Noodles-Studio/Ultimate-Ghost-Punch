@@ -2,12 +2,11 @@
 #ifndef FIGHT_CONFIGURATION_H
 #define FIGHT_CONFIGURATION_H
 
-#include "UserComponent.h"
+#include <UserComponent.h>
+#include <UIElement.h>
 
 #include <vector>
 #include <string>
-
-#include "UIElement.h"
 
 const int MIN_TIME = 20;
 const int MAX_TIME = 240;
@@ -20,29 +19,29 @@ const int CHANGE_HEALTH = 1;
 const int MIN_PLAYERS = 1;
 
 class InputSystem;
+class UILayout;
 
 class FightConfiguration : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
 
+	std::vector<std::pair<int, UIElement>> slots;
+	UILayout* configLayout;
 	UIElement fightButton;
 
 	int numPlayers;
-	std::vector<std::pair<int, UIElement>> slots;
-
 	int health;
 	int time;
 
 	std::vector<std::string> levelNames = {"level 1", "dungeons", "cave"};
 	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
 
-	int level;
-	int song;
+	int levelIndex;
+	int songIndex;
 
 private:
-	void checkController();
-	void checkKeyboard();
+	void checkInput();
 
 	void fillSlot(int slotIndex, int deviceIndex);
 	void clearSlot(int index);
@@ -51,11 +50,12 @@ private:
 	int isIndexConnected(int index);
 
 	// events
-	bool fightButtonClick();
 	bool changeHealth(int value);
 	bool changeTime(int value);
 	bool changeSong(int value);
 	bool changeLevel(int value);
+
+	bool fightButtonClick();
 
 public:
 	FightConfiguration(GameObject* gameObject);
@@ -63,7 +63,6 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
-
 };
 
 #endif

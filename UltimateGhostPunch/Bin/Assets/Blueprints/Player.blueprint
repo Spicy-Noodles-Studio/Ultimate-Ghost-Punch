@@ -7,64 +7,64 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-               [ "position", "20 30 0"],
-               [ "scale", "1 1 1"],
-               [ "rotation", "0 90 0"]
+                ["position", "20 30 0"],
+                ["scale", "1 1 1"],
+                ["rotation", "0 90 0"]
             ]
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-               [ "mesh", "player Knight.mesh"]
+                ["mesh", "player Knight.mesh"]
             ]
         },
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-               [ "anim", "Idle player"]
+                ["anim", "Idle player"]
             ]
         },
         {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
-               [ "shape", "Box"],
-               [ "mass", "5"],
-               [ "friction", "0.1"],
-               [ "restitution", "0"],
-               [ "damping", "0.4"],
-               [ "angularDamping", "0"],
-               [ "gravity", "0 -10 0"],
-               [ "offset", "0 0 0"],
-               [ "scale", "1 2 1"],
-               [ "kinematic", "0"],
-               [ "trigger", "0"],
-               [ "movementConstraints", "1 1 0"],
-               [ "rotationConstraints", "0 0 0"]
+                ["shape", "Box"],
+                ["mass", "5"],
+                ["friction", "0.1"],
+                ["restitution", "0"],
+                ["damping", "0.4"],
+                ["angularDamping", "0"],
+                ["gravity", "0 -10 0"],
+                ["offset", "0 0 0"],
+                ["scale", "1 2 1"],
+                ["kinematic", "0"],
+                ["trigger", "0"],
+                ["movementConstraints", "1 1 0"],
+                ["rotationConstraints", "0 0 0"]
             ]
         },
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "speed", "50"]
+                ["speed", "50"]
             ]
         },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
-               [ "keyboard", "0"],
-               [ "index", "0"]
+                ["keyboard", "0"],
+                ["index", "0"]
             ]
         },
         {
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
-               [ "maxSpeed", "6"]
+                ["maxSpeed", "6"]
             ]
         },
         {
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": [
-               [ "force", "200"],
+                ["force", "200"],
                 ["duration" , "0.333"],
                 ["chargeSpeedMult" , "0.3"]
             ]
@@ -103,8 +103,8 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "0 0 1.65"],
-                       [ "scale", "1 1 2"]
+                        ["position", "0 0 1.65"],
+                        ["scale", "1 1 2"]
                     ]
                 }
             ],
@@ -125,7 +125,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "0 -0.9 0"],
+                        ["position", "0 -1 0"],
                         ["scale", "0.75 0.75 0.75"]
                     ]
                 }
@@ -135,8 +135,8 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "12"],
-				        ["jumpDecay", "1.5"]
+                        ["maxForce", "50"],
+				        ["jumpDecay", "0.4"]
                     ]       
                 }
             ]

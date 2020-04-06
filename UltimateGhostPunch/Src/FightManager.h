@@ -2,28 +2,30 @@
 #ifndef FIGHT_MANAGER_H
 #define FIGHT_MANAGER_H
 
-#include "UserComponent.h"
+#include <UserComponent.h>
+#include <UIElement.h>
+#include <Vector3.h>
 
 #include <vector>
 #include <string>
 
-#include "UIElement.h"
-#include "Vector3.h"
-
-class InputSystem;
+class GameManager;
+class UILayout;
 
 class FightManager : public UserComponent
 {
 private:
+	GameManager* gameManager;
+	UILayout* fightLayout;
+	UIElement timeText;
 	UIElement winnerPanel;
 	UIElement winnerText;
 
 	std::vector<int> playerIndexes;
 	std::vector<Vector3> playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
 
-	float time;
-	bool countingTime;
-
+	float fightTimer; // If time is -1, then infinite
+	float finishTimer; // Time taken to send us back to MainMenu
 	int winner;
 
 private:
@@ -35,7 +37,7 @@ private:
 
 public:
 	FightManager(GameObject* gameObject);
-	virtual ~FightManager();
+	~FightManager();
 
 	virtual void start();
 	virtual void update(float deltaTime);

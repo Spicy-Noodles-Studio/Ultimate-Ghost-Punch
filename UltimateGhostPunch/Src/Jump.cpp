@@ -10,8 +10,8 @@ REGISTER_FACTORY(Jump);
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
 {
-	jumpVector = { 0,0,0 };
 	coyoteTime = 2;
+	coyoteTimer = 0.0f;
 	grounded = false;
 	jumping = false;
 }
@@ -28,37 +28,35 @@ void Jump::start()
 void Jump::update(float deltaTime)
 {
 	// Manage coyote time so jumping is possible when not grounded for a certain time
-	if (coyoteTime >= 0.0f) coyoteTime -= deltaTime;
+	if (coyoteTimer >= 0.0f) coyoteTimer -= deltaTime;
 }
 
-void Jump::fixedUpdate(float deltaTime)
+void Jump::onObjectEnter(GameObject* other)
 {
-	if (jumping) {
-		if (jumpVector != Vector3(0, 0, 0)) {
-			rigidBody->addImpulse(jumpVector * jumpForce);
-			jumpForce -= jumpDecay;
+	if (other->getTag() == "suelo") {
+		grounded = true;
+		coyoteTimer = 0.0f;
+		jumping = false; // Cannot be jumping if is on floor
+	}
+}
 
-			jumpVector = { 0,0,0 };
-			if (jumpForce <= 0.0f) {
-				jumpForce = 0.0f;
-				jumping = false;
-			}
-		}
-		else {
-			jumping = false;
-		}
+void Jump::onObjectExit(GameObject* other)
+{
+	if (other->getTag() == "suelo") {
+		grounded = false;
+		if(!jumping)
+			coyoteTimer = coyoteTime;
 	}
 }
 
 void Jump::handleData(ComponentData* data)
 {
-	for (auto prop : data->getProperties())
-	{
+	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "maxForce")
 		{
-			if(!(ss >> maxForce))
+			if(!(ss >> jumpForce))
 				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
 		else if (prop.first == "jumpDecay") {
@@ -68,41 +66,26 @@ void Jump::handleData(ComponentData* data)
 	}
 }
 
-void Jump::onObjectEnter(GameObject* other)
+void Jump::jump()
 {
-	if (other->getTag() == "suelo") {
-		grounded = true;
-	}
-}
+	if (jumping || !canJump()) return;
 
-void Jump::onObjectExit(GameObject* other)
-{
-	if (other->getTag() == "suelo") {
-		grounded = false;
-	}
-}
-
-bool Jump::jump()
-{
-	// TODO: cambiar para que aplique el impulso aqui
-	if (grounded && !jumping) {
-		jumping = true;
-		jumpForce = maxForce;
-	}
-
-	if (jumping) jumpVector = { 0,1,0 };
-
-	return jumping;
+	// Cancel vertical velocity so impulse doesnt lose strenght
+	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
+	rigidBody->addImpulse(Vector3(0.0, 1.0, 0.0) * jumpForce);
+	jumping = true;
+	coyoteTimer = 0.0f;
 }
 
 void Jump::cancelJump()
 {
 	if (!jumping) return;
-	float jumpAttenuation = 0.5f;
 	Vector3 velocity = rigidBody->getLinearVelocity();
-	velocity.y *= jumpAttenuation;
+	if (velocity.y < 0.0) return; // Is falling
+	velocity.y *= jumpDecay;
 
 	rigidBody->setLinearVelocity(velocity);
+	jumping = false;
 }
 
 void Jump::setJumpForce(float force)
@@ -127,5 +110,5 @@ bool Jump::isJumping()
 
 bool Jump::canJump()
 {
-	return grounded || coyoteTime > 0.0f;
+	return grounded || coyoteTimer > 0.0f;
 }
