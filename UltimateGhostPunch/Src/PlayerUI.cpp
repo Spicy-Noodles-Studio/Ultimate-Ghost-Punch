@@ -7,6 +7,7 @@
 #include "UILayout.h"
 #include "Health.h"
 #include "ComponentRegister.h"
+#include "Timer.h"
 
 REGISTER_FACTORY(PlayerUI);
 
@@ -95,6 +96,10 @@ void PlayerUI::updateHealth()
 void PlayerUI::setPauseMenuVisible(bool show)
 {
 	pauseMenu.setVisible(show);
+	if(show)
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	else
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
 }
 
 bool PlayerUI::isPauseMenuVisible()
