@@ -7,10 +7,11 @@
 
 #include "Health.h"
 #include "PlayerController.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerUI);
 
-PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), health(nullptr)
+PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), health(nullptr), mainCamera(nullptr), ghostManager(nullptr), name("")
 {
 
 }
@@ -34,16 +35,21 @@ void PlayerUI::start()
 	if (health == nullptr)
 		LOG("Health component not found");
 
+	//Get ghostManager component to update status
+	ghostManager = gameObject->getComponent<GhostManager>();
+	if (ghostManager == nullptr)
+		LOG("Ghost Manager component not found");
+
 	// Get camera
 	GameObject* cameraObject = findGameObjectWithName("MainCamera");
-	if(cameraObject != nullptr)
+	if (cameraObject != nullptr)
 		mainCamera = cameraObject->getComponent<Camera>();
 	if (mainCamera == nullptr)
 		LOG("Camera component not found");
 
 	// Get player layout
 	UILayout* cameraLayout = nullptr;
-	if(cameraObject != nullptr)
+	if (cameraObject != nullptr)
 		cameraLayout = cameraObject->getComponent<UILayout>();
 
 	// Get UI elements for PlayerIndicator and PlayerStatsPanel
@@ -67,6 +73,7 @@ void PlayerUI::createHearts()
 {
 	if (health == nullptr)
 		return;
+
 	std::string heartName = name + "Heart";
 	float posX = 0.3f;
 	float posY = 0.1f;
@@ -100,16 +107,19 @@ void PlayerUI::updateIndicator()
 void PlayerUI::update(float deltaTime)
 {
 	updateIndicator();
+	updateHealth();
+	updateState();
 }
 
-void PlayerUI::updateState(const std::string state)
+void PlayerUI::changeState(const std::string state)
 {
 	playerHUD.getChild(name + "StateText").setText("State: " + state);
 }
 
 void PlayerUI::updateHealth()
 {
-	playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
+	if (health != nullptr)
+		playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
 }
@@ -124,8 +134,17 @@ bool PlayerUI::isPauseMenuVisible()
 	return pauseMenu.isVisible();
 }*/
 
+void PlayerUI::updateState()
+{
+	if (health != nullptr && ghostManager != nullptr) {
+		std::string state = health->isAlive() ? (health->isInvencible() ? "Invencible" : "Alive") : (ghostManager->isGhost() ? "Ghost" : "Dead");
+		changeState(state);
+	}
+}
+
 void PlayerUI::updateHearts()
 {
-	for (int i = 1; i <= health->getMaxHealth(); i++)
-		playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(i <= health->getHealth());
+	if (health != nullptr)
+		for (int i = 1; i <= health->getMaxHealth(); i++)
+			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(i <= health->getHealth());
 }

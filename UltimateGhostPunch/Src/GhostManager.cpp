@@ -2,7 +2,7 @@
 #include <GameObject.h>
 #include <sstream>
 
-#include "PlayerController.h"
+#include "Respawn.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Health.h"
@@ -15,7 +15,10 @@
 
 REGISTER_FACTORY(GhostManager);
 
-GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject)
+GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
+													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2),aliveMeshId(""), aliveMeshName(""),
+													 ghostMeshId(""), ghostMeshName(""), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
+												     deathPosition(Vector3()), ghostSpawnOffset(Vector3())
 {
 
 }
@@ -33,16 +36,15 @@ void GhostManager::start()
 	transform = gameObject->transform;
 	meshRenderer = gameObject->getComponent<MeshRenderer>();
 	rigidBody = gameObject->getComponent<RigidBody>();
-	playerUI = gameObject->getComponent<PlayerUI>();
 
-	ghost = false;
-	used = false;
+	GameObject* aux = findGameObjectWithName("FightManager");
+	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
 
 	// Store some data for player resurrection
 	if (meshRenderer != nullptr) aliveMeshId = meshRenderer->getMeshId();
 	if (meshRenderer != nullptr) aliveMeshName = meshRenderer->getMeshName();
 	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity().y;
-	aliveScale = transform->getScale();
+	if (transform != nullptr) aliveScale = transform->getScale();
 }
 
 void GhostManager::update(float deltaTime)
@@ -51,23 +53,16 @@ void GhostManager::update(float deltaTime)
 	{
 		if (!used && !ghost)
 			activateGhost();
-
-		if (used && !ghost)
-		{
-			if (playerUI != nullptr) playerUI->updateState("Dead");
-			findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
-		}
+		else if (used && !ghost && fightManager != nullptr)
+			fightManager->playerDie();
 	}
 
 	if (ghost)
 	{
 		if (ghostTime > 0)
 			ghostTime -= deltaTime;
-		else
-		{
-			if (playerUI != nullptr) playerUI->updateState("Dead");
-			findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
-		}
+		else if(fightManager != nullptr)
+			fightManager->playerDie();
 	}
 }
 
@@ -87,6 +82,11 @@ void GhostManager::handleData(ComponentData* data)
 			if (!(ss >> ghostDamage))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
+		else if (prop.first == "resurrectionHealth")
+		{
+			if (!(ss >> resurrectionHealth))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
 		else if (prop.first == "ghostMesh")
 		{
 			if (!(ss >> ghostMeshId >> ghostMeshName))
@@ -94,27 +94,18 @@ void GhostManager::handleData(ComponentData* data)
 		}
 		else if (prop.first == "ghostScale")
 		{
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
+			if (!(ss >> ghostScale.x >> ghostScale.y >> ghostScale.z))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
-			else
-				ghostScale = { x,y,z };
 		}
 		else if (prop.first == "spawnOffset")
 		{
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
+			if (!(ss >> ghostSpawnOffset.x >> ghostSpawnOffset.y >> ghostSpawnOffset.z))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
-			else
-				ghostSpawnOffset = { x,y,z };
 		}
 		else if (prop.first == "deathPosition")
 		{
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
-			else
-				deathPosition = { x,y,z };
+			if (!(ss >> deathPosition.x >> deathPosition.y >> deathPosition.z))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
 			LOG("GHOST MANAGER: Invalid property name \"%s\"", prop.first.c_str());
@@ -131,12 +122,9 @@ void GhostManager::onObjectEnter(GameObject* other)
 		//If the other player is alive
 		if (aux != nullptr && aux->isAlive())
 		{
-			if (health != nullptr) health->setAlive(true);
+			aux->receiveDamage(ghostDamage);
 
 			deactivateGhost();
-			aux->receiveDamage(ghostDamage);
-			gameObject->getComponent<PlayerController>()->setFrozen(true);
-			gameObject->getComponent<PlayerController>()->respawn(deathPosition);
 		}
 	}
 }
@@ -148,16 +136,13 @@ bool GhostManager::isGhost()
 
 void GhostManager::activateGhost()
 {
-	deathPosition = transform->getPosition();
-
 	ghost = true;
 	used = true;
 
 	if (movement != nullptr) movement->setActive(false);
 	if (ghostMovement != nullptr) ghostMovement->setActive(true);
 
-	if (rigidBody != nullptr)
-	{
+	if (rigidBody != nullptr){
 		rigidBody->setTrigger(true);
 		rigidBody->setGravity({ 0,0,0 });
 	}
@@ -165,13 +150,15 @@ void GhostManager::activateGhost()
 	// Change player's mesh -> ghost mesh
 	if (meshRenderer != nullptr) meshRenderer->changeMesh(ghostMeshId, ghostMeshName);
 
-	// Change scale
-	transform->setScale(ghostScale);
+	if (transform != nullptr) {
+		if (!deathPosChanged) deathPosition = transform->getPosition();
+		
+		// Change scale
+		transform->setScale(ghostScale);
 
-	// Apply position offset
-	transform->setPosition({ transform->getPosition().x + ghostSpawnOffset.x, transform->getPosition().y + ghostSpawnOffset.y, transform->getPosition().z + ghostSpawnOffset.z });
-
-	if (playerUI != nullptr) playerUI->updateState("Ghost");
+		// Apply position offset
+		transform->setPosition(transform->getPosition() + ghostSpawnOffset);
+	}
 }
 
 void GhostManager::deactivateGhost()
@@ -188,16 +175,24 @@ void GhostManager::deactivateGhost()
 	}
 
 	// Change player's mesh -> alive mesh
-	gameObject->getComponent<MeshRenderer>()->changeMesh(aliveMeshId, aliveMeshName);
+	if (meshRenderer != nullptr) meshRenderer->changeMesh(aliveMeshId, aliveMeshName);
 
 	// Change scale
-	gameObject->getComponent<Transform>()->setScale(aliveScale);
+	if(transform!= nullptr) transform->setScale(aliveScale);
 
-	if (playerUI != nullptr) playerUI->updateState("Alive");
+	//Set the player alive
+	if (health != nullptr) {
+		health->setAlive(true);
+		health->setHealth(resurrectionHealth);
+	}
+
+	//Respawn the player
+	Respawn* respawn = gameObject->getComponent<Respawn>();
+	if (respawn != nullptr) respawn->spawn(deathPosition);
 }
 
 void GhostManager::setDeathPosition(const Vector3& dPos)
 {
+	deathPosChanged = true;
 	deathPosition = dPos;
-	LOG("{%f, %f, %f}\n", dPos.x, dPos.y, dPos.z);
 }

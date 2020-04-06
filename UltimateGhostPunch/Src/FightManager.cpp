@@ -102,6 +102,8 @@ void FightManager::createKnights()
 
 void FightManager::chooseWinner()
 {
+	fightTimer = 0.0f;
+
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	bool tie = false;

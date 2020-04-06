@@ -6,7 +6,7 @@
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject),maxHealth(4),health(4),time(0.0f), alive(true), invencible(false), invencibleDamageTime(0.5f)
 {
 
 }
@@ -19,10 +19,6 @@ Health::~Health()
 void Health::start()
 {
 	maxHealth = health;
-	time = 0.0f;
-
-	alive = true;
-	invencible = false;
 }
 
 void Health::update(float deltaTime)
@@ -47,19 +43,9 @@ void Health::handleData(ComponentData* data)
 			if (!(ss >> health))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
-		else if (prop.first == "resHealth")
-		{
-			if (!(ss >> resurrectionHealth))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
-		}
 		else if (prop.first == "invDamTime")
 		{
 			if (!(ss >> invencibleDamageTime))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "invResTime")
-		{
-			if (!(ss >> invencibleResurrectionTime))
 				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -75,11 +61,6 @@ int Health::getMaxHealth()
 int Health::getHealth()
 {
 	return health;
-}
-
-int Health::getResurrectionHealth()
-{
-	return resurrectionHealth;
 }
 
 void Health::setHealth(int health)
@@ -112,11 +93,6 @@ float Health::getTime()
 float Health::getInvDamTime()
 {
 	return invencibleDamageTime;
-}
-
-float Health::getInvResTime()
-{
-	return invencibleResurrectionTime;
 }
 
 void Health::setTime(float time)

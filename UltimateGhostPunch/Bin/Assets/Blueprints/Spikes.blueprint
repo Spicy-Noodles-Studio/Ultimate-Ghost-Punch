@@ -41,7 +41,7 @@
             "ComponentProperties": [
                 ["damage", "2"],
                 ["pushStrength", "40"],
-                ["respawnOffset", "2 0 0"]
+                ["respawnOffset", "4 0 0"]
             ]
         }
     ]

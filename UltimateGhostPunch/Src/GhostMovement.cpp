@@ -9,19 +9,19 @@
 
 REGISTER_FACTORY(GhostMovement);
 
-GhostMovement::GhostMovement(GameObject* g) :UserComponent(g)
+GhostMovement::GhostMovement(GameObject* g) :UserComponent(g), rigidbody(nullptr), maxSpeed(2.0f)
 {
 }
 
 void GhostMovement::start()
 {
-	body = gameObject->getComponent<RigidBody>();
+	rigidbody = gameObject->getComponent<RigidBody>();
 }
 
 void GhostMovement::move(Vector3 dir)
 {
 	dir *= maxSpeed;
-	if (body != nullptr) body->setLinearVelocity(dir);
+	if (rigidbody != nullptr) rigidbody->setLinearVelocity(dir);
 }
 
 void GhostMovement::handleData(ComponentData* data)

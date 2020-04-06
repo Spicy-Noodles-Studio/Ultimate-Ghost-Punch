@@ -8,12 +8,8 @@
 
 REGISTER_FACTORY(Jump);
 
-Jump::Jump(GameObject* gameObject) : UserComponent(gameObject)
+Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), coyoteTime(0.5f), coyoteTimer(0.0f), grounded(false), jumping(false), rigidBody(nullptr)
 {
-	coyoteTime = 2;
-	coyoteTimer = 0.0f;
-	grounded = false;
-	jumping = false;
 }
 
 Jump::~Jump()
@@ -61,6 +57,10 @@ void Jump::handleData(ComponentData* data)
 		}
 		else if (prop.first == "jumpDecay") {
 			if(!(ss >> jumpDecay))
+				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
+		}
+		else if (prop.first == "coyoteTime") {
+			if (!(ss >> coyoteTime))
 				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
 		}
 	}

@@ -36,6 +36,12 @@
         },
         {
             "ObjectType": "BLUEPRINT",
+            "ObjectName": "DeathZone",
+            "Tag": "death",
+            "BlueprintPath": "DeathZone"
+        },
+        {
+            "ObjectType": "BLUEPRINT",
             "ObjectName": "spikeObstacle1",
             "Tag": "spikeObstacle",
             "BlueprintPath": "Spikes",

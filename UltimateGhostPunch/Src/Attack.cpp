@@ -9,7 +9,9 @@
 
 REGISTER_FACTORY(Attack);
 
-Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr),currentAttack(NONE),state(NOT_ATTACKING),activeTime(0.0f), attackDuration(0.5f),
+										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
+										 quickAttackCooldown(0.5f),cooldown(0.0f)
 {
 }
 

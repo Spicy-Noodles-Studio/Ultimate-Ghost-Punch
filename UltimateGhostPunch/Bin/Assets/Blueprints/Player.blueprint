@@ -51,7 +51,6 @@
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
-                ["keyboard", "0"],
                 ["index", "0"]
             ]
         },
@@ -59,6 +58,12 @@
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
                 ["maxSpeed", "6"]
+            ]
+        },
+        {
+            "ComponentName": "Respawn",
+            "ComponentProperties":[ 
+                ["respawnTime", "2"]
             ]
         },
         {
@@ -73,9 +78,7 @@
             "ComponentName": "Health",
             "ComponentProperties": [
                 ["health", "4"],
-                ["resHealth", "2"],
-                ["invDamTime", "2"],
-                ["invResTime", "3"]
+                ["invDamTime", "2"]
             ]
         },
         {
@@ -85,7 +88,8 @@
                 ["ghostMesh", "ghost Espada.mesh"],
                 ["ghostScale", "1 1 1"],
                 ["spawnOffset", "0 1.25 0"],
-                ["ghostDamage", "1"]
+                ["ghostDamage", "1"],
+                ["resurrectionHealth", "2"]
             ]
         },
         {
@@ -136,7 +140,8 @@
                     "ComponentName": "Jump",
                     "ComponentProperties": [
                         ["maxForce", "50"],
-				        ["jumpDecay", "0.4"]
+				        ["jumpDecay", "0.4"],
+                        ["coyoteTime", "0.4"]
                     ]       
                 }
             ]

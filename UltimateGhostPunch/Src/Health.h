@@ -16,14 +16,12 @@ public:
 
 	int getMaxHealth();
 	int getHealth();
-	int getResurrectionHealth();
 
 	void setHealth(int health);
 	void receiveDamage(int damage);
 
 	float getTime();
 	float getInvDamTime();
-	float getInvResTime();
 
 	void setTime(float time);
 
@@ -36,11 +34,9 @@ public:
 private:
 	int maxHealth;
 	int health; // 1 life = 2 health points
-	int resurrectionHealth;
 
 	float time;
 	float invencibleDamageTime;
-	float invencibleResurrectionTime;
 
 	bool alive; // player alive
 	bool invencible;

@@ -22,11 +22,7 @@ private:
 	int playerIndex;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
-	// Initial position of the player
-	Vector3 initialPosition;
-
-	// Player direction
-	Vector3 direction; // TODO: no se para que se usa, probablemente sobre
+	Vector3 direction;
 
 	// Components
 	Movement* movement;
@@ -34,20 +30,32 @@ private:
 	Jump* jump;
 	Health* health;
 
-	GhostManager* ghost;
+	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
-
-	PlayerUI* playerUI; // TODO: sobra, esto solo trabaja con input
 
 	// Input
 	InputSystem* inputSystem;
 
-	// Will ignore input if frozen is true
-	bool frozen; //TODO: deberia de servir un setActive(false) desde fuera
+	//Checks if the player is using a keyboard and if the key was used
+	bool getKeyDown(const std::string& key);
+	bool getKey(const std::string& key);
 
-	// Damage taken when falling out of the world
-	float fallDamage; // TODO: sacar de aqui, hacer componentes DeadZone
+	//Checks if the player is using a controller and if the key was used
+	bool getButtonDown(const std::string& button);
+	bool getButton(const std::string& button);
+
+	//Checks if the player is using a controller and if an axis was used
+	//Left or Right as parameters
+	int getControllerHorizontalLeftAxis();
+	int getControllerHorizontalRightAxis();
+	int getControllerVerticalLeftAxis();
+	int getControllerVerticalRightAxis();
+
+	int getHorizontalAxis();
+	int getVerticalAxis();
+
+	void ghostPunchMouseAim();
 
 public:
 	PlayerController(GameObject* gameObject);
@@ -59,21 +67,11 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	// Manages player's input and generates a movement direction
-	void checkInput(Vector3 &dir); //TODO: dir sobra, unificar controllers con keyboard
-
-	// Respawn and damage the player if it falls out of the world
-	// and returns true in that case
-	bool checkOutsideLimits(); //TODO: componente DeadZone
-	void respawn(const Vector3& respawnPos); //TODO: componente que se encargue del Respawn
+	void checkInput();
 
 	int getPlayerIndex() const;
 	void setPlayerIndex(int index);
 	void setControllerIndex(int index);
-
-	Vector3 getInitialPosition() const;
-
-	// Freezes / Reenables the movement 
-	void setFrozen(bool freeze); //TODO: SOBRAAAAA
 };
 
 #endif

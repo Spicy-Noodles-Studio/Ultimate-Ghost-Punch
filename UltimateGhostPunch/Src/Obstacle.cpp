@@ -9,7 +9,7 @@
 
 REGISTER_FACTORY(Obstacle);
 
-Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(0), pushStrength(10.f), respawnOffset(50.0, 0.0, 0.0)
+Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(1), pushStrength(40.0f), respawnOffset(5.0, 0.0, 0.0)
 {
 }
 
@@ -26,16 +26,16 @@ void Obstacle::onCollisionEnter(GameObject* other)
 		int yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
 
 		// The player receives damage
-		Health* h = other->getComponent<Health>();
-		if (h == nullptr) return;
+		Health* health = other->getComponent<Health>();
+		if (health == nullptr) return;
 		
-		h->receiveDamage(damage);
+		health->receiveDamage(damage);
 		// If the player has died, add an offset to the respawn position, in case it resurrects
-		if (h->getHealth() <= 0) {
-			GhostManager* ghost = other->getComponent<GhostManager>();
-			if (ghost != nullptr) {
+		if (!health->isAlive()) {
+			GhostManager* ghostManager = other->getComponent<GhostManager>();
+			if (ghostManager != nullptr) {
 				respawnOffset.x *= xDir;
-				ghost->setDeathPosition(other->transform->getPosition() + respawnOffset);
+				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
 			}
 		}
 		else {

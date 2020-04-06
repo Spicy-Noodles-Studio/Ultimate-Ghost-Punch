@@ -10,8 +10,8 @@ class RigidBody;
 class GhostMovement : public UserComponent
 {
 private:
-	float maxSpeed=0;
-	RigidBody* body;
+	float maxSpeed;
+	RigidBody* rigidbody;
 public:
 	GhostMovement(GameObject* g);
 

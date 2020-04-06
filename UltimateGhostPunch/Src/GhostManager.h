@@ -3,7 +3,6 @@
 #define GHOST_MANAGER_H
 
 #include <UserComponent.h>
-#include <string>
 
 class Movement;
 class GhostMovement;
@@ -12,15 +11,15 @@ class Transform;
 class MeshRenderer;
 class RigidBody;
 class PlayerUI;
+class FightManager;
 
 class GhostManager : public UserComponent
 {
 private:
-	bool ghost;
-	bool used;
+	bool ghost, used, deathPosChanged;
 
-	float ghostTime;
-	int ghostDamage;
+	float ghostTime, playerGravity;
+	int ghostDamage, resurrectionHealth;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -29,6 +28,7 @@ private:
 	MeshRenderer* meshRenderer;
 	RigidBody* rigidBody;
 	PlayerUI* playerUI;
+	FightManager* fightManager;
 
 	std::string ghostMeshId, ghostMeshName;
 	std::string aliveMeshId, aliveMeshName;
@@ -38,8 +38,6 @@ private:
 	Vector3 ghostSpawnOffset;
 
 	Vector3 deathPosition;
-
-	float playerGravity;
 
 public:
 	GhostManager(GameObject* gameObject);

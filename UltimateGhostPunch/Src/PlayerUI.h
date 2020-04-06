@@ -7,6 +7,7 @@
 
 class Camera;
 class Health;
+class GhostManager;
 
 class PlayerUI : public UserComponent
 {
@@ -17,7 +18,7 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void updateState(const std::string state);
+	void changeState(const std::string state);
 	void updateHealth();
 
 	// TODO: quitar esto, aqui sobra
@@ -27,12 +28,14 @@ public:
 private:
 	void createHearts();
 
+	void updateState();
 	void updateHearts();
 	void updateIndicator();
 
 private:
 	Camera* mainCamera;
 	Health* health;
+	GhostManager* ghostManager;
 
 	std::string name;
 	UIElement playerHUD;
