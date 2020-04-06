@@ -8,7 +8,7 @@
             "ComponentName": "Transform",
             "ComponentProperties": [
                [ "position", "20 30 0"],
-               [ "scale", "1 1 1"],
+               [ "scale", "0.6 0.6 0.6"],
                [ "rotation", "0 90 0"]
             ]
         },
@@ -21,7 +21,7 @@
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-               [ "anim", "Idle player"]
+               [ "anim", "Run player"]
             ]
         },
         {
@@ -35,7 +35,7 @@
                [ "angularDamping", "0"],
                [ "gravity", "0 -10 0"],
                [ "offset", "0 0 0"],
-               [ "scale", "1 2 1"],
+               [ "scale", "2 5.2 2"],
                [ "kinematic", "0"],
                [ "trigger", "0"],
                [ "movementConstraints", "1 1 0"],
@@ -102,7 +102,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "0 0 1.65"],
+                       [ "position", "1 0 1.65"],
                        [ "scale", "1 1 2"]
                     ]
                 }
@@ -124,7 +124,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "0 -0.9 0"],
+                       [ "position", "0 -2.2 0"],
                         ["scale", "0.75 0.75 0.75"]
                     ]
                 }

@@ -8,6 +8,8 @@
 #include "FightConfiguration.h"
 #include <GaiaData.h>
 
+#include "RigidBody.h"
+
 #include "ComponentRegister.h"
 
 REGISTER_FACTORY(FightManager);
@@ -75,11 +77,15 @@ void FightManager::createLevel()
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
 
-	// instantiate collider
+	// instantiate collider mesh
 	instantiate(levelData.find("LevelBlueprint").getValue().c_str());
 
-	// instantiate mesh
+	// instantiate render mesh
 	//...
+
+	GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
+	backWall->getComponent<Transform>()->setScale({ 90,50,1 });
+	backWall->getComponent<RigidBody>()->setKinematic(true);
 
 	// player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
