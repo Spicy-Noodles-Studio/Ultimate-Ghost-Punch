@@ -1,4 +1,5 @@
 #include "GhostManager.h"
+#include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
 
@@ -10,8 +11,6 @@
 #include "RigidBody.h"
 #include "PlayerUI.h"
 #include "FightManager.h"
-
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(GhostManager);
 

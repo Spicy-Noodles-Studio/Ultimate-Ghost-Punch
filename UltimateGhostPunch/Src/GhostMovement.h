@@ -1,7 +1,6 @@
 #pragma once
-
-#ifndef GHOSTMOVE_H
-#define GHOSTMOVE_H
+#ifndef GHOST_MOVEMENT_H
+#define GHOST_MOVEMENT_H
 
 #include <UserComponent.h>
 
@@ -10,17 +9,20 @@ class RigidBody;
 class GhostMovement : public UserComponent
 {
 private:
+	RigidBody* rigidBody;
 	float maxSpeed;
-	RigidBody* rigidbody;
+
 public:
 	GhostMovement(GameObject* g);
+	virtual ~GhostMovement();
 
 	virtual void start();
-	void move(Vector3 dir);
 	virtual void handleData(ComponentData* data);
+
+	void move(Vector3 dir);
 
 	void setSpeed(float speed);
 	float getSpeed() const;
 };
 
-#endif 
+#endif

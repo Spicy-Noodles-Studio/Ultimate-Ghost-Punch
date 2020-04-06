@@ -28,13 +28,13 @@ private:
 	int time;
 
 	// Bottom limit of the level 
-	float bottomLimit = -10;
+	float bottomLimit;
 
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
 
-	~GameManager();
+	virtual ~GameManager();
 
 	static GameManager* GetInstance();
 

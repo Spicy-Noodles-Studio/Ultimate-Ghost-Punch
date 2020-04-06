@@ -14,13 +14,13 @@ private:
 
 public:
 	Movement(GameObject* gameObject);
+	virtual ~Movement();
 
-	void move(Vector3 dir);
-	// Stops the object's physic body's movement and clear its forces
-	void stop();
-	
 	virtual void start();
 	virtual void handleData(ComponentData* data);
+
+	void move(Vector3 dir);
+	void stop(); // Stops the object's physic body's movement and clear its forces
 
 	void setSpeed(float spd);
 	float getSpeed() const;

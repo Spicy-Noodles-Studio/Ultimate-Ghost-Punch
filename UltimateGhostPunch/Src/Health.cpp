@@ -1,8 +1,7 @@
 #include "Health.h"
+#include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
-
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(Health);
 

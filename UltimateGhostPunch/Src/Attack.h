@@ -27,7 +27,9 @@ private:
 	{
 		QUICK, STRONG, NONE
 	};
-	enum AttackState {
+
+	enum AttackState
+	{
 		NOT_ATTACKING, CHARGING, ATTACKING
 	};
 
@@ -38,14 +40,15 @@ private:
 
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
+
 public:
 	Attack(GameObject* gameObject);
+	virtual ~Attack();
 
 	virtual void start();
 	virtual void update(float deltaTime);
-	virtual void onObjectStay(GameObject* other);
-
 	virtual void handleData(ComponentData* data);
+	virtual void onObjectStay(GameObject* other);
 
 	void quickAttack();
 	void strongAttack();

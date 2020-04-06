@@ -3,9 +3,9 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include <sstream>
 #include <Scene.h>
 #include <Camera.h>
+#include <sstream>
 
 #include "Health.h"
 #include "GhostMovement.h"

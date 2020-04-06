@@ -1,11 +1,11 @@
 #include "DeathZone.h"
 
+#include <ComponentRegister.h>
 #include<GameObject.h>
 #include<sstream>
-#include <ComponentRegister.h>
 
-#include "Health.h"
 #include "Respawn.h"
+#include "Health.h"
 
 REGISTER_FACTORY(DeathZone);
 
