@@ -22,7 +22,7 @@ private:
 	UIElement winnerText;
 
 	std::vector<int> playerIndexes;
-	std::vector<Vector3> playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
+	std::vector<Vector3> playerPositions;
 
 	float fightTimer; // If time is -1, then infinite
 	float finishTimer; // Time taken to send us back to MainMenu
@@ -37,7 +37,7 @@ private:
 
 public:
 	FightManager(GameObject* gameObject);
-	~FightManager();
+	virtual ~FightManager();
 
 	virtual void start();
 	virtual void update(float deltaTime);

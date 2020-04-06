@@ -59,7 +59,7 @@ private:
 
 public:
 	FightConfiguration(GameObject* gameObject);
-	~FightConfiguration();
+	virtual ~FightConfiguration();
 
 	virtual void start();
 	virtual void update(float deltaTime);

@@ -1,13 +1,36 @@
 #include "DynamicCamController.h"
-#include "GameObject.h"
+#include <ComponentRegister.h>
+#include <GameObject.h>
 #include <sstream>
-
-#include "Movement.h"
-#include "GameManager.h"
 #include <queue>
+
+#include "GameManager.h"
+#include "Movement.h"
+
+REGISTER_FACTORY(DynamicCamController);
 
 DynamicCamController::DynamicCamController(GameObject* gameObject) : UserComponent(gameObject)
 {
+
+}
+
+DynamicCamController::~DynamicCamController()
+{
+
+}
+
+void DynamicCamController::start()
+{
+	camMove = gameObject->getComponent<Movement>();
+
+	prevDist = 0;
+	mpThreshold = 100;
+	zoomThreshold = 5;
+}
+
+void DynamicCamController::update(float deltaTime)
+{
+	dynamicMove();
 }
 
 void DynamicCamController::handleData(ComponentData* data)
@@ -27,21 +50,14 @@ void DynamicCamController::handleData(ComponentData* data)
 	}
 }
 
-void DynamicCamController::start()
-{
-	camMove = gameObject->getComponent<Movement>();
-}
-
-void DynamicCamController::update(float deltaTime)
-{
-	dynamicMove();
-}
-
 float DynamicCamController::getMaxDistBetweenPlayers()
 {
+	// Vector with every player
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
+
 	// number of players
 	int n = players.size();
+
 	float maxDist = -1;
 	for (int i = 0; i < n; i++)
 	{
@@ -62,10 +78,13 @@ Vector3 DynamicCamController::getMidPointBetweenPlayers()
 {
 	// mid point
 	Vector3 mp;
+
 	// Queue with every player's position
 	std::queue<Vector3> pts;
+
 	// Vector with every player
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
+
 	// number of players
 	int n = players.size();
 
@@ -84,10 +103,10 @@ Vector3 DynamicCamController::getMidPointBetweenPlayers()
 void DynamicCamController::dynamicMove()
 {
 	Vector3 movDir;
+
 	// Move towards mid-point position
 	Vector3 midPos = getMidPointBetweenPlayers() + Vector3(0, 0, gameObject->transform->getPosition().z);
 	movDir = midPos - gameObject->transform->getPosition();
-	
 	
 	if (movDir.magnitude() > mpThreshold)
 	{
@@ -100,4 +119,3 @@ void DynamicCamController::dynamicMove()
 	// Zoom in/out
 	printf("Dist: %f\n", getMaxDistBetweenPlayers());
 }
-

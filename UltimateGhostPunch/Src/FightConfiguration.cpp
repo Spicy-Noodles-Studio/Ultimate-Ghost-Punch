@@ -1,15 +1,14 @@
 #include "FightConfiguration.h"
 
-#include "InputSystem.h"
-#include "GameObject.h"
-#include "UILayout.h"
-#include "UIElement.h"
-
-#include <SceneManager.h>
+#include <ComponentRegister.h>
 #include <InterfaceSystem.h>
-#include "GameManager.h"
+#include <InputSystem.h>
+#include <SceneManager.h>
+#include <GameObject.h>
+#include <UILayout.h>
+#include <UIElement.h>
 
-#include "ComponentRegister.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(FightConfiguration);
 

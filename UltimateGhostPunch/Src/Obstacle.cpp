@@ -11,12 +11,39 @@ REGISTER_FACTORY(Obstacle);
 
 Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(0), pushStrength(10.f), respawnOffset(50.0, 0.0, 0.0)
 {
+
 }
 
 Obstacle::~Obstacle()
 {
+
 }
 
+void Obstacle::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "damage") {
+			if (!(ss >> damage))
+				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+		}
+		else if (prop.first == "pushStrength") {
+			if (!(ss >> pushStrength))
+				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+		}
+		else if (prop.first == "respawnOffset") {
+			double x, y, z;
+			if (!(ss >> x >> y >> z))
+				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+			else
+				respawnOffset = { x,y,z };
+		}
+		else
+			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
+	}
+}
 
 void Obstacle::onCollisionEnter(GameObject* other)
 {
@@ -47,30 +74,5 @@ void Obstacle::onCollisionEnter(GameObject* other)
 			if (rb != nullptr)
 				rb->addImpulse(pushDir * pushStrength);
 		}
-	}
-}
-
-void Obstacle::handleData(ComponentData* data)
-{
-	for (auto prop : data->getProperties()) {
-		std::stringstream ss(prop.second);
-
-		if (prop.first == "damage") {
-			if (!(ss >> damage))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
-		}
-		else if (prop.first == "pushStrength") {
-			if (!(ss >> pushStrength))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
-		}
-		else if (prop.first == "respawnOffset") {
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
-			else
-				respawnOffset = { x,y,z };
-		}
-		else
-			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }

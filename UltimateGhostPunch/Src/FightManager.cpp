@@ -1,9 +1,9 @@
 #include "FightManager.h"
 
 #include <ComponentRegister.h>
+#include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
-#include <SceneManager.h>
 
 #include "PlayerController.h"
 #include "Health.h"
@@ -40,6 +40,7 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
+	playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
 
 	// create game
 	createLevel();

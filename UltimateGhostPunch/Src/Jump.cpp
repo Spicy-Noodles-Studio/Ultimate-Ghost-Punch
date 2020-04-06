@@ -1,10 +1,8 @@
 #include "Jump.h"
-
-#include <sstream>
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-
+#include <sstream>
 
 REGISTER_FACTORY(Jump);
 

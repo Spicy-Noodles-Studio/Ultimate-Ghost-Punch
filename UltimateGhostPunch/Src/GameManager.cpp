@@ -1,6 +1,5 @@
 #include "GameManager.h"
-
-#include "ComponentRegister.h"
+#include <ComponentRegister.h>
 
 REGISTER_FACTORY(GameManager);
 
@@ -34,6 +33,7 @@ void GameManager::start()
 {
 	level = "";
 	song = "";
+	bottomLimit = -10;
 
 	dontDestroyOnLoad(gameObject);
 }

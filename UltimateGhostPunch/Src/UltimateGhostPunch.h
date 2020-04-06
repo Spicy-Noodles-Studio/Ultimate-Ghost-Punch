@@ -20,6 +20,7 @@ private:
 	float duration;
 	float force;
 	float ghostSpeed;
+
 	// Speed multiplyer for punch charging speed (from 0.0 to 1.0)
 	float chargeSpeedMult;
 

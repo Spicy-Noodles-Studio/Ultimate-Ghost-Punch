@@ -51,7 +51,7 @@ private:
 
 public:
 	PlayerController(GameObject* gameObject);
-	~PlayerController();
+	virtual ~PlayerController();
 
 	virtual void start();
 	virtual void update(float deltaTime);

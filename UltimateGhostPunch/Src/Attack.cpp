@@ -1,16 +1,21 @@
 #include "Attack.h"
-
+#include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
 #include <sstream>
 
 #include "Health.h"
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(Attack);
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject)
 {
+
+}
+
+Attack::~Attack()
+{
+
 }
 
 void Attack::start()
@@ -19,28 +24,30 @@ void Attack::start()
 
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+
+	cooldown = 0;
+	chargeTime = 0;
+	activeTime = 0;
+
+	currentAttack = NONE;
+	state = NOT_ATTACKING;
 }
 
 void Attack::update(float deltaTime)
 {
 	// Update the cooldown
 	if (cooldown > 0.0f)
-	{
 		cooldown -= deltaTime;
-	}
 
 	//Attack charge time
-	if (chargeTime > 0.0f) {
+	if (chargeTime > 0.0f)
 		chargeTime -= deltaTime;
-	}
 	else if (state == CHARGING)
 		attack();
 
 	// Attack active time
 	if (activeTime > 0.0f)
-	{
 		activeTime -= deltaTime;
-	}
 	else if (state == ATTACKING)
 	{
 		// Deactivate the trigger until the next attack is used
@@ -49,7 +56,67 @@ void Attack::update(float deltaTime)
 		// Reset the current attack state
 		state = NOT_ATTACKING;
 	}
+}
 
+void Attack::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "quickCooldown") {
+			if (!(ss >> quickAttackCooldown))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "strongCooldown") {
+			if (!(ss >> strongAttackCooldown))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "quickDamage") {
+			if (!(ss >> quickAttackDamage))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "strongDamage") {
+			if (!(ss >> strongAttackDamage))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "attackDuration") {
+			if (!(ss >> attackDuration))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "quickCharge") {
+			if (!(ss >> quickChargeTime))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "strongCharge") {
+			if (!(ss >> strongChargeTime))
+				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else
+			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
+	}
+}
+
+void Attack::onObjectStay(GameObject* other)
+{
+	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING) // If it hits a player different than myself
+	{
+		LOG("You hit player %s!\n", other->getName().c_str());
+		float damage = 0;
+
+		switch (currentAttack)
+		{
+		case Attack::QUICK:
+			damage = quickAttackDamage;
+			break;
+		case Attack::STRONG:
+			damage = strongAttackDamage;
+			break;
+		}
+
+		Health* enemyHealth = other->getComponent<Health>();
+		if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+	}
 }
 
 void Attack::charge(float newCooldown, float newChargeTime)
@@ -89,64 +156,4 @@ void Attack::strongAttack()
 	}
 	else
 		LOG("Attack on CD...\n");
-}
-
-void Attack::onObjectStay(GameObject* other)
-{
-	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
-	{
-		LOG("You hit player %s!\n", other->getName().c_str());
-		float damage = 0;
-
-		switch (currentAttack)
-		{
-		case Attack::QUICK:
-			damage = quickAttackDamage;
-			break;
-		case Attack::STRONG:
-			damage = strongAttackDamage;
-			break;
-		}
-
-		Health* enemyHealth = other->getComponent<Health>();
-		if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
-	}
-}
-
-void Attack::handleData(ComponentData* data)
-{
-	for (auto prop : data->getProperties()) {
-		std::stringstream ss(prop.second);
-
-		if (prop.first == "quickCooldown") {
-			if (!(ss >> quickAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongCooldown") {
-			if (!(ss >> strongAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "quickDamage") {
-			if (!(ss >> quickAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongDamage") {
-			if (!(ss >> strongAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "attackDuration") {
-			if (!(ss >> attackDuration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "quickCharge") {
-			if (!(ss >> quickChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongCharge") {
-			if (!(ss >> strongChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else
-			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
-	}
 }
