@@ -6,6 +6,7 @@
 #include "PlayerController.h"
 #include "UILayout.h"
 #include "FightConfiguration.h"
+#include "GameManager.h"
 
 #include "ComponentRegister.h"
 
@@ -25,10 +26,15 @@ void FightManager::start()
 {
 	timed = true;
 
-	winnerPanel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("WinnerBackground");
-	winnerText = winnerPanel.getChild("Winner");
+	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	if (cameraLayout != nullptr)
+	{
+		winnerPanel = cameraLayout->getRoot().getChild("WinnerBackground");
+		winnerText = winnerPanel.getChild("Winner");
 
-	winnerPanel.setVisible(false);
+		winnerPanel.setVisible(false);
+	}
+	
 
 	playerIndexes = GameManager::GetInstance()->getPlayerIndexes();
 
@@ -38,6 +44,7 @@ void FightManager::start()
 
 	time = GameManager::GetInstance()->getTime();
 	if (time < 0) timed = false;
+	GameManager::GetInstance()->pauseGame(false);
 	playSong();
 }
 
@@ -134,3 +141,4 @@ void FightManager::chooseWinner()
 		winnerText.setText("Winner: P" + std::to_string(winner + 1));
 	}
 }
+

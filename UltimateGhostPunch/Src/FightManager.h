@@ -7,9 +7,8 @@
 #include <vector>
 #include <string>
 
-#include "UIElement.h"
-
 #include "Vector3.h"
+#include "UIElement.h"
 
 class InputSystem;
 
@@ -28,7 +27,6 @@ private:
 
 	int winner;
 
-private:
 	void createLevel();
 	void createKnights();
 	void playSong();
@@ -43,6 +41,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie();
+
 };
 
 #endif

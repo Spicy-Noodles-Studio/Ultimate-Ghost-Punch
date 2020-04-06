@@ -48,7 +48,9 @@ void PlayerController::start()
 void PlayerController::update(float deltaTime)
 {
 	// Ignore input if:
-	if (frozen) return; // Player is frozen
+	if (frozen ||  // Player is frozen 
+		GameManager::GetInstance()->gameIsPaused()) // Game is paused
+		return;
 	
 	checkInput(dir);
 
@@ -91,9 +93,6 @@ void PlayerController::checkInput(Vector3& dir)
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-		if (inputSystem->getKeyPress("ESCAPE"))
-			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
-
 		if (inputSystem->isKeyPressed("A"))
 		{
 			dir = Vector3(-1, 0, 0);
