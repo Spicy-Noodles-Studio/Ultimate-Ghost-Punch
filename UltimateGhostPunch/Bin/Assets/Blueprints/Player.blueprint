@@ -15,7 +15,8 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "player Knight.mesh"]
+               [ "mesh", "player Knight.mesh"],
+               [ "attachToBone", "sword Espada.mesh player Mano.L"]
             ]
         },
         {
