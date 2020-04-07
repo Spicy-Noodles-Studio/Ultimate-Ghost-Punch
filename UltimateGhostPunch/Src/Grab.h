@@ -30,7 +30,7 @@ private:
 	PlayerController* controller;
 
 	GameObject* enemy;
-
+	PlayerController* enemyController;
 
 	Vector3 vIzq;
 	Vector3 vDer;

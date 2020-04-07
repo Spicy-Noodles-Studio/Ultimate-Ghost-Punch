@@ -175,12 +175,11 @@ void PlayerController::checkInput(Vector3& dir)
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
 
-		if (inputSystem->isKeyPressed("S")){
+		if (inputSystem->getKeyPress("S")){
 			isBlocking = block->block();
 		}
-		if (isBlocking && !inputSystem->isKeyPressed("S")) {
-			isBlocking = false;
-			block->unblock();
+		if (isBlocking && inputSystem->getKeyRelease("S")) {
+			isBlocking = block->unblock();
 		}
 	}
 	//Controles con mando
@@ -232,17 +231,20 @@ void PlayerController::checkInput(Vector3& dir)
 				if (jump != nullptr) jump->salta();
 		}
 
-		else if (inputSystem->getButtonPress(controllerIndex, "LB") && !isBlocking) {
+		if (inputSystem->getButtonPress(controllerIndex, "LB") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				grab->grab();
 		}
+		if (inputSystem->getButtonRelease(controllerIndex, "LB") && !isBlocking) {
+			if (ghost == nullptr || !ghost->isGhost())
+				grab->drop();
+		}
 
-		if (inputSystem->isButtonPressed(controllerIndex, "B")){
+		if (inputSystem->getButtonPress(controllerIndex, "B")){
 			isBlocking = block->block();
 		}
-		else if (isBlocking && !inputSystem->isButtonPressed(controllerIndex, "B")) {
-			isBlocking = false;
-			block->unblock();
+		else if (isBlocking && inputSystem->getButtonRelease(controllerIndex, "B")) {
+			isBlocking = block->unblock();
 		}		
 	}
 
@@ -316,6 +318,11 @@ void PlayerController::setFrozen(bool freeze)
 void PlayerController::setPlayerIndex(int index)
 {
 	playerIndex = index;
+}
+
+void PlayerController::setBlocking(bool _block)
+{
+	isBlocking = _block;
 }
 
 void PlayerController::setControllerIndex(int index)

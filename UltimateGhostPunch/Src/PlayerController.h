@@ -74,6 +74,7 @@ public:
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
 	void setPlayerIndex(int index);
+	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);
 

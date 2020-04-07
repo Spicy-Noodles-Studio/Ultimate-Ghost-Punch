@@ -90,6 +90,8 @@ void Grab::onObjectStay(GameObject* other)
 			state = GRABBED;
 			remain = duration;
 			enemy = other;
+			enemyController = other->getComponent<PlayerController>();
+			if (enemyController)enemyController->setFrozen(true);
 		}
 	}
 }
@@ -123,13 +125,13 @@ void Grab::grab()
 
 void Grab::drop()
 {
-	
+	if (!enemy) return;
 	//lanzar enemigo
 	if (gameObject->getParent()->transform->getRotation().y >= 0) enemy->getComponent<RigidBody>()->addForce(vDer * force);
 	else enemy->getComponent<RigidBody>()->addForce(vIzq * force);
 	
-
+	if (enemyController)enemyController->setFrozen(false);
 	
-
+	enemyController = nullptr;
 	enemy = nullptr;
 }

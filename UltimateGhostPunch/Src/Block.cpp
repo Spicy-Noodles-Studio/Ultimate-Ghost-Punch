@@ -11,6 +11,65 @@ Block::Block(GameObject* gameObject) : UserComponent(gameObject)
 {
 }
 
+
+
+void Block::start()
+{
+	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
+
+	controller = gameObject->getParent()->getComponent<PlayerController>();
+
+	isBlocking = false;
+	blockTime = maxBlockTime;
+	timeElapsed = 0;
+}
+
+void Block::update(float deltaTime)
+{
+	if (!isGrounded && isBlocking) {
+		isBlocking = false;
+		controller->setBlocking(false);
+		return;
+	}
+
+	if (!isBlocking && blockTime != maxBlockTime) {
+		timeElapsed += deltaTime;
+		if (timeElapsed > blockRegenTime) {
+			blockTime = maxBlockTime;
+			timeElapsed = 0;
+			LOG("BLOCK RECHARGED\n");
+		}
+	}
+	else if (isBlocking && blockTime > 0 && isGrounded) {
+		blockTime -= deltaTime;
+		if (blockTime <= 0) {
+			blockTime = 0;
+			isBlocking = false;
+			controller->setBlocking(false);
+			LOG("BLOCK ENDED\n");
+		}
+	}
+}
+
+void Block::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "maxBlockTime")
+		{
+			ss >> maxBlockTime;
+		}
+		if (prop.first == "blockRegenTime") {
+			ss >> blockRegenTime;
+		}
+		if (prop.first == "blockGrabMargin") {
+			ss >> blockGrabMargin;
+		}
+	}
+}
+
 bool Block::block()
 {
 	if (!isBlocking && blockTime > 0 && isGrounded) {
@@ -35,70 +94,16 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
 		if (blockTime <= 0) {
-			LOG("BLOCK ENDED\n");
 			isBlocking = false;
+			controller->setBlocking(false);
 		}
 		return true;
 	}
 	else {
 		Health* health = gameObject->getParent()->getComponent<Health>();
 		if (health != nullptr) health->receiveDamage(damage);
-		LOG("Attack received\n");
 	}
 	return false;
-}
-
-void Block::start()
-{
-	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
-
-	isBlocking = false;
-	blockTime = maxBlockTime;
-	timeElapsed = 0;
-}
-
-void Block::update(float deltaTime)
-{
-	if (!isGrounded && isBlocking) {
-		isBlocking = false;
-		return;
-	}
-
-	if (!isBlocking && blockTime != maxBlockTime) {
-		timeElapsed += deltaTime;
-		if (timeElapsed > blockRegenTime) {
-			blockTime = maxBlockTime;
-			timeElapsed = 0;
-			LOG("BLOCK RECHARGED\n");
-		}
-	}
-	else if (isBlocking && blockTime > 0 && isGrounded) {
-		blockTime -= deltaTime;
-		if (blockTime <= 0) {
-			blockTime = 0;
-			isBlocking = false;
-			LOG("BLOCK ENDED\n");
-		}
-	}
-}
-
-void Block::handleData(ComponentData* data)
-{
-	for (auto prop : data->getProperties())
-	{
-		std::stringstream ss(prop.second);
-
-		if (prop.first == "maxBlockTime")
-		{
-			ss >> maxBlockTime;
-		}
-		if (prop.first == "blockRegenTime") {
-			ss >> blockRegenTime;
-		}
-		if (prop.first == "blockGrabMargin") {
-			ss >> blockGrabMargin;
-		}
-	}
 }
 
 void Block::onObjectEnter(GameObject* other)

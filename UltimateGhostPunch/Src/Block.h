@@ -6,6 +6,8 @@
 #include <GameObject.h>
 #include <RigidBody.h>
 
+#include "PlayerController.h"
+
 class Block : public UserComponent
 {
 private:
@@ -23,6 +25,8 @@ private:
 
 	float blockDirection;
 	GameObject* attackCollider;
+
+	PlayerController* controller;
 
 public:
 	Block(GameObject* gameObject);
