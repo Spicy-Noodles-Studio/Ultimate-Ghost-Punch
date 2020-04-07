@@ -7,6 +7,7 @@
 #include "UILayout.h"
 #include "Health.h"
 #include "ComponentRegister.h"
+#include "Timer.h"
 
 REGISTER_FACTORY(PlayerUI);
 
@@ -90,16 +91,6 @@ void PlayerUI::updateHealth()
 	playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
-}
-
-void PlayerUI::setPauseMenuVisible(bool show)
-{
-	pauseMenu.setVisible(show);
-}
-
-bool PlayerUI::isPauseMenuVisible()
-{
-	return pauseMenu.isVisible();
 }
 
 void PlayerUI::updateHearts()
