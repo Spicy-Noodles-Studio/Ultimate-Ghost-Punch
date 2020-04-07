@@ -106,14 +106,8 @@ void DynamicCamera::dynamicMove()
 
 	Vector3 dest = midPos + Vector3(0, 0, dist);
 
-	gameObject->transform->setPosition(Lerp(gameObject->transform->getPosition(), dest, smoothFactor));
-}
-
-Vector3 DynamicCamera::Lerp(Vector3 s, Vector3 d, float f)
-{
-	//clamp between 0 and 1
-	f = std::min(1.0f, std::max(f, 0.0f));
-
-	return Vector3(s.x + (d.x - s.x) * f, s.y + (d.y - s.y) * f, s.z + (d.z - s.z) * f);
+	Vector3 lerpDest = gameObject->transform->getPosition();
+	lerpDest.lerp(dest, smoothFactor);
+	gameObject->transform->setPosition(lerpDest);
 }
 

@@ -30,7 +30,6 @@ public:
 	// Applies a movement in the direction specified by the players' mid-point and distance
 	void dynamicMove();
 
-	Vector3 Lerp(Vector3 s, Vector3 d, float f);
 };
 
 #endif
