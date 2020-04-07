@@ -25,6 +25,15 @@
                         ["layout" , "fight.layout"],
                         ["event" , "BackButton backButtonClick | ResumeButton resumeButtonClick"]
                     ]
+                },
+                {
+                    "ComponentName": "DynamicCamera",
+                    "ComponentProperties": [
+                        ["minZ" , "40"],
+                        ["maxZ" , "50"],
+                        ["zoomFactor" , "2.0f"],
+                        ["smoothFactor" , "0.125f"]
+                    ]
                 }
             ]
         },

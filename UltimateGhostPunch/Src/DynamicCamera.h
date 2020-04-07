@@ -1,29 +1,27 @@
 #pragma once
+#ifndef DYNAMIC_CAMERA_H
+#define DYNAMIC_CAMERA_H
 #include <UserComponent.h>
 
 class GameObject;
-class Movement;
 
-class DynamicCamController :
+class DynamicCamera :
 	public UserComponent
 {
 private:
-	Movement* camMove = nullptr;
-	float minZ = 10,
-		maxZ = 100;
+	float minZ, maxZ;
 
-	// Stores the previous maximum distance between two players
-	float prevDist = 0.0f;
-	// Cam will not move if dist to mid-point is <= threshold
-	float mpThreshold = 100.0f;
-	float zoomThreshold = 5.0f;
+	//Cam's Z pos = max dist between players * zoomFactor
+	float zoomFactor;
+	float smoothFactor;
+
 public:
-	DynamicCamController(GameObject* gameObject);
+	DynamicCamera(GameObject* gameObject);
 
 	virtual void handleData(ComponentData* data);
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void fixedUpdate(float deltaTime);
 
 	// Returns the maximum distance that exists currently between two players
 	float getMaxDistBetweenPlayers();
@@ -31,5 +29,7 @@ public:
 	Vector3 getMidPointBetweenPlayers();
 	// Applies a movement in the direction specified by the players' mid-point and distance
 	void dynamicMove();
+
 };
 
+#endif
