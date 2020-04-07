@@ -1,7 +1,7 @@
 {
     "ObjectType": "GAMEOBJECT",
     "ObjectName": "Player",
-    "Tag": "player",
+    "Tag": "Player",
     "Components":
     [
         {
@@ -45,7 +45,7 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "force", "20"]
+              [  "speed", "50"]
             ]
         },
         {  
@@ -65,7 +65,8 @@
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": [
                [ "force", "200"],
-                ["duration" , "0.333"]
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
             ]
         },
         {
@@ -78,6 +79,13 @@
             ]
         },
         {
+            "ComponentName": "GhostManager"
+        },
+		
+		{
+		"ComponentName": "Dodge"
+		},
+        {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostMesh", "ghost Espada.mesh"],
@@ -85,6 +93,9 @@
                 ["spawnOffset", "0 1.25 0"],
                 ["ghostDamage", "1"]
             ]
+        },
+        {
+            "ComponentName": "PlayerUI"
         }
     ],
     "Children": [
@@ -130,7 +141,7 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "12"],
+                        ["maxForce", "15"],
 				        ["jumpDecay", "1.5"]
                     ]       
                 },
@@ -140,6 +151,28 @@
                         ["maxBlockTime", "3.0"],
 				        ["blockRegenTime", "1.5"]
                     ]       
+                }
+            ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab"
                 }
             ]
         }

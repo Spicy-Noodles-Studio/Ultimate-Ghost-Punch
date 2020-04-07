@@ -35,7 +35,7 @@ private:
 	float invencibleDamageTime = 0.2f;
 
 	bool alive; // player alive
-
+	bool respawning = false; // only true when respawning 
 	bool invencible;
 
 	GhostManager* ghost;

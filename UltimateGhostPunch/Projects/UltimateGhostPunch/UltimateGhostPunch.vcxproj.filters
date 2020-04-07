@@ -45,6 +45,12 @@
     <ClCompile Include="..\..\Src\GhostManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Dodge.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Grab.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\PlayerUI.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -52,6 +58,22 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Block.cpp">
+    <ClCompile Include="..\..\Src\Obstacle.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\FightConfiguration.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\GameManager.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\FightManager.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\DynamicCamera.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PauseMenu.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,6 +99,12 @@
     <ClInclude Include="..\..\Src\GhostManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Dodge.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Grab.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Src\PlayerUI.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -84,6 +112,22 @@
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Block.h">
+    <ClInclude Include="..\..\Src\Obstacle.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\FightConfiguration.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\GameManager.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\FightManager.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\DynamicCamera.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PauseMenu.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>

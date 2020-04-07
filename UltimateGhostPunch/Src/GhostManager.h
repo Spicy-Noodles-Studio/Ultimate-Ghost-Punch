@@ -33,6 +33,7 @@ private:
 	std::string aliveMeshId, aliveMeshName;
 	Vector3 aliveScale;
 	float playerGravity;
+	Vector3 deathPos = {0,0,0};
 
 
 	std::string ghostMeshId, ghostMeshName;
@@ -58,5 +59,6 @@ public:
 	void activateGhost();
 	void deactivateGhost();
 
+	void setDeathPosition(const Vector3& dPos);
 };
 

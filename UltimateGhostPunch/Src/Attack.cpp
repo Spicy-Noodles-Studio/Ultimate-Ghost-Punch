@@ -95,7 +95,7 @@ void Attack::strongAttack()
 
 void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
+	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;

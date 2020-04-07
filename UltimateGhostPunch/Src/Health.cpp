@@ -4,7 +4,10 @@
 
 #include "GhostManager.h"
 #include "PlayerUI.h"
+#include "PlayerController.h"
 #include "ComponentRegister.h"
+
+#include "FightManager.h"
 
 REGISTER_FACTORY(Health);
 
@@ -15,7 +18,7 @@ Health::Health(GameObject* gameObject) : UserComponent(gameObject)
 
 Health::~Health()
 {
-
+	
 }
 
 void Health::start()
@@ -39,6 +42,13 @@ void Health::update(float deltaTime)
 		{
 			invencible = false;
 			if(playerUI!=nullptr) playerUI->updateState("Alive");
+			if (respawning) 
+			{
+				respawning = false;
+				// reactivate movement
+				PlayerController* input = gameObject->getComponent<PlayerController>();
+				if (input != nullptr) input->setFrozen(false);
+			}
 		}
 	}
 }
@@ -103,6 +113,8 @@ void Health::die()
 
 	if (playerUI != nullptr) playerUI->updateState("Dead");
 
+	findGameObjectWithName("FightManager")->getComponent<FightManager>()->playerDie();
+
 	// deactivate gameObject
 	gameObject->setActive(false);
 
@@ -125,8 +137,15 @@ void Health::resurrect()
 	//update UI
 	if (playerUI != nullptr) {
 		playerUI->updateHealth();
-		playerUI->updateState("Invencible");
+		playerUI->updateState("Respawning");
 	}
+	respawning = true;
+
+	// deactivate movement while reapearing
+	PlayerController* input = gameObject->getComponent<PlayerController>();
+	if (input != nullptr) input->setFrozen(true);
+	
+	
 }
 
 int Health::getHealth()

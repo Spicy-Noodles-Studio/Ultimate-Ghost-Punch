@@ -16,11 +16,16 @@ public:
 
 	void updateState(const std::string state);
 	void updateHealth();
+
 private:
 	Health* health;
 
+	std::string name;
+
 	UIElement playerHUD;
 	UIElement playerIndicator;
+
+	UIElement pauseMenu;
 
 private:
 	void createHearts();

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="fightConfigRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        # SLOT 1
+        <Window type="TaharezLook/StaticImage" name="Slot1" >
+            <Property name="Area" value="{{0.1,0},{0.1,0},{0.3,0},{0.3,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Slot1Text" >
+                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="PRESS X OR SPACE" />
+            </Window>
+            <Window type="TaharezLook/StaticImage" name="Connected1" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="PlayerText" >
+                    <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="P1" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="IndexText" >
+                    <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Index: " />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="TypeText" >
+                    <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Keyboard" />
+                </Window>
+            </Window>
+        </Window>
+        # SLOT 2
+        <Window type="TaharezLook/StaticImage" name="Slot2" >
+            <Property name="Area" value="{{0.3,0},{0.1,0},{0.5,0},{0.3,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Slot2Text" >
+                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="PRESS X OR SPACE" />
+            </Window>
+            <Window type="TaharezLook/StaticImage" name="Connected2" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="PlayerText" >
+                    <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="P2" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="IndexText" >
+                    <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Index: " />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="TypeText" >
+                    <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Keyboard" />
+                </Window>
+            </Window>
+        </Window>
+        # SLOT 3
+        <Window type="TaharezLook/StaticImage" name="Slot3" >
+            <Property name="Area" value="{{0.5,0},{0.1,0},{0.7,0},{0.3,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Slot3Text" >
+                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="PRESS X OR SPACE" />
+            </Window>
+            <Window type="TaharezLook/StaticImage" name="Connected3" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="PlayerText" >
+                    <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="P3" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="IndexText" >
+                    <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Index: " />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="TypeText" >
+                    <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Keyboard" />
+                </Window>
+            </Window>
+        </Window>
+        # SLOT 4
+        <Window type="TaharezLook/StaticImage" name="Slot4" >
+            <Property name="Area" value="{{0.7,0},{0.1,0},{0.9,0},{0.3,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Slot4Text" >
+                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="PRESS X OR SPACE" />
+            </Window>
+            <Window type="TaharezLook/StaticImage" name="Connected4" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+                <Window type="TaharezLook/StaticText" name="PlayerText" >
+                    <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="P4" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="IndexText" >
+                    <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Index: " />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="TypeText" >
+                    <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Keyboard" />
+                </Window>
+            </Window>
+        </Window>
+        # LEVEL TEXT
+        <Window type="TaharezLook/StaticText" name="LevelText" >
+                    <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="LEVEL" />
+        </Window>
+        # -LEVEL BUTTON
+        <Window type="TaharezLook/Button" name="-LevelButton" >
+                    <Property name="Area" value="{{0.4,0},{0.38,0},{0.45,0},{0.42,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="-" />
+        </Window>
+        # LEVEL
+        <Window type="TaharezLook/StaticText" name="Level" >
+                    <Property name="Area" value="{{0.5,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="level 1" />
+        </Window>
+        # +LEVEL BUTTON
+        <Window type="TaharezLook/Button" name="+LevelButton" >
+                    <Property name="Area" value="{{0.6,0},{0.38,0},{0.65,0},{0.42,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="+" />
+        </Window>
+        # TIME TEXT
+        <Window type="TaharezLook/StaticText" name="TimeText" >
+                    <Property name="Area" value="{{0.1,0},{0.4,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="TIME" />
+        </Window>
+        # -TIME BUTTON
+        <Window type="TaharezLook/Button" name="-TimeButton" >
+                    <Property name="Area" value="{{0.4,0},{0.48,0},{0.45,0},{0.52,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="-" />
+        </Window>
+        # TIME
+        <Window type="TaharezLook/StaticText" name="Time" >
+                    <Property name="Area" value="{{0.5,0},{0.4,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="60" />
+        </Window>
+        # +TIME BUTTON
+        <Window type="TaharezLook/Button" name="+TimeButton" >
+                    <Property name="Area" value="{{0.6,0},{0.48,0},{0.65,0},{0.52,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="+" />
+        </Window>
+        # SONG TEXT
+        <Window type="TaharezLook/StaticText" name="SongText" >
+                    <Property name="Area" value="{{0.1,0},{0.5,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="SONG" />
+        </Window>
+        # -SONG BUTTON
+        <Window type="TaharezLook/Button" name="-SongButton" >
+                    <Property name="Area" value="{{0.4,0},{0.58,0},{0.45,0},{0.62,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="-" />
+        </Window>
+        # SONG
+        <Window type="TaharezLook/StaticText" name="Song" >
+                    <Property name="Area" value="{{0.5,0},{0.5,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="despacito" />
+        </Window>
+        # +SONG BUTTON
+        <Window type="TaharezLook/Button" name="+SongButton" >
+                    <Property name="Area" value="{{0.6,0},{0.58,0},{0.65,0},{0.62,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="+" />
+        </Window>
+        # HEALTH TEXT
+        <Window type="TaharezLook/StaticText" name="HealthText" >
+                    <Property name="Area" value="{{0.1,0},{0.6,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="HEALTH" />
+        </Window>
+        # -HEALTH BUTTON
+        <Window type="TaharezLook/Button" name="-HealthButton" >
+                    <Property name="Area" value="{{0.4,0},{0.68,0},{0.45,0},{0.72,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="-" />
+        </Window>
+        # HEALTH
+        <Window type="TaharezLook/StaticText" name="Health" >
+                    <Property name="Area" value="{{0.5,0},{0.6,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="4" />
+        </Window>
+        # +HEALTH BUTTON
+        <Window type="TaharezLook/Button" name="+HealthButton" >
+                    <Property name="Area" value="{{0.6,0},{0.68,0},{0.65,0},{0.72,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="+" />
+        </Window>
+        # FIGHT BUTTON
+        <Window type="TaharezLook/Button" name="FightButton" >
+            <Property name="Area" value="{{0.4,0},{0.8,0},{0.6,0},{0.85,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+            <Property name="Text" value="FIGHT!" />
+        </Window>
+        # BACK BUTTON
+        <Window type="TaharezLook/Button" name="BackButton" >
+            <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="BACK" />
+        </Window>
+    </Window>
+</GUILayout>
