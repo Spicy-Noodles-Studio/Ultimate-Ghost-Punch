@@ -25,9 +25,11 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
-	if (state == GRABBING) {
-		//state = IDLE;
+	if (state == GRABBING && last == GRABBING) {
+		state = IDLE;
 	}
+
+	last = state;
 
 	if (remain > 0.0f) remain -= deltaTime;
 
@@ -92,7 +94,9 @@ void Grab::drop()
 {
 	
 	//lanzar enemigo
-	enemy->getComponent<RigidBody>()->addForce(vDer * force);
+	if (gameObject->getParent()->transform->getRotation().y >= 0) enemy->getComponent<RigidBody>()->addForce(vDer * force);
+	else enemy->getComponent<RigidBody>()->addForce(vIzq * force);
+	
 
 	
 

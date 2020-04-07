@@ -22,6 +22,7 @@ private:
 	};
 
 	State state = IDLE;
+	State last = IDLE;
 
 	RigidBody* attackTrigger;
 

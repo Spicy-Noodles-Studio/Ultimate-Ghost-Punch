@@ -26,19 +26,6 @@ void Dodge::update(float deltaTime)
 		cd -= deltaTime;
 	}
 
-	if (state == DODGING_R) {
-		duration += deltaTime;
-		movement->move(Vector3(VELOCITY,0,0));
-	}else if (state == DODGING_L) {
-		duration += deltaTime;
-		movement->move(Vector3(-VELOCITY, 0, 0));
-	}
-
-
-	if (duration >= DURATION) {
-		duration = 0.0f;
-		state = CD;
-	}
 
 	if (cd <= 0.0f) {
 		state = IDLE;
@@ -50,16 +37,18 @@ void Dodge::update(float deltaTime)
 void Dodge::dodgeR()
 {
 	if (state == IDLE) { 
-		state = DODGING_R; 
-		cd = COOLDOWN + DURATION;
+		gameObject->getComponent<RigidBody>()->addForce(vDer * force);
+		cd = COOLDOWN;
+		state = CD;
 	}
 }
 
 void Dodge::dodgeL()
 {
 	if (state == IDLE) { 
-		state = DODGING_L; 
-		cd = COOLDOWN + DURATION;
+		gameObject->getComponent<RigidBody>()->addForce(vIzq * force);
+		cd = COOLDOWN;
+		state = CD;
 	}
 }
 

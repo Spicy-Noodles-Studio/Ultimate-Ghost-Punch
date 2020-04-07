@@ -98,14 +98,7 @@ void PlayerController::checkInput(Vector3& dir)
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-		//Pruebas dodge y grab
-		if (inputSystem->isKeyPressed("H"))
-			dodge->dodgeL();
-		else if (inputSystem->isKeyPressed("J"))
-			dodge->dodgeR();
-
-		if (inputSystem->isKeyPressed("M")) 
-			grab->grab();
+		
 
 
 		if (inputSystem->getKeyPress("ESCAPE"))
@@ -113,12 +106,19 @@ void PlayerController::checkInput(Vector3& dir)
 
 		if (inputSystem->isKeyPressed("A"))
 		{
-			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ 0,-90,0 });
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeL();
+			else {
+				dir = Vector3(-1, 0, 0);
+				gameObject->transform->setRotation({ 0,-90,0 });
+			}
 		}
 		else if (inputSystem->isKeyPressed("D")) {
-			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ 0,90,0 });
+
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeR();
+			else {
+				dir = Vector3(1, 0, 0);
+				gameObject->transform->setRotation({ 0,90,0 });
+			}
 		}
 
 		if (ghost != nullptr && ghost->isGhost()) {
@@ -148,6 +148,13 @@ void PlayerController::checkInput(Vector3& dir)
 				}
 			}
 		}
+
+
+
+		
+
+		if (inputSystem->isKeyPressed("E"))
+			grab->grab();
 
 		if (inputSystem->getMouseButtonClick('l')) {
 			if (ghost == nullptr || !ghost->isGhost())
@@ -207,9 +214,16 @@ void PlayerController::checkInput(Vector3& dir)
 				if (attack != nullptr) attack->strongAttack();
 		}
 
-		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A"))
+		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A")) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
+		}
+
+		else if (inputSystem->getButtonPress(controllerIndex, "LB")) {
+			if (ghost == nullptr || !ghost->isGhost())
+				grab->grab();
+		}
+				
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
