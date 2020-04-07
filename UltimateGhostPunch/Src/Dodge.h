@@ -12,23 +12,23 @@ class Dodge : public UserComponent
 {
 private:
 	//VARIABLES A BALANCEAR
-	float COOLDOWN = 1.0f;
-	float force = 3000.0f;
+	float COOLDOWN;
+	float force;
 
 	//otras variables
-	float cd = 0.0f;
+	float cd ;
 	
 
 	enum State {
 		IDLE, CD
 	};
 
-	State state = IDLE;
+	State state;
 
 	Movement* movement;
 
-	Vector3 vIzq = { -1,0,0 };
-	Vector3 vDer = { 1,0,0 };
+	Vector3 vIzq;
+	Vector3 vDer;
 
 
 public:

@@ -10,6 +10,17 @@ REGISTER_FACTORY(Dodge);
 
 Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject)
 {
+	COOLDOWN = 1.0f;
+	force = 3000.0f;
+
+	cd = 0.0f;
+
+
+	state = IDLE;
+
+	vIzq = { -1,0,0 };
+	vDer = { 1,0,0 };
+
 }
 
 void Dodge::start()

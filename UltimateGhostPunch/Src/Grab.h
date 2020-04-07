@@ -10,27 +10,27 @@ class GameObject;
 class Grab : public UserComponent
 {
 private:
-	float duration = 1.5f;
-	float remain = 0.0f;
+	float duration;
+	float remain;
 
-	float force = 1500.0f;
+	float force;
 
-	bool isGrounded = true;
+	bool isGrounded;
 
 	enum State {
 		IDLE, GRABBING, GRABBED
 	};
 
-	State state = IDLE;
-	State last = IDLE;
+	State state;
+	State last;
 
 	RigidBody* attackTrigger;
 
-	GameObject* enemy = nullptr;
+	GameObject* enemy;
 
 
-	Vector3 vIzq = { -1,0,0 };
-	Vector3 vDer = { 1,0,0 };
+	Vector3 vIzq;
+	Vector3 vDer;
 
 	Vector3 enemyDiff;
 public:

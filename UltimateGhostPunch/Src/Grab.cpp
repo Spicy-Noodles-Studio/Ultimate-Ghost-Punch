@@ -11,6 +11,18 @@ REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject)
 {
+	duration = 1.5f;
+	remain = 0.0f;
+
+	force = 1500.0f;
+
+	isGrounded = true;
+	state = IDLE;
+	last = IDLE;
+	enemy = nullptr;
+
+	vIzq = { -1,0,0 };
+	vDer = { 1,0,0 };
 }
 
 void Grab::start()
