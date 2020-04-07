@@ -237,7 +237,7 @@ void PlayerController::checkInput(Vector3& dir)
 			isBlocking = false;
 			block->unblock();
 		}
-				
+
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {

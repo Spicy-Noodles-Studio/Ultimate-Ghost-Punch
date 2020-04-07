@@ -31,6 +31,8 @@ private:
 	float playerGravity;
 	Vector3 deathPos = {0,0,0};
 
+	void changeMesh(std::string id, std::string name);
+
 public:
 	GhostManager(GameObject* gameObject);
 
