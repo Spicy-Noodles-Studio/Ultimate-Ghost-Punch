@@ -175,6 +175,28 @@
                     "ComponentName": "Grab"
                 }
             ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab"
+                }
+            ]
         }
     ]
 }

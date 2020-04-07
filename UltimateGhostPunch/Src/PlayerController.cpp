@@ -147,10 +147,6 @@ void PlayerController::checkInput(Vector3& dir)
 			}
 		}
 
-
-
-		
-
 		if (inputSystem->isKeyPressed("E") && !isBlocking)
 			grab->grab();
 
@@ -236,8 +232,7 @@ void PlayerController::checkInput(Vector3& dir)
 		else if (isBlocking && !inputSystem->isButtonPressed(controllerIndex, "B")) {
 			isBlocking = false;
 			block->unblock();
-		}
-				
+		}		
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
