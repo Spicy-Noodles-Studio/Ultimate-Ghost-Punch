@@ -1,5 +1,5 @@
 {
-    "LevelBlueprint" : "Level1",
+    "LevelBlueprint" : "Level2",
     "PlayerTransforms":[
         ["-20 30 0", "0 90 0"],
         ["20 30 0", "0 -90 0"],

@@ -12,6 +12,8 @@ class GhostManager;
 class Jump;
 class UltimateGhostPunch;
 class PlayerUI;
+class Animator;
+
 class Vector3;
 
 class PlayerController : public UserComponent
@@ -32,9 +34,9 @@ private:
 	Jump* jump;
 	Attack* attack;
 	UltimateGhostPunch* ghostPunch;
-
 	InputSystem* inputSystem;
 	GhostManager* ghost;
+	Animator* anim;
 
 	// Will ignore input if frozen is true
 	bool frozen = false;

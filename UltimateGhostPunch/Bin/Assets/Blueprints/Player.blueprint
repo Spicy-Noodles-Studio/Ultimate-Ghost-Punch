@@ -21,7 +21,9 @@
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-               [ "anim", "Run player"]
+               [ "anim", "Run player"],
+               [ "anim", "Jump player"],
+               [ "anim", "Idle player"]
             ]
         },
         {

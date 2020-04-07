@@ -84,7 +84,7 @@ void FightManager::createLevel()
 	//...
 
 	GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
-	backWall->getComponent<Transform>()->setScale({ 90,50,1 });
+	backWall->getComponent<Transform>()->setScale({ 190,150,1 });
 	backWall->getComponent<RigidBody>()->setKinematic(true);
 
 	// player initial transforms

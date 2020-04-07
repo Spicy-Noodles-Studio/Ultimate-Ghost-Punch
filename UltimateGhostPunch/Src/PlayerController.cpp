@@ -16,6 +16,7 @@
 #include "Health.h"
 #include "ComponentRegister.h"
 #include "GameManager.h"
+#include "Animator.h"
 
 REGISTER_FACTORY(PlayerController);
 
@@ -35,6 +36,7 @@ void PlayerController::start()
 	ghost = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	playerUI = gameObject->getComponent<PlayerUI>();
+	anim = gameObject->getComponent<Animator>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
@@ -94,6 +96,14 @@ void PlayerController::checkInput(Vector3& dir)
 		if (inputSystem->getKeyPress("ESCAPE"))
 			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
 
+		// test animations
+		if (inputSystem->getKeyPress("A") || inputSystem->getKeyPress("D"))
+			anim->playAnimation("Run");
+
+		if (inputSystem->getKeyPress("Space"))
+			anim->playAnimation("Jump");
+
+
 		if (inputSystem->isKeyPressed("A"))
 		{
 			dir = Vector3(-1, 0, 0);
@@ -103,6 +113,8 @@ void PlayerController::checkInput(Vector3& dir)
 			dir = Vector3(1, 0, 0);
 			gameObject->transform->setRotation({ 0,90,0 });
 		}
+		else if (anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
+			anim->playAnimation("Idle");
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->isKeyPressed("W"))
@@ -134,7 +146,10 @@ void PlayerController::checkInput(Vector3& dir)
 
 		if (inputSystem->getMouseButtonClick('l')) {
 			if (ghost == nullptr || !ghost->isGhost())
+			{
 				attack->quickAttack();
+				anim->playAnimation("AttackA");
+			}
 			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
 				ghostPunch->charge();
 		}
