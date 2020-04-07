@@ -134,4 +134,5 @@ void Grab::drop()
 	
 	enemyController = nullptr;
 	enemy = nullptr;
+	state = IDLE;
 }
