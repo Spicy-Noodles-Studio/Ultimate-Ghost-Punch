@@ -9,10 +9,12 @@ class GhostMovement;
 class Movement;
 class Attack;
 class GhostManager;
+class Dodge;
 class Jump;
 class UltimateGhostPunch;
 class PlayerUI;
 class Vector3;
+class Grab;
 
 class PlayerController : public UserComponent
 {
@@ -36,6 +38,8 @@ private:
 	InputSystem* inputSystem;
 	GhostManager* ghost;
 
+	Dodge* dodge;
+	Grab* grab;
 	// Will ignore input if frozen is true
 	bool frozen = false;
 

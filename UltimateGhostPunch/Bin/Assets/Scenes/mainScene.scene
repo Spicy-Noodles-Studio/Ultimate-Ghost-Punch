@@ -2,6 +2,17 @@
     "SceneName": "MainScene",
     "SceneObjects": [
         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "PauseMenu",
+            "Tag": "pauseMenu",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "PauseMenu"
+                }
+            ]
+        },
+        {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
             "Tag": "mainCamera",

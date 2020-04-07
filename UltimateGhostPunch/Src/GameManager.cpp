@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "Timer.h"
 
 #include "ComponentRegister.h"
 
@@ -6,7 +7,7 @@ REGISTER_FACTORY(GameManager);
 
 GameManager* GameManager::instance = nullptr;
 
-GameManager::GameManager() : UserComponent(nullptr)
+GameManager::GameManager() : UserComponent(nullptr), paused(false)
 {
 
 }
@@ -101,6 +102,12 @@ std::vector<int>& GameManager::getPlayerIndexes()
 	return playerIndexes;
 }
 
+void GameManager::reset()
+{
+	Timer::GetInstance()->setTimeScale(1.0f);
+	paused = false;
+}
+
 void GameManager::setNPlayers(int nPlayers)
 {
 	this->nPlayers = nPlayers;
@@ -109,6 +116,23 @@ void GameManager::setNPlayers(int nPlayers)
 int GameManager::getNPlayers()
 {
 	return nPlayers;
+}
+
+void GameManager::pauseGame(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	if (paused)
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	else
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+}
+
+bool GameManager::gameIsPaused()
+{
+	return paused;
 }
 
 std::vector<GameObject*>& GameManager::getKnights()

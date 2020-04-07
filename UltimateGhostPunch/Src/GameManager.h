@@ -39,8 +39,11 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
+	void reset();
 	void setNPlayers(int nPlayers);
 	int getNPlayers();
+	void pauseGame(bool setPaused);
+	bool gameIsPaused();
 
 	std::vector<GameObject*>& getKnights();
 

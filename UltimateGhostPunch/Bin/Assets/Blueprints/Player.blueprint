@@ -79,6 +79,13 @@
             ]
         },
         {
+            "ComponentName": "GhostManager"
+        },
+		
+		{
+		"ComponentName": "Dodge"
+		},
+        {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostMesh", "ghost Espada.mesh"],
@@ -137,6 +144,28 @@
                         ["maxForce", "15"],
 				        ["jumpDecay", "1.5"]
                     ]       
+                }
+            ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab"
                 }
             ]
         }

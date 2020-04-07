@@ -17,9 +17,6 @@ public:
 	void updateState(const std::string state);
 	void updateHealth();
 
-	void setPauseMenuVisible(bool show);
-	bool isPauseMenuVisible();
-
 private:
 	Health* health;
 
