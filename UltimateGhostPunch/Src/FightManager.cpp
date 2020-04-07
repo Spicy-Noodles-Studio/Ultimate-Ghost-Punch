@@ -28,10 +28,15 @@ void FightManager::start()
 {
 	timed = true;
 
-	winnerPanel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("WinnerBackground");
-	winnerText = winnerPanel.getChild("Winner");
+	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	if (cameraLayout != nullptr)
+	{
+		winnerPanel = cameraLayout->getRoot().getChild("WinnerBackground");
+		winnerText = winnerPanel.getChild("Winner");
 
-	winnerPanel.setVisible(false);
+		winnerPanel.setVisible(false);
+	}
+	
 
 	playerIndexes = GameManager::GetInstance()->getPlayerIndexes();
 
@@ -42,6 +47,7 @@ void FightManager::start()
 
 	time = GameManager::GetInstance()->getTime();
 	if (time < 0) timed = false;
+	GameManager::GetInstance()->pauseGame(false);
 	playSong();
 }
 
@@ -83,9 +89,9 @@ void FightManager::createLevel()
 	// instantiate render mesh
 	//...
 
-	GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
+	/*GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
 	backWall->getComponent<Transform>()->setScale({ 190,150,1 });
-	backWall->getComponent<RigidBody>()->setKinematic(true);
+	backWall->getComponent<RigidBody>()->setKinematic(true);*/
 
 	// player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
@@ -198,3 +204,4 @@ void FightManager::chooseWinner()
 		winnerText.setText("Winner: P" + std::to_string(winner + 1));
 	}
 }
+

@@ -37,15 +37,6 @@ bool exitButtonClick()
 	return false;
 }
 
-// PAUSE MENU EVENTS
-bool resumeButtonClick()
-{
-	// hide pause menu
-	//findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("PauseBackground");
-	return false;
-}
-
-
 //-------------
 
 #ifdef _DEBUG
@@ -70,8 +61,6 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 	// fightConfigMenu
 	//InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", &fightButtonClick));
 
-	// pauseMenu
-	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", &resumeButtonClick));
 
 
 	GaiaCore* g = new GaiaCore();

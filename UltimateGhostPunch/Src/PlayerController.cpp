@@ -12,15 +12,15 @@
 #include "Attack.h"
 #include "Jump.h"
 #include "GhostManager.h"
+#include "Dodge.h"
 #include "UltimateGhostPunch.h"
 #include "Health.h"
 #include "ComponentRegister.h"
 #include "GameManager.h"
 #include "Animator.h"
+#include "Grab.h"
 
 REGISTER_FACTORY(PlayerController);
-
-#include "PlayerUI.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -34,8 +34,8 @@ void PlayerController::start()
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
+	dodge = gameObject->getComponent<Dodge>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
-	playerUI = gameObject->getComponent<PlayerUI>();
 	anim = gameObject->getComponent<Animator>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
@@ -44,13 +44,18 @@ void PlayerController::start()
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
 
+	aux = gameObject->findChildrenWithTag("grabSensor");
+	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
+
 	iniPosition = gameObject->transform->getPosition();
 }
 
 void PlayerController::update(float deltaTime)
 {
 	// Ignore input if:
-	if (frozen) return; // Player is frozen
+	if (frozen ||  // Player is frozen 
+		GameManager::GetInstance()->gameIsPaused()) // Game is paused
+		return;
 	
 	checkInput(dir);
 
@@ -93,9 +98,6 @@ void PlayerController::checkInput(Vector3& dir)
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-		if (inputSystem->getKeyPress("ESCAPE"))
-			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
-
 		// test animations
 		if (inputSystem->getKeyPress("A") || inputSystem->getKeyPress("D"))
 			anim->playAnimation("Run");
@@ -106,12 +108,19 @@ void PlayerController::checkInput(Vector3& dir)
 
 		if (inputSystem->isKeyPressed("A"))
 		{
-			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ 0,-90,0 });
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeL();
+			else {
+				dir = Vector3(-1, 0, 0);
+				gameObject->transform->setRotation({ 0,-90,0 });
+			}
 		}
 		else if (inputSystem->isKeyPressed("D")) {
-			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ 0,90,0 });
+
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeR();
+			else {
+				dir = Vector3(1, 0, 0);
+				gameObject->transform->setRotation({ 0,90,0 });
+			}
 		}
 		else if (anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
 			anim->playAnimation("Idle");
@@ -143,6 +152,13 @@ void PlayerController::checkInput(Vector3& dir)
 				}
 			}
 		}
+
+
+
+		
+
+		if (inputSystem->isKeyPressed("E"))
+			grab->grab();
 
 		if (inputSystem->getMouseButtonClick('l')) {
 			if (ghost == nullptr || !ghost->isGhost())
@@ -205,9 +221,16 @@ void PlayerController::checkInput(Vector3& dir)
 				if (attack != nullptr) attack->strongAttack();
 		}
 
-		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A"))
+		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A")) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
+		}
+
+		else if (inputSystem->getButtonPress(controllerIndex, "LB")) {
+			if (ghost == nullptr || !ghost->isGhost())
+				grab->grab();
+		}
+				
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {

@@ -80,6 +80,9 @@
                 ["invResTime", "3"]
             ]
         },
+		{
+		    "ComponentName": "Dodge"
+		},
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
@@ -136,9 +139,31 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "12"],
+                        ["maxForce", "15"],
 				        ["jumpDecay", "1.5"]
                     ]       
+                }
+            ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab"
                 }
             ]
         }

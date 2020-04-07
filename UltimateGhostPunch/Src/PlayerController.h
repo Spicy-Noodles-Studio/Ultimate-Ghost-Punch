@@ -9,12 +9,13 @@ class GhostMovement;
 class Movement;
 class Attack;
 class GhostManager;
+class Dodge;
 class Jump;
 class UltimateGhostPunch;
-class PlayerUI;
 class Animator;
 
 class Vector3;
+class Grab;
 
 class PlayerController : public UserComponent
 {
@@ -38,13 +39,14 @@ private:
 	GhostManager* ghost;
 	Animator* anim;
 
+	Dodge* dodge;
+	Grab* grab;
 	// Will ignore input if frozen is true
 	bool frozen = false;
 
 
 	// Damage taken when falling out of the world
 	float fallDamage = 2.0f;
-	PlayerUI* playerUI;
 
 public:
 	PlayerController(GameObject* gameObject);

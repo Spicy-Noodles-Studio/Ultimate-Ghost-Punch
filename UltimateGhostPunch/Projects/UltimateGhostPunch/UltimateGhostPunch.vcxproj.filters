@@ -45,6 +45,12 @@
     <ClCompile Include="..\..\Src\GhostManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Dodge.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Grab.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\PlayerUI.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -63,8 +69,11 @@
     <ClCompile Include="..\..\Src\FightManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\DynamicCamController.cpp">
-      <Filter>Archivos de origen</Filter>
+    <ClCompile Include="..\..\Src\DynamicCamera.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PauseMenu.cpp">
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +98,12 @@
     <ClInclude Include="..\..\Src\GhostManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Dodge.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Grab.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Src\PlayerUI.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -107,8 +122,11 @@
     <ClInclude Include="..\..\Src\FightManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\DynamicCamController.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="..\..\Src\DynamicCamera.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PauseMenu.h">
+      <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
