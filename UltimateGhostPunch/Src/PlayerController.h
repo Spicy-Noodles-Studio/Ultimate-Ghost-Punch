@@ -16,6 +16,8 @@ class Animator;
 
 class Vector3;
 class Grab;
+class Block;
+
 
 class PlayerController : public UserComponent
 {
@@ -23,6 +25,7 @@ private:
 	int controllerIndex;
 	bool usingKeyboard;
 	bool charge = false;
+	bool isBlocking = false;
 
 	int playerIndex;
 	Vector3 dir;
@@ -35,6 +38,8 @@ private:
 	Jump* jump;
 	Attack* attack;
 	UltimateGhostPunch* ghostPunch;
+	Block* block;
+
 	InputSystem* inputSystem;
 	GhostManager* ghost;
 	Animator* anim;
@@ -69,6 +74,7 @@ public:
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
 	void setPlayerIndex(int index);
+	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);
 

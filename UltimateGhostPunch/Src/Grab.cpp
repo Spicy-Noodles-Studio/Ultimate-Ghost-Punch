@@ -4,6 +4,7 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "Block.h"
 
 #include "ComponentRegister.h"
 
@@ -31,6 +32,8 @@ void Grab::start()
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 
+	controller = gameObject->getParent()->getComponent<PlayerController>();
+
 	// Deactivate the trigger until the attack is used
 	//if (attackTrigger != nullptr) attackTrigger->setActive(false);
 }
@@ -50,9 +53,12 @@ void Grab::update(float deltaTime)
 	}
 
 	if (remain <= 0.0f && state == GRABBED) {
-		state = IDLE;
 		drop();
-
+		state = IDLE;
+	}
+	if (remain <= 0.0f && state == BLOCKED) {
+		if (controller != nullptr)controller->setFrozen(false);
+		state = IDLE;
 	}
 }
 
@@ -67,12 +73,25 @@ void Grab::onObjectStay(GameObject* other)
 	if (state == GRABBING) {
 		if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
 		{
+
+			std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
+			Block* enemyBlock = nullptr;
+			if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
+			if (enemyBlock != nullptr && enemyBlock->getGrabBlock()) {
+				LOG("GRAB BLOCKED!");
+				state = BLOCKED;
+				remain = freezeDuration;
+				if (controller != nullptr)controller->setFrozen(true);
+				return;
+			}
+
 			enemyDiff = other->transform->getPosition() - gameObject->getParent()->transform->getPosition();
-			
+
 			state = GRABBED;
 			remain = duration;
 			enemy = other;
-
+			enemyController = other->getComponent<PlayerController>();
+			if (enemyController)enemyController->setFrozen(true);
 		}
 	}
 }
@@ -91,26 +110,29 @@ void Grab::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
-
 		
+		if (prop.first == "freezeDuration")
+		{
+			ss >> freezeDuration;
+		}
 	}
 }
 
 void Grab::grab()
 {
 	if (state == IDLE) state = GRABBING;
-	
 }
 
 void Grab::drop()
 {
-	
+	if (!enemy) return;
 	//lanzar enemigo
 	if (gameObject->getParent()->transform->getRotation().y >= 0) enemy->getComponent<RigidBody>()->addForce(vDer * force);
 	else enemy->getComponent<RigidBody>()->addForce(vIzq * force);
 	
-
+	if (enemyController)enemyController->setFrozen(false);
 	
-
+	enemyController = nullptr;
 	enemy = nullptr;
+	state = IDLE;
 }

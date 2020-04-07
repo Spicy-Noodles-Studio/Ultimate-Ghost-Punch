@@ -142,7 +142,15 @@
                         ["maxForce", "15"],
 				        ["jumpDecay", "1.5"]
                     ]       
-                }
+                },
+				{
+					"ComponentName": "Block",
+					"ComponentProperties": [
+                        ["maxBlockTime", "3"],
+				        ["blockRegenTime", "1.5"],
+						["blockGrabMargin", "1"]
+                    ]
+				}
             ]
         },
 		{
@@ -163,7 +171,10 @@
             "Components":
             [
                 {
-                    "ComponentName": "Grab"
+                    "ComponentName": "Grab",
+					"ComponentProperties": [
+                        ["freezeDuration", "2"]
+                    ]
                 }
             ]
         }

@@ -3,6 +3,7 @@
 #define GRAB_H
 
 #include <UserComponent.h>
+#include "PlayerController.h"
 
 class RigidBody;
 class GameObject;
@@ -12,22 +13,24 @@ class Grab : public UserComponent
 private:
 	float duration;
 	float remain;
+	float freezeDuration;
 
 	float force;
 
 	bool isGrounded;
 
 	enum State {
-		IDLE, GRABBING, GRABBED
+		IDLE, GRABBING, GRABBED, BLOCKED
 	};
 
 	State state;
 	State last;
 
 	RigidBody* attackTrigger;
+	PlayerController* controller;
 
 	GameObject* enemy;
-
+	PlayerController* enemyController;
 
 	Vector3 vIzq;
 	Vector3 vDer;
