@@ -20,7 +20,7 @@
         {
             "ComponentName": "Light",
             "ComponentProperties": [
-                ["type", "Point"],
+                ["type", "Directional"],
                 ["colour", "1 1 1"]
             ]
         },

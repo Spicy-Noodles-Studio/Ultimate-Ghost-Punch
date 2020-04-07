@@ -7,15 +7,15 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-                ["position", "-50 10 -200"],
-                ["scale", "2 2 2"],
+                ["position", "0 0 0"],
+                ["scale", "1 1 1"],
                 ["rotation", "0 0 0"]
             ]
         },
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "spikes Cube.mesh"]
+                ["mesh", "spikes Spikes.mesh"]
             ]
         },
         {
