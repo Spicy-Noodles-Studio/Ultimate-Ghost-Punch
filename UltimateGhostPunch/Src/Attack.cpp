@@ -113,7 +113,7 @@ void Attack::onObjectStay(GameObject* other)
 		Block* enemyBlock = nullptr;
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
-			enemyBlock->blockAttack(damage, gameObject->transform->getPosition());
+			enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition());
 
 			// Deactivate the trigger until the next attack is used
 			attackTrigger->setActive(false);

@@ -1,9 +1,7 @@
 #include "Block.h"
 #include <sstream>
-#include <ComponentRegister.h>
 
 #include "Health.h"
-
 
 #include "ComponentRegister.h"
 
