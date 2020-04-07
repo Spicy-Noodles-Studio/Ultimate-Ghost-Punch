@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\DynamicCamController.cpp" />
     <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="..\..\Src\GameManager.cpp" />
     <ClCompile Include="..\..\Src\PlayerUI.cpp" />
     <ClCompile Include="..\..\Src\GhostManager.cpp" />
+    <ClCompile Include="..\..\Src\Grab.cpp" />
     <ClCompile Include="..\..\Src\Health.cpp" />
     <ClCompile Include="..\..\Src\Attack.cpp" />
     <ClCompile Include="..\..\Src\GhostMovement.cpp" />
@@ -53,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\Grab.h" />
+    <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\DynamicCamController.h" />
     <ClInclude Include="..\..\Src\FightConfiguration.h" />
