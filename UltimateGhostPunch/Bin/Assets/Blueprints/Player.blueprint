@@ -149,7 +149,8 @@
 					"ComponentName": "Block",
 					"ComponentProperties": [
                         ["maxBlockTime", "3"],
-				        ["blockRegenTime", "1.5"]
+				        ["blockRegenTime", "1.5"],
+						["blockGrabMargin", "1"]
                     ]
 				}
             ]
@@ -172,29 +173,10 @@
             "Components":
             [
                 {
-                    "ComponentName": "Grab"
-                }
-            ]
-        },
-		{
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Grab Sensor",
-            "Tag": "grabSensor",
-            "BlueprintPath": "Sensor",
-            "ComponentModifications": 
-            [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties":[
-                       [ "position", "0 0 1.65"],
-                       [ "scale", "1 1 2"]
+                    "ComponentName": "Grab",
+					"ComponentProperties": [
+                        ["freezeDuration", "2"]
                     ]
-                }
-            ],
-            "Components":
-            [
-                {
-                    "ComponentName": "Grab"
                 }
             ]
         }

@@ -14,6 +14,7 @@ private:
 	float maxBlockTime; //Duration of block when started
 	float blockTime; //Remaining time of blocking
 	float blockRegenTime; //Time to regen max blockTime
+	float blockGrabMargin; //Time margin to block grabs
 
 	float timeElapsed; //Time elapsed for regen
 
@@ -38,6 +39,8 @@ public:
 
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
+
+	bool getGrabBlock();
 };
 
 #endif

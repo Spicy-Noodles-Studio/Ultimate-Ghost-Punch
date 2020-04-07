@@ -95,6 +95,9 @@ void Block::handleData(ComponentData* data)
 		if (prop.first == "blockRegenTime") {
 			ss >> blockRegenTime;
 		}
+		if (prop.first == "blockGrabMargin") {
+			ss >> blockGrabMargin;
+		}
 	}
 }
 
@@ -110,4 +113,10 @@ void Block::onObjectExit(GameObject* other)
 	if (other->getTag() == "suelo") {
 		isGrounded = false;
 	}
+}
+
+bool Block::getGrabBlock()
+{
+	if (isBlocking && blockTime > maxBlockTime - blockGrabMargin) return true;
+	else return false;
 }
