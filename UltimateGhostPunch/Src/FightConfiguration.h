@@ -16,7 +16,7 @@ const int MIN_HEALTH = 1;
 const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
-const int MIN_PLAYERS = 2;
+const int MIN_PLAYERS = 1;
 
 class InputSystem;
 
@@ -33,7 +33,7 @@ private:
 	int health;
 	int time;
 
-	std::vector<std::string> levelNames = {"level 1", "dungeons", "cave"};
+	std::vector<std::string> levelNames = {"level1", "level2", "cave"};
 	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
 
 	int level;

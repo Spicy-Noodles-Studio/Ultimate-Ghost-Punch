@@ -12,7 +12,8 @@ class GhostManager;
 class Dodge;
 class Jump;
 class UltimateGhostPunch;
-class PlayerUI;
+class Animator;
+
 class Vector3;
 class Grab;
 
@@ -34,9 +35,9 @@ private:
 	Jump* jump;
 	Attack* attack;
 	UltimateGhostPunch* ghostPunch;
-
 	InputSystem* inputSystem;
 	GhostManager* ghost;
+	Animator* anim;
 
 	Dodge* dodge;
 	Grab* grab;
@@ -46,7 +47,6 @@ private:
 
 	// Damage taken when falling out of the world
 	float fallDamage = 2.0f;
-	PlayerUI* playerUI;
 
 public:
 	PlayerController(GameObject* gameObject);

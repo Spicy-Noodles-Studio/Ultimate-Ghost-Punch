@@ -1,6 +1,6 @@
 {
     "ObjectType": "GAMEOBJECT",
-    "ObjectName": "Level",
+    "ObjectName": "Level2",
     "Tag": "suelo",
     "Components":
     [
@@ -15,7 +15,7 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "suelo Nivel1.mesh"]
+                ["mesh", "suelo Nivel2.mesh"]
             ]
         },
         {

@@ -139,8 +139,8 @@ void Health::resurrect()
 	respawning = true;
 
 	// deactivate movement while reapearing
-	PlayerController* input = gameObject->getComponent<PlayerController>();
-	if (input != nullptr) input->setFrozen(true);
+	//PlayerController* input = gameObject->getComponent<PlayerController>();
+	//if (input != nullptr) input->setFrozen(true);
 	
 	
 }
