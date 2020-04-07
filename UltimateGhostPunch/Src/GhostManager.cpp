@@ -27,7 +27,6 @@ void GhostManager::start()
 	transform = gameObject->transform;
 	mesh = gameObject->getComponent<MeshRenderer>();
 
-
 	ghost = false;
 	ghostAble = true;
 

@@ -3,6 +3,10 @@
 
 #include "Health.h"
 
+#include "ComponentRegister.h"
+
+REGISTER_FACTORY(Block);
+
 Block::Block(GameObject* gameObject) : UserComponent(gameObject)
 {
 }

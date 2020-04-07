@@ -51,7 +51,6 @@ void PlayerUI::createHearts()
 {
 	float posX = 0.3f;
 
-
 	if (health != nullptr)
 	{
 		for (int i = 1; i <= health->getHealth(); i++)

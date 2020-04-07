@@ -146,12 +146,12 @@
                     ]       
                 },
 				{
-                    "ComponentName": "Block",
-                    "ComponentProperties": [
-                        ["maxBlockTime", "3.0"],
+					"ComponentName": "Block",
+					"ComponentProperties": [
+                        ["maxBlockTime", "3"],
 				        ["blockRegenTime", "1.5"]
-                    ]       
-                }
+                    ]
+				}
             ]
         },
 		{

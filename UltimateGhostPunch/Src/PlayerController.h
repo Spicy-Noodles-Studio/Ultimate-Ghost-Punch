@@ -12,12 +12,10 @@ class GhostManager;
 class Dodge;
 class Jump;
 class UltimateGhostPunch;
-class Block;
-
 class PlayerUI;
-
 class Vector3;
 class Grab;
+class Block;
 
 class PlayerController : public UserComponent
 {
@@ -27,9 +25,7 @@ private:
 	bool charge = false;
 	bool isBlocking = false;
 
-
 	int playerIndex;
-
 	Vector3 dir;
 
 	// Initial position of the player

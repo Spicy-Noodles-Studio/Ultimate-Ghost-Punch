@@ -14,13 +14,11 @@
 #include "GhostManager.h"
 #include "Dodge.h"
 #include "UltimateGhostPunch.h"
-#include "Block.h"
-
-
 #include "Health.h"
 #include "ComponentRegister.h"
 #include "GameManager.h"
 #include "Grab.h"
+#include "Block.h"
 
 REGISTER_FACTORY(PlayerController);
 
@@ -45,6 +43,7 @@ void PlayerController::start()
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
+	if (aux.size() > 0) block = aux[0]->getComponent<Block>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
@@ -125,6 +124,7 @@ void PlayerController::checkInput(Vector3& dir)
 				dir += Vector3(0, 1, 0);
 			else if (inputSystem->isKeyPressed("S"))
 				dir += Vector3(0, -1, 0);
+
 			else if (inputSystem->getMouseButtonHold('l'))
 			{
 				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
@@ -151,16 +151,15 @@ void PlayerController::checkInput(Vector3& dir)
 
 		
 
-		if (inputSystem->isKeyPressed("E"))
+		if (inputSystem->isKeyPressed("E") && !isBlocking)
 			grab->grab();
 
 		if (inputSystem->getMouseButtonClick('l')) {
-			if (ghost == nullptr || !ghost->isGhost() && !isBlocking)
+			if ((ghost == nullptr || !ghost->isGhost()) && !isBlocking)
 				attack->quickAttack();
 			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
 				ghostPunch->charge();
 		}
-
 		else if (inputSystem->getMouseButtonClick('r') && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->strongAttack();
@@ -169,22 +168,22 @@ void PlayerController::checkInput(Vector3& dir)
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
 
-		if (inputSystem->isKeyPressed("F")) if (block != nullptr) {
-			isBlocking = true;
-			block->block();
+		if (inputSystem->isKeyPressed("S")){
+			isBlocking = block->block();
 		}
-		if (isBlocking && !inputSystem->isKeyPressed("F")) {
+		if (isBlocking && !inputSystem->isKeyPressed("S")) {
 			isBlocking = false;
 			block->unblock();
+		}
 	}
 	//Controles con mando
 	else
 	{
-		if (inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left") && !isBlocking) {
+		if ((inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left") ) && !isBlocking) {
 			dir = Vector3(-1, 0, 0);
 			gameObject->transform->setRotation({ 0,-90,0 });
 		}
-		else if (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right") && !isBlocking) {
+		else if ( (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right")) && !isBlocking) {
 			dir = Vector3(1, 0, 0);
 			gameObject->transform->setRotation({ 0,90,0 });
 		}
@@ -211,7 +210,6 @@ void PlayerController::checkInput(Vector3& dir)
 			}
 		}
 
-
 		if (inputSystem->getButtonPress(controllerIndex, "X") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->quickAttack();
@@ -222,7 +220,7 @@ void PlayerController::checkInput(Vector3& dir)
 				if (attack != nullptr) attack->strongAttack();
 		}
 
-		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A") && !isBlocking) {
+		else if (inputSystem->isButtonPressed(controllerIndex, "A") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
 		}
@@ -230,6 +228,14 @@ void PlayerController::checkInput(Vector3& dir)
 		else if (inputSystem->getButtonPress(controllerIndex, "LB") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				grab->grab();
+		}
+
+		if (inputSystem->isButtonPressed(controllerIndex, "B")){
+			isBlocking = block->block();
+		}
+		else if (isBlocking && !inputSystem->isButtonPressed(controllerIndex, "B")) {
+			isBlocking = false;
+			block->unblock();
 		}
 				
 	}
@@ -277,7 +283,6 @@ bool PlayerController::checkOutsideLimits()
 }
 
 int PlayerController::getPlayerIndex() const
-
 {
 	return playerIndex;
 }

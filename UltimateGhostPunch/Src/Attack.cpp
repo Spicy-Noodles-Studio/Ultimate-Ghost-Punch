@@ -6,7 +6,6 @@
 
 #include "Health.h"
 #include "Block.h"
-
 #include "ComponentRegister.h"
 
 REGISTER_FACTORY(Attack);
@@ -115,6 +114,13 @@ void Attack::onObjectStay(GameObject* other)
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
 			enemyBlock->blockAttack(damage, gameObject->transform->getPosition());
+
+			// Deactivate the trigger until the next attack is used
+			attackTrigger->setActive(false);
+
+			// Reset the current attack state
+			state = NOT_ATTACKING;
+
 		}
 		else {
 			Health* enemyHealth = other->getComponent<Health>();

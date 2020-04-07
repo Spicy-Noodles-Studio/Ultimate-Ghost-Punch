@@ -128,12 +128,9 @@ void Health::resurrect()
 {
 	health = resurrectionHealth;
 
-	playerUI->updateHealth();
-
 	// activate invencibility for a specified time
 	invencible = true;
 	time = invencibleResurrectionTime;
-
 	//update UI
 	if (playerUI != nullptr) {
 		playerUI->updateHealth();
