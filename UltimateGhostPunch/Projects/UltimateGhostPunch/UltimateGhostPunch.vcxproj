@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
     <ClCompile Include="..\..\Src\FightManager.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
+    <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
     <ClCompile Include="..\..\Src\PlayerUI.cpp" />
     <ClCompile Include="..\..\Src\GhostManager.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="..\..\Src\FightConfiguration.h" />
     <ClInclude Include="..\..\Src\FightManager.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
+    <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
     <ClInclude Include="..\..\Src\PlayerUI.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />

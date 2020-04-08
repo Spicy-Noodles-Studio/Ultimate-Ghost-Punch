@@ -16,11 +16,42 @@
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="RESOLUTION" />
         </Window>
+        # -RESOLUTION BUTTON
+        <Window type="TaharezLook/Button" name="-ResolutionButton" >
+                    <Property name="Area" value="{{0.4,0},{0.13,0},{0.45,0},{0.17,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+                    <Property name="Text" value="-" />
+        </Window>
+        # RESOLUTION
+        <Window type="TaharezLook/StaticText" name="Resolution" >
+                    <Property name="Area" value="{{0.5,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                    <Property name="Text" value="1280x720" />
+        </Window>
+        # +RESOLUTION BUTTON
+        <Window type="TaharezLook/Button" name="+ResolutionButton" >
+                    <Property name="Area" value="{{0.6,0},{0.13,0},{0.65,0},{0.17,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+                    <Property name="Text" value="+" />
+        </Window>
+        # RESOLUTION APPLY BUTTON
+        <Window type="TaharezLook/Button" name="ResolutionApplyButton" >
+                    <Property name="Area" value="{{0.7,0},{0.13,0},{0.9,0},{0.17,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                    <Property name="Text" value="Apply changes" />
+        </Window>
+
         # FULLSCREEN TEXT
         <Window type="TaharezLook/StaticText" name="FullscreenText" >
             <Property name="Area" value="{{0.2,0},{0.2,0},{0.5,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="FULLSCREEN" />
+        </Window>
+        # FULLSCREEN YES BUTTON
+        <Window type="TaharezLook/Checkbox" name="FullscreenYesButton" >
+                    <Property name="Area" value="{{0.4,0},{0.23,0},{0.42,0},{0.27,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+                    <Property name="Text" value="      " />
         </Window>
         # GAMMA TEXT
         <Window type="TaharezLook/StaticText" name="GammaText" >
@@ -28,18 +59,60 @@
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="GAMMA" />
         </Window>
+         # GAMMA SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="GammaScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.33,0},{0.7,0},{0.36,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
+        </Window>
+        # GAMMA
+        <Window type="TaharezLook/StaticText" name="Gamma" >
+                    <Property name="Area" value="{{0.75,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                    <Property name="Text" value="100" />
+        </Window>
         # MUSIC VOLUME TEXT
         <Window type="TaharezLook/StaticText" name="MusicVolumeText" >
             <Property name="Area" value="{{0.2,0},{0.4,0},{0.5,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="MUSIC VOLUME" />
         </Window>
+         # MUSIC SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="MusicScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.43,0},{0.7,0},{0.46,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
+        </Window>
+        # MUSIC VOLUME
+        <Window type="TaharezLook/StaticText" name="MusicVolume" >
+                    <Property name="Area" value="{{0.75,0},{0.4,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                    <Property name="Text" value="100" />
+                    
+        </Window>
+
         # SOUND VOLUME TEXT
         <Window type="TaharezLook/StaticText" name="SoundVolumeText" >
             <Property name="Area" value="{{0.2,0},{0.5,0},{0.5,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="SOUND VOLUME" />
         </Window>
+         # SOUND SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="SoundScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.53,0},{0.7,0},{0.56,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
+        </Window>
+        # SOUND VOLUME
+        <Window type="TaharezLook/StaticText" name="SoundVolume" >
+                    <Property name="Area" value="{{0.75,0},{0.5,0},{0.9,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                    <Property name="Text" value="100" />
+        </Window>
+       
         # DEFAULT OPTIONS BUTTON
         <Window type="TaharezLook/Button" name="DefaultOptionsButton" >
             <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
