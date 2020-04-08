@@ -2,6 +2,17 @@
     "SceneName": "MainScene",
     "SceneObjects": [
         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "PauseMenu",
+            "Tag": "pauseMenu",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "PauseMenu"
+                }
+            ]
+        },
+        {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
             "Tag": "mainCamera",
@@ -14,6 +25,15 @@
                         ["layout" , "fight.layout"],
                         ["event" , "BackButton backButtonClick | ResumeButton resumeButtonClick"]
                     ]
+                },
+                {
+                    "ComponentName": "DynamicCamera",
+                    "ComponentProperties": [
+                        ["minZ" , "40"],
+                        ["maxZ" , "50"],
+                        ["zoomFactor" , "2.0f"],
+                        ["smoothFactor" , "0.125f"]
+                    ]
                 }
             ]
         },
@@ -25,26 +45,6 @@
             [
                 {
                     "ComponentName" : "FightManager"
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "Suelo",
-            "Tag": "suelo",
-            "BlueprintPath": "Level"
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "spikeObstacle1",
-            "Tag": "spikeObstacle",
-            "BlueprintPath": "Spikes",
-            "ComponentModifications" : [
-                {
-                    "ComponentName": "Transform",
-                    "ComponentProperties": [
-                        ["position", "0 24 0"]
-                    ]
                 }
             ]
         }

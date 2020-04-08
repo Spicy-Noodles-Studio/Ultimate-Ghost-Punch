@@ -7,9 +7,8 @@
 #include <vector>
 #include <string>
 
-#include "UIElement.h"
-
 #include "Vector3.h"
+#include "UIElement.h"
 
 class InputSystem;
 
@@ -21,16 +20,18 @@ private:
 
 	std::vector<int> playerIndexes;
 
-	std::vector<Vector3> playerPositions = { {-20,30,0}, {20,30,0}, {-17.5,10,0}, {17.5,10,0} };
+	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
+	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
+	int nSpikes;
 
 	float time;
 	bool timed;
 
 	int winner;
 
-private:
 	void createLevel();
 	void createKnights();
+	void createSpikes();
 	void playSong();
 
 	void chooseWinner();
@@ -43,6 +44,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie();
+
 };
 
 #endif

@@ -9,10 +9,15 @@ class GhostMovement;
 class Movement;
 class Attack;
 class GhostManager;
+class Dodge;
 class Jump;
 class UltimateGhostPunch;
-class PlayerUI;
+class Animator;
+
 class Vector3;
+class Grab;
+class Block;
+
 
 class PlayerController : public UserComponent
 {
@@ -20,6 +25,7 @@ private:
 	int controllerIndex;
 	bool usingKeyboard;
 	bool charge = false;
+	bool isBlocking = false;
 
 	int playerIndex;
 	Vector3 dir;
@@ -32,17 +38,20 @@ private:
 	Jump* jump;
 	Attack* attack;
 	UltimateGhostPunch* ghostPunch;
+	Block* block;
 
 	InputSystem* inputSystem;
 	GhostManager* ghost;
+	Animator* anim;
 
+	Dodge* dodge;
+	Grab* grab;
 	// Will ignore input if frozen is true
 	bool frozen = false;
 
 
 	// Damage taken when falling out of the world
 	float fallDamage = 2.0f;
-	PlayerUI* playerUI;
 
 public:
 	PlayerController(GameObject* gameObject);
@@ -65,6 +74,7 @@ public:
 	// Freezes / Reenables the movement 
 	void setFrozen(bool freeze);
 	void setPlayerIndex(int index);
+	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);
 

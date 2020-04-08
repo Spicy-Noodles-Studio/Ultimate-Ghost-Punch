@@ -12,14 +12,16 @@
 #include "Attack.h"
 #include "Jump.h"
 #include "GhostManager.h"
+#include "Dodge.h"
 #include "UltimateGhostPunch.h"
 #include "Health.h"
 #include "ComponentRegister.h"
 #include "GameManager.h"
+#include "Animator.h"
+#include "Grab.h"
+#include "Block.h"
 
 REGISTER_FACTORY(PlayerController);
-
-#include "PlayerUI.h"
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
 {
@@ -33,14 +35,19 @@ void PlayerController::start()
 	movement = gameObject->getComponent<Movement>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghost = gameObject->getComponent<GhostManager>();
+	dodge = gameObject->getComponent<Dodge>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
-	playerUI = gameObject->getComponent<PlayerUI>();
+	anim = gameObject->getComponent<Animator>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
+	if (aux.size() > 0) block = aux[0]->getComponent<Block>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
+
+	aux = gameObject->findChildrenWithTag("grabSensor");
+	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
 
 	iniPosition = gameObject->transform->getPosition();
 }
@@ -48,7 +55,9 @@ void PlayerController::start()
 void PlayerController::update(float deltaTime)
 {
 	// Ignore input if:
-	if (frozen) return; // Player is frozen
+	if (frozen ||  // Player is frozen 
+		GameManager::GetInstance()->gameIsPaused()) // Game is paused
+		return;
 	
 	checkInput(dir);
 
@@ -91,18 +100,32 @@ void PlayerController::checkInput(Vector3& dir)
 	//Controles con teclado y raton
 	if (usingKeyboard)
 	{
-		if (inputSystem->getKeyPress("ESCAPE"))
-			playerUI->setPauseMenuVisible(!playerUI->isPauseMenuVisible());
+		// test animations
+		if (inputSystem->getKeyPress("A") || inputSystem->getKeyPress("D"))
+			anim->playAnimation("Run");
 
-		if (inputSystem->isKeyPressed("A"))
+		if (inputSystem->getKeyPress("Space"))
+			anim->playAnimation("Jump");
+
+
+		if (inputSystem->isKeyPressed("A") && !isBlocking)
 		{
-			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ 0,-90,0 });
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeL();
+			else {
+				dir = Vector3(-1, 0, 0);
+				gameObject->transform->setRotation({ 0,-90,0 });
+			}
 		}
-		else if (inputSystem->isKeyPressed("D")) {
-			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ 0,90,0 });
+		else if (inputSystem->isKeyPressed("D") && !isBlocking) {
+
+			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeR();
+			else {
+				dir = Vector3(1, 0, 0);
+				gameObject->transform->setRotation({ 0,90,0 });
+			}
 		}
+		else if (anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
+			anim->playAnimation("Idle");
 
 		if (ghost != nullptr && ghost->isGhost()) {
 			if (inputSystem->isKeyPressed("W"))
@@ -132,28 +155,41 @@ void PlayerController::checkInput(Vector3& dir)
 			}
 		}
 
+		if (inputSystem->isKeyPressed("E") && !isBlocking)
+			grab->grab();
+
 		if (inputSystem->getMouseButtonClick('l')) {
-			if (ghost == nullptr || !ghost->isGhost())
+			if ((ghost == nullptr || !ghost->isGhost()) && !isBlocking)
+			{
 				attack->quickAttack();
+				anim->playAnimation("AttackA");
+			}
 			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
 				ghostPunch->charge();
 		}
-		else if (inputSystem->getMouseButtonClick('r')) {
+		else if (inputSystem->getMouseButtonClick('r') && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->strongAttack();
 		}
-		else if (InputSystem::GetInstance()->isKeyPressed("Space"))
+		else if (InputSystem::GetInstance()->isKeyPressed("Space") && !isBlocking)
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
+
+		if (inputSystem->getKeyPress("S")){
+			isBlocking = block->block();
+		}
+		if (isBlocking && inputSystem->getKeyRelease("S")) {
+			isBlocking = block->unblock();
+		}
 	}
 	//Controles con mando
 	else
 	{
-		if (inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left")) {
+		if ((inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left") ) && !isBlocking) {
 			dir = Vector3(-1, 0, 0);
 			gameObject->transform->setRotation({ 0,-90,0 });
 		}
-		else if (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right")) {
+		else if ( (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right")) && !isBlocking) {
 			dir = Vector3(1, 0, 0);
 			gameObject->transform->setRotation({ 0,90,0 });
 		}
@@ -180,19 +216,36 @@ void PlayerController::checkInput(Vector3& dir)
 			}
 		}
 
-		if (inputSystem->getButtonPress(controllerIndex, "X")) {
+		if (inputSystem->getButtonPress(controllerIndex, "X") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->quickAttack();
 		}
 
-		else if (inputSystem->getButtonPress(controllerIndex, "Y")) {
+		else if (inputSystem->getButtonPress(controllerIndex, "Y") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (attack != nullptr) attack->strongAttack();
 		}
 
-		else if (InputSystem::GetInstance()->isButtonPressed(controllerIndex, "A"))
+		else if (inputSystem->isButtonPressed(controllerIndex, "A") && !isBlocking) {
 			if (ghost == nullptr || !ghost->isGhost())
 				if (jump != nullptr) jump->salta();
+		}
+
+		if (inputSystem->getButtonPress(controllerIndex, "LB") && !isBlocking) {
+			if (ghost == nullptr || !ghost->isGhost())
+				grab->grab();
+		}
+		if (inputSystem->getButtonRelease(controllerIndex, "LB") && !isBlocking) {
+			if (ghost == nullptr || !ghost->isGhost())
+				grab->drop();
+		}
+
+		if (inputSystem->getButtonPress(controllerIndex, "B")){
+			isBlocking = block->block();
+		}
+		else if (isBlocking && inputSystem->getButtonRelease(controllerIndex, "B")) {
+			isBlocking = block->unblock();
+		}		
 	}
 
 	if (ghost != nullptr && ghost->isGhost()) {
@@ -265,6 +318,11 @@ void PlayerController::setFrozen(bool freeze)
 void PlayerController::setPlayerIndex(int index)
 {
 	playerIndex = index;
+}
+
+void PlayerController::setBlocking(bool _block)
+{
+	isBlocking = _block;
 }
 
 void PlayerController::setControllerIndex(int index)
