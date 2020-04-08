@@ -28,6 +28,9 @@ class OptionsConfiguration :
 	InputSystem* inputSystem;
 
 	UIElement resolutionButton;
+	UIElement volumeScroll;
+	UIElement musicScroll;
+	UIElement gammaScroll;
 
 	
 	
@@ -51,6 +54,10 @@ private:
 	bool changeGamma(int value);
 	bool changeResolution(int value);
 	bool changeFullscreen(bool value);
+
+	bool changeSoundVolume();
+	bool changeMusicVolume();
+	bool changeGamma();
 
 	bool resolutionButtonClick();
 

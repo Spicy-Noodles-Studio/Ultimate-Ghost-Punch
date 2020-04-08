@@ -59,23 +59,18 @@
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="GAMMA" />
         </Window>
-         # -GAMMA BUTTON
-        <Window type="TaharezLook/Button" name="-GammaButton" >
-                    <Property name="Area" value="{{0.4,0},{0.33,0},{0.45,0},{0.37,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="-" />
+         # GAMMA SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="GammaScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.33,0},{0.7,0},{0.36,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
         </Window>
         # GAMMA
         <Window type="TaharezLook/StaticText" name="Gamma" >
-                    <Property name="Area" value="{{0.5,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.75,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
                     <Property name="Text" value="100" />
-        </Window>
-        # +GAMMA BUTTON
-        <Window type="TaharezLook/Button" name="+GammaButton" >
-                    <Property name="Area" value="{{0.6,0},{0.33,0},{0.65,0},{0.37,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="+" />
         </Window>
         # MUSIC VOLUME TEXT
         <Window type="TaharezLook/StaticText" name="MusicVolumeText" >
@@ -83,23 +78,19 @@
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="MUSIC VOLUME" />
         </Window>
-        # -MUSIC VOLUME BUTTON
-        <Window type="TaharezLook/Button" name="-MusicVolumeButton" >
-                    <Property name="Area" value="{{0.4,0},{0.43,0},{0.45,0},{0.47,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="-" />
+         # MUSIC SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="MusicScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.43,0},{0.7,0},{0.46,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
         </Window>
         # MUSIC VOLUME
         <Window type="TaharezLook/StaticText" name="MusicVolume" >
-                    <Property name="Area" value="{{0.5,0},{0.4,0},{0.9,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.75,0},{0.4,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
                     <Property name="Text" value="100" />
-        </Window>
-        # +MUSIC VOLUME BUTTON
-        <Window type="TaharezLook/Button" name="+MusicVolumeButton" >
-                    <Property name="Area" value="{{0.6,0},{0.43,0},{0.65,0},{0.47,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="+" />
+                    
         </Window>
 
         # SOUND VOLUME TEXT
@@ -108,24 +99,20 @@
             <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
             <Property name="Text" value="SOUND VOLUME" />
         </Window>
-         # -SOUND VOLUME BUTTON
-        <Window type="TaharezLook/Button" name="-SoundVolumeButton" >
-                    <Property name="Area" value="{{0.4,0},{0.53,0},{0.45,0},{0.57,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="-" />
+         # SOUND SCROLL
+        <Window type="TaharezLook/HorizontalScrollbar" name="SoundScroll" >
+                    <Property name="Area" value="{{0.4,0},{0.53,0},{0.7,0},{0.56,0}}" />
+                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                    <Property name="Text" value="" />
+                    <Property name="ScrollPosition" value="100" />
         </Window>
         # SOUND VOLUME
         <Window type="TaharezLook/StaticText" name="SoundVolume" >
-                    <Property name="Area" value="{{0.5,0},{0.5,0},{0.9,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.75,0},{0.5,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
                     <Property name="Text" value="100" />
         </Window>
-        # +SOUND VOLUME BUTTON
-        <Window type="TaharezLook/Button" name="+SoundVolumeButton" >
-                    <Property name="Area" value="{{0.6,0},{0.53,0},{0.65,0},{0.57,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="+" />
-        </Window>
+       
         # DEFAULT OPTIONS BUTTON
         <Window type="TaharezLook/Button" name="DefaultOptionsButton" >
             <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
