@@ -48,16 +48,10 @@
             <Property name="Text" value="FULLSCREEN" />
         </Window>
         # FULLSCREEN YES BUTTON
-        <Window type="TaharezLook/Button" name="FullscreenYesButton" >
-                    <Property name="Area" value="{{0.45,0},{0.23,0},{0.5,0},{0.27,0}}" />
+        <Window type="TaharezLook/Checkbox" name="FullscreenYesButton" >
+                    <Property name="Area" value="{{0.4,0},{0.23,0},{0.42,0},{0.27,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="Yes" />
-        </Window>
-         # FULLSCREEN NO BUTTON
-        <Window type="TaharezLook/Button" name="FullscreenNoButton" >
-                    <Property name="Area" value="{{0.55,0},{0.23,0},{0.6,0},{0.27,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="No" />
+                    <Property name="Text" value="      " />
         </Window>
         # GAMMA TEXT
         <Window type="TaharezLook/StaticText" name="GammaText" >

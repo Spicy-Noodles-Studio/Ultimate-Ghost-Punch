@@ -24,13 +24,21 @@ bool OptionsConfiguration::resolutionButtonClick()
 	// set data
 	//SceneManager::GetInstance()->setFullscreen(false, RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
 	//fullscreen = false;
-	if (fullscreen) {
-		RenderSystem::GetInstance()->setFullscreen(false);
-		RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
-		RenderSystem::GetInstance()->setFullscreen(true);
+	if (fullscreen ) {
+		if (currResolution != resolution)
+		{
+			RenderSystem::GetInstance()->setFullscreen(false);
+			RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+			RenderSystem::GetInstance()->setFullscreen(true);
+			currResolution = resolution;
+		}
 	}
 	else
-		RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+		if (currResolution != resolution)
+		{
+			RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+			currResolution = resolution;
+		}
 	
 	return false;
 }
@@ -121,10 +129,11 @@ OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) :
 	InterfaceSystem::GetInstance()->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
 	InterfaceSystem::GetInstance()->registerEvent("+resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(+1); }));
 
-	InterfaceSystem::GetInstance()->registerEvent("fullscreenYesButtonClick", UIEvent("ButtonClicked", [this]() {return changeFullscreen(true); }));
-	InterfaceSystem::GetInstance()->registerEvent("fullscreenNoButtonClick", UIEvent("ButtonClicked", [this]() {return changeFullscreen(false); }));
+	InterfaceSystem::GetInstance()->registerEvent("fullscreenYesButtonClick", UIEvent("ToggleClicked", [this]() {return changeFullscreen(!fullscreen); }));
+	//InterfaceSystem::GetInstance()->registerEvent("fullscreenNoButtonClick", UIEvent("ButtonClicked", [this]() {return changeFullscreen(false); }));
 
 	InterfaceSystem::GetInstance()->registerEvent("resolutionApplyButtonClick", UIEvent("ButtonClicked", [this]() {return resolutionButtonClick(); }));
+	currResolution = -1;
 }
 
 OptionsConfiguration::~OptionsConfiguration()
@@ -142,7 +151,7 @@ OptionsConfiguration::~OptionsConfiguration()
 	InterfaceSystem::GetInstance()->unregisterEvent("+resolutionButtonClick");
 
 	InterfaceSystem::GetInstance()->unregisterEvent("fullscreenYesButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("fullscreenNoButtonClick");
+	//InterfaceSystem::GetInstance()->unregisterEvent("fullscreenNoButtonClick");
 
 	InterfaceSystem::GetInstance()->unregisterEvent("resolutionApplyButtonClick");
 }
