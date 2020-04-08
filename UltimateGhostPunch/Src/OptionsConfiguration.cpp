@@ -165,6 +165,6 @@ void OptionsConfiguration::start()
 	musicVolume = 100;
 	soundsVolume = 100;
 	gamma = 100;
-	resolution = 2;
+	resolution = 6;
 	fullscreen = false;
 }
