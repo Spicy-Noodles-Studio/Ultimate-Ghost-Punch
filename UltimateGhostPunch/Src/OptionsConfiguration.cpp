@@ -25,9 +25,9 @@ bool OptionsConfiguration::resolutionButtonClick()
 	//SceneManager::GetInstance()->setFullscreen(false, RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
 	//fullscreen = false;
 	if (fullscreen) {
-		RenderSystem::GetInstance()->setFullscreen(false, RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+		RenderSystem::GetInstance()->setFullscreen(false);
 		RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
-		RenderSystem::GetInstance()->setFullscreen(true, RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+		RenderSystem::GetInstance()->setFullscreen(true);
 	}
 	else
 		RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
@@ -93,7 +93,7 @@ bool OptionsConfiguration::changeFullscreen(bool value)
 	//{
 		fullscreen = value;
 	
-		RenderSystem::GetInstance()->setFullscreen(fullscreen, RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
+		RenderSystem::GetInstance()->setFullscreen(fullscreen);
 	//}
 	
 	//if (level < 0) level = 0;
