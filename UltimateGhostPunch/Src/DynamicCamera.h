@@ -1,12 +1,10 @@
 #pragma once
 #ifndef DYNAMIC_CAMERA_H
 #define DYNAMIC_CAMERA_H
+
 #include <UserComponent.h>
 
-class GameObject;
-
-class DynamicCamera :
-	public UserComponent
+class DynamicCamera : public UserComponent
 {
 private:
 	float minZ, maxZ;
@@ -17,12 +15,12 @@ private:
 
 public:
 	DynamicCamera(GameObject* gameObject);
+	~DynamicCamera();
 
+	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
-	virtual void start();
-	virtual void fixedUpdate(float deltaTime);
-
+private:
 	// Returns the maximum distance that exists currently between two players
 	float getMaxDistBetweenPlayers();
 

@@ -1,17 +1,24 @@
 #include "DynamicCamera.h"
-#include "GameObject.h"
 #include <sstream>
+#include <ComponentRegister.h>
+#include <GameObject.h>
+#include <MathUtils.h>
 
 #include "GameManager.h"
-#include <queue>
-#include <algorithm>
-
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(DynamicCamera);
 
 DynamicCamera::DynamicCamera(GameObject* gameObject) : UserComponent(gameObject), smoothFactor(0.125f), minZ(20), maxZ(100), zoomFactor(1.0f)
 {
+}
+
+DynamicCamera::~DynamicCamera()
+{
+}
+
+void DynamicCamera::update(float deltaTime)
+{
+	dynamicMove();
 }
 
 void DynamicCamera::handleData(ComponentData* data)
@@ -22,30 +29,23 @@ void DynamicCamera::handleData(ComponentData* data)
 
 		if (prop.first == "minZ") {
 			if (!(ss >> minZ))
-				LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "maxZ") {
 			if (!(ss >> maxZ))
-				LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "smoothFactor") {
 			if (!(ss >> smoothFactor))
-				LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "zoomFactor") {
 			if (!(ss >> zoomFactor))
-				LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
+				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
 		}
+		else
+			LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
 	}
-}
-
-void DynamicCamera::start()
-{
-}
-
-void DynamicCamera::fixedUpdate(float deltaTime)
-{
-	dynamicMove();
 }
 
 float DynamicCamera::getMaxDistBetweenPlayers()
@@ -54,12 +54,9 @@ float DynamicCamera::getMaxDistBetweenPlayers()
 	// number of players
 	int n = players.size();
 	float maxDist = -1;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			if (i != j)
-			{
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (i != j) {
 				float d = (players[i]->transform->getPosition() - players[j]->transform->getPosition()).magnitude();
 				if (d > maxDist) maxDist = d;
 			}
@@ -71,32 +68,24 @@ float DynamicCamera::getMaxDistBetweenPlayers()
 
 Vector3 DynamicCamera::getMidPointBetweenPlayers()
 {
-	// mid point
-	Vector3 mp;
-	// Queue with every player's position
-	std::queue<Vector3> pts;
 	// Vector with every player
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
 	// number of players
 	int n = players.size();
-
 	float midX = 0.0f, midY = 0.0f;
-	for (auto p : players)
-	{
+
+	for (auto p : players) {
 		midX += p->transform->getPosition().x / n;
 		midY += p->transform->getPosition().y / n;
 	}
 
-	mp = { midX, midY, 0.0f };
-
-	return mp;
+	return Vector3(midX, midY, 0.0f);
 }
 
 void DynamicCamera::dynamicMove()
 {
 	// Move towards mid-point position
 	Vector3 midPos = getMidPointBetweenPlayers();// +Vector3(0, 0, gameObject->transform->getPosition().z);
-
 
 	// Zoom in/out
 	float dist = getMaxDistBetweenPlayers();

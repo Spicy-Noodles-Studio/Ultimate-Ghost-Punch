@@ -61,8 +61,6 @@ public:
 
 	void setTime(int time);
 	int getTime();
-
-	float getBottomLimit() const;
 };
 
 #endif

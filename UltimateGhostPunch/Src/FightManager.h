@@ -31,8 +31,6 @@ private:
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
 	int nSpikes;
 
-	bool timed;
-
 	int winner;
 
 	void createLevel();

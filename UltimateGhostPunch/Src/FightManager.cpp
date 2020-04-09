@@ -51,7 +51,6 @@ void FightManager::start()
 
 	fightTimer = gameManager->getTime();
 	finishTimer = 4.0f; // Hard Coded
-	if (fightTimer < 0) timed = false;
 	gameManager->pauseGame(false);
 	playSong();
 }
@@ -67,7 +66,10 @@ void FightManager::update(float deltaTime)
 		// end game
 		if (winner != -1) chooseWinner();
 		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f) SceneManager::GetInstance()->changeScene("mainMenu");
+		if (finishTimer <= 0.0f) { 
+			gameManager->getKnights().clear();
+			SceneManager::GetInstance()->changeScene("mainMenu"); 
+		}
 	}
 }
 
