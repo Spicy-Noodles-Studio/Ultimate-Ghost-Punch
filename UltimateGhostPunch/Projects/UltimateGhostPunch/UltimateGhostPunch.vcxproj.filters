@@ -45,6 +45,12 @@
     <ClCompile Include="..\..\Src\GhostManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Dodge.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Grab.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\PlayerUI.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -63,13 +69,22 @@
     <ClCompile Include="..\..\Src\FightManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\DynamicCamController.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\DeathZone.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Respawn.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\DynamicCamera.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PauseMenu.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Block.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\OptionsConfiguration.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,6 +110,12 @@
     <ClInclude Include="..\..\Src\GhostManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Dodge.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Grab.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Src\PlayerUI.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -113,13 +134,22 @@
     <ClInclude Include="..\..\Src\FightManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\DynamicCamController.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\DeathZone.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Respawn.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\DynamicCamera.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PauseMenu.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Block.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\OptionsConfiguration.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>

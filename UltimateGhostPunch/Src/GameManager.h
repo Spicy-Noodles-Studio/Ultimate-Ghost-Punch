@@ -42,6 +42,9 @@ public:
 
 	void setNumPlayers(int nPlayers);
 	int getNumPlayers();
+	void reset();
+	void pauseGame(bool setPaused);
+	bool gameIsPaused();
 
 	void setPlayerIndexes(std::vector<int> playerIndexes);
 	std::vector<int>& getPlayerIndexes();

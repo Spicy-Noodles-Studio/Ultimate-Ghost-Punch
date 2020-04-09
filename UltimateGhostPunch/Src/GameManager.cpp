@@ -1,11 +1,13 @@
 #include "GameManager.h"
 #include <ComponentRegister.h>
 
+#include "Timer.h"
+
 REGISTER_FACTORY(GameManager);
 
 GameManager* GameManager::instance = nullptr;
 
-GameManager::GameManager() : UserComponent(nullptr)
+GameManager::GameManager() : UserComponent(nullptr), paused(false)
 {
 
 }
@@ -33,7 +35,6 @@ void GameManager::start()
 {
 	level = "";
 	song = "";
-	bottomLimit = -10;
 
 	dontDestroyOnLoad(gameObject);
 }
@@ -67,8 +68,8 @@ void GameManager::setLevel(std::string level)
 {
 	this->level = level;
 
-	//Leer archivo config del nivel y guardar las posiciones de players/obstáculos para crearlos
-	//Leer el límite inferior del nivel: bottomLimit = ...
+	//Leer archivo config del nivel y guardar las posiciones de players/obstï¿½culos para crearlos
+	//Leer el lï¿½mite inferior del nivel: bottomLimit = ...
 }
 
 std::string GameManager::getLevel()
@@ -106,7 +107,25 @@ int GameManager::getTime()
 	return time;
 }
 
-float GameManager::getBottomLimit() const
+void GameManager::reset()
 {
-	return bottomLimit;
+	Timer::GetInstance()->setTimeScale(1.0f);
+	paused = false;
+}
+
+void GameManager::pauseGame(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	if (paused)
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	else
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+}
+
+bool GameManager::gameIsPaused()
+{
+	return paused;
 }

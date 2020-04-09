@@ -2,6 +2,17 @@
     "SceneName": "Options",
     "SceneObjects": [
         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "OptionsConfiguration",
+            "Tag": "optionsConfiguration",
+            "Components":
+            [
+                {
+                    "ComponentName" : "OptionsConfiguration"
+                }
+            ]
+        },
+        {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
             "Tag": "mainCamera",
@@ -12,7 +23,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "options.layout"],
-                        ["event" , "BackButton backButtonClick"]
+                        ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange"]
                     ]
                 }
             ]

@@ -21,10 +21,6 @@ public:
 	void changeState(const std::string state);
 	void updateHealth();
 
-	// TODO: quitar esto, aqui sobra
-	//void setPauseMenuVisible(bool show);
-	//bool isPauseMenuVisible();
-
 private:
 	void createHearts();
 
@@ -40,9 +36,6 @@ private:
 	std::string name;
 	UIElement playerHUD;
 	UIElement playerIndicator;
-
-	// TODO: quitar esto, aqui sobra
-	//UIElement pauseMenu;
 };
 
 #endif

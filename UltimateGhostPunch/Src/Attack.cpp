@@ -5,6 +5,8 @@
 #include <sstream>
 
 #include "Health.h"
+#include "Block.h"
+#include "ComponentRegister.h"
 
 REGISTER_FACTORY(Attack);
 
@@ -92,9 +94,10 @@ void Attack::handleData(ComponentData* data)
 	}
 }
 
+
 void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING) // If it hits a player different than myself
+	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
@@ -109,8 +112,23 @@ void Attack::onObjectStay(GameObject* other)
 			break;
 		}
 
-		Health* enemyHealth = other->getComponent<Health>();
-		if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
+		Block* enemyBlock = nullptr;
+		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
+		if (enemyBlock != nullptr) {
+			enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition());
+
+			// Deactivate the trigger until the next attack is used
+			attackTrigger->setActive(false);
+
+			// Reset the current attack state
+			state = NOT_ATTACKING;
+
+		}
+		else {
+			Health* enemyHealth = other->getComponent<Health>();
+			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+		}
 	}
 }
 

@@ -7,18 +7,24 @@
 class InputSystem;
 class Movement;
 class Attack;
+class Dodge;
 class Jump;
 class Health;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
-class PlayerUI;
+class Animator;
+
 class Vector3;
+class Grab;
+class Block;
+
 
 class PlayerController : public UserComponent
 {
 private:
-	// Indexes
+	bool isBlocking;
+
 	int playerIndex;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
@@ -33,16 +39,22 @@ private:
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
+	Animator* anim;
+	Block* block;
+	Dodge* dodge;
+	Grab* grab;
 
 	// Input
 	InputSystem* inputSystem;
 
 	//Checks if the player is using a keyboard and if the key was used
 	bool getKeyDown(const std::string& key);
+	bool getKeyUp(const std::string& key);
 	bool getKey(const std::string& key);
 
 	//Checks if the player is using a controller and if the key was used
 	bool getButtonDown(const std::string& button);
+	bool getButtonUp(const std::string& button);
 	bool getButton(const std::string& button);
 
 	//Checks if the player is using a controller and if an axis was used
@@ -71,6 +83,8 @@ public:
 
 	int getPlayerIndex() const;
 	void setPlayerIndex(int index);
+	void setBlocking(bool _block);
+
 	void setControllerIndex(int index);
 };
 

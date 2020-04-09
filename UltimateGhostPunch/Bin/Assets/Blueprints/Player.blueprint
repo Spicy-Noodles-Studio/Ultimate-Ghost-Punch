@@ -7,9 +7,9 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-                ["position", "20 30 0"],
-                ["scale", "1 1 1"],
-                ["rotation", "0 90 0"]
+               [ "position", "20 30 0"],
+               [ "scale", "0.6 0.6 0.6"],
+               [ "rotation", "0 90 0"]
             ]
         },
         {
@@ -22,25 +22,27 @@
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-                ["anim", "Idle player"]
+               [ "anim", "Run player"],
+               [ "anim", "Jump player"],
+               [ "anim", "Idle player"]
             ]
         },
         {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
-                ["shape", "Box"],
-                ["mass", "5"],
-                ["friction", "0.1"],
-                ["restitution", "0"],
-                ["damping", "0.4"],
-                ["angularDamping", "0"],
-                ["gravity", "0 -10 0"],
-                ["offset", "0 0 0"],
-                ["scale", "1 2 1"],
-                ["kinematic", "0"],
-                ["trigger", "0"],
-                ["movementConstraints", "1 1 0"],
-                ["rotationConstraints", "0 0 0"]
+               [ "shape", "Box"],
+               [ "mass", "5"],
+               [ "friction", "0.1"],
+               [ "restitution", "0"],
+               [ "damping", "0.4"],
+               [ "angularDamping", "0"],
+               [ "gravity", "0 -10 0"],
+               [ "offset", "0 0 0"],
+               [ "scale", "2 5.2 2"],
+               [ "kinematic", "0"],
+               [ "trigger", "0"],
+               [ "movementConstraints", "1 1 0"],
+               [ "rotationConstraints", "0 0 0"]
             ]
         },
         {
@@ -82,6 +84,9 @@
                 ["invDamTime", "2"]
             ]
         },
+		{
+		    "ComponentName": "Dodge"
+		},
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
@@ -108,8 +113,8 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                        ["position", "0 0 1.65"],
-                        ["scale", "1 1 2"]
+                       [ "position", "1 0 1.65"],
+                       [ "scale", "1 1 2"]
                     ]
                 }
             ],
@@ -139,7 +144,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                        ["position", "0 -1 0"],
+                       [ "position", "0 -2.2 0"],
                         ["scale", "0.75 0.75 0.75"]
                     ]
                 }
@@ -153,6 +158,39 @@
 				        ["jumpDecay", "0.4"],
                         ["coyoteTime", "0.4"]
                     ]       
+                },
+				{
+					"ComponentName": "Block",
+					"ComponentProperties": [
+                        ["maxBlockTime", "3"],
+				        ["blockRegenTime", "1.5"],
+						["blockGrabMargin", "1"]
+                    ]
+				}
+            ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 1.65"],
+                       [ "scale", "1 1 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab",
+					"ComponentProperties": [
+                        ["freezeDuration", "2"]
+                    ]
                 }
             ]
         }

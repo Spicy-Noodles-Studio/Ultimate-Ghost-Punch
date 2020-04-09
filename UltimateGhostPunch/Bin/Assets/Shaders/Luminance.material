@@ -1,0 +1,42 @@
+
+
+vertex_program LuminanceVS glsl // Ejemplo2VS
+{
+    //source Ejemplo2VS.glsl // podemos reutilizar
+    source LuminanceVS.glsl
+    default_params {        
+        param_named_auto modelViewProjMat worldviewproj_matrix
+    }
+}
+fragment_program LuminancePS glsl
+{
+    source LuminancePS.glsl
+    default_params {
+        param_named RTT0 int 0 // textura con la escena
+       
+    }
+    shared_params gamma{
+        shared_param_named brigh float 1.0
+    }
+}
+
+material LuminancePS {
+    technique {
+        pass {
+            depth_check off // desactivar el depth‐buffer
+            depth_write off
+
+            vertex_program_ref LuminanceVS {
+
+            }
+            fragment_program_ref LuminancePS {
+                shared_params_ref gamma
+            }
+
+            texture_unit RTT0 {
+                // sin imagen de archivo ‐> previous render target
+                filtering none // tiene la resolución del viewport
+            }
+        }
+    } 
+}

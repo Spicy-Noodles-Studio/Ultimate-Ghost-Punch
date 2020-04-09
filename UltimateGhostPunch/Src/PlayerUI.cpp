@@ -124,16 +124,6 @@ void PlayerUI::updateHealth()
 	updateHearts();
 }
 
-/*void PlayerUI::setPauseMenuVisible(bool show)
-{
-	pauseMenu.setVisible(show);
-}
-
-bool PlayerUI::isPauseMenuVisible()
-{
-	return pauseMenu.isVisible();
-}*/
-
 void PlayerUI::updateState()
 {
 	if (health != nullptr && ghostManager != nullptr) {

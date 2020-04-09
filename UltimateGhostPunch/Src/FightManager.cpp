@@ -4,6 +4,8 @@
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
+#include <GaiaData.h>
+#include <RigidBody.h>
 
 #include "PlayerController.h"
 #include "Health.h"
@@ -44,10 +46,13 @@ void FightManager::start()
 
 	// create game
 	createLevel();
+	createSpikes();
 	createKnights();
 
 	fightTimer = gameManager->getTime();
 	finishTimer = 4.0f; // Hard Coded
+	if (fightTimer < 0) timed = false;
+	gameManager->pauseGame(false);
 	playSong();
 }
 
@@ -78,7 +83,59 @@ void FightManager::playerDie()
 
 void FightManager::createLevel()
 {
-	//instantiate(GameManager::GetInstance()->getLevel());
+	GaiaData levelData;
+	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
+
+	// instantiate collider mesh
+	instantiate(levelData.find("LevelBlueprint").getValue().c_str());
+
+	// instantiate render mesh
+	//...
+
+	/*GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
+	backWall->getComponent<Transform>()->setScale({ 190,150,1 });
+	backWall->getComponent<RigidBody>()->setKinematic(true);*/
+
+	// player initial transforms
+	GaiaData playerData = levelData.find("PlayerTransforms");
+	for (int i = 0; i < playerData.size(); i++)
+	{
+		std::stringstream ss(playerData[i][0].getValue());
+		double posX, posY, posZ;
+		if (!(ss >> posX >> posY >> posZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(playerData[i][1].getValue());
+		double rotX, rotY, rotZ;
+		if (!(ss >> rotX >> rotY >> rotZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
+			continue;
+		}
+		playerTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
+	}
+
+	// spikes transforms
+	GaiaData spikesData = levelData.find("SpikesTransforms");
+	nSpikes = spikesData.size();
+	for (int i = 0; i < nSpikes; i++)
+	{
+		std::stringstream ss(spikesData[i][0].getValue());
+		double posX, posY, posZ;
+		if (!(ss >> posX >> posY >> posZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(spikesData[i][1].getValue());
+		double rotX, rotY, rotZ;
+		if (!(ss >> rotX >> rotY >> rotZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
+			continue;
+		}
+		spikesTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
+	}
 }
 
 void FightManager::playSong()
@@ -92,12 +149,24 @@ void FightManager::createKnights()
 
 	for (int i = 0; i < nPlayers; i++)
 	{
-		GameObject* knight = instantiate("Player", playerPositions[i]);
+		GameObject* knight = instantiate("Player", playerTransforms[i].first);
+		knight->transform->setRotation(playerTransforms[i].second);
+
 		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
 		knight->getComponent<PlayerController>()->setPlayerIndex(i + 1);
 
 		gameManager->getKnights().push_back(knight);
+	}
+}
+
+void FightManager::createSpikes()
+{
+	for (int i = 0; i < nSpikes; i++)
+	{
+		GameObject* spikes = instantiate("Spikes", spikesTransforms[i].first);
+		spikes->transform->setRotation(spikesTransforms[i].second);
 	}
 }
 

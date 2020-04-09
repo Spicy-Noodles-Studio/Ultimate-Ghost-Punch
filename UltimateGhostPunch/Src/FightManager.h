@@ -11,6 +11,7 @@
 
 class GameManager;
 class UILayout;
+class InputSystem;
 
 class FightManager : public UserComponent
 {
@@ -26,11 +27,17 @@ private:
 
 	float fightTimer; // If time is -1, then infinite
 	float finishTimer; // Time taken to send us back to MainMenu
+	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
+	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
+	int nSpikes;
+
+	bool timed;
+
 	int winner;
 
-private:
 	void createLevel();
 	void createKnights();
+	void createSpikes();
 	void playSong();
 
 	void chooseWinner();
@@ -43,6 +50,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie();
+
 };
 
 #endif
