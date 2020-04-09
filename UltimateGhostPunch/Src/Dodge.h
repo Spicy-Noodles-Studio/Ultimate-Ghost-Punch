@@ -30,6 +30,8 @@ private:
 	Vector3 vIzq;
 	Vector3 vDer;
 
+	void dodgeR();
+	void dodgeL();
 
 public:
 	Dodge(GameObject* gameObject);
@@ -39,10 +41,7 @@ public:
 
 	virtual void handleData(ComponentData* data);
 
-
-	void dodgeR();
-	void dodgeL();
-
+	void dodge();
 };
 
 #endif

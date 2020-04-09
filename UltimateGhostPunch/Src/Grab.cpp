@@ -57,7 +57,7 @@ void Grab::update(float deltaTime)
 		state = IDLE;
 	}
 	if (remain <= 0.0f && state == BLOCKED) {
-		if (controller != nullptr)controller->setFrozen(false);
+		if (controller != nullptr)controller->setActive(false);
 		state = IDLE;
 	}
 }
@@ -81,7 +81,7 @@ void Grab::onObjectStay(GameObject* other)
 				LOG("GRAB BLOCKED!");
 				state = BLOCKED;
 				remain = freezeDuration;
-				if (controller != nullptr)controller->setFrozen(true);
+				if (controller != nullptr)controller->setActive(true);
 				return;
 			}
 
@@ -91,7 +91,7 @@ void Grab::onObjectStay(GameObject* other)
 			remain = duration;
 			enemy = other;
 			enemyController = other->getComponent<PlayerController>();
-			if (enemyController)enemyController->setFrozen(true);
+			if (enemyController) enemyController->setActive(true);
 		}
 	}
 }
@@ -130,7 +130,7 @@ void Grab::drop()
 	if (gameObject->getParent()->transform->getRotation().y >= 0) enemy->getComponent<RigidBody>()->addForce(vDer * force);
 	else enemy->getComponent<RigidBody>()->addForce(vIzq * force);
 	
-	if (enemyController)enemyController->setFrozen(false);
+	if (enemyController)enemyController->setActive(false);
 	
 	enemyController = nullptr;
 	enemy = nullptr;

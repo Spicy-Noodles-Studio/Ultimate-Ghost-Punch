@@ -75,4 +75,9 @@ void Dodge::handleData(ComponentData* data)
 	}
 }
 
+void Dodge::dodge()
+{
+	(gameObject->transform->getRotation().y == 90) ? dodgeR() : dodgeL();
+}
+
 
