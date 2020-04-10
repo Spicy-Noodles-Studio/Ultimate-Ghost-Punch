@@ -7,7 +7,8 @@
 
 REGISTER_FACTORY(Block);
 
-Block::Block(GameObject* gameObject) : UserComponent(gameObject)
+Block::Block(GameObject* gameObject) : UserComponent(gameObject), isGrounded(false), isBlocking(false),blockRegenTime(1.5f), timeElapsed(0.0f), maxBlockTime(0.5f), blockTime(0.5f), 
+									   blockGrabMargin(0.25f), blockDirection(0)
 {
 }
 
@@ -15,11 +16,6 @@ Block::Block(GameObject* gameObject) : UserComponent(gameObject)
 
 void Block::start()
 {
-	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
-
-	controller = gameObject->getParent()->getComponent<PlayerController>();
-
-	isBlocking = false;
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
 }
@@ -28,10 +24,10 @@ void Block::update(float deltaTime)
 {
 	if (!isGrounded && isBlocking) {
 		isBlocking = false;
-		controller->setBlocking(false);
 		return;
 	}
 
+	//Recharge block
 	if (!isBlocking && blockTime != maxBlockTime) {
 		timeElapsed += deltaTime;
 		if (timeElapsed > blockRegenTime) {
@@ -40,12 +36,12 @@ void Block::update(float deltaTime)
 			LOG("BLOCK RECHARGED\n");
 		}
 	}
+	//Blocking
 	else if (isBlocking && blockTime > 0 && isGrounded) {
 		blockTime -= deltaTime;
 		if (blockTime <= 0) {
 			blockTime = 0;
 			isBlocking = false;
-			controller->setBlocking(false);
 			LOG("BLOCK ENDED\n");
 		}
 	}
@@ -59,18 +55,25 @@ void Block::handleData(ComponentData* data)
 
 		if (prop.first == "maxBlockTime")
 		{
-			ss >> maxBlockTime;
+			if (!(ss >> maxBlockTime))
+				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
 		}
-		if (prop.first == "blockRegenTime") {
-			ss >> blockRegenTime;
+		else if (prop.first == "blockRegenTime") {
+			if(!(ss >> blockRegenTime))
+				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
 		}
-		if (prop.first == "blockGrabMargin") {
-			ss >> blockGrabMargin;
+		else if (prop.first == "blockGrabMargin") {
+			if(!(ss >> blockGrabMargin))
+				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+
 		}
+		else
+			LOG("BLOCK: Invalid property name %s", prop.first.c_str());
+
 	}
 }
 
-bool Block::block()
+void Block::block()
 {
 	if (!isBlocking && blockTime > 0 && isGrounded) {
 		isBlocking = true;
@@ -78,13 +81,11 @@ bool Block::block()
 		blockDirection = gameObject->getParent()->transform->getRotation().y;
 		LOG("BLOCKING\n");
 	}
-	return isBlocking;
 }
 
-bool Block::unblock()
+void Block::unblock()
 {
 	isBlocking = false;
-	return isBlocking;
 }
 
 bool Block::blockAttack(float damage, Vector3 otherPosition)
@@ -93,10 +94,9 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 		(blockDirection < 0 && otherPosition.x < gameObject->getParent()->transform->getPosition().x))) {
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
-		if (blockTime <= 0) {
+		if (blockTime <= 0) 
 			isBlocking = false;
-			controller->setBlocking(false);
-		}
+
 		return true;
 	}
 	else {
@@ -120,8 +120,13 @@ void Block::onObjectExit(GameObject* other)
 	}
 }
 
-bool Block::getGrabBlock()
+bool Block::getGrabBlock() const
 {
 	if (isBlocking && blockTime > maxBlockTime - blockGrabMargin) return true;
 	else return false;
+}
+
+bool Block::blocking() const
+{
+	return isBlocking;
 }

@@ -1,0 +1,25 @@
+{
+    "ObjectType": "BLUEPRINT",
+    "ObjectName": "DeathZone",
+    "Tag": "death",
+    "BlueprintPath": "Sensor",
+    "ComponentModifications":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": [
+                ["position", "0 -10 0"],
+                ["scale", "100 1 10"]
+            ]
+        }
+    ],
+    "Components":
+    [
+        {
+            "ComponentName": "DeathZone",
+            "ComponentProperties":[
+                ["fallDamage", "2"]
+            ]
+        }
+    ]
+}

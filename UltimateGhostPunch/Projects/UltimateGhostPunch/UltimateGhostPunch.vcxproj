@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
@@ -57,10 +58,12 @@
     <ClCompile Include="..\..\Src\Movement.cpp" />
     <ClCompile Include="..\..\Src\PlayerController.cpp" />
     <ClCompile Include="..\..\Src\Jump.cpp" />
+    <ClCompile Include="..\..\Src\Respawn.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
@@ -77,6 +80,7 @@
     <ClInclude Include="..\..\Src\PlayerUI.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />
     <ClInclude Include="..\..\Src\GhostMovement.h" />
+    <ClInclude Include="..\..\Src\Respawn.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

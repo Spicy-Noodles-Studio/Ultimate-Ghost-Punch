@@ -1,6 +1,6 @@
 #pragma once
-#ifndef GAMEMANAGER_H
-#define GAMEMANAGER_H
+#ifndef GAME_MANAGER_H
+#define GAME_MANAGER_H
 
 #include "UserComponent.h"
 
@@ -16,7 +16,7 @@ private:
 
 	bool paused;
 
-	int nPlayers;
+	int numPlayers;
 
 	std::vector<int> playerIndexes;
 	std::vector<GameObject*> knights;
@@ -26,25 +26,28 @@ private:
 
 	int health;
 	int time;
+
 	// Bottom limit of the level 
-	float bottomLimit = -10;
+	float bottomLimit;
 
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
-	~GameManager();
+
+	virtual ~GameManager();
 
 	static GameManager* GetInstance();
 
 	virtual void start();
-	virtual void update(float deltaTime);
 
+	void setNumPlayers(int nPlayers);
+	int getNumPlayers();
 	void reset();
-	void setNPlayers(int nPlayers);
-	int getNPlayers();
 	void pauseGame(bool setPaused);
 	bool gameIsPaused();
 
+	void setPlayerIndexes(std::vector<int> playerIndexes);
+	std::vector<int>& getPlayerIndexes();
 	std::vector<GameObject*>& getKnights();
 
 	void setLevel(std::string level);
@@ -58,12 +61,6 @@ public:
 
 	void setTime(int time);
 	int getTime();
-
-	float getBottomLimit() const;
-
-	void setPlayerIndexes(std::vector<int> playerIndexes);
-	std::vector<int>& getPlayerIndexes();
-
 };
 
 #endif

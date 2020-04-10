@@ -1,31 +1,38 @@
 #include "PlayerController.h"
 
 #include <sstream>
+#include <ComponentRegister.h>
 #include <GameObject.h>
+
 #include <InputSystem.h>
 #include <Scene.h>
 #include <Camera.h>
 #include <Light.h>
 
 #include "Movement.h"
-#include "GhostMovement.h"
 #include "Attack.h"
 #include "Jump.h"
+#include "Health.h"
 #include "GhostManager.h"
+#include "GhostMovement.h"
 #include "Dodge.h"
 #include "UltimateGhostPunch.h"
-#include "Health.h"
-#include "ComponentRegister.h"
-#include "GameManager.h"
 #include "Animator.h"
 #include "Grab.h"
 #include "Block.h"
+#include "GameManager.h"
+#include "PlayerUI.h"
 
 REGISTER_FACTORY(PlayerController);
 
-PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject)
+PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
+															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1), isBlocking(false)
 {
 
+}
+
+PlayerController::~PlayerController()
+{
 }
 
 void PlayerController::start()
@@ -33,10 +40,12 @@ void PlayerController::start()
 	inputSystem = InputSystem::GetInstance();
 
 	movement = gameObject->getComponent<Movement>();
+	health = gameObject->getComponent<Health>();
+
 	ghostMovement = gameObject->getComponent<GhostMovement>();
-	ghost = gameObject->getComponent<GhostManager>();
-	dodge = gameObject->getComponent<Dodge>();
+	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
+	dodge = gameObject->getComponent<Dodge>();
 	anim = gameObject->getComponent<Animator>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
@@ -48,23 +57,18 @@ void PlayerController::start()
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
 	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
-
-	iniPosition = gameObject->transform->getPosition();
 }
 
 void PlayerController::update(float deltaTime)
 {
-	// Ignore input if:
-	if (frozen ||  // Player is frozen 
-		GameManager::GetInstance()->gameIsPaused()) // Game is paused
-		return;
-	
-	checkInput(dir);
+	checkInput();
+}
 
-	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != CHARGING && ghostPunch->getState() != PUNCHING))
-			if (ghostMovement != nullptr) ghostMovement->move(dir);
-	}
+void PlayerController::fixedUpdate(float deltaTime)
+{
+	//Movement
+	if (ghostManager == nullptr || !ghostManager->isGhost())
+		if (movement != nullptr) movement->move(direction);
 }
 
 void PlayerController::handleData(ComponentData* data)
@@ -73,19 +77,9 @@ void PlayerController::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "keyboard")
-		{
-			if (!(ss >> usingKeyboard))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "index")
+		if (prop.first == "index")
 		{
 			if (!(ss >> controllerIndex))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "fallDamage")
-		{
-			if (!(ss >> fallDamage))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
@@ -93,201 +87,98 @@ void PlayerController::handleData(ComponentData* data)
 	}
 }
 
-void PlayerController::checkInput(Vector3& dir)
+
+
+void PlayerController::checkInput()
 {
-	dir = Vector3(0, 0, 0);
-	Vector3 punchDir;
-	//Controles con teclado y raton
-	if (usingKeyboard)
-	{
-		// test animations
-		if (inputSystem->getKeyPress("A") || inputSystem->getKeyPress("D"))
-			anim->playAnimation("Run");
+	direction = Vector3(0, 0, 0);
 
-		if (inputSystem->getKeyPress("Space"))
-			anim->playAnimation("Jump");
+	if (block == nullptr || !block->blocking()) {
+		//Movement
+		direction += Vector3(getHorizontalAxis(), 0, 0);
+		//Character rotation
+		if (direction.x != 0)
+			gameObject->transform->setRotation({ 0,90 * direction.x,0 });
+	}
 
+	//Acctions if the player isn�t in ghostManager mode
+	if (ghostManager == nullptr || !ghostManager->isGhost()) {
 
-		if (inputSystem->isKeyPressed("A") && !isBlocking)
-		{
-			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeL();
-			else {
-				dir = Vector3(-1, 0, 0);
-				gameObject->transform->setRotation({ 0,-90,0 });
-			}
-		}
-		else if (inputSystem->isKeyPressed("D") && !isBlocking) {
+		//If we are not blocking
+		if (block == nullptr || !block->blocking()) {
+			//Test anim
+			if (direction.x != 0 && anim->getCurrentAnimation() != "Run")
+				anim->playAnimation("Run");
+			else if (direction.x == 0 && anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
+				anim->playAnimation("Idle");
+			if (getKeyDown("Space") || getButtonDown("A"))
+				anim->playAnimation("Jump");
 
-			if (inputSystem->isKeyPressed("LEFT SHIFT")) dodge->dodgeR();
-			else {
-				dir = Vector3(1, 0, 0);
-				gameObject->transform->setRotation({ 0,90,0 });
-			}
-		}
-		else if (anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
-			anim->playAnimation("Idle");
-
-		if (ghost != nullptr && ghost->isGhost()) {
-			if (inputSystem->isKeyPressed("W"))
-				dir += Vector3(0, 1, 0);
-			else if (inputSystem->isKeyPressed("S"))
-				dir += Vector3(0, -1, 0);
-
-			else if (inputSystem->getMouseButtonHold('l'))
-			{
-				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
-				{
-					std::pair<int, int> mousePos = inputSystem->getMousePosition();
-					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
-					ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
+			//Attack
+			if (attack != nullptr) {
+				//Quick attack
+				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
+					attack->quickAttack();
+					anim->playAnimation("AttackA");//provisional
 				}
+				//Strong attack
+				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
+					attack->strongAttack();
 			}
-			else if (inputSystem->getMouseButtonRelease('l'))
-			{
-				if (ghostPunch != nullptr && ghostPunch->getState() == CHARGING)
-				{
-					std::pair<int, int> mousePos = inputSystem->getMousePosition();
-					Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
-					ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
 
+			//Dodge
+			if (dodge != nullptr)
+				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
+					dodge->dodge();
+
+			//Jump
+			if (jump != nullptr)
+				if (getKey("Space") || getButton("A"))
+					jump->jump();
+
+			//Grab
+			if (grab != nullptr) {
+				if (getKey("E") || getButton("LB")) grab->grab();
+				else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
+			}
+		}
+
+		//Block
+		if (block != nullptr) {
+			if (getKeyDown("S") || getButtonDown("B")) block->block();
+			if (isBlocking && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
+		}
+	}
+
+	//Actions if the player is in ghostManager mode
+	else if (ghostManager != nullptr && ghostManager->isGhost())
+	{
+		direction += Vector3(0, getVerticalAxis(), 0);
+
+		//GhostPunch
+		if (ghostPunch != nullptr)
+		{
+			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
+			//Charge
+			if (ghostPunch->getState() == UltimateGhostPunch::State::AVAILABLE) {
+				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
+					ghostPunch->charge();
+			}
+			else if (ghostPunch->getState() == UltimateGhostPunch::State::CHARGING) {
+				//Aim
+				if (controllerIndex == 4) ghostPunchMouseAim();
+				else ghostPunch->aim(horizontal, -vertical);
+
+				//Ghost Punch
+				if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
 					ghostPunch->ghostPunch();
-				}
 			}
 		}
 
-		if (inputSystem->isKeyPressed("E") && !isBlocking)
-			grab->grab();
-
-		if (inputSystem->getMouseButtonClick('l')) {
-			if ((ghost == nullptr || !ghost->isGhost()) && !isBlocking)
-			{
-				attack->quickAttack();
-				anim->playAnimation("AttackA");
-			}
-			else if (ghostPunch != nullptr && ghostPunch->getState() == AVAILABLE)
-				ghostPunch->charge();
-		}
-		else if (inputSystem->getMouseButtonClick('r') && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				if (attack != nullptr) attack->strongAttack();
-		}
-		else if (InputSystem::GetInstance()->isKeyPressed("Space") && !isBlocking)
-			if (ghost == nullptr || !ghost->isGhost())
-				if (jump != nullptr) jump->salta();
-
-		if (inputSystem->getKeyPress("S")){
-			isBlocking = block->block();
-		}
-		if (isBlocking && inputSystem->getKeyRelease("S")) {
-			isBlocking = block->unblock();
-		}
+		//Ghost Movement
+		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
+			if (ghostMovement != nullptr) ghostMovement->move(direction);
 	}
-	//Controles con mando
-	else
-	{
-		if ((inputSystem->getLeftJoystick(controllerIndex).first < 0 || inputSystem->isButtonPressed(controllerIndex, "Left") ) && !isBlocking) {
-			dir = Vector3(-1, 0, 0);
-			gameObject->transform->setRotation({ 0,-90,0 });
-		}
-		else if ( (inputSystem->getLeftJoystick(controllerIndex).first > 0 || inputSystem->isButtonPressed(controllerIndex, "Right")) && !isBlocking) {
-			dir = Vector3(1, 0, 0);
-			gameObject->transform->setRotation({ 0,90,0 });
-		}
-
-		if (ghost != nullptr && ghost->isGhost()) {
-			if (inputSystem->getLeftJoystick(controllerIndex).second < 0 || inputSystem->isButtonPressed(controllerIndex, "Up"))
-				dir += Vector3(0, 1, 0);
-			else if (inputSystem->getLeftJoystick(controllerIndex).second > 0 || inputSystem->isButtonPressed(controllerIndex, "Down"))
-				dir += Vector3(0, -1, 0);
-
-			if (inputSystem->getRightJoystick(controllerIndex).first != 0 || inputSystem->getRightJoystick(controllerIndex).second != 0)
-			{
-				if (ghostPunch != nullptr)
-				{
-					if (ghostPunch->getState() == AVAILABLE) ghostPunch->charge();
-					else if (ghostPunch->getState() == CHARGING)
-					{
-						ghostPunch->aim(inputSystem->getRightJoystick(controllerIndex).first, -inputSystem->getRightJoystick(controllerIndex).second);
-
-						if (inputSystem->getButtonPress(controllerIndex, "X"))
-							ghostPunch->ghostPunch();
-					}
-				}
-			}
-		}
-
-		if (inputSystem->getButtonPress(controllerIndex, "X") && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				if (attack != nullptr) attack->quickAttack();
-		}
-
-		else if (inputSystem->getButtonPress(controllerIndex, "Y") && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				if (attack != nullptr) attack->strongAttack();
-		}
-
-		else if (inputSystem->isButtonPressed(controllerIndex, "A") && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				if (jump != nullptr) jump->salta();
-		}
-
-		if (inputSystem->getButtonPress(controllerIndex, "LB") && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				grab->grab();
-		}
-		if (inputSystem->getButtonRelease(controllerIndex, "LB") && !isBlocking) {
-			if (ghost == nullptr || !ghost->isGhost())
-				grab->drop();
-		}
-
-		if (inputSystem->getButtonPress(controllerIndex, "B")){
-			isBlocking = block->block();
-		}
-		else if (isBlocking && inputSystem->getButtonRelease(controllerIndex, "B")) {
-			isBlocking = block->unblock();
-		}		
-	}
-
-	if (ghost != nullptr && ghost->isGhost()) {
-		if (ghostPunch == nullptr || (ghostPunch->getState() != PUNCHING))
-			if (ghostMovement != nullptr) ghostMovement->move(dir);
-	}
-}
-
-void PlayerController::fixedUpdate(float deltaTime)
-{
-	// Don't move if:
-	if (frozen) return; // Player is frozen
-	if (checkOutsideLimits()) return; // Player has fallen off limits
-
-	//Movimiento
-	if (ghost == nullptr || !ghost->isGhost()) {
-		if (movement != nullptr) movement->move(dir);
-	}
-
-}
-
-bool PlayerController::checkOutsideLimits()
-{
-	bool out = gameObject->transform->getPosition().y <= GameManager::GetInstance()->getBottomLimit();
-	if (out)
-	{
-		Health* health = gameObject->getComponent<Health>();
-		health->receiveDamage(fallDamage);
-
-		// If the player is alive after falling it respawns
-		// else, it appears as a ghost at initial position
-		if (health->getHealth() > 0)
-			respawn(iniPosition);
-		else
-		{
-			gameObject->transform->setPosition(iniPosition);
-			// Sets the initial position as the respawn if the player resurrects
-			ghost->setDeathPosition(iniPosition);
-		}
-	}
-
-	return out;
 }
 
 int PlayerController::getPlayerIndex() const
@@ -295,39 +186,9 @@ int PlayerController::getPlayerIndex() const
 	return playerIndex;
 }
 
-int PlayerController::getControllerIndex() const
-{
-	return controllerIndex;
-}
-
-Vector3 PlayerController::getInitialPosition() const
-{
-	return iniPosition;
-}
-
-void PlayerController::respawn(const Vector3& respawnPos)
-{
-	Health* health = gameObject->getComponent<Health>();
-	if (health != nullptr) health->resurrect();
-
-	gameObject->transform->setPosition(respawnPos);
-	LOG("{%f, %f, %f}\n", respawnPos.x, respawnPos.y, respawnPos.z);
-	movement->stop();
-}
-
-void PlayerController::setFrozen(bool freeze)
-{
-	frozen = freeze;
-}
-
 void PlayerController::setPlayerIndex(int index)
 {
 	playerIndex = index;
-}
-
-void PlayerController::setBlocking(bool _block)
-{
-	isBlocking = _block;
 }
 
 void PlayerController::setControllerIndex(int index)
@@ -335,7 +196,96 @@ void PlayerController::setControllerIndex(int index)
 	controllerIndex = index;
 }
 
-void PlayerController::setUsingKeyboard(bool usingKeyboard)
+bool PlayerController::getKeyDown(const std::string& key)
 {
-	this->usingKeyboard = usingKeyboard;
+	return controllerIndex == 4 && inputSystem->getKeyPress(key);
+}
+
+bool PlayerController::getKeyUp(const std::string& key)
+{
+	return controllerIndex == 4 && inputSystem->getKeyRelease(key);
+}
+
+bool PlayerController::getKey(const std::string& key)
+{
+	return controllerIndex == 4 && inputSystem->isKeyPressed(key);
+}
+
+bool PlayerController::getButtonDown(const std::string& button)
+{
+	return controllerIndex < 4 && inputSystem->getButtonPress(controllerIndex, button);
+}
+
+bool PlayerController::getButtonUp(const std::string& button)
+{
+	return controllerIndex < 4 && inputSystem->getButtonRelease(controllerIndex, button);
+}
+
+int PlayerController::getControllerIndex() const
+{
+	return controllerIndex;
+}
+bool PlayerController::getButton(const std::string& button)
+{
+	return controllerIndex < 4 && inputSystem->isButtonPressed(controllerIndex, button);
+}
+
+int PlayerController::getControllerHorizontalLeftAxis()
+{
+	if (controllerIndex < 4)
+		return inputSystem->getLeftJoystick(controllerIndex).first;
+	else return 0;
+}
+
+int PlayerController::getControllerHorizontalRightAxis()
+{
+	if (controllerIndex < 4)
+		return inputSystem->getRightJoystick(controllerIndex).first;
+	else return 0;
+}
+
+int PlayerController::getControllerVerticalLeftAxis()
+{
+	if (controllerIndex < 4)
+		return inputSystem->getLeftJoystick(controllerIndex).second;
+	else return 0;
+}
+
+int PlayerController::getControllerVerticalRightAxis()
+{
+	if (controllerIndex < 4)
+		return inputSystem->getRightJoystick(controllerIndex).second;
+	else return 0;
+}
+
+int PlayerController::getHorizontalAxis()
+{
+	if (getKey("A") || getControllerHorizontalLeftAxis() < 0 || getButton("Left"))
+		return -1;
+	else if (getKey("D") || getControllerHorizontalLeftAxis() > 0 || getButton("Right"))
+		return 1;
+	else
+		return 0;
+}
+
+int PlayerController::getVerticalAxis()
+{
+	if (getKey("W") || getControllerVerticalLeftAxis() < 0 || getButton("Up"))
+		return 1;
+	else if (getKey("S") || getControllerVerticalLeftAxis() > 0 || getButton("Down"))
+		return -1;
+	else
+		return 0;
+}
+
+void PlayerController::setBlocking(bool _block)
+{
+	isBlocking = _block;
+}
+
+void PlayerController::ghostPunchMouseAim()
+{
+	std::pair<int, int> mousePos = inputSystem->getMousePosition();
+	Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
+	ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
 }

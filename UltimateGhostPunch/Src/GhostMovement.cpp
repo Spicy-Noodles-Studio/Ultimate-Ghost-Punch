@@ -1,41 +1,46 @@
 #include "GhostMovement.h"
-
+#include <ComponentRegister.h>
+#include <GameObject.h>
 #include <InputSystem.h>
 #include <RigidBody.h>
 #include <sstream>
-#include <GameObject.h>
-
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(GhostMovement);
 
-GhostMovement::GhostMovement(GameObject* g) :UserComponent(g)
+GhostMovement::GhostMovement(GameObject* g) :UserComponent(g), rigidBody(nullptr), maxSpeed(2.0f)
+{
+
+}
+
+GhostMovement::~GhostMovement()
 {
 }
 
 void GhostMovement::start()
 {
-	body = gameObject->getComponent<RigidBody>();
-}
-
-void GhostMovement::move(Vector3 dir)
-{
-	dir *= maxSpeed;
-	if (body != nullptr) body->setLinearVelocity(dir);
+	rigidBody = gameObject->getComponent<RigidBody>();
 }
 
 void GhostMovement::handleData(ComponentData* data)
 {
-	for (auto prop : data->getProperties()) {
+	for (auto prop : data->getProperties())
+	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "maxSpeed") {
+		if (prop.first == "maxSpeed")
+		{
 			if (!(ss >> maxSpeed))
 				LOG("GHOST MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else
 			LOG("GHOST MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+void GhostMovement::move(Vector3 dir)
+{
+	dir *= maxSpeed;
+	if (rigidBody != nullptr) rigidBody->setLinearVelocity(dir);
 }
 
 void GhostMovement::setSpeed(float speed)

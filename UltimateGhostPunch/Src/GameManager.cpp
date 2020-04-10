@@ -1,7 +1,7 @@
 #include "GameManager.h"
-#include "Timer.h"
+#include <ComponentRegister.h>
 
-#include "ComponentRegister.h"
+#include "Timer.h"
 
 REGISTER_FACTORY(GameManager);
 
@@ -39,17 +39,37 @@ void GameManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
-void GameManager::update(float deltaTime)
+void GameManager::setNumPlayers(int nPlayers)
 {
+	this->numPlayers = nPlayers;
+}
 
+int GameManager::getNumPlayers()
+{
+	return numPlayers;
+}
+
+void GameManager::setPlayerIndexes(std::vector<int> playerIndexes)
+{
+	this->playerIndexes = playerIndexes;
+}
+
+std::vector<int>& GameManager::getPlayerIndexes()
+{
+	return playerIndexes;
+}
+
+std::vector<GameObject*>& GameManager::getKnights()
+{
+	return knights;
 }
 
 void GameManager::setLevel(std::string level)
 {
 	this->level = level;
-	//todo:
-	//Leer archivo config del nivel y guardar las posiciones de players/obstáculos para crearlos
-	//Leer el límite inferior del nivel: bottomLimit = ...
+
+	//Leer archivo config del nivel y guardar las posiciones de players/obstï¿½culos para crearlos
+	//Leer el lï¿½mite inferior del nivel: bottomLimit = ...
 }
 
 std::string GameManager::getLevel()
@@ -87,35 +107,10 @@ int GameManager::getTime()
 	return time;
 }
 
-float GameManager::getBottomLimit() const
-{
-	return bottomLimit;
-}
-
-void GameManager::setPlayerIndexes(std::vector<int> playerIndexes)
-{
-	this->playerIndexes = playerIndexes;
-}
-
-std::vector<int>& GameManager::getPlayerIndexes()
-{
-	return playerIndexes;
-}
-
 void GameManager::reset()
 {
 	Timer::GetInstance()->setTimeScale(1.0f);
 	paused = false;
-}
-
-void GameManager::setNPlayers(int nPlayers)
-{
-	this->nPlayers = nPlayers;
-}
-
-int GameManager::getNPlayers()
-{
-	return nPlayers;
 }
 
 void GameManager::pauseGame(bool setPaused)
@@ -133,9 +128,4 @@ void GameManager::pauseGame(bool setPaused)
 bool GameManager::gameIsPaused()
 {
 	return paused;
-}
-
-std::vector<GameObject*>& GameManager::getKnights()
-{
-	return knights;
 }

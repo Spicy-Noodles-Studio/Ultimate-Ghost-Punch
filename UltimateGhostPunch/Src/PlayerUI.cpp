@@ -1,19 +1,17 @@
 #include "PlayerUI.h"
 
-#include <Scene.h>
-#include <Camera.h>
+#include <ComponentRegister.h>
 #include <GameObject.h>
+#include <Camera.h>
+#include <UILayout.h>
 
-#include "UILayout.h"
 #include "Health.h"
-#include "ComponentRegister.h"
-#include "Timer.h"
+#include "PlayerController.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerUI);
 
-#include "PlayerController.h"
-
-PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), pauseMenu(nullptr)
+PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), health(nullptr), mainCamera(nullptr), ghostManager(nullptr), name("")
 {
 
 }
@@ -25,81 +23,118 @@ PlayerUI::~PlayerUI()
 
 void PlayerUI::start()
 {
-	name = gameObject->getTag() + std::to_string(gameObject->getComponent<PlayerController>()->getPlayerIndex());
+	// Initialize name to search through layout
+	PlayerController* playerController = gameObject->getComponent<PlayerController>();
+	if (playerController != nullptr)
+		name = "Player" + std::to_string(playerController->getPlayerIndex());
+	else
+		LOG("PlayerController not found. Cannot get player index");
 
+	// Get health component to update stats
 	health = gameObject->getComponent<Health>();
+	if (health == nullptr)
+		LOG("Health component not found");
 
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	if (cameraLayout != nullptr)
-	{
+	//Get ghostManager component to update status
+	ghostManager = gameObject->getComponent<GhostManager>();
+	if (ghostManager == nullptr)
+		LOG("Ghost Manager component not found");
+
+	// Get camera
+	GameObject* cameraObject = findGameObjectWithName("MainCamera");
+	if (cameraObject != nullptr)
+		mainCamera = cameraObject->getComponent<Camera>();
+	if (mainCamera == nullptr)
+		LOG("Camera component not found");
+
+	// Get player layout
+	UILayout* cameraLayout = nullptr;
+	if (cameraObject != nullptr)
+		cameraLayout = cameraObject->getComponent<UILayout>();
+
+	// Get UI elements for PlayerIndicator and PlayerStatsPanel
+	if (cameraLayout != nullptr) {
 		playerHUD = cameraLayout->getRoot().getChild(name + "Background");
 		playerIndicator = cameraLayout->getRoot().getChild(name + "Indicator");
-		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 	}
-
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
 
+	//TODO: esto esta feo aqui (o eso creo)
 	for (int i = 0; i < playerHUD.getChildCount(); i++)
 		playerHUD.getChildAtIndex(i).setInheritsAlpha(false);
 
+	//Initialize layout aspect
 	createHearts();
 	updateHealth();
 }
 
 void PlayerUI::createHearts()
 {
+	if (health == nullptr)
+		return;
+
+	std::string heartName = name + "Heart";
 	float posX = 0.3f;
+	float posY = 0.1f;
+	float xOffset = 0.03f;
+	float heartOffset = 0.02f;
 
-	if (health != nullptr)
-	{
-		for (int i = 1; i <= health->getHealth(); i++)
-		{
-			UIElement heart = playerHUD.createChild("TaharezLook/StaticImage",
-				name + "Heart" + std::to_string(i));
+	for (int i = 1; i <= health->getHealth(); i++) {
+		// Create heart
+		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage", heartName + std::to_string(i));
 
-			heart.setPosition(posX, 0.1f);
-			heart.setSize(0.05f, 0.2f);
-			if (i % 2 != 0)
-				heart.flipHorizontal();
-			else
-				posX += 0.03f;
+		// Set position
+		heart.setPosition(posX, posY);
+		heart.setSize(0.05f, 0.2f);
+		if (i % 2 != 0)
+			heart.flipHorizontal();
+		else
+			posX += xOffset;
 
-			posX += 0.02f;
-		}
+		posX += heartOffset;
 	}
 }
 
 void PlayerUI::updateIndicator()
 {
-	Vector3 pos = gameObject->getScene()->getMainCamera()->worldToScreen(gameObject->transform->getPosition());
+	if (mainCamera == nullptr)
+		return;
+	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());
 	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.24f);
 }
 
 void PlayerUI::update(float deltaTime)
 {
 	updateIndicator();
+	updateHealth();
+	updateState();
 }
 
-void PlayerUI::updateState(const std::string state)
+void PlayerUI::changeState(const std::string state)
 {
 	playerHUD.getChild(name + "StateText").setText("State: " + state);
 }
 
 void PlayerUI::updateHealth()
 {
-	playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
+	if (health != nullptr)
+		playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
 }
 
+void PlayerUI::updateState()
+{
+	if (health != nullptr && ghostManager != nullptr) {
+		std::string state = health->isAlive() ? (health->isInvencible() ? "Invencible" : "Alive") : (ghostManager->isGhost() ? "Ghost" : "Dead");
+		changeState(state);
+	}
+}
+
 void PlayerUI::updateHearts()
 {
-	for (int i = 1; i <= health->getMaxHealth(); i++)
-	{
-		if (i > health->getHealth())
-			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(false);
-		else
-			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(true);
-	}
+	if (health != nullptr)
+		for (int i = 1; i <= health->getMaxHealth(); i++)
+			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(i <= health->getHealth());
 }

@@ -1,9 +1,13 @@
 #pragma once
+#ifndef PLAYER_UI_H
+#define PLAYER_UI_H
 
 #include "UserComponent.h"
 #include "UIElement.h"
 
+class Camera;
 class Health;
+class GhostManager;
 
 class PlayerUI : public UserComponent
 {
@@ -14,22 +18,24 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void updateState(const std::string state);
+	void changeState(const std::string state);
 	void updateHealth();
-
-private:
-	Health* health;
-
-	std::string name;
-
-	UIElement playerHUD;
-	UIElement playerIndicator;
-
-	UIElement pauseMenu;
 
 private:
 	void createHearts();
 
+	void updateState();
 	void updateHearts();
 	void updateIndicator();
+
+private:
+	Camera* mainCamera;
+	Health* health;
+	GhostManager* ghostManager;
+
+	std::string name;
+	UIElement playerHUD;
+	UIElement playerIndicator;
 };
+
+#endif

@@ -1,65 +1,45 @@
 #include "UltimateGhostPunch.h"
 
+#include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include <sstream>
 #include <Scene.h>
 #include <Camera.h>
+#include <sstream>
 
 #include "Health.h"
-#include "ComponentRegister.h"
 #include "GhostMovement.h"
 
 REGISTER_FACTORY(UltimateGhostPunch);
 
-UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), body(nullptr)
+UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) :	UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr), 
+																	direction(0.0, 0.0, 0.0), state(State::NONE), duration(0.0f), force(0.0f),
+																	ghostSpeed(0.0f), chargeSpeedMult(0.0f)
+																	
 {
+	
+}
+
+UltimateGhostPunch::~UltimateGhostPunch()
+{
+
 }
 
 void UltimateGhostPunch::start()
 {
-	body = gameObject->getComponent<RigidBody>();
-	mov = gameObject->getComponent<GhostMovement>();
-	if(mov != nullptr)	ghostSpeed = mov->getSpeed();
-	state = AVAILABLE;
-}
-
-void UltimateGhostPunch::charge()
-{
-	state = CHARGING;
-	if (mov != nullptr) mov->setSpeed(mov->getSpeed() * chargeSpeedMult);
-}
-
-void UltimateGhostPunch::aim(double x, double y)
-{
-	dir = { x, y, 0 };
-	dir.normalize();
-}
-
-void UltimateGhostPunch::ghostPunch()
-{
-	if (body != nullptr) body->addImpulse(dir * force);
-	if (mov != nullptr) mov->setSpeed(ghostSpeed);
-	state = PUNCHING;
+	rigidBody = gameObject->getComponent<RigidBody>();
+	ghostMovement = gameObject->getComponent<GhostMovement>();
+	if(ghostMovement != nullptr)	ghostSpeed = ghostMovement->getSpeed();
+	state = State::AVAILABLE;
 }
 
 void UltimateGhostPunch::update(float deltaTime)
 {
 	// Update the cooldown
-	if (duration > 0.0f && state == PUNCHING)
+	if (duration > 0.0f && state == State::PUNCHING)
 		duration -= deltaTime;
 	else if (duration <= 0.0f)
-		state = USED;
-}
-
-State UltimateGhostPunch::getState()
-{
-	return state;
-}
-
-const Vector3& UltimateGhostPunch::getDir()
-{
-	return dir;
+		state = State::USED;
 }
 
 void UltimateGhostPunch::handleData(ComponentData* data)
@@ -82,4 +62,33 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 		else
 			LOG("ULTIMATE GHOST PUNCH: Invalid property name \"%s\"", prop.first.c_str());
 	}
+}
+
+void UltimateGhostPunch::charge()
+{
+	state = State::CHARGING;
+	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
+}
+
+void UltimateGhostPunch::aim(double x, double y)
+{
+	direction = { x, y, 0.0 };
+	direction.normalize();
+}
+
+void UltimateGhostPunch::ghostPunch()
+{
+	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
+	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
+	state = State::PUNCHING;
+}
+
+const UltimateGhostPunch::State& UltimateGhostPunch::getState()
+{
+	return state;
+}
+
+const Vector3& UltimateGhostPunch::getDirection()
+{
+	return direction;
 }
