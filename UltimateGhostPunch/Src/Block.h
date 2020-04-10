@@ -11,8 +11,6 @@
 class Block : public UserComponent
 {
 private:
-	RigidBody* rigidBody;
-
 	float maxBlockTime; //Duration of block when started
 	float blockTime; //Remaining time of blocking
 	float blockRegenTime; //Time to regen max blockTime
@@ -24,15 +22,12 @@ private:
 	bool isBlocking;
 
 	float blockDirection;
-	GameObject* attackCollider;
-
-	PlayerController* controller;
 
 public:
 	Block(GameObject* gameObject);
 
-	bool block();
-	bool unblock();
+	void block();
+	void unblock();
 	bool blockAttack(float damage, Vector3 otherPosition);
 	
 	virtual void start();
@@ -44,7 +39,9 @@ public:
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
-	bool getGrabBlock();
+	bool getGrabBlock() const;
+
+	bool blocking() const;
 };
 
 #endif

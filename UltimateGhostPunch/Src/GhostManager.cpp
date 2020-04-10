@@ -52,16 +52,20 @@ void GhostManager::update(float deltaTime)
 	{
 		if (!used && !ghost)
 			activateGhost();
-		else if (used && !ghost && fightManager != nullptr)
+		else if (used && !ghost && fightManager != nullptr) {
 			fightManager->playerDie();
+			gameObject->setActive(false);
+		}
 	}
 
 	if (ghost)
 	{
 		if (ghostTime > 0)
 			ghostTime -= deltaTime;
-		else if(fightManager != nullptr)
+		else if (fightManager != nullptr) {
 			fightManager->playerDie();
+			gameObject->setActive(false);
+		}
 	}
 }
 

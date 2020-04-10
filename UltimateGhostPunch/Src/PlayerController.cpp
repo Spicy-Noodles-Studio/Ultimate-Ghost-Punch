@@ -93,7 +93,7 @@ void PlayerController::checkInput()
 {
 	direction = Vector3(0, 0, 0);
 
-	if (!isBlocking) {
+	if (block == nullptr || !block->blocking()) {
 		//Movement
 		direction += Vector3(getHorizontalAxis(), 0, 0);
 		//Character rotation
@@ -104,46 +104,49 @@ void PlayerController::checkInput()
 	//Acctions if the player isn�t in ghostManager mode
 	if (ghostManager == nullptr || !ghostManager->isGhost()) {
 
-		//Test anim
-		if (direction.x != 0 && anim->getCurrentAnimation()!= "Run")
-			anim->playAnimation("Run");
-		else if (direction.x==0 && anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
-			anim->playAnimation("Idle");
-		if (getKeyDown("Space") || getButtonDown("A"))
-			anim->playAnimation("Jump");
+		//If we are not blocking
+		if (block == nullptr || !block->blocking()) {
+			//Test anim
+			if (direction.x != 0 && anim->getCurrentAnimation() != "Run")
+				anim->playAnimation("Run");
+			else if (direction.x == 0 && anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
+				anim->playAnimation("Idle");
+			if (getKeyDown("Space") || getButtonDown("A"))
+				anim->playAnimation("Jump");
 
-		//Attack
-		if (attack != nullptr && !isBlocking) {
-			//Quick attack
-			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")){
-				attack->quickAttack();
-				anim->playAnimation("AttackA");//provisional
+			//Attack
+			if (attack != nullptr) {
+				//Quick attack
+				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
+					attack->quickAttack();
+					anim->playAnimation("AttackA");//provisional
+				}
+				//Strong attack
+				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
+					attack->strongAttack();
 			}
-			//Strong attack
-			else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
-				attack->strongAttack();
-		}
 
-		//Dodge
-		if (dodge != nullptr && !isBlocking)
-			if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
-				 dodge->dodge();
+			//Dodge
+			if (dodge != nullptr)
+				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
+					dodge->dodge();
 
-		//Jump
-		if (jump != nullptr && !isBlocking)
-			if (getKey("Space") || getButton("A"))
-				 jump->jump();
+			//Jump
+			if (jump != nullptr)
+				if (getKey("Space") || getButton("A"))
+					jump->jump();
 
-		//Grab
-		if (grab != nullptr && !isBlocking) {
-			if (getKey("E") || getButton("LB")) grab->grab();
-			else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
+			//Grab
+			if (grab != nullptr) {
+				if (getKey("E") || getButton("LB")) grab->grab();
+				else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
+			}
 		}
 
 		//Block
 		if (block != nullptr) {
-			if (getKeyDown("S") || getButtonDown("B")) isBlocking = block->block();
-			if (isBlocking && (getKeyUp("S") || getButtonUp("B")))  isBlocking = block->unblock();
+			if (getKeyDown("S") || getButtonDown("B")) block->block();
+			if (isBlocking && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
 		}
 	}
 

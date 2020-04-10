@@ -32,9 +32,9 @@
             "ComponentProperties":[ 
                [ "shape", "Box"],
                [ "mass", "5"],
-               [ "friction", "0.1"],
+               [ "friction", "0.9"],
                [ "restitution", "0"],
-               [ "damping", "0.4"],
+               [ "damping", "0.5"],
                [ "angularDamping", "0"],
                [ "gravity", "0 -10 0"],
                [ "offset", "0 0 0"],
@@ -85,7 +85,11 @@
             ]
         },
 		{
-		    "ComponentName": "Dodge"
+		    "ComponentName": "Dodge",
+             "ComponentProperties": [
+                ["force", "50"],
+                ["cooldown", "2"]
+            ]
 		},
         {
             "ComponentName": "GhostManager",
@@ -180,7 +184,7 @@
                     "ComponentName": "Transform",
                     "ComponentProperties":[
                        [ "position", "0 0 1.65"],
-                       [ "scale", "1 1 2"]
+                       [ "scale", "1 2 2"]
                     ]
                 }
             ],
@@ -189,7 +193,9 @@
                 {
                     "ComponentName": "Grab",
 					"ComponentProperties": [
-                        ["freezeDuration", "2"]
+                        ["freezeDuration", "2"],
+                        ["grabDuration", "2"],
+                        ["throwForce", "15"]
                     ]
                 }
             ]

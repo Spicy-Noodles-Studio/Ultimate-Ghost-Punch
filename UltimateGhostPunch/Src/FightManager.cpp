@@ -64,7 +64,7 @@ void FightManager::update(float deltaTime)
 	}
 	else {
 		// end game
-		if (winner != -1) chooseWinner();
+		if (winner == -1) chooseWinner();
 		finishTimer -= deltaTime;
 		if (finishTimer <= 0.0f) { 
 			gameManager->getKnights().clear();
