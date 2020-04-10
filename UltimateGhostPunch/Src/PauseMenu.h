@@ -1,14 +1,18 @@
 #pragma once
+#ifndef PAUSE_MENU_H
+#define PAUSE_MENU_H
+
 #include <UserComponent.h>
-#include "UIElement.h"
+#include <UIElement.h>
 
 class InputSystem;
 
 class PauseMenu : public UserComponent
 {
 private:
-	UIElement pauseMenu;
 	InputSystem* inputSystem;
+	UIElement pauseMenu;
+
 public:
 	PauseMenu(GameObject* gameObject);
 
@@ -20,3 +24,4 @@ public:
 	bool isVisible();
 };
 
+#endif

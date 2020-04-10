@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef RESPAWN_H
 #define RESPAWN_H
 
@@ -31,4 +30,4 @@ public:
 	bool isRespawning();
 };
 
-#endif 
+#endif

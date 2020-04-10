@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef DEATH_ZONE_H
 #define DEATH_ZONE_H
 
@@ -19,4 +18,4 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 };
 
-#endif 
+#endif

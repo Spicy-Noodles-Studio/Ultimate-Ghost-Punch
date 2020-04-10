@@ -1,19 +1,18 @@
 #include "OptionsConfiguration.h"
 
-#include "InputSystem.h"
-#include "GameObject.h"
-#include "UILayout.h"
-#include "UIElement.h"
-#include <Camera.h>
-
-#include <SceneManager.h>
+#include <InputSystem.h>
 #include <InterfaceSystem.h>
-#include "GameManager.h"
-#include "ComponentRegister.h"
 #include <SoundSystem.h>
 #include <RenderSystem.h>
-#include <SceneManager.h>
 #include <Window.h>
+#include <SceneManager.h>
+#include <GameObject.h>
+#include <UILayout.h>
+#include <UIElement.h>
+#include <Camera.h>
+
+#include "GameManager.h"
+#include "ComponentRegister.h"
 
 REGISTER_FACTORY(OptionsConfiguration);
 
@@ -21,27 +20,24 @@ REGISTER_FACTORY(OptionsConfiguration);
 
 bool OptionsConfiguration::resolutionButtonClick()
 {
-	
-	if (fullscreen ) {
-		if (currResolution != resolution)
+	if (currResolution != resolution)
+	{
+		if (fullscreen)
 		{
 			RenderSystem::GetInstance()->setFullscreen(false);
 			RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
 			RenderSystem::GetInstance()->setFullscreen(true);
 			currResolution = resolution;
 		}
-	}
-	else
-		if (currResolution != resolution)
+		else
 		{
 			RenderSystem::GetInstance()->windowResize(RESOLUTIONS[resolution].first, RESOLUTIONS[resolution].second);
 			currResolution = resolution;
 		}
+	}
 	
 	return false;
 }
-
-
 
 bool OptionsConfiguration::changeResolution(int value)
 {
@@ -57,17 +53,14 @@ bool OptionsConfiguration::changeResolution(int value)
 
 bool OptionsConfiguration::changeFullscreen(bool value)
 {
-		fullscreen = value;
-	
-		RenderSystem::GetInstance()->setFullscreen(fullscreen);
-	
+	fullscreen = value;
+	RenderSystem::GetInstance()->setFullscreen(fullscreen);
 
 	return false;
 }
 
 bool OptionsConfiguration::changeSoundVolume()
 {
-
 	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("SoundVolume").setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() *MAX_VOLUME+0.5)));
 	SoundSystem::GetInstance()->setSoundEffectsVolume(volumeScroll.getScrollPositionScrollBar());
 	
@@ -78,6 +71,7 @@ bool OptionsConfiguration::changeMusicVolume()
 {
 	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("MusicVolume").setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME+0.5)));
 	SoundSystem::GetInstance()->setMusicVolume(musicScroll.getScrollPositionScrollBar());
+
 	return false;
 }
 
@@ -85,13 +79,13 @@ bool OptionsConfiguration::changeGamma()
 {
 	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Gamma").setText(std::to_string((int)(gammaScroll.getScrollPositionScrollBar() * MAX_GAMMA +0.5)));
 	RenderSystem::GetInstance()->changeParamOfShader("LuminancePS", "brigh", gammaScroll.getScrollPositionScrollBar());
+
 	return false;
 }
 
 // -----
 
-OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) :
-	UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL),musicScroll(NULL),gammaScroll(NULL)
+OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL),musicScroll(NULL),gammaScroll(NULL)
 {
 	InterfaceSystem::GetInstance()->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
 	InterfaceSystem::GetInstance()->registerEvent("+resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(+1); }));
@@ -129,9 +123,11 @@ void OptionsConfiguration::start()
 	volumeScroll = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("SoundScroll");
 	musicScroll= findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("MusicScroll");
 	gammaScroll= findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("GammaScroll");
+
 	musicVolume = 100;
 	soundsVolume = 100;
 	gamma = 100;
+
 	resolution = 6;
 	fullscreen = false;
 }
