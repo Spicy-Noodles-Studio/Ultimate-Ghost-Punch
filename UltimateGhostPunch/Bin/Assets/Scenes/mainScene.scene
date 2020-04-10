@@ -38,6 +38,12 @@
             ]
         },
         {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "DeathZone",
+            "Tag": "death",
+            "BlueprintPath": "DeathZone"
+        },
+        {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "FightManager",
             "Tag": "fightManager",

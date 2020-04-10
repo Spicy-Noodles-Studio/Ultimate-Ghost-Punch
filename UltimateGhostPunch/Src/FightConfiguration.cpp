@@ -1,15 +1,14 @@
 #include "FightConfiguration.h"
 
-#include "InputSystem.h"
-#include "GameObject.h"
-#include "UILayout.h"
-#include "UIElement.h"
-
-#include <SceneManager.h>
+#include <ComponentRegister.h>
 #include <InterfaceSystem.h>
-#include "GameManager.h"
+#include <InputSystem.h>
+#include <SceneManager.h>
+#include <GameObject.h>
+#include <UILayout.h>
+#include <UIElement.h>
 
-#include "ComponentRegister.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(FightConfiguration);
 
@@ -18,18 +17,19 @@ REGISTER_FACTORY(FightConfiguration);
 bool FightConfiguration::fightButtonClick()
 {
 	// set data
-	GameManager::GetInstance()->setLevel(levelNames[level]);
-	GameManager::GetInstance()->setSong(songNames[song]);
-	GameManager::GetInstance()->setNPlayers(nPlayers);
-	GameManager::GetInstance()->setHealth(health);
+	GameManager* gameManager = GameManager::GetInstance();
+	gameManager->setLevel(levelNames[levelIndex]);
+	gameManager->setSong(songNames[songIndex]);
+	gameManager->setNumPlayers(numPlayers);
+	gameManager->setHealth(health);
 
 	std::vector<int> indexes;
-	for (int i = 0; i < nPlayers; i++)
+	for (int i = 0; i < numPlayers; i++)
 		indexes.push_back(slots[i].first);
-	GameManager::GetInstance()->setPlayerIndexes(indexes);
+	gameManager->setPlayerIndexes(indexes);
 
-	if (time != MAX_TIME) GameManager::GetInstance()->setTime(time);
-	else GameManager::GetInstance()->setTime(-1);
+	if (time != MAX_TIME) gameManager->setTime(time);
+	else gameManager->setTime(-1);
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("mainScene");
@@ -44,7 +44,7 @@ bool FightConfiguration::changeHealth(int value)
 	if (health < MIN_HEALTH) health = MIN_HEALTH;
 	if (health > MAX_HEALTH) health = MAX_HEALTH;
 
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Health").setText(std::to_string(health));
+	configLayout->getRoot().getChild("Health").setText(std::to_string(health));
 
 	return false;
 }
@@ -56,126 +56,120 @@ bool FightConfiguration::changeTime(int value)
 	if (time < MIN_TIME) time = MIN_TIME;
 	if (time > MAX_TIME) time = MAX_TIME;
 
-	if (time == MAX_TIME) findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Time").setText("INFINITE");
-	else findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Time").setText(std::to_string(time));
+	if (time == MAX_TIME) configLayout->getRoot().getChild("Time").setText("INFINITE");
+	else configLayout->getRoot().getChild("Time").setText(std::to_string(time));
 
 	return false;
 }
 
 bool FightConfiguration::changeSong(int value)
 {
-	song += value;
+	songIndex += value;
 
-	if (song < 0) song = 0;
-	if (song > songNames.size() - 1) song = songNames.size() - 1;
+	if (songIndex < 0) songIndex = 0;
+	if (songIndex > songNames.size() - 1) songIndex = songNames.size() - 1;
 
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Song").setText(songNames[song]);
+	configLayout->getRoot().getChild("Song").setText(songNames[songIndex]);
 
 	return false;
 }
 
 bool FightConfiguration::changeLevel(int value)
 {
-	level += value;
+	levelIndex += value;
 
-	if (level < 0) level = 0;
-	if (level > levelNames.size() - 1) level = levelNames.size() - 1;
+	if (levelIndex < 0) levelIndex = 0;
+	if (levelIndex > levelNames.size() - 1) levelIndex = levelNames.size() - 1;
 
-	findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Level").setText(levelNames[level]);
+	configLayout->getRoot().getChild("Level").setText(levelNames[levelIndex]);
 
 	return false;
 }
 
 // -----
 
-FightConfiguration::FightConfiguration(GameObject* gameObject) :
-	UserComponent(gameObject), fightButton(NULL)
+FightConfiguration::FightConfiguration(GameObject* gameObject) :	UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
+																	numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 {
-	InterfaceSystem::GetInstance()->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
-	InterfaceSystem::GetInstance()->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
+	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
+	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
 
-	InterfaceSystem::GetInstance()->registerEvent("-timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(-20); }));
-	InterfaceSystem::GetInstance()->registerEvent("+timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(+20); }));
+	interfaceSystem->registerEvent("-timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(-20); }));
+	interfaceSystem->registerEvent("+timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(+20); }));
 
-	InterfaceSystem::GetInstance()->registerEvent("-songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(-1); }));
-	InterfaceSystem::GetInstance()->registerEvent("+songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(+1); }));
+	interfaceSystem->registerEvent("-songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(-1); }));
+	interfaceSystem->registerEvent("+songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(+1); }));
 
-	InterfaceSystem::GetInstance()->registerEvent("-levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(-1); }));
-	InterfaceSystem::GetInstance()->registerEvent("+levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(+1); }));
+	interfaceSystem->registerEvent("-levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(-1); }));
+	interfaceSystem->registerEvent("+levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(+1); }));
 
-	InterfaceSystem::GetInstance()->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
+	interfaceSystem->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
 }
 
 FightConfiguration::~FightConfiguration()
 {
-	InterfaceSystem::GetInstance()->unregisterEvent("-healthButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("+healthButtonClick");
+	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+	interfaceSystem->unregisterEvent("-healthButtonClick");
+	interfaceSystem->unregisterEvent("+healthButtonClick");
 
-	InterfaceSystem::GetInstance()->unregisterEvent("-timeButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("+timeButtonClick");
+	interfaceSystem->unregisterEvent("-timeButtonClick");
+	interfaceSystem->unregisterEvent("+timeButtonClick");
 
-	InterfaceSystem::GetInstance()->unregisterEvent("-songButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("+songButtonClick");
+	interfaceSystem->unregisterEvent("-songButtonClick");
+	interfaceSystem->unregisterEvent("+songButtonClick");
 
-	InterfaceSystem::GetInstance()->unregisterEvent("-levelButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("+levelButtonClick");
+	interfaceSystem->unregisterEvent("-levelButtonClick");
+	interfaceSystem->unregisterEvent("+levelButtonClick");
 
-	InterfaceSystem::GetInstance()->unregisterEvent("fightButtonClick");
+	interfaceSystem->unregisterEvent("fightButtonClick");
 }
 
 void FightConfiguration::start()
 {
 	inputSystem = InputSystem::GetInstance();
 
-	fightButton = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("FightButton");
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera != nullptr)
+		configLayout = mainCamera->getComponent<UILayout>();
+	if(configLayout != nullptr)
+		fightButton = configLayout->getRoot().getChild("FightButton");
 
-	level = 0;
-	song = 0;
+	levelIndex = 0;
+	songIndex = 0;
 	time = 60;
 	health = 4;
-	nPlayers = 0;
+	numPlayers = 0;
 
 	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
-	for (int i = 0; i < 4; i++)
-	{
-		slots[i] = { -1 , findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("Slot" + std::to_string(i + 1))
-			.getChild("Connected" + std::to_string(i + 1)) };
+	for (int i = 0; i < 4; i++)	{
+		if (configLayout != nullptr)
+			slots[i] = { -1 , configLayout->getRoot().getChild("Slot" + std::to_string(i + 1)).getChild("Connected" + std::to_string(i + 1)) };
 	}
 
 }
 
 void FightConfiguration::update(float deltaTime)
 {
-	checkController();
-	checkKeyboard();
+	checkInput();
 }
 
-void FightConfiguration::checkController()
+void FightConfiguration::checkInput()
 {
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 5; i++)	{
 		int slotIndex = isIndexConnected(i);
+		// Controller || Keyboard
+		bool enterButton =		(i < 4 && inputSystem->getButtonPress(i, "A"))	// Controller
+							||	(i == 4 && inputSystem->getKeyPress("Space"));	// Keyboard
+		bool exitButton =		(i < 4 && (inputSystem->getButtonPress(i, "B") || !inputSystem->isControllerConnected(i)))	// Controller
+							||	(i == 4 && inputSystem->getKeyPress("ESCAPE"));												// Keyboard
 
-		if (nPlayers < 4 && slotIndex == -1 && inputSystem->getButtonPress(i, "A"))
-			fillSlot(nPlayers, i);
-		else if (slotIndex != -1 && (inputSystem->getButtonPress(i, "B") || !inputSystem->isControllerConnected(i)))
-		{
+		if (numPlayers < 4 && slotIndex == -1 && enterButton)
+			fillSlot(numPlayers, i);
+		else if (slotIndex != -1 && exitButton)	{
 			clearSlot(slotIndex);
 			reorderSlots(slotIndex);
 		}
-	}
-}
-
-void FightConfiguration::checkKeyboard()
-{
-	int slotIndex = isIndexConnected(5);
-
-	if (nPlayers < 4 && slotIndex == -1 && inputSystem->getKeyPress("SPACE"))
-		fillSlot(nPlayers, 5);
-	else if (slotIndex != -1 && inputSystem->getKeyPress("ESCAPE"))
-	{
-		clearSlot(slotIndex);
-		reorderSlots(slotIndex);
 	}
 }
 
@@ -187,12 +181,12 @@ void FightConfiguration::fillSlot(int slotIndex, int deviceIndex)
 	slots[slotIndex].second.getChild("PlayerText").setText("P" + std::to_string(slotIndex + 1));
 	slots[slotIndex].second.getChild("IndexText").setText("Index: " + std::to_string(slots[slotIndex].first));
 
-	if (deviceIndex == 5) slots[slotIndex].second.getChild("TypeText").setText("Keyboard");
+	if (deviceIndex == 4) slots[slotIndex].second.getChild("TypeText").setText("Keyboard");
 	else slots[slotIndex].second.getChild("TypeText").setText("Controller");
 
-	nPlayers++;
+	numPlayers++;
 
-	if (!fightButton.isVisible() && nPlayers >= MIN_PLAYERS) fightButton.setVisible(true);
+	if (!fightButton.isVisible() && numPlayers >= MIN_PLAYERS) fightButton.setVisible(true);
 }
 
 void FightConfiguration::clearSlot(int index)
@@ -200,15 +194,15 @@ void FightConfiguration::clearSlot(int index)
 	slots[index].first = -1;
 	slots[index].second.setVisible(false);
 
-	nPlayers--;
+	numPlayers--;
 
-	if (fightButton.isVisible() && nPlayers < MIN_PLAYERS) fightButton.setVisible(false);
+	if (fightButton.isVisible() && numPlayers < MIN_PLAYERS) fightButton.setVisible(false);
 }
 
 int FightConfiguration::isIndexConnected(int index)
 {
 	int i = 0;
-	while (i < nPlayers && slots[i].first != index)
+	while (i < numPlayers && slots[i].first != index)
 		i++;
 
 	if (slots[i].first == index)
@@ -219,7 +213,7 @@ int FightConfiguration::isIndexConnected(int index)
 
 void FightConfiguration::reorderSlots(int index)
 {
-	for (int i = index; i < nPlayers; i++)
+	for (int i = index; i < numPlayers; i++)
 	{
 		fillSlot(i, slots[i + 1].first);
 		clearSlot(i + 1);

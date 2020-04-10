@@ -15,7 +15,8 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-               [ "mesh", "player Knight.mesh"]
+               [ "mesh", "player Knight.mesh"],
+               [ "attachToBone", "sword Espada.mesh player Mano.L"]
             ]
         },
         {
@@ -31,9 +32,9 @@
             "ComponentProperties":[ 
                [ "shape", "Box"],
                [ "mass", "5"],
-               [ "friction", "0.1"],
+               [ "friction", "0.9"],
                [ "restitution", "0"],
-               [ "damping", "0.4"],
+               [ "damping", "0.5"],
                [ "angularDamping", "0"],
                [ "gravity", "0 -10 0"],
                [ "offset", "0 0 0"],
@@ -47,26 +48,31 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-              [  "speed", "50"]
+                ["speed", "75"]
             ]
         },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
-               [ "keyboard", "0"],
-               [ "index", "0"]
+                ["index", "0"]
             ]
         },
         {
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
-               [ "maxSpeed", "6"]
+                ["maxSpeed", "5"]
+            ]
+        },
+        {
+            "ComponentName": "Respawn",
+            "ComponentProperties":[ 
+                ["respawnTime", "2"]
             ]
         },
         {
             "ComponentName": "UltimateGhostPunch",
             "ComponentProperties": [
-               [ "force", "200"],
+                ["force", "200"],
                 ["duration" , "0.333"],
                 ["chargeSpeedMult" , "0.3"]
             ]
@@ -75,21 +81,25 @@
             "ComponentName": "Health",
             "ComponentProperties": [
                 ["health", "4"],
-                ["resHealth", "2"],
-                ["invDamTime", "2"],
-                ["invResTime", "3"]
+                ["invDamTime", "2"]
             ]
         },
 		{
-		    "ComponentName": "Dodge"
+		    "ComponentName": "Dodge",
+             "ComponentProperties": [
+                ["force", "20"],
+                ["cooldown", "2"]
+            ]
 		},
         {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
+                ["ghostTime", "10"],
                 ["ghostMesh", "ghost Espada.mesh"],
                 ["ghostScale", "1 1 1"],
                 ["spawnOffset", "0 1.25 0"],
-                ["ghostDamage", "1"]
+                ["ghostDamage", "1"],
+                ["resurrectionHealth", "2"]
             ]
         },
         {
@@ -115,7 +125,16 @@
             "Components":
             [
                 {
-                    "ComponentName": "Attack"
+                    "ComponentName": "Attack",
+                    "ComponentProperties":[
+                        ["quickCooldown", "0.5"],
+                        ["strongCooldown", "2"],
+                        ["quickDamage", "1"],
+                        ["strongDamage", "2"],
+                        ["attackDuration", "0.5"],
+                        ["quickCharge", "0.5"],
+                        ["strongCharge", "0.75"]
+                    ]
                 }
             ]
         },
@@ -139,8 +158,9 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "15"],
-				        ["jumpDecay", "1.5"]
+                        ["maxForce", "55"],
+				        ["jumpDecay", "0.4"],
+                        ["coyoteTime", "0.4"]
                     ]       
                 },
 				{
@@ -164,7 +184,7 @@
                     "ComponentName": "Transform",
                     "ComponentProperties":[
                        [ "position", "0 0 1.65"],
-                       [ "scale", "1 1 2"]
+                       [ "scale", "1 2 2"]
                     ]
                 }
             ],
@@ -173,7 +193,9 @@
                 {
                     "ComponentName": "Grab",
 					"ComponentProperties": [
-                        ["freezeDuration", "2"]
+                        ["freezeDuration", "2"],
+                        ["grabDuration", "2"],
+                        ["throwForce", "15"]
                     ]
                 }
             ]

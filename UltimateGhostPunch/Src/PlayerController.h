@@ -5,12 +5,13 @@
 #include <UserComponent.h>
 
 class InputSystem;
-class GhostMovement;
 class Movement;
 class Attack;
-class GhostManager;
 class Dodge;
 class Jump;
+class Health;
+class GhostManager;
+class GhostMovement;
 class UltimateGhostPunch;
 class Animator;
 
@@ -22,39 +23,55 @@ class Block;
 class PlayerController : public UserComponent
 {
 private:
-	int controllerIndex;
-	bool usingKeyboard;
-	bool charge = false;
-	bool isBlocking = false;
+	bool isBlocking;
 
 	int playerIndex;
-	Vector3 dir;
+	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
-	// Initial position of the player
-	Vector3 iniPosition = {0,0,0};
+	Vector3 direction;
 
+	// Components
 	Movement* movement;
-	GhostMovement* ghostMovement;
-	Jump* jump;
 	Attack* attack;
+	Jump* jump;
+	Health* health;
+
+	GhostManager* ghostManager;
+	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
-	Block* block;
-
-	InputSystem* inputSystem;
-	GhostManager* ghost;
 	Animator* anim;
-
+	Block* block;
 	Dodge* dodge;
 	Grab* grab;
-	// Will ignore input if frozen is true
-	bool frozen = false;
 
+	// Input
+	InputSystem* inputSystem;
 
-	// Damage taken when falling out of the world
-	float fallDamage = 2.0f;
+	//Checks if the player is using a keyboard and if the key was used
+	bool getKeyDown(const std::string& key);
+	bool getKeyUp(const std::string& key);
+	bool getKey(const std::string& key);
+
+	//Checks if the player is using a controller and if the key was used
+	bool getButtonDown(const std::string& button);
+	bool getButtonUp(const std::string& button);
+	bool getButton(const std::string& button);
+
+	//Checks if the player is using a controller and if an axis was used
+	//Left or Right as parameters
+	int getControllerHorizontalLeftAxis();
+	int getControllerHorizontalRightAxis();
+	int getControllerVerticalLeftAxis();
+	int getControllerVerticalRightAxis();
+
+	int getHorizontalAxis();
+	int getVerticalAxis();
+
+	void ghostPunchMouseAim();
 
 public:
 	PlayerController(GameObject* gameObject);
+	virtual ~PlayerController();
 
 	virtual void start();
 	virtual void update(float deltaTime);
@@ -62,23 +79,13 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	// Manages player's input and generates a movement direction
-	void checkInput(Vector3 &dir);
-	// Respawn and damage the player if it falls out of the world,
-	// and returns true in that case
-	bool checkOutsideLimits();
+	void checkInput();
 
 	int getPlayerIndex() const;
-	Vector3 getInitialPosition() const;
-
-	void respawn(const Vector3& respawnPos);
-	// Freezes / Reenables the movement 
-	void setFrozen(bool freeze);
 	void setPlayerIndex(int index);
 	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);
-
-	void setUsingKeyboard(bool usingKeyboard);
 };
 
 #endif

@@ -1,48 +1,54 @@
 #pragma once
+#ifndef GHOST_MANAGER_H
+#define GHOST_MANAGER_H
+
 #include <UserComponent.h>
-#include <string>
 
 class Movement;
-class Health;
 class GhostMovement;
-class RigidBody;
+class Health;
 class Transform;
 class MeshRenderer;
+class RigidBody;
+class PlayerUI;
+class FightManager;
 
 class GhostManager : public UserComponent
 {
 private:
-	bool ghost, ghostAble;
-	float ghostTime = 10;
-	int ghostDamage = 1;
-	Vector3 ghostSpawnOffset = { 0,0,0 };
+	bool ghost, used, deathPosChanged;
 
-	Movement* mov;
-	GhostMovement* gMov;
+	float ghostTime, playerGravity;
+	int ghostDamage, resurrectionHealth;
+
+	Movement* movement;
+	GhostMovement* ghostMovement;
 	Health* health;
-	RigidBody* rb;
 	Transform* transform;
-	MeshRenderer* mesh;
+	MeshRenderer* meshRenderer;
+	RigidBody* rigidBody;
+	PlayerUI* playerUI;
+	FightManager* fightManager;
 
 	std::string ghostMeshId, ghostMeshName;
-	Vector3 ghostScale = { 1,1,1 };
 	std::string aliveMeshId, aliveMeshName;
+
 	Vector3 aliveScale;
-	float playerGravity;
-	Vector3 deathPos = {0,0,0};
+	Vector3 ghostScale;
+	Vector3 ghostSpawnOffset;
+
+	Vector3 deathPosition;
 
 public:
 	GhostManager(GameObject* gameObject);
+	virtual ~GhostManager();
 
 	virtual void start();
 	virtual void update(float deltaTime);
-
 	virtual void handleData(ComponentData* data);
-
 	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
-	bool hasGhost();
 
 	void activateGhost();
 	void deactivateGhost();
@@ -50,3 +56,4 @@ public:
 	void setDeathPosition(const Vector3& dPos);
 };
 
+#endif

@@ -1,8 +1,8 @@
 #include "PauseMenu.h"
 
 #include <InputSystem.h>
-#include <GameObject.h>
 #include <InterfaceSystem.h>
+#include <GameObject.h>
 
 #include "GameManager.h"
 #include "UILayout.h"
@@ -19,13 +19,11 @@ PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), pauseM
 void PauseMenu::start()
 {
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+
 	if (cameraLayout != nullptr)
-	{
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
-	}
 
 	inputSystem = InputSystem::GetInstance();
-
 }
 
 void PauseMenu::update(float deltaTime)
