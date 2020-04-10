@@ -15,7 +15,9 @@ void PlatformGraph::drawLinks()
 {
 	for (PlatformNode node : platforms) {
 		for (NavigationLink n : node.getEdges()) {
-			physicsSystem->drawLine(node.getBegining(), platforms[n.getConnection()].getBegining(), { 0,1,0 });
+			auto v = n.getStates();
+			for(int i=0; i< v.size()-1;i++)
+			physicsSystem->drawLine(v[i].getPos(), v[i+1].getPos(), { 0,1,0 });
 		}
 	}
 }

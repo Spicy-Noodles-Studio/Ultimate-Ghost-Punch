@@ -18,6 +18,8 @@ private:
 public:
 	State();
 	State(const Vector3& pos, const Vector3& velocity, const Vector3& force, Action action);
+
+	Vector3 getPos() const;
 };
 
 class NavigationLink {
@@ -29,6 +31,7 @@ public:
 	NavigationLink(const std::vector<State>& states, int connection);
 
 	int getConnection() const;
+	std::vector<State> getStates() const;
 };
 
 class PlatformNode

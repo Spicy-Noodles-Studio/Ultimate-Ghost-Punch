@@ -30,8 +30,8 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	virtual void onCollisionEnter(GameObject* other);
-	virtual void onCollisionExit(GameObject* other);
+	virtual void onObjectEnter(GameObject* other);
+	virtual void onObjectExit(GameObject* other);
 
 	void saveState(Action action);
 };

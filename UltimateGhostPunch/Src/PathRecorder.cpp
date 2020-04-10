@@ -25,17 +25,19 @@ void PathRecorder::start()
 	rigidBody = gameObject->getComponent<RigidBody>();
 	
 	GameObject* aux = findGameObjectWithName("Level1");
-	if(aux != nullptr) graph = gameObject->getComponent<PlatformGraph>();
+	if(aux != nullptr) graph = aux->getComponent<PlatformGraph>();
 
 	inputSystem = InputSystem::GetInstance();
 
-	controllerIndex = gameObject->getComponent<PlayerController>()->getControllerIndex();
+	controllerIndex = gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
 }
 
 void PathRecorder::update(float deltaTime)
 {
 	if (controllerIndex == 4 && record) {
 		if (inputSystem->getKeyPress("Space")) {
+			if(!recording)
+				iniPos = gameObject->getParent()->transform->getWorldPosition();
 			saveState(Action::Jump);
 			recording = true;
 		}
@@ -50,34 +52,38 @@ void PathRecorder::update(float deltaTime)
 	}
 }
 
-void PathRecorder::onCollisionEnter(GameObject* other)
+void PathRecorder::onObjectEnter(GameObject* other)
 {
 	if (controllerIndex == 4 && other->getTag() == "suelo") {
 		int endIndex = -1, iniIndex = -1;
 		if (graph != nullptr) {
-			endIndex = graph->getIndex(gameObject->transform->getPosition());
+			endIndex = graph->getIndex(gameObject->getParent()->transform->getWorldPosition());
 			iniIndex = graph->getIndex(iniPos);
 		}
 		if (endIndex != -1) {
 			NavigationLink navLink = NavigationLink(states, endIndex);
-			if(iniIndex!=-1) graph->addLinkToPlatform(iniIndex, navLink);
+			if (iniIndex != -1) {
+				graph->addLinkToPlatform(iniIndex, navLink);
+				LOG("Link Created");
+			}
 		}
 		states.clear();
-		LOG("Link Created");
 		recording = false;
 	}
 }
 
-void PathRecorder::onCollisionExit(GameObject* other)
+void PathRecorder::onObjectExit(GameObject* other)
 {
 	if (controllerIndex == 4 && other->getTag() == "suelo" && !recording) {
 		saveState(Action::None);
+		iniPos = gameObject->getParent()->transform->getWorldPosition();
+		recording = true;
 	}
 }
 
 void PathRecorder::saveState(Action action)
 {
-	states.push_back(State(gameObject->transform->getPosition(), rigidBody->getLinearVelocity(), rigidBody->getTotalForce(), action));
+	states.push_back(State(gameObject->getParent()->transform->getWorldPosition(), rigidBody->getLinearVelocity(), rigidBody->getTotalForce(), action));
 	LOG("State Recorded");
 }
 

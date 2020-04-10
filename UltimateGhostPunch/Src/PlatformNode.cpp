@@ -61,6 +61,11 @@ State::State(const Vector3& pos, const Vector3& velocity, const Vector3& force, 
 {
 }
 
+Vector3 State::getPos() const
+{
+	return pos;
+}
+
 //NAVIGATION LINK
 NavigationLink::NavigationLink(const std::vector<State>& states, int connection) : linkStates(states), connection(connection)
 {
@@ -69,4 +74,9 @@ NavigationLink::NavigationLink(const std::vector<State>& states, int connection)
 int NavigationLink::getConnection() const
 {
 	return connection;
+}
+
+std::vector<State> NavigationLink::getStates() const
+{
+	return linkStates;
 }
