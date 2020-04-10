@@ -295,6 +295,11 @@ int PlayerController::getPlayerIndex() const
 	return playerIndex;
 }
 
+int PlayerController::getControllerIndex() const
+{
+	return controllerIndex;
+}
+
 Vector3 PlayerController::getInitialPosition() const
 {
 	return iniPosition;

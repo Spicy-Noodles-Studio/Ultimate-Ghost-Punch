@@ -68,6 +68,7 @@ public:
 	bool checkOutsideLimits();
 
 	int getPlayerIndex() const;
+	int getControllerIndex()const;
 	Vector3 getInitialPosition() const;
 
 	void respawn(const Vector3& respawnPos);
