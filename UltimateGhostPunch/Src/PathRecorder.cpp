@@ -8,6 +8,8 @@
 #include "PlatformGraph.h"
 #include "PlatformNode.h"
 #include "PlayerController.h"
+#include "Health.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PathRecorder);
 
@@ -22,14 +24,16 @@ PathRecorder::~PathRecorder()
 
 void PathRecorder::start()
 {
-	rigidBody = gameObject->getComponent<RigidBody>();
-	
 	GameObject* aux = findGameObjectWithName("Level1");
 	if(aux != nullptr) graph = aux->getComponent<PlatformGraph>();
 
 	inputSystem = InputSystem::GetInstance();
 
+	health = gameObject->getParent()->getComponent<Health>();
+	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
+	ghostManager = gameObject->getParent()->getComponent<GhostManager>();
 	controllerIndex = gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
+
 }
 
 void PathRecorder::update(float deltaTime)
@@ -50,11 +54,16 @@ void PathRecorder::update(float deltaTime)
 		else if (recording)
 			saveState(Action::None);
 	}
+	//If we recived damage we stop recording
+	if (health != nullptr && health->isInvencible())
+		stopRecording();
+	if (ghostManager != nullptr && ghostManager->isGhost())
+		stopRecording();
 }
 
 void PathRecorder::onObjectEnter(GameObject* other)
 {
-	if (controllerIndex == 4 && other->getTag() == "suelo") {
+	if (controllerIndex == 4 && other->getTag() == "suelo" && recording) {
 		int endIndex = -1, iniIndex = -1;
 		if (graph != nullptr) {
 			endIndex = graph->getIndex(gameObject->getParent()->transform->getWorldPosition());
@@ -64,16 +73,15 @@ void PathRecorder::onObjectEnter(GameObject* other)
 			NavigationLink navLink = NavigationLink(states, endIndex);
 			if (iniIndex != -1) {
 				graph->addLinkToPlatform(iniIndex, navLink);
-				LOG("Link Created");
 			}
 		}
-		states.clear();
-		recording = false;
+		stopRecording();
 	}
 }
 
 void PathRecorder::onObjectExit(GameObject* other)
 {
+	//Start recording
 	if (controllerIndex == 4 && other->getTag() == "suelo" && !recording) {
 		saveState(Action::None);
 		iniPos = gameObject->getParent()->transform->getWorldPosition();
@@ -84,6 +92,11 @@ void PathRecorder::onObjectExit(GameObject* other)
 void PathRecorder::saveState(Action action)
 {
 	states.push_back(State(gameObject->getParent()->transform->getWorldPosition(), rigidBody->getLinearVelocity(), rigidBody->getTotalForce(), action));
-	LOG("State Recorded");
+}
+
+void PathRecorder::stopRecording()
+{
+	recording = false;
+	states.clear();
 }
 

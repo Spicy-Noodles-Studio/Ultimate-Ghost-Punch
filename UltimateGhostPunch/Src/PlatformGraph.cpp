@@ -16,8 +16,11 @@ void PlatformGraph::drawLinks()
 	for (PlatformNode node : platforms) {
 		for (NavigationLink n : node.getEdges()) {
 			auto v = n.getStates();
-			for(int i=0; i< v.size()-1;i++)
+			int i = 0;
+			physicsSystem->drawLine(node.getBegining(), v[i].getPos(), { 0,1,0 });
+			for(; i< v.size()-1;i++)
 			physicsSystem->drawLine(v[i].getPos(), v[i+1].getPos(), { 0,1,0 });
+			physicsSystem->drawLine(v[i].getPos(), platforms[n.getConnection()].getBegining(), { 0,1,0 });
 		}
 	}
 }
@@ -126,7 +129,7 @@ int PlatformGraph::getIndex(const Vector3& pos)
 	float minYDiff = INFINITY, yDiff = 0.0f;
 	for (int i = 0; i < platforms.size(); i++) {
 		PlatformNode node = platforms[i];
-		if (node.getBegining().x > pos.x || node.getEnd().x < pos.x || node.getEnd().y > pos.y)
+		if (node.getBegining().x > pos.x +playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x || node.getEnd().y > pos.y)
 			continue;
 		yDiff = pos.y - node.getEnd().y;
 		if (yDiff < minYDiff) {

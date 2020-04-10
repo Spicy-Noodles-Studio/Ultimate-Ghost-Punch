@@ -9,6 +9,8 @@ class RigidBody;
 class PlatformGraph;
 class InputSystem;
 class State;
+class Health;
+class GhostManager;
 enum class Action;
 
 class PathRecorder : public UserComponent
@@ -18,6 +20,8 @@ private:
 	RigidBody* rigidBody;
 	PlatformGraph* graph;
 	InputSystem* inputSystem;
+	Health* health;
+	GhostManager* ghostManager;
 	std::vector<State> states;
 
 	int controllerIndex;
@@ -34,6 +38,8 @@ public:
 	virtual void onObjectExit(GameObject* other);
 
 	void saveState(Action action);
+	
+	void stopRecording();
 };
 
 #endif 
