@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="leaderBoardRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        ## P1 PANEL
+         <Window type="TaharezLook/StaticImage" name="P1TotalDamageTakenBackground" >
+            <Property name="Area" value="{{0.01,0},{0.2,0},{0.3,0},{0.8,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/ScrollablePane" name="P1Background" >
+                <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Window type="TaharezLook/StaticText" name="P1TotalKills" >
+                    <Property name="Area" value="{{0.05,0},{0,0},{1,0},{0.1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Total kills: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1Kills" >
+                    <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Player kills: " />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="P1DamageDealt" >
+                   <Property name="Area" value="{{0.05,0},{0.2,0},{1,0},{0.3,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Text" value="Total damage dealt: " />
+                    <Property name="TextSize" value="0.5" />
+                </Window>
+                <Window type="TaharezLook/StaticText" name="P1TotalDamageTaken" >
+                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Total damage received: " />
+                </Window>
+                
+                 <Window type="TaharezLook/StaticText" name="P1TimesFallen" >
+                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Times has fallen: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1DamageTakenByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Enviroment hazards hit: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1DeathsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Enviroment hazards deaths: " />
+                </Window>
+                  <Window type="TaharezLook/StaticText" name="P1Attacks" >
+                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Attacks made: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1PercentOfHits" >
+                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Succesfull attacks: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1SuccesfullGrabs" >
+                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Successful grabs made: " />
+                </Window>
+                 <Window type="TaharezLook/StaticText" name="P1LivesStolen" >
+                    <Property name="Area" value="{{0.05,0},{1.0,0},{1,0},{1.1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Lives stolen: " />
+                </Window>
+            </Window>
+        </Window>
+        ## P2 PANEL
+        <Window type="TaharezLook/StaticImage" name="P2Background" >
+            <Property name="Area" value="{{0.3,0},{0.2,0},{0.5,0},{0.8,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Winner" >
+                <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Winner: " />
+            </Window>
+        </Window>
+        ## P3 PANEL
+        <Window type="TaharezLook/StaticImage" name="P3Background" >
+            <Property name="Area" value="{{0.5,0},{0.2,0},{0.7,0},{0.8,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Winner" >
+                <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Winner: " />
+            </Window>
+        </Window>
+        ## P4 PANEL
+        <Window type="TaharezLook/StaticImage" name="P4Background" >
+            <Property name="Area" value="{{0.7,0},{0.2,0},{0.9,0},{0.8,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Winner" >
+                <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Winner: " />
+            </Window>
+        </Window>
+         # BACK BUTTON
+        <Window type="TaharezLook/Button" name="BackButton" >
+            <Property name="Area" value="{{0.2,0},{0.8,0},{0.4,0},{0.9,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="BACK" />
+        </Window>     
+           # RESET BUTTON
+        <Window type="TaharezLook/Button" name="ResetButton" >
+            <Property name="Area" value="{{0.7,0},{0.8,0},{0.9,0},{0.9,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Text" value="RESET" />
+        </Window>   
+    </Window>
+</GUILayout>

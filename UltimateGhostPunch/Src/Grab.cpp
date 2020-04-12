@@ -7,6 +7,8 @@
 #include "Block.h"
 
 #include "ComponentRegister.h"
+#include "GameManager.h"
+#include "Score.h"
 
 REGISTER_FACTORY(Grab);
 
@@ -50,6 +52,7 @@ void Grab::onObjectStay(GameObject* other)
 	if (state == GRABBING) {
 		if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
 		{
+			Score* score = GameManager::GetInstance()->getScore();
 			//Check if we have been blocked
 			std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 			Block* enemyBlock = nullptr;
@@ -66,7 +69,7 @@ void Grab::onObjectStay(GameObject* other)
 
 			//Grab the enemy
 			enemyDiff = other->transform->getPosition() - gameObject->getParent()->transform->getPosition();
-
+			score->grabbedBy(other->getComponent<PlayerController>()->getPlayerIndex(), controller->getPlayerIndex());
 			state = GRABBED;
 			remain = grabDuration;
 			enemy = other;

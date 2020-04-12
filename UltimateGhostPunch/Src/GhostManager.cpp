@@ -11,6 +11,9 @@
 #include "RigidBody.h"
 #include "PlayerUI.h"
 #include "FightManager.h"
+#include "GameManager.h"
+#include "Score.h"
+#include "PlayerController.h"
 
 REGISTER_FACTORY(GhostManager);
 
@@ -120,13 +123,17 @@ void GhostManager::onObjectEnter(GameObject* other)
 	// If this player is in ghost mode and other is a player
 	if (ghost && other->getTag() == "Player")
 	{
+		Score* score = GameManager::GetInstance()->getScore();
 		Health* aux = other->getComponent<Health>();
 
 		//If the other player is alive
 		if (aux != nullptr && aux->isAlive())
 		{
+			int health = aux->getHealth();
 			aux->receiveDamage(ghostDamage);
-
+			score->lifeStolenBy(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getComponent<PlayerController>()->getPlayerIndex());
+			if (health != aux->getHealth())
+				score->killedBy(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getComponent<PlayerController>()->getPlayerIndex());
 			deactivateGhost();
 		}
 	}

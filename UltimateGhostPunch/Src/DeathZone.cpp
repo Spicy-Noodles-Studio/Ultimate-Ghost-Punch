@@ -6,6 +6,9 @@
 
 #include "Respawn.h"
 #include "Health.h"
+#include "GameManager.h"
+#include "Score.h"
+#include "PlayerController.h"
 
 REGISTER_FACTORY(DeathZone);
 
@@ -39,7 +42,14 @@ void DeathZone::onObjectEnter(GameObject* other)
 	if (other->getTag() == "Player") {
 		Health* health = other->getComponent<Health>();
 		if (health != nullptr) {
+			Score* score = GameManager::GetInstance()->getScore();
+			int h = health->getHealth();
 			health->receiveDamage(fallDamage);
+			if (h != health->getHealth())
+				score->fall(other->getComponent<PlayerController>()->getPlayerIndex());
+
+			if (!health->isAlive())
+				score->deathByEnviromentHazard(other->getComponent<PlayerController>()->getPlayerIndex());
 
 			Respawn* respawn = other->getComponent<Respawn>();
 			if (respawn != nullptr); respawn->respawn();

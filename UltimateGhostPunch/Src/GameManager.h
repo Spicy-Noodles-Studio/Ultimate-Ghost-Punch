@@ -3,7 +3,7 @@
 #define GAME_MANAGER_H
 
 #include "UserComponent.h"
-
+#include "Score.h"
 #include <vector>
 #include <string>
 
@@ -26,7 +26,7 @@ private:
 
 	int health;
 	int time;
-
+	Score scores;
 	// Bottom limit of the level 
 	float bottomLimit;
 
@@ -61,6 +61,7 @@ public:
 
 	void setTime(int time);
 	int getTime();
+	Score* getScore();
 };
 
 #endif

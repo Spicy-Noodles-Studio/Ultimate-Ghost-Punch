@@ -5,6 +5,9 @@
 
 #include "Health.h"
 #include "RigidBody.h"
+#include "GameManager.h"
+#include "Score.h"
+#include "PlayerController.h"
 #include "GhostManager.h"
 
 REGISTER_FACTORY(Obstacle);
@@ -53,16 +56,20 @@ void Obstacle::onCollisionEnter(GameObject* other)
 		int yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
 
 		// The player receives damage
+		Score* score = GameManager::GetInstance()->getScore();
 		Health* health = other->getComponent<Health>();
 		if (health == nullptr) return;
-		
+		int h = health->getHealth();
 		health->receiveDamage(damage);
+		if (h != health->getHealth())
+			score->damagedBySpike(other->getComponent<PlayerController>()->getPlayerIndex());
 		// If the player has died, add an offset to the respawn position, in case it resurrects
 		if (!health->isAlive()) {
 			GhostManager* ghostManager = other->getComponent<GhostManager>();
 			if (ghostManager != nullptr) {
 				respawnOffset.x *= xDir;
 				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
+				score->deathByEnviromentHazard(other->getComponent<PlayerController>()->getPlayerIndex());
 			}
 		}
 		else {

@@ -35,13 +35,14 @@ void GameManager::start()
 {
 	level = "";
 	song = "";
-
+	
 	dontDestroyOnLoad(gameObject);
 }
 
 void GameManager::setNumPlayers(int nPlayers)
 {
 	this->numPlayers = nPlayers;
+	
 }
 
 int GameManager::getNumPlayers()
@@ -105,6 +106,11 @@ void GameManager::setTime(int time)
 int GameManager::getTime()
 {
 	return time;
+}
+
+Score* GameManager::getScore()
+{
+	return &scores;
 }
 
 void GameManager::reset()
