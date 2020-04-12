@@ -5,6 +5,7 @@
 #include <GameObject.h>
 
 #include <InputSystem.h>
+#include "Animator.h"
 
 #include "Attack.h"
 #include "Jump.h"
@@ -12,20 +13,15 @@
 #include "GhostManager.h"
 #include "Dodge.h"
 #include "UltimateGhostPunch.h"
-#include "Animator.h"
 #include "Grab.h"
 #include "Block.h"
 #include "GameManager.h"
+#include "RigidBody.h"
 
 
 REGISTER_FACTORY(PlayerAnimController);
 
-void PlayerAnimController::updateIdle()
-{
-
-}
-
-PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), state(IDLE)
+PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f)
 {
 }
 
@@ -33,8 +29,17 @@ void PlayerAnimController::start()
 {
 	inputSystem = InputSystem::GetInstance();
 	anim = gameObject->getComponent<Animator>();
+	body = gameObject->getComponent<RigidBody>();
+	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
+	if (aux.size() > 0) 
+	{
+		jump = aux[0]->getComponent<Jump>();
+	}
 
-	anim->printAllAnimationsNames();
+	if (anim == nullptr)
+		LOG("ERROR: Animator component not found in player.\n");
+	else
+		anim->printAllAnimationsNames();
 }
 
 void PlayerAnimController::update(float deltaTime)
@@ -48,6 +53,16 @@ void PlayerAnimController::update(float deltaTime)
 	anim->updateAnimationSequence();
 }
 
+void PlayerAnimController::jumpAnimation()
+{
+	if (anim->getCurrentAnimation() == "JumpStart" || anim->getCurrentAnimation() == "JumpChange" || anim->getCurrentAnimation() == "Fall")
+		return;
+
+	anim->playAnimation("JumpStart");
+	anim->setLoop(false);
+	state = JUMP;
+}
+
 void PlayerAnimController::updateState()
 {
 	switch (state)
@@ -56,8 +71,13 @@ void PlayerAnimController::updateState()
 		updateIdle();
 		break;
 	case PlayerAnimController::RUN:					// RUN //
+		updateRun();
 		break;
-	case PlayerAnimController::AIR:					// AIR //
+	case PlayerAnimController::JUMP:				// JUMP //
+		updateJump();
+		break;
+	case PlayerAnimController::FALL:				// FALL //
+		updateFall();
 		break;
 	case PlayerAnimController::BLOCKING:			// BLOCKING // 
 		break;
@@ -66,6 +86,7 @@ void PlayerAnimController::updateState()
 	case PlayerAnimController::GRABBED:				// GRABBED //
 		break;
 	case PlayerAnimController::NOT_LOOPING_STATE:	// NOT_LOOPING_STATE //
+		updateNotLoopingState();
 		break;
 	default:
 		break;
@@ -90,12 +111,15 @@ void PlayerAnimController::handleState()
 			anim->setLoop(true);
 		}
 		break;
-	case PlayerAnimController::AIR:					// AIR //
+	case PlayerAnimController::FALL:					// FALL //
 		if (anim->getCurrentAnimation() != "Fall")
 		{
 			anim->playAnimation("Fall");
 			anim->setLoop(true);
 		}
+		break;
+	case PlayerAnimController::JUMP:					// JUMP //
+		
 		break;
 	case PlayerAnimController::BLOCKING:			// BLOCKING // 
 		if (anim->getCurrentAnimation() != "BlockHold")
@@ -122,3 +146,92 @@ void PlayerAnimController::handleState()
 		break;
 	}
 }
+
+
+void PlayerAnimController::updateIdle()
+{
+	// TRANSITION TO FALL IF
+	if (!jump->isGrounded())
+	{
+		state = FALL;
+		return;
+	}
+
+	// TRANSITION TO RUN IF
+	if (abs(body->getLinearVelocity().x) >= runThreshold)
+	{
+		state = RUN;
+		return;
+	}
+
+}
+
+void PlayerAnimController::updateRun()
+{
+	// TRANSITION TO FALL IF
+	if (!jump->isGrounded())
+	{
+		state = FALL;
+		return;
+	}
+
+	// TRANSITION TO IDLE IF
+	if (abs(body->getLinearVelocity().x) < runThreshold)
+	{
+		state = IDLE;
+		return;
+	}
+}
+
+void PlayerAnimController::updateJump()
+{
+	if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded() && abs(body->getLinearVelocity().y) <= fallThreshold)
+	{
+		anim->playAnimationSequence({ "JumpChange", "Fall" }, true);
+		anim->setLoop(false);
+		return;
+	}
+
+	if (anim->getCurrentAnimation() == "Fall") // Player is falling: transition to Fall
+		state = FALL;
+}
+
+void PlayerAnimController::updateFall()
+{
+	if (!jump->isGrounded())
+		return;
+
+	// If isGrounded, the player has landed
+	anim->playAnimation("Land");
+	anim->setLoop(false);
+	state = NOT_LOOPING_STATE;
+}
+
+void PlayerAnimController::updateNotLoopingState()
+{
+	// Only transition when the animation has finished
+	if (!anim->getLoop() && !anim->hasEnded())
+		return;
+
+	// TRANSITION TO FALL IF
+	if (!jump->isGrounded())
+	{
+		state = FALL;
+		return;
+	}
+
+	// TRANSITION TO IDLE IF
+	if (abs(body->getLinearVelocity().x) < runThreshold)
+	{
+		state = IDLE;
+		return;
+	}
+	else
+	{
+		// TRANSITION TO RUN
+		state = RUN;
+		return;
+	}
+}
+
+

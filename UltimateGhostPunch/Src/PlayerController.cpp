@@ -17,7 +17,7 @@
 #include "GhostMovement.h"
 #include "Dodge.h"
 #include "UltimateGhostPunch.h"
-#include "Animator.h"
+#include "PlayerAnimController.h"
 #include "Grab.h"
 #include "Block.h"
 #include "GameManager.h"
@@ -26,7 +26,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1), isBlocking(false)
+health(nullptr), jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1), isBlocking(false), animController(nullptr)
 {
 
 }
@@ -46,7 +46,7 @@ void PlayerController::start()
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	dodge = gameObject->getComponent<Dodge>();
-	anim = gameObject->getComponent<Animator>();
+	animController = gameObject->getComponent<PlayerAnimController>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
@@ -106,26 +106,17 @@ void PlayerController::checkInput()
 
 		//If we are not blocking
 		if (block == nullptr || !block->blocking()) {
-			//Test anim
-			/*if (direction.x != 0 && anim->getCurrentAnimation() != "Run")
-				anim->playAnimation("Run");
-			else if (direction.x == 0 && anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
-				anim->playAnimation("Idle");
-			if (getKeyDown("Space") || getButtonDown("A"))
-				anim->playAnimation("Jump");
-			*/
 			//Attack
 			if (attack != nullptr) {
 				//Quick attack
 				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
 					attack->quickAttack();
-					anim->playAnimation("AttackA");//provisional
+					//anim->playAnimation("AttackA");//provisional
 				}
 				//Strong attack
 				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
 					attack->strongAttack();
 			}
-
 			//Dodge
 			if (dodge != nullptr)
 				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
@@ -133,8 +124,13 @@ void PlayerController::checkInput()
 
 			//Jump
 			if (jump != nullptr)
+			{
 				if (getKey("Space") || getButton("A"))
+				{
 					jump->jump();
+					animController->jumpAnimation();
+				}
+			}
 
 			//Grab
 			if (grab != nullptr) {
