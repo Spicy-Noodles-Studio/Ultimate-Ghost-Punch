@@ -41,8 +41,8 @@
                [ "scale", "2 5.2 2"],
                [ "kinematic", "0"],
                [ "trigger", "0"],
-               [ "linearFactor", "1 1 0"],
-               [ "angularFactor", "0 0 0"],
+               [ "movementConstraints", "1 1 0"],
+               [ "rotationConstraints", "0 0 0"],
                [ "collisionGroup", "IgnoreRaycast"]
             ]
         },

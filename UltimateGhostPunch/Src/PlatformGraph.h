@@ -25,6 +25,8 @@ private:
 	int currentPlatformIndex;
 	Vector3 fallOffset, playerCollisionSize;
 
+	std::string saveFilename, loadFilename, fileRoute;
+
 	void drawLinks();
 
 public:
@@ -38,6 +40,9 @@ public:
 
 	void createNodes();
 	void createLinks();
+
+	void saveGraph();
+	bool loadGraph();
 
 	void addLinkToPlatform(int platform, const NavigationLink& navLink);
 

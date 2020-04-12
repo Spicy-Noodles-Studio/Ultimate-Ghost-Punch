@@ -11,20 +11,21 @@ class InputSystem;
 class State;
 class Health;
 class GhostManager;
+class Jump;
 enum class Action;
 
 class PathRecorder : public UserComponent
 {
 private:
-	bool record, recording;
-	RigidBody* rigidBody;
+	bool recording;
 	PlatformGraph* graph;
 	InputSystem* inputSystem;
 	Health* health;
 	GhostManager* ghostManager;
+	Jump* jump;
 	std::vector<State> states;
 
-	int controllerIndex;
+	int controllerIndex, frame;
 
 	Vector3 iniPos;
 public:
@@ -40,6 +41,7 @@ public:
 	void saveState(Action action);
 	
 	void stopRecording();
+	void startRecording();
 };
 
 #endif 

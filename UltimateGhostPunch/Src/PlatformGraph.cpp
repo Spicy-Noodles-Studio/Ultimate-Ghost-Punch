@@ -5,6 +5,7 @@
 #include <RaycastHit.h>
 #include <Transform.h>
 #include <GameObject.h>
+#include <GaiaData.h>
 #include <sstream>
 
 #include "PlatformNode.h"
@@ -13,20 +14,20 @@ REGISTER_FACTORY(PlatformGraph);
 
 void PlatformGraph::drawLinks()
 {
-	for (PlatformNode node : platforms) {
+	for (PlatformNode node : platforms)
 		for (NavigationLink n : node.getEdges()) {
-			auto v = n.getStates();
-			int i = 0;
-			physicsSystem->drawLine(node.getBegining(), v[i].getPos(), { 0,1,0 });
-			for(; i< v.size()-1;i++)
-			physicsSystem->drawLine(v[i].getPos(), v[i+1].getPos(), { 0,1,0 });
-			physicsSystem->drawLine(v[i].getPos(), platforms[n.getConnection()].getBegining(), { 0,1,0 });
+			std::vector<State> states = n.getStates();
+
+			for (int i = 0; i < states.size() - 1; i++) {
+				physicsSystem->drawLine(states[i].getPos(), states[i + 1].getPos(), { 0,1,0 });
+			}
+			if (states.size() > 0) physicsSystem->drawLine(states[states.size() - 1].getPos(), n.getEndPos(), { 0,0,1 });
 		}
-	}
 }
 
 PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3()), levelEnd(Vector3()), currentPos(Vector3()), currentPlatformIndex(0),
-													   fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(1.0f, 2.0f, 1.0f))
+													   fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(1.0f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
+													   loadFilename(saveFilename)
 {
 }
 
@@ -38,14 +39,18 @@ void PlatformGraph::start()
 {
 	physicsSystem = PhysicsSystem::GetInstance();
 
-	currentPos = levelStart;
-
-	createNodes();
+	//If the graph was not loaded we create an empty one
+	if (!loadGraph()) {
+		currentPos = levelStart;
+		createNodes();
+	}
 }
 
 void PlatformGraph::update(float deltaTime)
 {
+#ifdef _DEBUG
 	drawLinks();
+#endif
 }
 
 void PlatformGraph::handleData(ComponentData* data)
@@ -59,9 +64,15 @@ void PlatformGraph::handleData(ComponentData* data)
 			if (!(ss >> levelStart.x >> levelStart.y >> levelStart.z))
 				LOG("PLATFORM GRAPH: Invalid value for property %s", prop.first.c_str());
 		}
-		if (prop.first == "levelEnd") {
+		else if (prop.first == "levelEnd") {
 			if (!(ss >> levelEnd.x >> levelEnd.y >> levelEnd.z))
 				LOG("PLATFORM GRAPH: Invalid value for property %s", prop.first.c_str());
+		}
+		else if (prop.first == "saveFilename") {
+			saveFilename = prop.second;
+		}
+		else if (prop.first == "loadFilename") {
+			loadFilename = prop.second;
 		}
 		else
 			LOG("PLATFORM GRAPH: Invalid property with name %s", prop.first.c_str());
@@ -71,7 +82,7 @@ void PlatformGraph::handleData(ComponentData* data)
 void PlatformGraph::createNodes()
 {
 	std::vector<RaycastHit> hits;
-	while(currentPos.x < levelEnd.x) {
+	while (currentPos.x < levelEnd.x) {
 		hits = physicsSystem->raycastAll({ currentPos.x,levelStart.y,0 }, { currentPos.x,levelEnd.y,0 });
 		std::map<float, int> newPlatforms;
 		for (RaycastHit hit : hits) {
@@ -84,7 +95,7 @@ void PlatformGraph::createNodes()
 				}
 				//If its a new platform
 				else {
-					PlatformNode node = PlatformNode(hit.point);
+					PlatformNode node = PlatformNode(hit.point, currentPlatformIndex);
 					platforms.push_back(node);
 					newPlatforms[hit.point.y] = currentPlatformIndex;
 					currentPlatformIndex += 1;
@@ -117,6 +128,43 @@ void PlatformGraph::createLinks()
 	}
 }
 
+void PlatformGraph::saveGraph()
+{
+	GaiaData data;
+	data.addElement<std::string>("numberOfPlatforms", std::to_string(platforms.size()));
+	std::vector<GaiaData>platformsData;
+	for (PlatformNode node : platforms)
+		platformsData.push_back(node.savePlatform());
+
+	data.addElement("platforms", platformsData);
+
+	data.save(fileRoute + saveFilename);
+}
+
+bool PlatformGraph::loadGraph()
+{
+	GaiaData data;
+	if (!data.load(fileRoute + loadFilename))
+		return false;
+
+	GaiaData nPlat = data.find("numberOfPlatforms");
+	std::stringstream ss(nPlat.getValue());
+	int numberPlatforms; ss >> numberPlatforms;
+	if (numberPlatforms < 0)
+		return false;
+
+	platforms = std::vector<PlatformNode>(numberPlatforms);
+
+	GaiaData platformsData = data.find("platforms");
+	for (auto it = platformsData.begin(); it != platformsData.end(); it++) {
+		PlatformNode node;
+		node.loadPlatform((*it));
+		platforms[node.getIndex()] = node;
+	}
+
+	return true;
+}
+
 void PlatformGraph::addLinkToPlatform(int platform, const NavigationLink& navLink)
 {
 	if (platform < platforms.size())
@@ -129,7 +177,7 @@ int PlatformGraph::getIndex(const Vector3& pos)
 	float minYDiff = INFINITY, yDiff = 0.0f;
 	for (int i = 0; i < platforms.size(); i++) {
 		PlatformNode node = platforms[i];
-		if (node.getBegining().x > pos.x +playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x || node.getEnd().y > pos.y)
+		if (node.getBegining().x > pos.x + playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x || node.getEnd().y > pos.y + playerCollisionSize.y)
 			continue;
 		yDiff = pos.y - node.getEnd().y;
 		if (yDiff < minYDiff) {
