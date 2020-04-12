@@ -107,13 +107,13 @@ void PlayerController::checkInput()
 		//If we are not blocking
 		if (block == nullptr || !block->blocking()) {
 			//Test anim
-			if (direction.x != 0 && anim->getCurrentAnimation() != "Run")
+			/*if (direction.x != 0 && anim->getCurrentAnimation() != "Run")
 				anim->playAnimation("Run");
 			else if (direction.x == 0 && anim->getCurrentAnimation() != "Idle" && anim->getCurrentAnimation() != "Jump" && anim->getCurrentAnimation() != "AttackA")
 				anim->playAnimation("Idle");
 			if (getKeyDown("Space") || getButtonDown("A"))
 				anim->playAnimation("Jump");
-
+			*/
 			//Attack
 			if (attack != nullptr) {
 				//Quick attack

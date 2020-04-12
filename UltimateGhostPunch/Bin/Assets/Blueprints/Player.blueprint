@@ -28,6 +28,9 @@
             ]
         },
         {
+            "ComponentName": "PlayerAnimController"
+        },
+        {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
                [ "shape", "Box"],
