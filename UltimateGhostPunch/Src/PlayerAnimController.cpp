@@ -113,7 +113,7 @@ void PlayerAnimController::blockedAttackAnimation()
 {
 	anim->playAnimation("BlockAttack");
 	anim->setLoop(false);
-	state = NOT_LOOPING_STATE;
+	state = BLOCKING;
 }
 
 void PlayerAnimController::blockedEnemyGrabAnimation()
@@ -292,10 +292,17 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 		return;
 	}
 
-	if (anim->getCurrentAnimation() == "BlockEnd" && anim->hasEnded() )
+	if (anim->getCurrentAnimation() == "BlockEnd" && anim->hasEnded())
 	{
 		state = IDLE;
 		updateIdle();
+		return;
+	}
+
+	if (anim->getCurrentAnimation() == "BlockAttack" && anim->hasEnded() && block->blocking())
+	{
+		anim->playAnimation("BlockHold");
+		anim->setLoop(true);
 		return;
 	}
 }
