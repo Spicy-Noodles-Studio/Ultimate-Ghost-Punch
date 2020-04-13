@@ -140,10 +140,10 @@ void PlayerController::checkInput()
 
 			//Grab
 			if (grab != nullptr) {
-				if (getKey("E") || getButton("LB")) 
-				{ 
-					grab->grab(); 
-					animController->grabAnimation(); 
+				if (getKey("E") || getButton("LB"))
+				{
+					grab->grab();
+					animController->grabAnimation();
 				}
 				else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
 			}
@@ -157,6 +157,12 @@ void PlayerController::checkInput()
 				animController->blockAnimation();
 			}
 			if (isBlocking && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
+		}
+
+		//Taunt
+		if (getKeyDown("T") || getButtonDown("BACK"))
+		{
+			animController->tauntAnimation();
 		}
 	}
 

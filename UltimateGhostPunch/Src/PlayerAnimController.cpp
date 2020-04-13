@@ -20,7 +20,6 @@
 #include "RigidBody.h"
 #include "PlayerController.h"
 
-
 REGISTER_FACTORY(PlayerAnimController);
 
 PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f)
@@ -74,9 +73,7 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
-	anim->playAnimation("Hurt");
-	anim->setLoop(false);
-	state = NOT_LOOPING_STATE;
+	notLoopAnimation("Hurt");
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
@@ -118,9 +115,7 @@ void PlayerAnimController::blockedAttackAnimation()
 
 void PlayerAnimController::blockedEnemyGrabAnimation()
 {
-	anim->playAnimation("Knockback");
-	anim->setLoop(false);
-	state = NOT_LOOPING_STATE;
+	notLoopAnimation("Knockback");
 }
 
 void PlayerAnimController::enemyBlockedMyGrabAnimation()
@@ -143,7 +138,43 @@ void PlayerAnimController::stunnedAnimation()
 
 void PlayerAnimController::dashAnimation()
 {
-	anim->playAnimation("DashFront");
+	notLoopAnimation("DashFront");
+}
+
+void PlayerAnimController::resurrectAnimation()
+{
+	notLoopAnimation("Resurrect");
+}
+
+void PlayerAnimController::tauntAnimation()
+{
+	if (state != IDLE) return;
+	notLoopAnimation("Taunt");
+}
+
+void PlayerAnimController::throwEnemyAnimation()
+{
+	notLoopAnimation("Throw");
+}
+
+void PlayerAnimController::thrownAwayAnimation()
+{
+	notLoopAnimation("Thrown");
+}
+
+void PlayerAnimController::grabbedByEnemyAnimation()
+{
+	if (anim->getCurrentAnimation() == "GrabbedStart" || anim->getCurrentAnimation() == "GrabbedHold")
+		return;
+
+	anim->playAnimation("GrabbedStart");
+	anim->setLoop(false);
+	state = GRABBING;
+}
+
+void PlayerAnimController::notLoopAnimation(std::string name)
+{
+	anim->playAnimation(name);
 	anim->setLoop(false);
 	state = NOT_LOOPING_STATE;
 }
@@ -280,6 +311,15 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 	{
 		state = IDLE;
 		updateIdle();
+	}
+}
+
+void PlayerAnimController::updateGrabbed() //  GRABBED //
+{
+	if (anim->getCurrentAnimation() == "GrabbedStart" && anim->hasEnded())
+	{
+		anim->playAnimation("GrabbedHold");
+		anim->setLoop(true);
 	}
 }
 

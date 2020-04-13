@@ -63,7 +63,14 @@ public:
 	void enemyBlockedMyGrabAnimation();
 	void stunnedAnimation();
 	void dashAnimation();
+	void resurrectAnimation();
+	void tauntAnimation();
+	void throwEnemyAnimation();
+	void thrownAwayAnimation();
+	void grabbedByEnemyAnimation();
 private:
+	// Play a not looping animation
+	void notLoopAnimation(std::string name);
 	// 0 for QUICK | 1 for STRONG
 	void attackAnimation(int type);
 
@@ -73,6 +80,7 @@ private:
 	void updateJump();		// JUMP
 	void updateFall();		// FALL
 	void updateGrabbing();  // GRABBING
+	void updateGrabbed();  // GRABBED
 	void updateBlocking();  // BLOCKING
 	void updateStunned();	// STUNNED
 

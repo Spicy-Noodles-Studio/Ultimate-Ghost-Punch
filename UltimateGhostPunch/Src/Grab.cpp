@@ -80,6 +80,7 @@ void Grab::onObjectStay(GameObject* other)
 			enemy = other;
 			enemyController = other->getComponent<PlayerController>();
 			if (enemyController != nullptr) enemyController->setActive(false);//freeze the enemy
+			if (otherAnim != nullptr) otherAnim->grabbedByEnemyAnimation();
 		}
 	}
 }
@@ -124,7 +125,15 @@ void Grab::drop()
 	
 	//Return control to the enemy
 	if (enemyController != nullptr)enemyController->setActive(true);
-	
+
+	//Play throw animations
+	PlayerAnimController* otherAnim = enemy->getComponent<PlayerAnimController>();
+	PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
+	if (otherAnim != nullptr)
+		otherAnim->thrownAwayAnimation();
+	if (myAnim != nullptr)
+		myAnim->throwEnemyAnimation();
+
 	//Reset state
 	enemyController = nullptr;
 	enemy = nullptr;

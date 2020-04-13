@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "PlayerController.h"
+#include "PlayerAnimController.h"
 #include "Movement.h"
 #include "Health.h"
 
@@ -68,6 +69,10 @@ void Respawn::spawn(const Vector3& spawnPos)
 		health->setTime(respawnTime);
 	}
 	if (playerController != nullptr) playerController->setActive(false);
+
+	PlayerAnimController* animController = gameObject->getComponent<PlayerAnimController>();
+	if (animController != nullptr)
+		animController->resurrectAnimation();
 
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;
