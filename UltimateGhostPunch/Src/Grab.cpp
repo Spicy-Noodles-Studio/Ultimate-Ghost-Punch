@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "Block.h"
+#include "PlayerAnimController.h"
 
 #include "ComponentRegister.h"
 
@@ -50,6 +51,9 @@ void Grab::onObjectStay(GameObject* other)
 	if (state == GRABBING) {
 		if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
 		{
+			PlayerAnimController* otherAnim = other->getComponent<PlayerAnimController>();
+			PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
+
 			//Check if we have been blocked
 			std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 			Block* enemyBlock = nullptr;
@@ -60,6 +64,10 @@ void Grab::onObjectStay(GameObject* other)
 				state = BLOCKED;
 				remain = freezeDuration;
 				if (controller != nullptr)controller->setActive(false);//freeze our character
+
+				
+				if (otherAnim != nullptr) otherAnim->blockedEnemyGrabAnimation();
+				if (myAnim != nullptr) myAnim->enemyBlockedMyGrabAnimation();
 
 				return;
 			}

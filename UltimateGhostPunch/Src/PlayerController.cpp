@@ -111,16 +111,22 @@ void PlayerController::checkInput()
 				//Quick attack
 				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
 					attack->quickAttack();
-					//anim->playAnimation("AttackA");//provisional
+					animController->quickAttackAnimation();
 				}
 				//Strong attack
 				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
+				{
 					attack->strongAttack();
+					animController->strongAttackAnimation();
+				}
 			}
 			//Dodge
 			if (dodge != nullptr)
 				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
+				{
 					dodge->dodge();
+					animController->dashAnimation();
+				}
 
 			//Jump
 			if (jump != nullptr)
@@ -134,14 +140,22 @@ void PlayerController::checkInput()
 
 			//Grab
 			if (grab != nullptr) {
-				if (getKey("E") || getButton("LB")) grab->grab();
+				if (getKey("E") || getButton("LB")) 
+				{ 
+					grab->grab(); 
+					animController->grabAnimation(); 
+				}
 				else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
 			}
 		}
 
 		//Block
 		if (block != nullptr) {
-			if (getKeyDown("S") || getButtonDown("B")) block->block();
+			if (getKeyDown("S") || getButtonDown("B"))
+			{
+				block->block();
+				animController->blockAnimation();
+			}
 			if (isBlocking && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
 		}
 	}

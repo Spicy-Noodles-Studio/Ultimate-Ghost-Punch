@@ -5,6 +5,8 @@ class InputSystem;
 class Animator;
 class RigidBody;
 class Jump;
+class Grab;
+class Block;
 
 class PlayerAnimController :
 	public UserComponent
@@ -18,10 +20,14 @@ private:
 	RigidBody* body;
 	// Jump
 	Jump* jump;
+	// Grab
+	Grab* grab;
+	// Block
+	Block* block;
 
 	enum PlayerAnimState
 	{
-		IDLE, RUN, JUMP, FALL, BLOCKING, GRABBING, GRABBED, NOT_LOOPING_STATE
+		IDLE, RUN, JUMP, FALL, BLOCKING, GRABBING, GRABBED, STUNNED, NOT_LOOPING_STATE
 	};
 
 	// Current player state
@@ -47,12 +53,28 @@ public:
 	virtual void update(float deltaTime);
 
 	void jumpAnimation();
+	void hurtAnimation();
+	void grabAnimation();
+	void quickAttackAnimation();
+	void strongAttackAnimation();
+	void blockAnimation();
+	void blockedAttackAnimation();
+	void blockedEnemyGrabAnimation();
+	void enemyBlockedMyGrabAnimation();
+	void stunnedAnimation();
+	void dashAnimation();
 private:
+	// 0 for QUICK | 1 for STRONG
+	void attackAnimation(int type);
+
 	// Each of these functions checks if the state should transition to another one and makes the transition
-	void updateIdle(); // IDLE
-	void updateRun(); // RUN
-	void updateJump(); // JUMP
-	void updateFall(); // FALL
+	void updateIdle();		// IDLE
+	void updateRun();		// RUN
+	void updateJump();		// JUMP
+	void updateFall();		// FALL
+	void updateGrabbing();  // GRABBING
+	void updateBlocking();  // BLOCKING
+	void updateStunned();	// STUNNED
 
 	void updateNotLoopingState(); // NOT LOOPING STATE (block, attacks...)
 };
