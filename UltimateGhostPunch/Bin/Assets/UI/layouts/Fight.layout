@@ -31,18 +31,30 @@
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.2,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="RESUME" />
+				<Property name="UpButton" value="BackButton" />
+				<Property name="DownButton" value="OptionsButton" />
+				<Property name="LeftButton" value="BackButton" />
+				<Property name="RightButton" value="OptionsButton" />
             </Window>
             # OPTIONS
             <Window type="TaharezLook/Button" name="OptionsButton" >
                 <Property name="Area" value="{{0.1,0},{0.4,0},{0.9,0},{0.5,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="OPTIONS" />
+				<Property name="UpButton" value="ResumeButton" />
+				<Property name="DownButton" value="BackButton" />
+				<Property name="LeftButton" value="ResumeButton" />
+				<Property name="RightButton" value="BackButton" />
             </Window>
             # BACK BUTTON
             <Window type="TaharezLook/Button" name="BackButton" >
                 <Property name="Area" value="{{0.1,0},{0.7,0},{0.9,0},{0.8,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="BACK" />
+				<Property name="UpButton" value="OptionsButton" />
+				<Property name="DownButton" value="ResumeButton" />
+				<Property name="LeftButton" value="OptionsButton" />
+				<Property name="RightButton" value="ResumeButton" />
             </Window>
         </Window>
         ## PLAYER 1 INFO

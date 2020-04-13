@@ -135,6 +135,10 @@
                     <Property name="Area" value="{{0.4,0},{0.38,0},{0.45,0},{0.42,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="BackButton" />
+					<Property name="DownButton" value="-TimeButton" />
+					<Property name="LeftButton" value="-LevelButton" />
+					<Property name="RightButton" value="+LevelButton" />
         </Window>
         # LEVEL
         <Window type="TaharezLook/StaticText" name="Level" >
@@ -147,6 +151,10 @@
                     <Property name="Area" value="{{0.6,0},{0.38,0},{0.65,0},{0.42,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="BackButton" />
+					<Property name="DownButton" value="+TimeButton" />
+					<Property name="LeftButton" value="-LevelButton" />
+					<Property name="RightButton" value="+LevelButton" />
         </Window>
         # TIME TEXT
         <Window type="TaharezLook/StaticText" name="TimeText" >
@@ -159,6 +167,10 @@
                     <Property name="Area" value="{{0.4,0},{0.48,0},{0.45,0},{0.52,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-LevelButton" />
+					<Property name="DownButton" value="-SongButton" />
+					<Property name="LeftButton" value="-TimeButton" />
+					<Property name="RightButton" value="+TimeButton" />
         </Window>
         # TIME
         <Window type="TaharezLook/StaticText" name="Time" >
@@ -171,6 +183,10 @@
                     <Property name="Area" value="{{0.6,0},{0.48,0},{0.65,0},{0.52,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+LevelButton" />
+					<Property name="DownButton" value="+TimeButton" />
+					<Property name="LeftButton" value="-TimeButton" />
+					<Property name="RightButton" value="+TimeButton" />
         </Window>
         # SONG TEXT
         <Window type="TaharezLook/StaticText" name="SongText" >
@@ -183,6 +199,10 @@
                     <Property name="Area" value="{{0.4,0},{0.58,0},{0.45,0},{0.62,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-TimeButton" />
+					<Property name="DownButton" value="-HealthButton" />
+					<Property name="LeftButton" value="-SongButton" />
+					<Property name="RightButton" value="+SongButton" />
         </Window>
         # SONG
         <Window type="TaharezLook/StaticText" name="Song" >
@@ -195,6 +215,10 @@
                     <Property name="Area" value="{{0.6,0},{0.58,0},{0.65,0},{0.62,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+TimeButton" />
+					<Property name="DownButton" value="+HealthButton" />
+					<Property name="LeftButton" value="-SongButton" />
+					<Property name="RightButton" value="+SongButton" />
         </Window>
         # HEALTH TEXT
         <Window type="TaharezLook/StaticText" name="HealthText" >
@@ -207,6 +231,10 @@
                     <Property name="Area" value="{{0.4,0},{0.68,0},{0.45,0},{0.72,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-SongButton" />
+					<Property name="DownButton" value="FightButton" />
+					<Property name="LeftButton" value="-HealthButton" />
+					<Property name="RightButton" value="+HealthButton" />
         </Window>
         # HEALTH
         <Window type="TaharezLook/StaticText" name="Health" >
@@ -219,6 +247,10 @@
                     <Property name="Area" value="{{0.6,0},{0.68,0},{0.65,0},{0.72,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+SongButton" />
+					<Property name="DownButton" value="FightButton" />
+					<Property name="LeftButton" value="-HealthButton" />
+					<Property name="RightButton" value="+HealthButton" />
         </Window>
         # FIGHT BUTTON
         <Window type="TaharezLook/Button" name="FightButton" >
@@ -226,12 +258,20 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="FIGHT!" />
+			<Property name="UpButton" value="+HealthButton" />
+			<Property name="DownButton" value="BackButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="+HealthButton" />
         </Window>
         # BACK BUTTON
         <Window type="TaharezLook/Button" name="BackButton" >
             <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="BACK" />
+			<Property name="UpButton" value="FightButton" />
+			<Property name="DownButton" value="+LevelButton" />
+			<Property name="LeftButton" value="-LevelButton" />
+			<Property name="RightButton" value="FightButton" />
         </Window>
     </Window>
 </GUILayout>

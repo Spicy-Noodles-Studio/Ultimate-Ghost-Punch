@@ -21,6 +21,10 @@
                     <Property name="Area" value="{{0.4,0},{0.13,0},{0.45,0},{0.17,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="BackButton" />
+					<Property name="DownButton" value="FullscreenYesButton" />
+					<Property name="LeftButton" value="-ResolutionButton" />
+					<Property name="RightButton" value="+ResolutionButton" />
         </Window>
         # RESOLUTION
         <Window type="TaharezLook/StaticText" name="Resolution" >
@@ -33,12 +37,20 @@
                     <Property name="Area" value="{{0.6,0},{0.13,0},{0.65,0},{0.17,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="DefaultOptionsButton" />
+					<Property name="DownButton" value="FullscreenYesButton" />
+					<Property name="LeftButton" value="-ResolutionButton" />
+					<Property name="RightButton" value="ResolutionApplyButton" />
         </Window>
         # RESOLUTION APPLY BUTTON
         <Window type="TaharezLook/Button" name="ResolutionApplyButton" >
                     <Property name="Area" value="{{0.7,0},{0.13,0},{0.9,0},{0.17,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
                     <Property name="Text" value="Apply changes" />
+					<Property name="UpButton" value="DefaultOptionsButton" />
+					<Property name="DownButton" value="FullscreenYesButton" />
+					<Property name="LeftButton" value="+ResolutionButton" />
+					<Property name="RightButton" value="ResolutionApplyButton" />
         </Window>
 
         # FULLSCREEN TEXT
@@ -65,6 +77,10 @@
                     <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
                     <Property name="Text" value="" />
                     <Property name="ScrollPosition" value="100" />
+					<Property name="UpButton" value="FullscreenYesButton" />
+					<Property name="DownButton" value="MusicScroll" />
+					<Property name="LeftButton" value="GammaScroll" />
+					<Property name="RightButton" value="GammaScroll" />
         </Window>
         # GAMMA
         <Window type="TaharezLook/StaticText" name="Gamma" >
@@ -84,6 +100,10 @@
                     <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
                     <Property name="Text" value="" />
                     <Property name="ScrollPosition" value="100" />
+					<Property name="UpButton" value="GammaScroll" />
+					<Property name="DownButton" value="SoundScroll" />
+					<Property name="LeftButton" value="MusicScroll" />
+					<Property name="RightButton" value="MusicScroll" />
         </Window>
         # MUSIC VOLUME
         <Window type="TaharezLook/StaticText" name="MusicVolume" >
@@ -105,6 +125,10 @@
                     <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
                     <Property name="Text" value="" />
                     <Property name="ScrollPosition" value="100" />
+					<Property name="UpButton" value="MusicScroll" />
+					<Property name="DownButton" value="BackButton" />
+					<Property name="LeftButton" value="SoundScroll" />
+					<Property name="RightButton" value="SoundScroll" />
         </Window>
         # SOUND VOLUME
         <Window type="TaharezLook/StaticText" name="SoundVolume" >
@@ -118,12 +142,20 @@
             <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="DEFAULT OPTIONS" />
+			<Property name="UpButton" value="SoundScroll" />
+			<Property name="DownButton" value="+ResolutionButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="DefaultOptionsButton" />
         </Window>
         # BACK BUTTON
         <Window type="TaharezLook/Button" name="BackButton" >
             <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="BACK" />
+			<Property name="UpButton" value="SoundScroll" />
+			<Property name="DownButton" value="-ResolutionButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="DefaultOptionsButton" />
         </Window>
     </Window>
 </GUILayout>

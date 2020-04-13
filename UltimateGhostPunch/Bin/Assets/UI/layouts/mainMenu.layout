@@ -14,24 +14,40 @@
             <Property name="Area" value="{{0.4,0},{0.5,0},{0.6,0},{0.55,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="SINGLE PLAYER" />
+			<Property name="UpButton" value="ExitButton" />
+			<Property name="DownButton" value="MultiplayerButton" />
+			<Property name="LeftButton" value="ExitButton" />
+			<Property name="RightButton" value="MultiplayerButton" />
         </Window>
         # MULTIPLAYER
         <Window type="TaharezLook/Button" name="MultiplayerButton" >
             <Property name="Area" value="{{0.4,0},{0.6,0},{0.6,0},{0.65,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="MULTIPLAYER" />
+			<Property name="UpButton" value="SinglePlayerButton" />
+			<Property name="DownButton" value="OptionsButton" />
+			<Property name="LeftButton" value="SinglePlayerButton" />
+			<Property name="RightButton" value="OptionsButton" />
         </Window>
         # OPTIONS
         <Window type="TaharezLook/Button" name="OptionsButton" >
             <Property name="Area" value="{{0.4,0},{0.7,0},{0.6,0},{0.75,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="OPTIONS" />
+			<Property name="UpButton" value="MultiplayerButton" />
+			<Property name="DownButton" value="ExitButton" />
+			<Property name="LeftButton" value="MultiplayerButton" />
+			<Property name="RightButton" value="ExitButton" />
         </Window>
         # EXIT
         <Window type="TaharezLook/Button" name="ExitButton" >
             <Property name="Area" value="{{0.4,0},{0.8,0},{0.6,0},{0.85,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="EXIT" />
+			<Property name="UpButton" value="OptionsButton" />
+			<Property name="DownButton" value="SinglePlayerButton" />
+			<Property name="LeftButton" value="OptionsButton" />
+			<Property name="RightButton" value="SinglePlayerButton" />
         </Window>
         # INFO TEXT
         <Window type="TaharezLook/StaticText" name="InfoText" >
