@@ -17,7 +17,11 @@ class ScoreManager :
 	UIElement player2Text;
 	UIElement player3Text;
 	UIElement player4Text;
-	
+
+	UIElement player1Panel;
+	UIElement player2Panel;
+	UIElement player3Panel;
+	UIElement player4Panel;
 	
 
 private:
@@ -25,14 +29,31 @@ private:
 	bool backButtonClick();
 	bool resetButtonClick();
 
-	
+	void initStatistics(int numOfPlayers);
+	void reposition(int numOfPlayers);
 
+	void setTotalKills(int playerIndex);
+	void setIndexOfPlayersKilled(int playerIndex);
+
+	void setPercentOfHits(int playerIndex);
+	void setSuccessfullGrabs(int playerIndex);
+	void setTotalAttacks(int playerIndex);
+	void setAmountOfDamageDealt(int playerIndex);
+	void setLifesAsGhost(int playerIndex);
+
+	void setTimesHittedBySpikes(int playerIndex);
+	void setAmountOfFalls(int playerIndex);
+	void setTotalDamageSuffer(int playerIndex);
+	void setEnviromentDeaths(int playerIndex);
+	
 
 public:
 	ScoreManager(GameObject* gameObject);
 	virtual ~ScoreManager();
 
 	virtual void start();
+
+	
 };
 
 

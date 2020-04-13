@@ -12,7 +12,7 @@ void Score::initScorePlayer(ScorePlayer* player)
 	player->numOfKills = 0;
 	player->numOfSuccessfullGrabs = 0;
 	player->numOfTotalAttacks = 0;
-	player->percertOfHits = 100;
+	player->percertOfHits = 0;
 	player->timesFallen = 0;
 	player->TotalDamgeTaken = 0;
 }
