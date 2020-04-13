@@ -35,7 +35,7 @@ void GameManager::start()
 {
 	level = "";
 	song = "";
-	
+
 	dontDestroyOnLoad(gameObject);
 }
 
@@ -68,7 +68,7 @@ std::vector<GameObject*>& GameManager::getKnights()
 void GameManager::setLevel(std::string level)
 {
 	this->level = level;
-
+	this->lastLevel = level;
 	//Leer archivo config del nivel y guardar las posiciones de players/obst�culos para crearlos
 	//Leer el l�mite inferior del nivel: bottomLimit = ...
 }
@@ -78,14 +78,26 @@ std::string GameManager::getLevel()
 	return level;
 }
 
+std::string GameManager::getLastLevel()
+{
+
+	return lastLevel;
+}
+
 void GameManager::setSong(std::string song)
 {
+	this->lastSong = song;
 	this->song = song;
 }
 
 std::string GameManager::getSong()
 {
 	return song;
+}
+
+std::string GameManager::getLastSong()
+{
+	return lastSong;
 }
 
 void GameManager::setHealth(int health)
@@ -101,11 +113,17 @@ int GameManager::getHealth()
 void GameManager::setTime(int time)
 {
 	this->time = time;
+	this->maxTime = time;
 }
 
 int GameManager::getTime()
 {
 	return time;
+}
+
+int GameManager::getInitialTime()
+{
+	return maxTime;
 }
 
 Score* GameManager::getScore()

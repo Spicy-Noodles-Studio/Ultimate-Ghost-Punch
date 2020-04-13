@@ -24,8 +24,12 @@ private:
 	std::string level;
 	std::string song;
 
+	std::string lastLevel;
+	std::string lastSong;
+
 	int health;
 	int time;
+	int maxTime;
 	Score scores;
 	// Bottom limit of the level 
 	float bottomLimit;
@@ -53,14 +57,22 @@ public:
 	void setLevel(std::string level);
 	std::string getLevel();
 
+	std::string getLastLevel();
+
 	void setSong(std::string song);
 	std::string getSong();
+
+	std::string getLastSong();
 
 	void setHealth(int health);
 	int getHealth();
 
 	void setTime(int time);
 	int getTime();
+
+	
+	int getInitialTime();
+
 	Score* getScore();
 };
 

@@ -26,7 +26,6 @@ class ScoreManager :
 
 private:
 		// events
-	bool backButtonClick();
 	bool resetButtonClick();
 
 	void initStatistics(int numOfPlayers);

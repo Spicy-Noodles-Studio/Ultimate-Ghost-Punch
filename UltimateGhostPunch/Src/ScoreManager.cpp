@@ -1,33 +1,45 @@
-#include "ComponentRegister.h"
+
+#include "ScoreManager.h"
+
+#include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
 #include <UIElement.h>
+#include <InputSystem.h>
 #include <Camera.h>
-
+#include <InterfaceSystem.h>
 #include "GameManager.h"
-#include "ScoreManager.h"
+
 
 REGISTER_FACTORY(ScoreManager);
 
-bool ScoreManager::backButtonClick()
-{
-	return false;
-}
+
 
 bool ScoreManager::resetButtonClick()
 {
+	manager->setNumPlayers(manager->getPlayerIndexes().size());
+
+	manager->setTime(manager->getInitialTime());
+	manager->setLevel(manager->getLastLevel());
+	manager->setSong(manager->getLastSong());
+
+	// change scene
+	SceneManager::GetInstance()->changeScene("mainScene");
 	return false;
 }
 
 ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject), player1Text(NULL), player2Text(NULL), player3Text(NULL), player4Text(NULL),
 													player1Panel(NULL), player2Panel(NULL), player3Panel(NULL), player4Panel(NULL)
 {
-
+	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+	interfaceSystem->registerEvent("resetButtonClick", UIEvent("ButtonClicked", [this]() {return resetButtonClick(); }));
 }
 
 ScoreManager::~ScoreManager()
 {
+	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+	interfaceSystem->unregisterEvent("resetButtonClick");
 }
 
 void ScoreManager::start()
