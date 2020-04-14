@@ -63,7 +63,11 @@
         <Window type="TaharezLook/Checkbox" name="FullscreenYesButton" >
                     <Property name="Area" value="{{0.4,0},{0.23,0},{0.42,0},{0.27,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="      " />
+                    <Property name="Text" value="" />
+					<Property name="UpButton" value="-ResolutionButton" />
+					<Property name="DownButton" value="GammaScroll" />
+					<Property name="LeftButton" value="FullscreenYesButton" />
+					<Property name="RightButton" value="FullscreenYesButton" />
         </Window>
         # GAMMA TEXT
         <Window type="TaharezLook/StaticText" name="GammaText" >
