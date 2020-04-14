@@ -59,6 +59,17 @@ void PlatformNode::addEdge(const NavigationLink& link)
 	edges.push_back(link);
 }
 
+void PlatformNode::removeLastEdge()
+{
+	if(!edges.empty())
+		edges.pop_back();
+}
+
+void PlatformNode::removeAllEdges()
+{
+	edges.clear();
+}
+
 GaiaData PlatformNode::savePlatform()
 {
 	GaiaData platform;

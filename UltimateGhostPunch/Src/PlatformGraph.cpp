@@ -165,10 +165,28 @@ bool PlatformGraph::loadGraph()
 	return true;
 }
 
+void PlatformGraph::clearAllConnections()
+{
+	for (int i = 0; i < platforms.size(); i++)
+		clearConnections(i);
+}
+
+void PlatformGraph::clearConnections(int platform)
+{
+	if (platform < platforms.size() && platform >= 0)
+		platforms[platform].removeAllEdges();
+}
+
 void PlatformGraph::addLinkToPlatform(int platform, const NavigationLink& navLink)
 {
-	if (platform < platforms.size())
+	if (platform < platforms.size() && platform >=0)
 		platforms[platform].addEdge(navLink);
+}
+
+void PlatformGraph::removeLastLink(int platform)
+{
+	if (platform < platforms.size() && platform >= 0)
+		platforms[platform].removeLastEdge();
 }
 
 int PlatformGraph::getIndex(const Vector3& pos)

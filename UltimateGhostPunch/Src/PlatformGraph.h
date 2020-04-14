@@ -44,7 +44,10 @@ public:
 	void saveGraph();
 	bool loadGraph();
 
+	void clearAllConnections();
+	void clearConnections(int platform);
 	void addLinkToPlatform(int platform, const NavigationLink& navLink);
+	void removeLastLink(int platform);
 
 	int getIndex(const Vector3& pos);
 };

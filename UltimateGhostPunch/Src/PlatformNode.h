@@ -68,6 +68,8 @@ public:
 	int getIndex() const;
 
 	void addEdge(const NavigationLink& link);
+	void removeLastEdge();
+	void removeAllEdges();
 
 	GaiaData savePlatform();
 	void loadPlatform(const GaiaData& data);

@@ -14,9 +14,10 @@
 
 REGISTER_FACTORY(PathRecorder);
 
-PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), frame(-1)
+PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()),
+													 currentPlatform(-1)
 {
-	states = std::vector<State>();
+
 }
 
 PathRecorder::~PathRecorder()
@@ -46,8 +47,30 @@ void PathRecorder::start()
 
 void PathRecorder::update(float deltaTime)
 {
+	//Saves the graph
 	if (inputSystem->getKeyPress("O"))
 		graph->saveGraph();
+
+	//Removes last link of the last platform we have been at
+	else if (inputSystem->getKeyPress("K"))
+		graph->removeLastLink(currentPlatform);
+
+	//Removes all links of the last platform we have been at
+	else if (inputSystem->getKeyPress("L")) {
+		graph->clearConnections(currentPlatform);
+	}
+
+	//Removes all connections
+	else if (inputSystem->getKeyPress("P"))
+		graph->clearAllConnections();
+
+	//Removes last link created
+	else if (inputSystem->getKeyPress("U"))
+		eraseLastLink();
+
+	//Removes all links created in this recording
+	else if (inputSystem->getKeyPress("I"))
+		eraseRecordedLinks();
 
 	if (controllerIndex == 4) {
 		//If it is an actual jump
@@ -75,17 +98,18 @@ void PathRecorder::update(float deltaTime)
 void PathRecorder::onObjectEnter(GameObject* other)
 {
 	if (controllerIndex == 4 && other->getTag() == "suelo" && recording) {
-		int endIndex = -1, iniIndex = -1;
 		Vector3 endPos = gameObject->transform->getWorldPosition();
-		if (graph != nullptr) {
-			endIndex = graph->getIndex(endPos);
-			iniIndex = graph->getIndex(iniPos);
-		}
-		if (endIndex != -1) {
-			NavigationLink navLink = NavigationLink(states, iniPos, endPos, frame, endIndex);
-			if (iniIndex != -1) {
-				graph->addLinkToPlatform(iniIndex, navLink);
-			}
+
+		if (currentPlatform != -1) lastPlatform.push(currentPlatform);
+
+		if (graph != nullptr) 
+			currentPlatform = graph->getIndex(endPos);
+
+		if (currentPlatform != -1) {
+			NavigationLink navLink = NavigationLink(states, iniPos, endPos, frame, currentPlatform);
+			if (!lastPlatform.empty()) {
+				graph->addLinkToPlatform(lastPlatform.top(), navLink);
+			}			
 		}
 		stopRecording();
 	}
@@ -116,5 +140,20 @@ void PathRecorder::startRecording()
 {
 	iniPos = gameObject->transform->getWorldPosition();
 	recording = true;
+}
+
+void PathRecorder::eraseLastLink()
+{
+	if (graph != nullptr && !lastPlatform.empty()) {
+		graph->removeLastLink(lastPlatform.top());
+		lastPlatform.pop();
+	}
+}
+
+void PathRecorder::eraseRecordedLinks()
+{
+	while (!lastPlatform.empty()) {
+		eraseLastLink();
+	}
 }
 

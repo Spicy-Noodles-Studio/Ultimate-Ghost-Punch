@@ -4,6 +4,7 @@
 #define PATH_RECORDER_H
 
 #include <UserComponent.h>
+#include <stack>
 
 class RigidBody;
 class PlatformGraph;
@@ -24,10 +25,15 @@ private:
 	GhostManager* ghostManager;
 	Jump* jump;
 	std::vector<State> states;
+	std::stack<int> lastPlatform;
 
-	int controllerIndex, frame;
+	int controllerIndex, frame, currentPlatform;
 
 	Vector3 iniPos;
+
+	void eraseLastLink();
+	void eraseRecordedLinks();
+
 public:
 	PathRecorder(GameObject* gameObject);
 	~PathRecorder();
@@ -42,6 +48,7 @@ public:
 	
 	void stopRecording();
 	void startRecording();
+
 };
 
 #endif 
