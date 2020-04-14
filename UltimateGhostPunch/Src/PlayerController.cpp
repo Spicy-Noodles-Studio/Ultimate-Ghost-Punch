@@ -26,7 +26,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1), isBlocking(false)
+															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1)
 {
 
 }
@@ -132,9 +132,12 @@ void PlayerController::checkInput()
 					dodge->dodge();
 
 			//Jump
-			if (jump != nullptr)
+			if (jump != nullptr) {
 				if (getKey("Space") || getButton("A"))
 					jump->jump();
+				else if (getKeyUp("Space") || getButtonUp("A"))
+					jump->cancelJump();
+			}
 
 			//Grab
 			if (grab != nullptr) {
@@ -146,7 +149,7 @@ void PlayerController::checkInput()
 		//Block
 		if (block != nullptr) {
 			if (getKeyDown("S") || getButtonDown("B")) block->block();
-			if (isBlocking && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
+			if (block->blocking() && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
 		}
 	}
 
@@ -221,6 +224,10 @@ bool PlayerController::getButtonUp(const std::string& button)
 	return controllerIndex < 4 && inputSystem->getButtonRelease(controllerIndex, button);
 }
 
+int PlayerController::getControllerIndex() const
+{
+	return controllerIndex;
+}
 bool PlayerController::getButton(const std::string& button)
 {
 	return controllerIndex < 4 && inputSystem->isButtonPressed(controllerIndex, button);
@@ -272,11 +279,6 @@ int PlayerController::getVerticalAxis()
 		return -1;
 	else
 		return 0;
-}
-
-void PlayerController::setBlocking(bool _block)
-{
-	isBlocking = _block;
 }
 
 void PlayerController::ghostPunchMouseAim()

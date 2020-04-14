@@ -23,8 +23,6 @@ class Block;
 class PlayerController : public UserComponent
 {
 private:
-	bool isBlocking;
-
 	int playerIndex;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
@@ -82,8 +80,8 @@ public:
 	void checkInput();
 
 	int getPlayerIndex() const;
+	int getControllerIndex()const;
 	void setPlayerIndex(int index);
-	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);
 };
