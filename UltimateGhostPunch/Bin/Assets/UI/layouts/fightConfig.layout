@@ -184,7 +184,7 @@
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
 					<Property name="UpButton" value="+LevelButton" />
-					<Property name="DownButton" value="+TimeButton" />
+					<Property name="DownButton" value="+SongButton" />
 					<Property name="LeftButton" value="-TimeButton" />
 					<Property name="RightButton" value="+TimeButton" />
         </Window>
