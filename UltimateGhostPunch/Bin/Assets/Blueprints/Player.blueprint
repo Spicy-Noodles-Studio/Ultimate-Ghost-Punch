@@ -42,7 +42,8 @@
                [ "kinematic", "0"],
                [ "trigger", "0"],
                [ "movementConstraints", "1 1 0"],
-               [ "rotationConstraints", "0 0 0"]
+               [ "rotationConstraints", "0 0 0"],
+               [ "collisionGroup", "IgnoreRaycast"]
             ]
         },
         {
@@ -176,7 +177,10 @@
 				        ["blockRegenTime", "1.5"],
 						["blockGrabMargin", "1"]
                     ]
-				}
+				},
+                {
+                    "ComponentName": "PathRecorder"
+                }
             ]
         },
 		{
