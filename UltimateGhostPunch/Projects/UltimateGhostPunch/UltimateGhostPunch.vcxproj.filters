@@ -87,6 +87,13 @@
     <ClCompile Include="..\..\Src\OptionsConfiguration.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\ScoreManager.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Score.cpp">
+      <Filter>Archivos de origen\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PlayerIndex.cpp">
     <ClCompile Include="..\..\Src\PlatformGraph.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -161,6 +168,13 @@
     <ClInclude Include="..\..\Src\OptionsConfiguration.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\ScoreManager.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Score.h">
+      <Filter>Archivos de encabezado\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PlayerIndex.h">
     <ClInclude Include="..\..\Src\PlatformGraph.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>

@@ -26,7 +26,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), playerIndex(1), controllerIndex(1)
+															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1), isBlocking(false)
 {
 
 }
@@ -77,7 +77,7 @@ void PlayerController::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "index")
+		if (prop.first == "controllerIndex")
 		{
 			if (!(ss >> controllerIndex))
 				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
@@ -182,16 +182,6 @@ void PlayerController::checkInput()
 		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
 			if (ghostMovement != nullptr) ghostMovement->move(direction);
 	}
-}
-
-int PlayerController::getPlayerIndex() const
-{
-	return playerIndex;
-}
-
-void PlayerController::setPlayerIndex(int index)
-{
-	playerIndex = index;
 }
 
 void PlayerController::setControllerIndex(int index)
