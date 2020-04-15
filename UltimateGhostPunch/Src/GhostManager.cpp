@@ -132,7 +132,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 			int health = aux->getHealth();
 			aux->receiveDamage(ghostDamage);
 			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
-			if (health != aux->getHealth())
+			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			deactivateGhost();
 		}
