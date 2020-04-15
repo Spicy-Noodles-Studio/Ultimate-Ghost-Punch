@@ -19,8 +19,7 @@
                 ["mass", "1"],
                 ["kinematic", "1"],
                 ["trigger", "1"],
-                ["scale", "1 1 1"],
-                [ "collisionGroup", "IgnoreRaycast"]
+                ["scale", "1 1 1"]
             ]
         }
     ]

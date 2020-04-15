@@ -43,7 +43,7 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
-	playerPositions = { {-20,20,0}, {20,20,0}, {-17.5,0,0}, {17.5,0,0} };
+	playerPositions = { {-20,25,0}, {20,25,0}, {-17.5,5,0}, {17.5,5,0} };
 
 	// create game
 	createLevel();
@@ -64,7 +64,7 @@ void FightManager::update(float deltaTime)
 		if (fightTimer < 0.0f) fightTimer = 0.0f;
 		timeText.setText(std::to_string((int)fightTimer % 60));
 	}
-	else if(fightTimer == 0) {//If its negative it means match its not timed
+	else {
 		// end game
 		if (winner == -1) chooseWinner();
 		finishTimer -= deltaTime;
