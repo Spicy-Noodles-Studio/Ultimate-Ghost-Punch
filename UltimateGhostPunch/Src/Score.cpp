@@ -59,7 +59,7 @@ void Score::attackDone(int PlayerIndex, bool groundAttack)
 void Score::receiveHitFrom(int playerIndex, int fromIndex)
 {
 	playerScores.at(fromIndex - 1)->numOfHits++;
-	playerScores.at(fromIndex - 1)->percertOfHits = playerScores.at(fromIndex)->numOfHits / playerScores.at(fromIndex)->numOfTotalAttacks * 100;
+	playerScores.at(fromIndex - 1)->percertOfHits = playerScores.at(fromIndex-1)->numOfHits / playerScores.at(fromIndex-1)->numOfTotalAttacks * 100;
 }
 
 void Score::damageRecivedFrom(int playerIndex, int fromIndex, int amount)

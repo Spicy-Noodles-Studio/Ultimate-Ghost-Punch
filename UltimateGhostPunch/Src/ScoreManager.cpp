@@ -195,19 +195,19 @@ void ScoreManager::setPercentOfHits(int playerIndex)
 	}
 	else if (playerIndex == 2)
 	{
-		text += score->getPercentOfHits(playerIndex);
+		text += std::to_string(score->getPercentOfHits(playerIndex));
 		text += "%";
 		player2Panel.getChild(name2).getChild(name).setText(text);
 	}
 	else if (playerIndex == 3)
 	{
-		text += score->getPercentOfHits(playerIndex);
+		text += std::to_string(score->getPercentOfHits(playerIndex));
 		text += "%";
 		player3Panel.getChild(name2).getChild(name).setText(text);
 	}
 	else
 	{
-		text += score->getPercentOfHits(playerIndex);
+		text += std::to_string(score->getPercentOfHits(playerIndex));
 		text += "%";
 		player4Panel.getChild(name2).getChild(name).setText(text);
 	}
