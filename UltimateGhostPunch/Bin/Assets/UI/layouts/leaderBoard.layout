@@ -342,6 +342,10 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="BACK" />
             <Property name="Font" value="Batang8" />
+			<Property name="UpButton" value="BackButton" />
+			<Property name="DownButton" value="BackButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="ResetButton" />
         </Window>     
            # RESET BUTTON
         <Window type="TaharezLook/Button" name="ResetButton" >
@@ -349,6 +353,10 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="RESET" />
             <Property name="Font" value="Batang8" />
+			<Property name="UpButton" value="ResetButton" />
+			<Property name="DownButton" value="ResetButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="ResetButton" />
         </Window>   
     </Window>
 </GUILayout>
