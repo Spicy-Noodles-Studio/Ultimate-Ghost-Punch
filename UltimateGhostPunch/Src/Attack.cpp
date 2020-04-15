@@ -120,8 +120,19 @@ void Attack::onObjectStay(GameObject* other)
 		Block* enemyBlock = nullptr;
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
-			enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition());
-
+			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
+			{
+				Health* enemyHealth = other->getComponent<Health>();
+				int health = enemyHealth->getHealth();
+				score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+				if (health != enemyHealth->getHealth())
+					score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
+				if (!enemyHealth->isAlive())
+				{
+					score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+				}
+			}
+			
 			// Deactivate the trigger until the next attack is used
 			attackTrigger->setActive(false);
 
