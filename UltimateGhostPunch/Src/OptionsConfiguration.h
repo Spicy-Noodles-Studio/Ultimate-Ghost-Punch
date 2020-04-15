@@ -20,12 +20,9 @@ const std::vector<std::pair<int, int>> RESOLUTIONS = { {640,480},{800,600},{960,
 {1400,1050},{1440,900},{1440,1080},{1600,900},{1600,1200},
 {1680,1050},{1856,1392},{1920,1080}, {1920,1200},{1920,1440} };
 
-class InputSystem;
 
 class OptionsConfiguration : public UserComponent
 {
-	InputSystem* inputSystem;
-
 	UIElement resolutionButton;
 	UIElement volumeScroll;
 	UIElement musicScroll;

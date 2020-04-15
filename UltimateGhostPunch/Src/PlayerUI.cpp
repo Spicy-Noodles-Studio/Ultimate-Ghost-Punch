@@ -7,6 +7,7 @@
 
 #include "Health.h"
 #include "PlayerController.h"
+#include"PlayerIndex.h"
 #include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerUI);
@@ -25,10 +26,16 @@ void PlayerUI::start()
 {
 	// Initialize name to search through layout
 	PlayerController* playerController = gameObject->getComponent<PlayerController>();
-	if (playerController != nullptr)
-		name = "Player" + std::to_string(playerController->getPlayerIndex());
+	
+	if (playerController == nullptr)
+		LOG("PlayerController not found");
+
+	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
+	if(playerIndex!=nullptr)
+		name = "Player" + std::to_string(playerIndex->getIndex());
 	else
-		LOG("PlayerController not found. Cannot get player index");
+		LOG("PlayerIndex not found. Cannot get player index");
+
 
 	// Get health component to update stats
 	health = gameObject->getComponent<Health>();

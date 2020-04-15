@@ -4,6 +4,7 @@
 
 #include <UserComponent.h>
 
+class PlayerIndex;
 class InputSystem;
 class Movement;
 class Attack;
@@ -25,7 +26,7 @@ class PlayerController : public UserComponent
 private:
 	bool isBlocking;
 
-	int playerIndex;
+	PlayerIndex *playerIndex;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
 	Vector3 direction;
@@ -81,8 +82,6 @@ public:
 	// Manages player's input and generates a movement direction
 	void checkInput();
 
-	int getPlayerIndex() const;
-	void setPlayerIndex(int index);
 	void setBlocking(bool _block);
 
 	void setControllerIndex(int index);

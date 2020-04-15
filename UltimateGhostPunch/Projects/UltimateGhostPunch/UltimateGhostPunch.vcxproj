@@ -45,6 +45,7 @@
     <ClCompile Include="..\..\Src\GameManager.cpp" />
     <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
+    <ClCompile Include="..\..\Src\PlayerIndex.cpp" />
     <ClCompile Include="..\..\Src\PlayerUI.cpp" />
     <ClCompile Include="..\..\Src\GhostManager.cpp" />
     <ClCompile Include="..\..\Src\Grab.cpp" />
@@ -56,6 +57,8 @@
     <ClCompile Include="..\..\Src\PlayerController.cpp" />
     <ClCompile Include="..\..\Src\Jump.cpp" />
     <ClCompile Include="..\..\Src\Respawn.cpp" />
+    <ClCompile Include="..\..\Src\Score.cpp" />
+    <ClCompile Include="..\..\Src\ScoreManager.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +74,13 @@
     <ClInclude Include="..\..\Src\GameManager.h" />
     <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
+    <ClInclude Include="..\..\Src\PlayerIndex.h" />
     <ClInclude Include="..\..\Src\PlayerUI.h" />
     <ClInclude Include="..\..\Src\GhostManager.h" />
     <ClInclude Include="..\..\Src\GhostMovement.h" />
     <ClInclude Include="..\..\Src\Respawn.h" />
+    <ClInclude Include="..\..\Src\Score.h" />
+    <ClInclude Include="..\..\Src\ScoreManager.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

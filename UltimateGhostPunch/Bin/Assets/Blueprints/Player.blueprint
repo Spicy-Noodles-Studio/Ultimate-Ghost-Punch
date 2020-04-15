@@ -54,6 +54,12 @@
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
+                ["controllerIndex", "0"]
+            ]
+        },
+         {  
+            "ComponentName": "PlayerIndex",
+            "ComponentProperties":[ 
                 ["index", "0"]
             ]
         },
