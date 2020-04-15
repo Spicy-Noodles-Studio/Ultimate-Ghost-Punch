@@ -120,10 +120,10 @@ void Attack::onObjectStay(GameObject* other)
 		Block* enemyBlock = nullptr;
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
+			Health* enemyHealth = other->getComponent<Health>();
+			int health = enemyHealth->getHealth();
 			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
 			{
-				Health* enemyHealth = other->getComponent<Health>();
-				int health = enemyHealth->getHealth();
 				score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
 				if (health != enemyHealth->getHealth())
 					score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
