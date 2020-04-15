@@ -224,13 +224,13 @@ void ScoreManager::setSuccessfullGrabs(int playerIndex)
 
 
 	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Successful grabs made: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+		player1Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
 	else if (playerIndex == 2)
-		player2Panel.getChild(name2).getChild(name).setText("Successful grabs made: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+		player2Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
 	else if (playerIndex == 3)
-		player3Panel.getChild(name2).getChild(name).setText("Successful grabs made: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+		player3Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
 	else
-		player4Panel.getChild(name2).getChild(name).setText("Successful grabs made: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+		player4Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
 }
 
 void ScoreManager::setTotalAttacks(int playerIndex)
@@ -296,13 +296,13 @@ void ScoreManager::setTimesHittedBySpikes(int playerIndex)
 	name2 += "ScrollablePane";
 
 	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Enviroment hazards hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+		player1Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Enviroment hazards hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+			player2Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Enviroment hazards hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+			player3Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 	else
-			player4Panel.getChild(name2).getChild(name).setText("Enviroment hazards hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+			player4Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 }
 
 void ScoreManager::setAmountOfFalls(int playerIndex)
@@ -313,13 +313,13 @@ void ScoreManager::setAmountOfFalls(int playerIndex)
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
 	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Times has fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+		player1Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Times has fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+			player2Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Times has fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+			player3Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 	else
-			player4Panel.getChild(name2).getChild(name).setText("Times has fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+			player4Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 }
 
 void ScoreManager::setTotalDamageSuffer(int playerIndex)
@@ -348,11 +348,11 @@ void ScoreManager::setEnviromentDeaths(int playerIndex)
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
 	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Enviroment hazards deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+		player1Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Enviroment hazards deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+			player2Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Enviroment hazards deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+			player3Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 	else
-			player4Panel.getChild(name2).getChild(name).setText("Enviroment hazards deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+			player4Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 }
