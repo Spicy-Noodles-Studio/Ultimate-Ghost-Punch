@@ -73,16 +73,10 @@ void ScoreManager::start()
 
 void ScoreManager::initStatistics(int numOfPlayers)
 {
-<<<<<<< HEAD
 	Score * score = manager->getScore();
 	for (int i = 0; i < numOfPlayers; i++)
 	{
 		setTotalKills(i + 1);
-=======
-	for (int i = 0; i < numOfPlayers; i++)
-	{
-		
->>>>>>> master
 		setIndexOfPlayersKilled(i + 1);
 		setPercentOfHits(i + 1);
 		setSuccessfullGrabs(i + 1);
@@ -141,7 +135,6 @@ void ScoreManager::reposition(int numOfPlayers)
 	}
 }
 
-<<<<<<< HEAD
 void ScoreManager::setTotalKills(int playerIndex)
 {
 	Score* score = manager->getScore();
@@ -159,9 +152,6 @@ void ScoreManager::setTotalKills(int playerIndex)
 	else 
 		player4Panel.getChild(name2).getChild(name).setText("Total kills: " + std::to_string(score->getNumberOfKills(playerIndex)));
 }
-=======
-
->>>>>>> master
 
 void ScoreManager::setIndexOfPlayersKilled(int playerIndex)
 {
