@@ -28,6 +28,7 @@
 					<Property name="DownButton" value="FullscreenYesButton" />
 					<Property name="LeftButton" value="-ResolutionButton" />
 					<Property name="RightButton" value="+ResolutionButton" />
+                    <Property name="Font" value="Batang8" />
         </Window>
         # RESOLUTION
         <Window type="TaharezLook/StaticText" name="Resolution" >
@@ -46,6 +47,7 @@
 					<Property name="DownButton" value="FullscreenYesButton" />
 					<Property name="LeftButton" value="-ResolutionButton" />
 					<Property name="RightButton" value="ResolutionApplyButton" />
+                    <Property name="Font" value="Batang8" />
         </Window>
         # RESOLUTION APPLY BUTTON
         <Window type="TaharezLook/Button" name="ResolutionApplyButton" >
@@ -57,6 +59,7 @@
 					<Property name="DownButton" value="FullscreenYesButton" />
 					<Property name="LeftButton" value="+ResolutionButton" />
 					<Property name="RightButton" value="ResolutionApplyButton" />
+                    <Property name="Font" value="Batang8" />
         </Window>
 
         # FULLSCREEN TEXT
@@ -160,6 +163,7 @@
 			<Property name="DownButton" value="+ResolutionButton" />
 			<Property name="LeftButton" value="BackButton" />
 			<Property name="RightButton" value="DefaultOptionsButton" />
+            <Property name="Font" value="Batang8" />
         </Window>
         # BACK BUTTON
         <Window type="TaharezLook/Button" name="BackButton" >
@@ -171,6 +175,7 @@
 			<Property name="DownButton" value="-ResolutionButton" />
 			<Property name="LeftButton" value="BackButton" />
 			<Property name="RightButton" value="DefaultOptionsButton" />
+            <Property name="Font" value="Batang8" />
         </Window>
     </Window>
 </GUILayout>
