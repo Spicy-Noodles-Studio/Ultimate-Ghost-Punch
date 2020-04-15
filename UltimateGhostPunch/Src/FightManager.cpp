@@ -8,6 +8,7 @@
 #include <RigidBody.h>
 
 #include "PlayerController.h"
+#include "PlayerIndex.h"
 #include "Health.h"
 #include "FightConfiguration.h"
 #include "GameManager.h"
@@ -158,7 +159,7 @@ void FightManager::createKnights()
 		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
 
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
-		knight->getComponent<PlayerController>()->setPlayerIndex(i + 1);
+		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
 
 		gameManager->getKnights().push_back(knight);
 	}

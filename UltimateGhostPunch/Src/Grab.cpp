@@ -9,6 +9,7 @@
 #include "ComponentRegister.h"
 #include "GameManager.h"
 #include "Score.h"
+#include "PlayerIndex.h"
 
 REGISTER_FACTORY(Grab);
 
@@ -69,7 +70,7 @@ void Grab::onObjectStay(GameObject* other)
 
 			//Grab the enemy
 			enemyDiff = other->transform->getPosition() - gameObject->getParent()->transform->getPosition();
-			score->grabbedBy(other->getComponent<PlayerController>()->getPlayerIndex(), controller->getPlayerIndex());
+			score->grabbedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
 			state = GRABBED;
 			remain = grabDuration;
 			enemy = other;

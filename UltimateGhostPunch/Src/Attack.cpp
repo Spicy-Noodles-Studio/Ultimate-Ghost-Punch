@@ -9,6 +9,7 @@
 #include "ComponentRegister.h"
 #include "GameManager.h"
 #include "Score.h"
+#include "PlayerIndex.h"
 
 REGISTER_FACTORY(Attack);
 
@@ -132,12 +133,12 @@ void Attack::onObjectStay(GameObject* other)
 			Health* enemyHealth = other->getComponent<Health>();
 			int health = enemyHealth->getHealth();
 			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
-			score->receiveHitFrom(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getParent()->getComponent<PlayerController>()->getPlayerIndex());
+			score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
 			if(health!= enemyHealth->getHealth())
-				score->damageRecivedFrom(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getParent()->getComponent<PlayerController>()->getPlayerIndex(), damage);
+				score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
 			if (!enemyHealth->isAlive())
 			{
-				score->killedBy(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getParent()->getComponent<PlayerController>()->getPlayerIndex());
+				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
 			}
 		}
 	}
@@ -156,7 +157,7 @@ void Attack::attack()
 	state = ATTACKING;
 	activeTime = attackDuration;
 	attackTrigger->setActive(true);
-	GameManager::GetInstance()->getScore()->attackDone(gameObject->getParent()->getComponent<PlayerController>()->getPlayerIndex(), false);
+	GameManager::GetInstance()->getScore()->attackDone(gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), false);
 	LOG("Attack!\n");
 }
 

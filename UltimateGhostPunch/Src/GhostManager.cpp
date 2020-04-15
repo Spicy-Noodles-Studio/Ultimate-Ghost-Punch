@@ -14,7 +14,7 @@
 #include "GameManager.h"
 #include "Score.h"
 #include "PlayerController.h"
-
+#include "PlayerIndex.h"
 REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
@@ -131,9 +131,9 @@ void GhostManager::onObjectEnter(GameObject* other)
 		{
 			int health = aux->getHealth();
 			aux->receiveDamage(ghostDamage);
-			score->lifeStolenBy(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getComponent<PlayerController>()->getPlayerIndex());
+			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			if (health != aux->getHealth())
-				score->killedBy(other->getComponent<PlayerController>()->getPlayerIndex(), gameObject->getComponent<PlayerController>()->getPlayerIndex());
+				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			deactivateGhost();
 		}
 	}
