@@ -73,10 +73,9 @@ void ScoreManager::start()
 
 void ScoreManager::initStatistics(int numOfPlayers)
 {
-	Score * score = manager->getScore();
 	for (int i = 0; i < numOfPlayers; i++)
 	{
-		setTotalKills(i + 1);
+		
 		setIndexOfPlayersKilled(i + 1);
 		setPercentOfHits(i + 1);
 		setSuccessfullGrabs(i + 1);
@@ -135,23 +134,7 @@ void ScoreManager::reposition(int numOfPlayers)
 	}
 }
 
-void ScoreManager::setTotalKills(int playerIndex)
-{
-	Score* score = manager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
-	name = name + "TotalKills";
-	std::string name2 = "P"+ std::to_string(playerIndex);
-	name2 += "ScrollablePane";
-	
-	if(playerIndex==1)
-		player1Panel.getChild(name2).getChild(name).setText("Total kills: " + std::to_string(score->getNumberOfKills(playerIndex)));
-	else if (playerIndex == 2)
-		player2Panel.getChild(name2).getChild(name).setText("Total kills: " + std::to_string(score->getNumberOfKills(playerIndex)));
-	else if (playerIndex == 3)
-		player3Panel.getChild(name2).getChild(name).setText("Total kills: " + std::to_string(score->getNumberOfKills(playerIndex)));
-	else 
-		player4Panel.getChild(name2).getChild(name).setText("Total kills: " + std::to_string(score->getNumberOfKills(playerIndex)));
-}
+
 
 void ScoreManager::setIndexOfPlayersKilled(int playerIndex)
 {

@@ -31,7 +31,7 @@ private:
 	void initStatistics(int numOfPlayers);
 	void reposition(int numOfPlayers);
 
-	void setTotalKills(int playerIndex);
+	
 	void setIndexOfPlayersKilled(int playerIndex);
 
 	void setPercentOfHits(int playerIndex);

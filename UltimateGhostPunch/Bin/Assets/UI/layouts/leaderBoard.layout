@@ -18,69 +18,63 @@
             <Window type="TaharezLook/ScrollablePane" name="P1ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Window type="TaharezLook/StaticText" name="P1TotalKills" >
-                    <Property name="Area" value="{{0.05,0},{0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Total kills: " />
-                     <Property name="Font" value="Batang7" />
-                </Window>
                  <Window type="TaharezLook/StaticText" name="P1Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player kills: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P1DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.2,0},{1,0},{0.3,0}}" />
+                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Total damage dealt: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P1TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1.0,0},{0.4,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Total damage received: " />
                 </Window>
                 
                  <Window type="TaharezLook/StaticText" name="P1TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Times has fallen: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P1DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Enviroment hazards hit: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P1DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Enviroment hazards deaths: " />
                 </Window>
                   <Window type="TaharezLook/StaticText" name="P1Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Attacks made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P1PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Succesfull attacks: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P1SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Successful grabs made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P1LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{1.0,0},{1,0},{1.1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Lives stolen: " />
                      <Property name="Font" value="Batang7" />
@@ -101,69 +95,63 @@
             <Window type="TaharezLook/ScrollablePane" name="P2ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Window type="TaharezLook/StaticText" name="P2TotalKills" >
-                    <Property name="Area" value="{{0.05,0},{0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Total kills: " />
-                     <Property name="Font" value="Batang7" />
-                </Window>
                  <Window type="TaharezLook/StaticText" name="P2Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player kills: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P2DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.2,0},{1,0},{0.3,0}}" />
+                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Total damage dealt: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P2TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1.0,0},{0.4,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Total damage received: " />
                 </Window>
                 
                  <Window type="TaharezLook/StaticText" name="P2TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Times has fallen: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P2DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Enviroment hazards hit: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P2DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Enviroment hazards deaths: " />
                 </Window>
                   <Window type="TaharezLook/StaticText" name="P2Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Attacks made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P2PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Succesfull attacks: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P2SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Successful grabs made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P2LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{1.0,0},{1,0},{1.1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Lives stolen: " />
                      <Property name="Font" value="Batang7" />
@@ -184,69 +172,63 @@
                 <Window type="TaharezLook/ScrollablePane" name="P3ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Window type="TaharezLook/StaticText" name="P3TotalKills" >
-                    <Property name="Area" value="{{0.05,0},{0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Total kills: " />
-                     <Property name="Font" value="Batang7" />
-                </Window>
                  <Window type="TaharezLook/StaticText" name="P3Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player kills: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P3DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.2,0},{1,0},{0.3,0}}" />
+                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Total damage dealt: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P3TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1.0,0},{0.4,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Total damage received: " />
                 </Window>
                 
                  <Window type="TaharezLook/StaticText" name="P3TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Times has fallen: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P3DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Enviroment hazards hit: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P3DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Enviroment hazards deaths: " />
                 </Window>
                   <Window type="TaharezLook/StaticText" name="P3Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Attacks made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P3PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Succesfull attacks: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P3SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Successful grabs made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P3LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{1.0,0},{1,0},{1.1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Lives stolen: " />
                      <Property name="Font" value="Batang7" />
@@ -267,69 +249,63 @@
                 <Window type="TaharezLook/ScrollablePane" name="P4ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Window type="TaharezLook/StaticText" name="P4TotalKills" >
-                    <Property name="Area" value="{{0.05,0},{0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Total kills: " />
-                     <Property name="Font" value="Batang7" />
-                </Window>
                  <Window type="TaharezLook/StaticText" name="P4Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player kills: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P4DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.2,0},{1,0},{0.3,0}}" />
+                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Total damage dealt: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="P4TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1.0,0},{0.4,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Total damage received: " />
                 </Window>
                 
                  <Window type="TaharezLook/StaticText" name="P4TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Times has fallen: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P4DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Enviroment hazards hit: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P4DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                      <Property name="Font" value="Batang7" />
                     <Property name="Text" value="Enviroment hazards deaths: " />
                 </Window>
                   <Window type="TaharezLook/StaticText" name="P4Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Attacks made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P4PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Succesfull attacks: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P4SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Successful grabs made: " />
                      <Property name="Font" value="Batang7" />
                 </Window>
                  <Window type="TaharezLook/StaticText" name="P4LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{1.0,0},{1,0},{1.1,0}}" />
+                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Lives stolen: " />
                      <Property name="Font" value="Batang7" />
