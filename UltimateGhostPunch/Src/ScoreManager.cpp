@@ -73,6 +73,7 @@ void ScoreManager::start()
 
 void ScoreManager::initStatistics(int numOfPlayers)
 {
+
 	for (int i = 0; i < numOfPlayers; i++)
 	{
 		
@@ -133,7 +134,6 @@ void ScoreManager::reposition(int numOfPlayers)
 		}
 	}
 }
-
 
 
 void ScoreManager::setIndexOfPlayersKilled(int playerIndex)

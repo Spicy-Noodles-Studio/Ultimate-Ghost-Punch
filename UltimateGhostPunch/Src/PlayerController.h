@@ -83,6 +83,7 @@ public:
 	void checkInput();
 
 	void setBlocking(bool _block);
+
 	int getPlayerIndex() const;
 	int getControllerIndex()const;
 	void setPlayerIndex(int index);

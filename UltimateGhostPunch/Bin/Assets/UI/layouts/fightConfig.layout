@@ -152,6 +152,10 @@
                     <Property name="Area" value="{{0.4,0},{0.38,0},{0.45,0},{0.42,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="BackButton" />
+					<Property name="DownButton" value="-TimeButton" />
+					<Property name="LeftButton" value="-LevelButton" />
+					<Property name="RightButton" value="+LevelButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # LEVEL
@@ -166,6 +170,10 @@
                     <Property name="Area" value="{{0.6,0},{0.38,0},{0.65,0},{0.42,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="BackButton" />
+					<Property name="DownButton" value="+TimeButton" />
+					<Property name="LeftButton" value="-LevelButton" />
+					<Property name="RightButton" value="+LevelButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # TIME TEXT
@@ -180,6 +188,10 @@
                     <Property name="Area" value="{{0.4,0},{0.48,0},{0.45,0},{0.52,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-LevelButton" />
+					<Property name="DownButton" value="-SongButton" />
+					<Property name="LeftButton" value="-TimeButton" />
+					<Property name="RightButton" value="+TimeButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # TIME
@@ -194,6 +206,10 @@
                     <Property name="Area" value="{{0.6,0},{0.48,0},{0.65,0},{0.52,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+LevelButton" />
+					<Property name="DownButton" value="+SongButton" />
+					<Property name="LeftButton" value="-TimeButton" />
+					<Property name="RightButton" value="+TimeButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # SONG TEXT
@@ -208,6 +224,10 @@
                     <Property name="Area" value="{{0.4,0},{0.58,0},{0.45,0},{0.62,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-TimeButton" />
+					<Property name="DownButton" value="-HealthButton" />
+					<Property name="LeftButton" value="-SongButton" />
+					<Property name="RightButton" value="+SongButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # SONG
@@ -222,6 +242,10 @@
                     <Property name="Area" value="{{0.6,0},{0.58,0},{0.65,0},{0.62,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+TimeButton" />
+					<Property name="DownButton" value="+HealthButton" />
+					<Property name="LeftButton" value="-SongButton" />
+					<Property name="RightButton" value="+SongButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # HEALTH TEXT
@@ -236,6 +260,10 @@
                     <Property name="Area" value="{{0.4,0},{0.68,0},{0.45,0},{0.72,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="-" />
+					<Property name="UpButton" value="-SongButton" />
+					<Property name="DownButton" value="FightButton" />
+					<Property name="LeftButton" value="-HealthButton" />
+					<Property name="RightButton" value="+HealthButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # HEALTH
@@ -250,6 +278,10 @@
                     <Property name="Area" value="{{0.6,0},{0.68,0},{0.65,0},{0.72,0}}" />
                     <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
                     <Property name="Text" value="+" />
+					<Property name="UpButton" value="+SongButton" />
+					<Property name="DownButton" value="FightButton" />
+					<Property name="LeftButton" value="-HealthButton" />
+					<Property name="RightButton" value="+HealthButton" />
                     <Property name="Font" value="Batang8" />
         </Window>
         # FIGHT BUTTON
@@ -258,6 +290,10 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="FIGHT!" />
+			<Property name="UpButton" value="+HealthButton" />
+			<Property name="DownButton" value="BackButton" />
+			<Property name="LeftButton" value="BackButton" />
+			<Property name="RightButton" value="+HealthButton" />
             <Property name="Font" value="Batang8" />
         </Window>
         # BACK BUTTON
@@ -265,6 +301,10 @@
             <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="BACK" />
+			<Property name="UpButton" value="FightButton" />
+			<Property name="DownButton" value="+LevelButton" />
+			<Property name="LeftButton" value="-LevelButton" />
+			<Property name="RightButton" value="FightButton" />
             <Property name="Font" value="Batang8" />
         </Window>
     </Window>
