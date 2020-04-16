@@ -38,7 +38,12 @@ void Grab::update(float deltaTime)
 	if (grabTimer > 0.0f) grabTimer -= deltaTime;
 
 	if (state == GRABBED) {
-		if(enemy!= nullptr) enemy->transform->setPosition(gameObject->getParent()->transform->getPosition() + Vector3(0,gameObject->getParent()->transform->getScale().y * grabVerticalOffset,0));
+		if (enemy != nullptr)
+		{
+			Vector3 grabPos = enemy->transform->getPosition();
+			grabPos.lerp(gameObject->getParent()->transform->getPosition() + Vector3(0, gameObject->getParent()->transform->getScale().y * grabVerticalOffset, 0), 0.2f);
+			enemy->transform->setPosition(grabPos);
+		}
 	}
 
 	if (remain <= 0.0f && state == GRABBED) {
@@ -176,6 +181,7 @@ void Grab::resetEnemy()
 
 	//Return control to the enemy
 	if (enemyController != nullptr)enemyController->setActive(true);
+
 
 	PlayerAnimController* enemyAnim = enemy->getComponent<PlayerAnimController>();
 	if (enemyAnim != nullptr)
