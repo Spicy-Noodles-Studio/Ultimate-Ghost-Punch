@@ -5,13 +5,11 @@
 #include <UserComponent.h>
 
 class StateAction;
+enum class ActionInput; // Para la herencia
 
 class StateMachine : public UserComponent
 {
-public:
-	enum class ActionInput; // Para la herencia
-	
-private:
+protected:
 	std::vector<ActionInput> actionInputs; // Input del jugador (puede ser varios)
 	std::vector<StateAction*> stateActions; // Los estados
 	StateAction* currentState;

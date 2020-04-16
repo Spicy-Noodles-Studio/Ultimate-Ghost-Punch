@@ -8,7 +8,9 @@ StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) ,
 
 StateMachine::~StateMachine()
 {
-
+	for (auto state : stateActions)
+		delete state;
+	stateActions.clear();
 }
 
 void StateMachine::update(float deltaTime)

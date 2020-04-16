@@ -31,6 +31,8 @@
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
     <ClCompile Include="..\..\Src\StateAction.cpp" />
     <ClCompile Include="..\..\Src\StateMachine.cpp" />
+    <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
+    <ClCompile Include="..\..\Src\PlatformNavigation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
@@ -62,5 +64,7 @@
     <ClInclude Include="..\..\Src\Health.h" />
     <ClInclude Include="..\..\Src\StateAction.h" />
     <ClInclude Include="..\..\Src\StateMachine.h" />
+    <ClInclude Include="..\..\Src\AIStateMachine.h" />
+    <ClInclude Include="..\..\Src\PlatformNavigation.h" />
   </ItemGroup>
 </Project>

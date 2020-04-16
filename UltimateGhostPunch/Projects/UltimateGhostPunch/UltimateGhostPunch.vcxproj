@@ -43,6 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
+    <ClCompile Include="..\..\Src\PlatformNavigation.cpp" />
     <ClCompile Include="..\..\Src\PlayerIndex.cpp" />
     <ClCompile Include="..\..\Src\PlatformGraph.cpp" />
     <ClCompile Include="..\..\Src\PlatformNode.cpp" />
@@ -75,6 +77,7 @@
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Src\AIStateMachine.h" />
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
@@ -88,6 +91,7 @@
     <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
+    <ClInclude Include="..\..\Src\PlatformNavigation.h" />
     <ClInclude Include="..\..\Src\PlayerIndex.h" />
     <ClInclude Include="..\..\Src\PlatformGraph.h" />
     <ClInclude Include="..\..\Src\PlatformNode.h" />
