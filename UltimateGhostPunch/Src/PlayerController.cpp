@@ -93,7 +93,7 @@ void PlayerController::checkInput()
 {
 	direction = Vector3(0, 0, 0);
 
-	if (block == nullptr || !block->blocking()) {
+	if ((block == nullptr || !block->blocking()) && (dodge== nullptr || !dodge->isDodging())) {
 		//Movement
 		direction += Vector3(getHorizontalAxis(), 0, 0);
 		//Character rotation

@@ -32,11 +32,11 @@
             "ComponentProperties":[ 
                [ "shape", "Box"],
                [ "mass", "5"],
-               [ "friction", "0.9"],
+               [ "friction", "0.3"],
                [ "restitution", "0"],
-               [ "damping", "0.5"],
+               [ "damping", "0.6"],
                [ "angularDamping", "0"],
-               [ "gravity", "0 -10 0"],
+               [ "gravity", "0 -15 0"],
                [ "offset", "0 0 0"],
                [ "scale", "2 5.2 2"],
                [ "kinematic", "0"],
@@ -49,7 +49,8 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-                ["speed", "75"]
+                ["speed", "75"],
+                ["maxVelocity", "7.5"]
             ]
         },
         {  
@@ -94,8 +95,10 @@
 		{
 		    "ComponentName": "Dodge",
              "ComponentProperties": [
-                ["force", "20"],
-                ["cooldown", "2"]
+                ["force", "100"],
+                ["cooldown", "2"],
+                ["duration", "0.15"],
+                ["atenuation", "0.3"]
             ]
 		},
         {
@@ -124,8 +127,8 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "1 0 1.65"],
-                       [ "scale", "1 1 2"]
+                       [ "position", "1 0 3.5"],
+                       [ "scale", "1 1.75 3"]
                     ]
                 }
             ],
@@ -165,8 +168,8 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "55"],
-				        ["jumpDecay", "0.4"],
+                        ["maxForce", "90"],
+				        ["jumpDecay", "0.65"],
                         ["coyoteTime", "0.4"]
                     ]       
                 },
@@ -193,7 +196,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "0 0 1.65"],
+                       [ "position", "0 0 2.5"],
                        [ "scale", "1 2 2"]
                     ]
                 }

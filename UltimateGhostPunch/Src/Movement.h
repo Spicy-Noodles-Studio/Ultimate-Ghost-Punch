@@ -10,7 +10,7 @@ class Movement : public UserComponent
 {
 private:
 	RigidBody* rigidBody;
-	float speed;
+	float speed, maxVelocity;
 
 public:
 	Movement(GameObject* gameObject);

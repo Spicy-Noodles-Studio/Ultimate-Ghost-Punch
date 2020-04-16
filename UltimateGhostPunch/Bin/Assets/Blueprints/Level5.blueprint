@@ -1,0 +1,36 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Level5",
+    "Tag": "suelo",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": [
+                ["position", "0 0 0"],
+                ["scale", "1 1 1"],
+                ["rotation", "0 90 0"]
+            ]
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": [
+                ["mesh", "suelo Level5.mesh"]
+            ]
+        },
+        {
+            "ComponentName": "Strider",
+            "ComponentProperties": [
+                ["mesh", "suelo"],
+                ["friction", "1.5"]
+            ]
+        },
+        {
+            "ComponentName": "PlatformGraph",
+            "ComponentProperties": [
+                ["levelStart", "-25 23 0"],
+                ["levelEnd", "25 -5 0"]
+            ]
+        }
+    ]
+}

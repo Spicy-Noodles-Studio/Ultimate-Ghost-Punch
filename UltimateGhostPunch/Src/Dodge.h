@@ -6,24 +6,30 @@
 
 class RigidBody;
 class GameObject;
+class Movement;
 
 class Dodge : public UserComponent
 {
 private:
-	enum State { IDLE, CD };
+	enum class State { IDLE, DODGING, CD,  };
 	
-	float cooldown, force, cd ;
+	float cooldown, force, time, duration, atenuation;
+	Vector3 playerGravity;
 	
 	State state;
+	RigidBody* rigidBody;
 
 public:
 	Dodge(GameObject* gameObject);
 
 	virtual void update(float deltaTime);
+	virtual void start();
 
 	virtual void handleData(ComponentData* data);
 
 	void dodge();
+	void endDodge();
+	bool isDodging();
 };
 
 #endif

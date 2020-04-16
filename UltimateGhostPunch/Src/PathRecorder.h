@@ -28,8 +28,10 @@ private:
 	std::stack<int> lastPlatform;
 
 	int controllerIndex, frame, currentPlatform;
+	float time;
 
 	Vector3 iniPos;
+	std::vector<Action> actions;
 
 	void eraseLastLink();
 	void eraseRecordedLinks();
@@ -44,7 +46,7 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
-	void saveState(Action action);
+	void saveState(const std::vector<Action>& actions);
 	
 	void stopRecording();
 	void startRecording();
