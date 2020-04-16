@@ -7,6 +7,9 @@
 #include "Health.h"
 #include "Block.h"
 #include "ComponentRegister.h"
+#include "GameManager.h"
+#include "Score.h"
+#include "PlayerIndex.h"
 
 REGISTER_FACTORY(Attack);
 
@@ -99,6 +102,7 @@ void Attack::onObjectStay(GameObject* other)
 {
 	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
 	{
+		Score* score = GameManager::GetInstance()->getScore();
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
 
@@ -116,8 +120,18 @@ void Attack::onObjectStay(GameObject* other)
 		Block* enemyBlock = nullptr;
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
-			enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition());
-
+			
+			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
+			{
+				Health* enemyHealth = other->getComponent<Health>();
+				score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+				score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
+				if (!enemyHealth->isAlive())
+				{
+					score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+				}
+			}
+			
 			// Deactivate the trigger until the next attack is used
 			attackTrigger->setActive(false);
 
@@ -127,7 +141,15 @@ void Attack::onObjectStay(GameObject* other)
 		}
 		else {
 			Health* enemyHealth = other->getComponent<Health>();
+			int health = enemyHealth->getHealth();
 			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
+			score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+			if(health!= enemyHealth->getHealth())
+				score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
+			if (!enemyHealth->isAlive())
+			{
+				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+			}
 		}
 	}
 }
@@ -145,6 +167,7 @@ void Attack::attack()
 	state = ATTACKING;
 	activeTime = attackDuration;
 	attackTrigger->setActive(true);
+	GameManager::GetInstance()->getScore()->attackDone(gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), false);
 	LOG("Attack!\n");
 }
 

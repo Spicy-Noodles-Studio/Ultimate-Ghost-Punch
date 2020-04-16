@@ -45,7 +45,8 @@
                [ "kinematic", "0"],
                [ "trigger", "0"],
                [ "movementConstraints", "1 1 0"],
-               [ "rotationConstraints", "0 0 0"]
+               [ "rotationConstraints", "0 0 0"],
+               [ "collisionGroup", "IgnoreRaycast"]
             ]
         },
         {
@@ -56,6 +57,12 @@
         },
         {  
             "ComponentName": "PlayerController",
+            "ComponentProperties":[ 
+                ["controllerIndex", "0"]
+            ]
+        },
+         {  
+            "ComponentName": "PlayerIndex",
             "ComponentProperties":[ 
                 ["index", "0"]
             ]
@@ -173,7 +180,10 @@
 				        ["blockRegenTime", "1.5"],
 						["blockGrabMargin", "1"]
                     ]
-				}
+				},
+                {
+                    "ComponentName": "PathRecorder"
+                }
             ]
         },
 		{
@@ -198,7 +208,7 @@
 					"ComponentProperties": [
                         ["freezeDuration", "2"],
                         ["grabDuration", "2"],
-                        ["throwForce", "15"]
+                        ["throwForce", "40"]
                     ]
                 }
             ]
