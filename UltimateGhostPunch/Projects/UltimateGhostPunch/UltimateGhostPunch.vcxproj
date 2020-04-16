@@ -70,6 +70,8 @@
     <ClCompile Include="..\..\Src\Respawn.cpp" />
     <ClCompile Include="..\..\Src\Score.cpp" />
     <ClCompile Include="..\..\Src\ScoreManager.cpp" />
+    <ClCompile Include="..\..\Src\StateAction.cpp" />
+    <ClCompile Include="..\..\Src\StateMachine.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +97,8 @@
     <ClInclude Include="..\..\Src\Respawn.h" />
     <ClInclude Include="..\..\Src\Score.h" />
     <ClInclude Include="..\..\Src\ScoreManager.h" />
+    <ClInclude Include="..\..\Src\StateAction.h" />
+    <ClInclude Include="..\..\Src\StateMachine.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

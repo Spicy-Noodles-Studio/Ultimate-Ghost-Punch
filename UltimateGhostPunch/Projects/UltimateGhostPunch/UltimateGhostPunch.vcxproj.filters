@@ -1,188 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de origen">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Archivos de encabezado">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Archivos de encabezado\Components">
-      <UniqueIdentifier>{deda36cf-536d-4c8f-9ce2-b40af732ddb7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Components">
-      <UniqueIdentifier>{b22a85e2-3169-4009-b7ce-cbeb86f73b42}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\..\Src\DeathZone.cpp" />
+    <ClCompile Include="..\..\Src\Block.cpp" />
+    <ClCompile Include="..\..\Src\Dodge.cpp" />
+    <ClCompile Include="..\..\Src\Obstacle.cpp" />
+    <ClCompile Include="..\..\Src\DynamicCamera.cpp" />
+    <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
+    <ClCompile Include="..\..\Src\FightManager.cpp" />
+    <ClCompile Include="..\..\Src\GameManager.cpp" />
+    <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
+    <ClCompile Include="..\..\Src\PathRecorder.cpp" />
+    <ClCompile Include="..\..\Src\PauseMenu.cpp" />
+    <ClCompile Include="..\..\Src\PlayerIndex.cpp" />
+    <ClCompile Include="..\..\Src\PlatformGraph.cpp" />
+    <ClCompile Include="..\..\Src\PlatformNode.cpp" />
+    <ClCompile Include="..\..\Src\PlayerUI.cpp" />
+    <ClCompile Include="..\..\Src\GhostManager.cpp" />
+    <ClCompile Include="..\..\Src\Grab.cpp" />
+    <ClCompile Include="..\..\Src\Health.cpp" />
+    <ClCompile Include="..\..\Src\Attack.cpp" />
+    <ClCompile Include="..\..\Src\GhostMovement.cpp" />
+    <ClCompile Include="..\..\Src\main.cpp" />
+    <ClCompile Include="..\..\Src\Movement.cpp" />
+    <ClCompile Include="..\..\Src\PlayerController.cpp" />
+    <ClCompile Include="..\..\Src\Jump.cpp" />
+    <ClCompile Include="..\..\Src\Respawn.cpp" />
+    <ClCompile Include="..\..\Src\Score.cpp" />
+    <ClCompile Include="..\..\Src\ScoreManager.cpp" />
+    <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
+    <ClCompile Include="..\..\Src\StateAction.cpp" />
+    <ClCompile Include="..\..\Src\StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Attack.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Movement.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PlayerController.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\GhostMovement.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Health.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Jump.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\GhostManager.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Dodge.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Grab.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PlayerUI.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Obstacle.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\FightConfiguration.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\GameManager.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\FightManager.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\DeathZone.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Respawn.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\DynamicCamera.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PauseMenu.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Block.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\OptionsConfiguration.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\ScoreManager.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\Score.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PlayerIndex.cpp">
-    <ClCompile Include="..\..\Src\PlatformGraph.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PlatformNode.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PathRecorder.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Src\Attack.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Movement.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PlayerController.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\GhostMovement.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Health.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Jump.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\GhostManager.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Dodge.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Grab.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PlayerUI.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\UltimateGhostPunch.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Obstacle.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\FightConfiguration.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\GameManager.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\FightManager.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\DeathZone.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Respawn.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\DynamicCamera.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PauseMenu.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Block.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\OptionsConfiguration.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\ScoreManager.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\Score.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PlayerIndex.h">
-    <ClInclude Include="..\..\Src\PlatformGraph.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PlatformNode.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PathRecorder.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\DeathZone.h" />
+    <ClInclude Include="..\..\Src\Block.h" />
+    <ClInclude Include="..\..\Src\Grab.h" />
+    <ClInclude Include="..\..\Src\Dodge.h" />
+    <ClInclude Include="..\..\Src\Obstacle.h" />
+    <ClInclude Include="..\..\Src\DynamicCamera.h" />
+    <ClInclude Include="..\..\Src\FightConfiguration.h" />
+    <ClInclude Include="..\..\Src\FightManager.h" />
+    <ClInclude Include="..\..\Src\GameManager.h" />
+    <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
+    <ClInclude Include="..\..\Src\PathRecorder.h" />
+    <ClInclude Include="..\..\Src\PauseMenu.h" />
+    <ClInclude Include="..\..\Src\PlayerIndex.h" />
+    <ClInclude Include="..\..\Src\PlatformGraph.h" />
+    <ClInclude Include="..\..\Src\PlatformNode.h" />
+    <ClInclude Include="..\..\Src\PlayerUI.h" />
+    <ClInclude Include="..\..\Src\GhostManager.h" />
+    <ClInclude Include="..\..\Src\GhostMovement.h" />
+    <ClInclude Include="..\..\Src\Respawn.h" />
+    <ClInclude Include="..\..\Src\Score.h" />
+    <ClInclude Include="..\..\Src\ScoreManager.h" />
+    <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
+    <ClInclude Include="..\..\Src\Movement.h" />
+    <ClInclude Include="..\..\Src\PlayerController.h" />
+    <ClInclude Include="..\..\Src\Jump.h" />
+    <ClInclude Include="..\..\Src\Health.h" />
+    <ClInclude Include="..\..\Src\StateAction.h" />
+    <ClInclude Include="..\..\Src\StateMachine.h" />
   </ItemGroup>
 </Project>
