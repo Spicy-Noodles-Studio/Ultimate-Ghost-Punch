@@ -205,3 +205,8 @@ int PlatformGraph::getIndex(const Vector3& pos)
 	}
 	return index;
 }
+
+std::vector<PlatformNode>& PlatformGraph::getPlatforms()
+{
+	return platforms;
+}

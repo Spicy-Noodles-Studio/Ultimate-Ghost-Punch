@@ -50,6 +50,8 @@ public:
 	void removeLastLink(int platform);
 
 	int getIndex(const Vector3& pos);
+
+	std::vector<PlatformNode>& getPlatforms();
 };
 
 #endif

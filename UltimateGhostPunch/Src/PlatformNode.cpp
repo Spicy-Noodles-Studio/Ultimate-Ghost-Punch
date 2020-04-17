@@ -109,7 +109,7 @@ void PlatformNode::loadPlatform(const GaiaData& data)
 	midPos = (iniPos + endPos) / 2.0f;
 }
 
-std::vector<NavigationLink> PlatformNode::getEdges()
+std::vector<NavigationLink>& PlatformNode::getEdges()
 {
 	return edges;
 }

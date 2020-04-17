@@ -82,7 +82,7 @@ public:
 	GaiaData savePlatform();
 	void loadPlatform(const GaiaData& data);
 
-	std::vector<NavigationLink> getEdges();
+	std::vector<NavigationLink>& getEdges();
 };
 
 #endif

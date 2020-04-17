@@ -5,7 +5,7 @@
 #include <UserComponent.h>
 
 class StateAction;
-enum class ActionInput; // Para la herencia
+enum class ActionInput;
 
 class StateMachine : public UserComponent
 {

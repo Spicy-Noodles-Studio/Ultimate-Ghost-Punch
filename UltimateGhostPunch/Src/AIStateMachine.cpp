@@ -1,9 +1,13 @@
 #include "AIStateMachine.h"
-#include "PlatformNavigation.h"
+#include <ComponentRegister.h>
+#include <GameObject.h>
 
+#include "PlatformNavigation.h"
 #include "Movement.h"
 #include "Jump.h"
 #include "Dodge.h"
+
+REGISTER_FACTORY(AIStateMachine);
 
 AIStateMachine::AIStateMachine(GameObject* gameObject) : StateMachine(gameObject), movement(nullptr), jump(nullptr), dodge(nullptr)
 {
@@ -60,6 +64,9 @@ void AIStateMachine::createMovingPlatformsAction()
 
 	/* ADD MORE DATA IF NEEDED */
 	/* GRAPH DATA */
+	PlatformGraph* platformGraph = findGameObjectsWithTag("suelo")[0]->getComponent<PlatformGraph>(); //TODO: gestion de errores (ademas esta feo)
+	platformNavigation->setPlatformGraph(platformGraph);
+	platformNavigation->setCharacter(gameObject);
 
 	// TODO: quitar cuando se unifiquen las IAs
 	currentState = platformNavigation;
