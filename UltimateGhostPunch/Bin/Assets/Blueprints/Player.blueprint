@@ -142,8 +142,8 @@
                         ["quickDamage", "1"],
                         ["strongDamage", "2"],
                         ["attackDuration", "0.5"],
-                        ["quickCharge", "0.5"],
-                        ["strongCharge", "0.75"]
+                        ["quickCharge", "0.25"],
+                        ["strongCharge", "0.6"]
                     ]
                 }
             ]
