@@ -19,10 +19,11 @@
 #include "GameManager.h"
 #include "RigidBody.h"
 #include "PlayerController.h"
+#include "MeshRenderer.h"
 
 REGISTER_FACTORY(PlayerAnimController);
 
-PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f)
+PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND)
 {
 }
 
@@ -31,6 +32,8 @@ void PlayerAnimController::start()
 	inputSystem = InputSystem::GetInstance();
 	anim = gameObject->getComponent<Animator>();
 	body = gameObject->getComponent<RigidBody>();
+	mesh = gameObject->getComponent<MeshRenderer>();
+
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
 	{
@@ -44,6 +47,12 @@ void PlayerAnimController::start()
 		LOG("ERROR: Animator component not found in player.\n");
 	else
 		anim->printAllAnimationsNames();
+
+	if (mesh == nullptr)
+		LOG("ERROR: MeshRenderer component not found in player.\n");
+	else
+		mesh->printAllBones();
+
 }
 
 void PlayerAnimController::update(float deltaTime)
@@ -55,6 +64,14 @@ void PlayerAnimController::update(float deltaTime)
 	handleState();
 
 	anim->updateAnimationSequence();
+
+	// Update sword position if necessary
+	if (swordState != HAND && state != GRABBING)
+	{
+		// Move sword back to hand
+		gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Mano.L", "sword");
+		swordState = HAND;
+	}
 }
 
 /******************************
@@ -69,6 +86,7 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 	anim->playAnimation("JumpStart");
 	anim->setLoop(false);
 	state = JUMP;
+
 }
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
@@ -84,6 +102,10 @@ void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 	anim->playAnimation("GrabStart");
 	anim->setLoop(false);
 	state = GRABBING;
+
+	// Move Sword to back
+	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Cuello", "sword");
+	swordState = SHEATHED;
 }
 
 void PlayerAnimController::quickAttackAnimation() //  QUICK ATTACK ANIMATION //
@@ -307,7 +329,7 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 	}
 
 	if ((anim->getCurrentAnimation() == "GrabHold" && !grab->isGrabbing())
-		|| anim->getCurrentAnimation() == "GrabFailed" && anim->hasEnded())
+		|| (anim->getCurrentAnimation() == "GrabFail" && anim->hasEnded()))
 	{
 		state = IDLE;
 		updateIdle();

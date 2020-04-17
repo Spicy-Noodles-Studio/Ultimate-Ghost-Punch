@@ -7,11 +7,14 @@ class RigidBody;
 class Jump;
 class Grab;
 class Block;
+class MeshRenderer;
 
 class PlayerAnimController :
 	public UserComponent
 {
 private:
+	// MeshRenderer
+	MeshRenderer* mesh;
 	// Input
 	InputSystem* inputSystem;
 	// Animator
@@ -44,6 +47,12 @@ private:
 	// For the current state of the player, plays the appropriate animation
 	void handleState();
 
+	enum SwordState
+	{
+		HAND, SHEATHED
+	};
+	// Indicates the current position of the sword
+	SwordState swordState;
 	
 public:
 	PlayerAnimController(GameObject* gameObject);

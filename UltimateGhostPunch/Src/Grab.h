@@ -13,7 +13,8 @@ class Grab : public UserComponent
 private:
 	enum State { IDLE, GRABBING, GRABBED, BLOCKED };
 	
-	float grabDuration, remain, freezeDuration, throwForce;
+	float grabDuration, remain, freezeDuration, throwForce,
+			cooldown, grabTimer, grabVerticalOffset, dropHorizontalOffset;
 
 	State state;
 	State last;
@@ -24,6 +25,8 @@ private:
 	PlayerController* enemyController;
 
 	Vector3 enemyDiff;
+
+	void resetEnemy();
 public:
 	Grab(GameObject* gameObject);
 
@@ -37,6 +40,7 @@ public:
 	void drop();
 
 	bool isGrabbing() const;
+	bool isOnCooldown() const;
 };
 
 #endif

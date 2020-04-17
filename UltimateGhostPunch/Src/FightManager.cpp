@@ -1,5 +1,5 @@
 #include "FightManager.h"
-
+#include "Score.h"
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
@@ -8,6 +8,7 @@
 #include <RigidBody.h>
 
 #include "PlayerController.h"
+#include "PlayerIndex.h"
 #include "Health.h"
 #include "FightConfiguration.h"
 #include "GameManager.h"
@@ -42,12 +43,13 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
-	playerPositions = { {-20,25,0}, {20,25,0}, {-17.5,5,0}, {17.5,5,0} };
+	playerPositions = { {-20,20,0}, {20,20,0}, {-17.5,0,0}, {17.5,0,0} };
 
 	// create game
 	createLevel();
 	createSpikes();
 	createKnights();
+	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
 
 	fightTimer = gameManager->getTime();
 	finishTimer = 4.0f; // Hard Coded
@@ -62,13 +64,13 @@ void FightManager::update(float deltaTime)
 		if (fightTimer < 0.0f) fightTimer = 0.0f;
 		timeText.setText(std::to_string((int)fightTimer % 60));
 	}
-	else {
+	else if(fightTimer == 0) {//If its negative it means match its not timed
 		// end game
 		if (winner == -1) chooseWinner();
 		finishTimer -= deltaTime;
 		if (finishTimer <= 0.0f) { 
 			gameManager->getKnights().clear();
-			SceneManager::GetInstance()->changeScene("mainMenu"); 
+			SceneManager::GetInstance()->changeScene("leaderBoard");
 		}
 	}
 }
@@ -149,6 +151,8 @@ void FightManager::createKnights()
 {
 	int nPlayers = gameManager->getNumPlayers();
 
+	gameManager->getKnights().clear();
+
 	for (int i = 0; i < nPlayers; i++)
 	{
 		GameObject* knight = instantiate("Player", playerTransforms[i].first);
@@ -157,7 +161,7 @@ void FightManager::createKnights()
 		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
 
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
-		knight->getComponent<PlayerController>()->setPlayerIndex(i + 1);
+		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
 
 		gameManager->getKnights().push_back(knight);
 	}
@@ -195,6 +199,8 @@ void FightManager::chooseWinner()
 				tie = true;
 		}
 	}
+
+	
 	winnerPanel.setVisible(true);
 
 	if (tie)

@@ -1,6 +1,6 @@
 #include "OptionsConfiguration.h"
 
-#include <InputSystem.h>
+
 #include <InterfaceSystem.h>
 #include <SoundSystem.h>
 #include <RenderSystem.h>
@@ -116,7 +116,6 @@ OptionsConfiguration::~OptionsConfiguration()
 
 void OptionsConfiguration::start()
 {
-	inputSystem = InputSystem::GetInstance();
 
 	resolutionButton = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("ResolutionApplyButton");
 	
