@@ -161,7 +161,7 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "55"],
+                        ["maxForce", "75"],
 				        ["jumpDecay", "0.4"],
                         ["coyoteTime", "0.4"]
                     ]       
