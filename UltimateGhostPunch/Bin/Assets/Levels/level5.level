@@ -1,5 +1,6 @@
 {
     "LevelBlueprint" : "Level5",
+    "LevelRenderBlueprint" : "Level5Render",
     "PlayerTransforms":[
         ["-10 15 0", "0 90 0"],
         ["10 15 0", "0 -90 0"],

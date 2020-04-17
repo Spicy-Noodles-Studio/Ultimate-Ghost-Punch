@@ -13,7 +13,6 @@
 #include "FightConfiguration.h"
 #include "GameManager.h"
 
-
 REGISTER_FACTORY(FightManager);
 
 FightManager::FightManager(GameObject* gameObject) :	UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL),
@@ -94,7 +93,7 @@ void FightManager::createLevel()
 	instantiate(levelData.find("LevelBlueprint").getValue().c_str());
 
 	// instantiate render mesh
-	//...
+	instantiate(levelData.find("LevelRenderBlueprint").getValue().c_str());
 
 	/*GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
 	backWall->getComponent<Transform>()->setScale({ 190,150,1 });
