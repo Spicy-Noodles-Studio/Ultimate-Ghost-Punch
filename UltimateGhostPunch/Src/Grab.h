@@ -17,7 +17,6 @@ private:
 			cooldown, grabTimer, grabVerticalOffset, dropHorizontalOffset;
 
 	State state;
-	State last;
 
 	PlayerController* controller;
 
@@ -27,12 +26,16 @@ private:
 	Vector3 enemyDiff;
 
 	void resetEnemy();
+	void grabEnemy();
 public:
 	Grab(GameObject* gameObject);
 
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void onObjectStay(GameObject* other);
+
+	virtual void onObjectEnter(GameObject* other);
+	virtual void onObjectExit(GameObject* other);
 
 	virtual void handleData(ComponentData* data);
 

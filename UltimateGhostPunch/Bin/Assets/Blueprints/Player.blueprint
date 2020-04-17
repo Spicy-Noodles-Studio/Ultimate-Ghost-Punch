@@ -28,7 +28,12 @@
             ]
         },
         {
-            "ComponentName": "PlayerAnimController"
+            "ComponentName": "PlayerAnimController",
+            "ComponentProperties": [
+               [ "runThreshold", "0.5f"],
+               [ "fallThreshold", "1.0f"],
+               [ "thrownDelay", "0.35f"]
+            ]
         },
         {
             "ComponentName": "RigidBody",
