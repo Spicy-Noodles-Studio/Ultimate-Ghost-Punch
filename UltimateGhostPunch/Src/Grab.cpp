@@ -11,11 +11,12 @@
 #include "GameManager.h"
 #include "Score.h"
 #include "PlayerIndex.h"
+#include "MeshRenderer.h"
 
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), grabDuration(1.5f), freezeDuration(1.0f), remain(0.0f), throwForce(15.0f), state(IDLE), enemy(nullptr),
-									 controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.00f), grabTimer(0.0f), grabVerticalOffset(2.5f), dropHorizontalOffset(2.0f)
+									 controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.00f), grabTimer(0.0f), grabVerticalOffset(2.5f), dropHorizontalOffset(0.50f)
 {
 
 }
@@ -27,6 +28,7 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
+
 	// Check if it can grab
 	if (state == GRABBING && enemy != nullptr)
 		grabEnemy();
@@ -129,7 +131,7 @@ void Grab::drop()
 	//Throw enemy
 	Vector3 dir = Vector3(0, 0, 0);
 	dir.x = (gameObject->getParent()->transform->getRotation().y >= 0) ? 1 : -1;
-	enemy->transform->setPosition(enemy->transform->getPosition() + Vector3(dir.x * gameObject->getParent()->transform->getScale().x * dropHorizontalOffset, 0, 0));
+	enemy->transform->setPosition(gameObject->getParent()->transform->getPosition() + Vector3((gameObject->getParent()->transform->getScale().x/2) + (dropHorizontalOffset * dir.x), enemy->transform->getPosition().y - gameObject->getParent()->transform->getPosition().y, 0));
 	RigidBody* enemyRb = enemy->getComponent<RigidBody>();
 	if(enemyRb!=nullptr) enemyRb->addImpulse(dir * throwForce);
 
