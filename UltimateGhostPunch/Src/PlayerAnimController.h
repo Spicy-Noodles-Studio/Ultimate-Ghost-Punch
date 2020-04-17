@@ -1,5 +1,6 @@
 #pragma once
 #include <UserComponent.h>
+#include <queue>
 
 class InputSystem;
 class Animator;
@@ -8,6 +9,9 @@ class Jump;
 class Grab;
 class Block;
 class MeshRenderer;
+
+
+
 
 class PlayerAnimController :
 	public UserComponent
@@ -33,6 +37,12 @@ private:
 		IDLE, RUN, JUMP, FALL, BLOCKING, GRABBING, GRABBED, STUNNED, NOT_LOOPING_STATE
 	};
 
+	struct DelayedAnimation
+	{
+		std::string name;
+		float delayTime;
+	};
+
 	// Current player state
 	PlayerAnimState state;
 
@@ -54,12 +64,18 @@ private:
 	// Indicates the current position of the sword
 	SwordState swordState;
 	
+	// Delayed animation
+	std::queue<DelayedAnimation> delayedAnimations;
+
+	// Delay for the thrown animation
+	float thrownDelay;
 public:
 	PlayerAnimController(GameObject* gameObject);
 
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void handleData(ComponentData* data);
 
 	void jumpAnimation();
 	void hurtAnimation();
@@ -77,11 +93,15 @@ public:
 	void throwEnemyAnimation();
 	void thrownAwayAnimation();
 	void grabbedByEnemyAnimation();
-private:
+
 	// Play a not looping animation
 	void notLoopAnimation(std::string name);
 	// 0 for QUICK | 1 for STRONG
 	void attackAnimation(int type);
+
+	// Play animation "name" after a delay of "delay" seconds
+	void playAnimationWithDelay(std::string name, float delay);
+private:
 
 	// Each of these functions checks if the state should transition to another one and makes the transition
 	void updateIdle();		// IDLE
@@ -94,5 +114,8 @@ private:
 	void updateStunned();	// STUNNED
 
 	void updateNotLoopingState(); // NOT LOOPING STATE (block, attacks...)
+
+	// Play delayed animations
+	void updateDelayedAnimations(float deltaTime);
 };
 

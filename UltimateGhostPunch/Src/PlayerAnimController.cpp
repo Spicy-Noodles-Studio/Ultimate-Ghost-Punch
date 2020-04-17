@@ -23,7 +23,7 @@
 
 REGISTER_FACTORY(PlayerAnimController);
 
-PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND)
+PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(), thrownDelay(0.35f)
 {
 }
 
@@ -52,7 +52,6 @@ void PlayerAnimController::start()
 		LOG("ERROR: MeshRenderer component not found in player.\n");
 	else
 		mesh->printAllBones();
-
 }
 
 void PlayerAnimController::update(float deltaTime)
@@ -72,6 +71,9 @@ void PlayerAnimController::update(float deltaTime)
 		gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Mano.L", "sword");
 		swordState = HAND;
 	}
+
+	// Update delayed animations
+	updateDelayedAnimations(deltaTime);
 }
 
 /******************************
@@ -181,7 +183,7 @@ void PlayerAnimController::throwEnemyAnimation()
 
 void PlayerAnimController::thrownAwayAnimation()
 {
-	notLoopAnimation("Thrown");
+	playAnimationWithDelay("Thrown", thrownDelay);
 }
 
 void PlayerAnimController::grabbedByEnemyAnimation()
@@ -426,6 +428,28 @@ void PlayerAnimController::updateNotLoopingState()
 	}
 }
 
+void PlayerAnimController::updateDelayedAnimations(float deltaTime)
+{
+	std::vector<DelayedAnimation> updated;
+	while (!delayedAnimations.empty())
+	{
+		// Treat the animation
+		DelayedAnimation dAnim = delayedAnimations.front(); delayedAnimations.pop();
+		dAnim.delayTime -= deltaTime;
+
+		if (dAnim.delayTime <= 0)	notLoopAnimation(dAnim.name);	// If the time has come, play the animation
+		else updated.push_back(dAnim);	//else, place it again in delayed animations
+	}
+
+	for (auto u : updated)
+		delayedAnimations.push(u);
+}
+
+void PlayerAnimController::playAnimationWithDelay(std::string name, float delay)
+{
+	delayedAnimations.push({ name, delay });
+}
+
 /******************************
 	STATE HANDLING
 *******************************/
@@ -457,6 +481,33 @@ void PlayerAnimController::handleState()
 		break;
 	default:
 		break;
+	}
+}
+
+
+/*				
+********************************
+	HANDLE DATA
+********************************
+*/				
+void PlayerAnimController::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "runThreshold") {
+			if (!(ss >> runThreshold))
+				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "strongCooldown") {
+			if (!(ss >> fallThreshold))
+				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "thrownDelay") {
+			if (!(ss >> thrownDelay))
+				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
 	}
 }
 

@@ -14,8 +14,8 @@
 
 REGISTER_FACTORY(Grab);
 
-Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), grabDuration(1.5f), freezeDuration(1.0f), remain(0.0f), throwForce(15.0f), state(IDLE), last(IDLE), enemy(nullptr),
-									 controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(5.0f), grabTimer(0.0f), grabVerticalOffset(2.5f), dropHorizontalOffset(2.0f)
+Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), grabDuration(1.5f), freezeDuration(1.0f), remain(0.0f), throwForce(15.0f), state(IDLE), enemy(nullptr),
+									 controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.00f), grabTimer(0.0f), grabVerticalOffset(2.5f), dropHorizontalOffset(2.0f)
 {
 
 }
@@ -27,11 +27,16 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
-	if (state == GRABBING && last == GRABBING) {
+	// Check if it can grab
+	if (state == GRABBING && enemy != nullptr)
+		grabEnemy();
+	else if (state == GRABBING && enemy == nullptr) // state is GRABBING but enemy is null ==> failed grab
+	{
+		PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
+		if (myAnim != nullptr) myAnim->notLoopAnimation("GrabFail");
+
 		state = IDLE;
 	}
-
-	last = state;
 
 	if (remain > 0.0f) remain -= deltaTime;
 
@@ -62,46 +67,20 @@ void Grab::update(float deltaTime)
 
 void Grab::onObjectStay(GameObject* other)
 {
-	if (state == GRABBING) {
-		if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
-		{
-			PlayerAnimController* otherAnim = other->getComponent<PlayerAnimController>();
-			PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
+	if (enemy == nullptr && other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
+		enemy = other;
+}
 
-			Score* score = GameManager::GetInstance()->getScore();
-			//Check if we have been blocked
-			std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
-			Block* enemyBlock = nullptr;
-			if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
+void Grab::onObjectEnter(GameObject* other)
+{
+	if (other->getTag() == "Player" && other != gameObject->getParent())//If it hits a player different than myself
+		enemy = other;
+}
 
-			if (enemyBlock != nullptr && enemyBlock->getGrabBlock()) {
-				LOG("GRAB BLOCKED!");
-				state = BLOCKED;
-				remain = freezeDuration;
-				if (controller != nullptr)controller->setActive(false);//freeze our character
-
-				
-				if (otherAnim != nullptr) otherAnim->blockedEnemyGrabAnimation();
-				if (myAnim != nullptr) myAnim->enemyBlockedMyGrabAnimation();
-
-				return;
-			}
-
-			//Grab the enemy
-			enemyDiff = other->transform->getPosition() - gameObject->getParent()->transform->getPosition();
-			score->grabbedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
-			state = GRABBED;
-			remain = grabDuration;
-			enemy = other;
-			enemyController = other->getComponent<PlayerController>();
-			if (enemyController != nullptr) enemyController->setActive(false);//freeze the enemy
-
-			RigidBody* enemyRB = other->getComponent<RigidBody>();
-			if (enemyRB != nullptr) enemyRB->setActive(false);
-
-			if (otherAnim != nullptr) otherAnim->grabbedByEnemyAnimation();
-		}
-	}
+void Grab::onObjectExit(GameObject* other)
+{
+	if (other == enemy && state != GRABBED)
+		enemy = nullptr;
 }
 
 void Grab::handleData(ComponentData* data)
@@ -137,14 +116,13 @@ void Grab::grab()
 	{
 		state = GRABBING;
 		grabTimer = cooldown;
-		PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
-		if(myAnim != nullptr) myAnim->grabAnimation();
 	}
 }
 
 void Grab::drop()
 {
-	if (enemy == nullptr) return;
+	if (enemy == nullptr) 
+		return;
 
 	resetEnemy();
 
@@ -173,11 +151,12 @@ bool Grab::isOnCooldown() const
 
 void Grab::resetEnemy()
 {
+	grabTimer = cooldown;
 	if (enemy == nullptr) return;
 
 	//Reactivate enemy's RigidBody
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
-	if (enemyRB != nullptr) enemyRB->setActive(true);
+	if (enemyRB != nullptr) { enemyRB->setTrigger(false); enemyRB->setActive(true); }
 
 	//Return control to the enemy
 	if (enemyController != nullptr)enemyController->setActive(true);
@@ -191,4 +170,46 @@ void Grab::resetEnemy()
 	PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
 	if (myAnim != nullptr)
 		myAnim->throwEnemyAnimation();
+}
+
+void Grab::grabEnemy()
+{
+	PlayerAnimController* enemyAnim = enemy->getComponent<PlayerAnimController>();
+	PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
+
+	Score* score = GameManager::GetInstance()->getScore();
+	//Check if we have been blocked
+	std::vector<GameObject*> aux = enemy->findChildrenWithTag("groundSensor");
+	Block* enemyBlock = nullptr;
+	if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
+
+	if (enemyBlock != nullptr && enemyBlock->getGrabBlock()) {
+		LOG("GRAB BLOCKED!");
+		state = BLOCKED;
+		remain = freezeDuration;
+		if (controller != nullptr)controller->setActive(false);//freeze our character
+
+
+		if (enemyAnim != nullptr) enemyAnim->blockedEnemyGrabAnimation();
+		if (myAnim != nullptr) myAnim->enemyBlockedMyGrabAnimation();
+
+		return;
+	}
+
+	//Grab the enemy
+	enemyDiff = enemy->transform->getPosition() - gameObject->getParent()->transform->getPosition();
+	score->grabbedBy(enemy->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+	state = GRABBED;
+	remain = grabDuration;
+	enemy = enemy;
+	enemyController = enemy->getComponent<PlayerController>();
+	if (enemyController != nullptr) enemyController->setActive(false);//freeze the enemy
+	grabTimer = 10000000; // initially infinite, will be set to cooldown time after droping the enemy
+
+	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
+	if (enemyRB != nullptr) { enemyRB->setTrigger(true); enemyRB->setActive(false); }
+
+
+	if (myAnim != nullptr) myAnim->grabAnimation();
+	if (enemyAnim != nullptr) enemyAnim->grabbedByEnemyAnimation();
 }
