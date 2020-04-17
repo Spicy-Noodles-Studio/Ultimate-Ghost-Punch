@@ -110,22 +110,19 @@ void PlayerController::checkInput()
 			if (attack != nullptr) {
 				//Quick attack
 				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
-					attack->quickAttack();
-					animController->quickAttackAnimation();
+					if (attack->quickAttack()) animController->quickAttackAnimation();
 				}
 				//Strong attack
 				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
 				{
-					attack->strongAttack();
-					animController->strongAttackAnimation();
+					if (attack->strongAttack()) animController->strongAttackAnimation();
 				}
 			}
 			//Dodge
 			if (dodge != nullptr)
 				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
 				{
-					dodge->dodge();
-					animController->dashAnimation();
+					if (dodge->dodge()) animController->dashAnimation();
 				}
 
 			//Jump

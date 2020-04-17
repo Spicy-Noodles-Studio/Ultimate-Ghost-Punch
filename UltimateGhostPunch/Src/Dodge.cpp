@@ -41,7 +41,7 @@ void Dodge::handleData(ComponentData* data)
 	}
 }
 
-void Dodge::dodge()
+bool Dodge::dodge()
 {
 	if (state == IDLE) {
 		Vector3 dir = Vector3();
@@ -52,7 +52,10 @@ void Dodge::dodge()
 
 		cd = cooldown;
 		state = CD;
+
+		return true;
 	}
+	return false;
 }
 
 

@@ -104,7 +104,7 @@ void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 	state = GRABBING;
 
 	// Move Sword to back
-	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Cuello", "sword");
+	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
 	swordState = SHEATHED;
 }
 
@@ -192,6 +192,9 @@ void PlayerAnimController::grabbedByEnemyAnimation()
 	anim->playAnimation("GrabbedStart");
 	anim->setLoop(false);
 	state = GRABBING;
+
+	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
+	swordState = SHEATHED;
 }
 
 void PlayerAnimController::notLoopAnimation(std::string name)
