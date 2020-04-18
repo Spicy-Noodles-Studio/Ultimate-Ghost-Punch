@@ -16,7 +16,7 @@
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), grabDuration(1.5f), freezeDuration(1.0f), remain(0.0f), throwForce(15.0f), state(IDLE), enemy(nullptr),
-									 controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.00f), grabTimer(0.0f), grabVerticalOffset(2.5f), dropHorizontalOffset(0.50f)
+controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.00f), grabTimer(0.0f), grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), prevOrientation(1), enemyFollowingThreshold(0.3f)
 {
 
 }
@@ -28,6 +28,7 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
+	int newOrientation = (gameObject->getParent()->transform->getRotation().y >= 0) ? 1 : -1;
 
 	// Check if it can grab
 	if (state == GRABBING && enemy != nullptr)
@@ -47,9 +48,22 @@ void Grab::update(float deltaTime)
 	if (state == GRABBED) {
 		if (enemy != nullptr)
 		{
-			Vector3 grabPos = enemy->transform->getPosition();
-			grabPos.lerp(gameObject->getParent()->transform->getPosition() + Vector3(0, gameObject->getParent()->transform->getScale().y * grabVerticalOffset, 0), 0.2f);
-			enemy->transform->setPosition(grabPos);
+			Vector3 objPos;
+			float dist = (grabbedPosition - enemy->transform->getPosition()).magnitude();
+			if (!enemyFollowing && dist > enemyFollowingThreshold)
+			{
+				objPos = enemy->transform->getPosition();
+				objPos.lerp(grabbedPosition, 0.2f);
+			}
+			else if (dist <= enemyFollowingThreshold)
+			{
+				grabbedPosition = gameObject->getParent()->transform->getPosition() + Vector3(0, gameObject->getParent()->transform->getScale().y * grabVerticalOffset, 0);
+				objPos = grabbedPosition;
+			}
+
+			enemy->transform->setPosition(objPos);
+			if(newOrientation != prevOrientation)
+				enemy->transform->setRotation({ 0,double(90 * newOrientation),0 });
 		}
 	}
 
@@ -65,6 +79,8 @@ void Grab::update(float deltaTime)
 		if (controller != nullptr)controller->setActive(true);
 		state = IDLE;
 	}
+
+	prevOrientation = newOrientation;
 }
 
 void Grab::onObjectStay(GameObject* other)
@@ -172,6 +188,8 @@ void Grab::resetEnemy()
 	PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
 	if (myAnim != nullptr)
 		myAnim->throwEnemyAnimation();
+
+	grabbedPosition = Vector3();
 }
 
 void Grab::grabEnemy()
@@ -185,17 +203,25 @@ void Grab::grabEnemy()
 	Block* enemyBlock = nullptr;
 	if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 
+	
 	if (enemyBlock != nullptr && enemyBlock->getGrabBlock()) {
-		LOG("GRAB BLOCKED!");
-		state = BLOCKED;
-		remain = freezeDuration;
-		if (controller != nullptr)controller->setActive(false);//freeze our character
+		int dir = (gameObject->getParent()->transform->getRotation().y >= 0) ? 1 : -1;
+		int enemyDir = (enemy->transform->getRotation().y >= 0) ? 1 : -1;
+		if (dir != enemyDir) // ONLY BLOCK if blocking dir is correct
+		{
+			LOG("GRAB BLOCKED!");
+			state = BLOCKED;
+			remain = freezeDuration;
+			if (controller != nullptr)controller->setActive(false);//freeze our character
 
 
-		if (enemyAnim != nullptr) enemyAnim->blockedEnemyGrabAnimation();
-		if (myAnim != nullptr) myAnim->enemyBlockedMyGrabAnimation();
+			if (enemyAnim != nullptr) enemyAnim->blockedEnemyGrabAnimation();
+			if (myAnim != nullptr) myAnim->enemyBlockedMyGrabAnimation();
 
-		return;
+			return;
+		}
+			
+
 	}
 
 	//Grab the enemy
@@ -207,6 +233,7 @@ void Grab::grabEnemy()
 	enemyController = enemy->getComponent<PlayerController>();
 	if (enemyController != nullptr) enemyController->setActive(false);//freeze the enemy
 	grabTimer = 10000000; // initially infinite, will be set to cooldown time after droping the enemy
+	grabbedPosition = gameObject->getParent()->transform->getPosition() + Vector3(0, gameObject->getParent()->transform->getScale().y * grabVerticalOffset, 0);
 
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
 	if (enemyRB != nullptr) { enemyRB->setTrigger(true); enemyRB->setActive(false); }

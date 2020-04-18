@@ -24,6 +24,10 @@ private:
 	PlayerController* enemyController;
 
 	Vector3 enemyDiff;
+	bool enemyFollowing;
+	Vector3 grabbedPosition;
+	int prevOrientation;
+	float enemyFollowingThreshold;
 
 	void resetEnemy();
 	void grabEnemy();
