@@ -1,7 +1,7 @@
 {
     "ObjectType": "GAMEOBJECT",
-    "ObjectName": "Level4",
-    "Tag": "suelo",
+    "ObjectName": "Level4Render",
+    "Tag": "render",
     "Components":
     [
         {
@@ -15,15 +15,7 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "suelo Level4.mesh"],
-                ["visible", "0"]
-            ]
-        },
-        {
-            "ComponentName": "Strider",
-            "ComponentProperties": [
-                ["mesh", "suelo"],
-                ["friction", "0.5"]
+                ["mesh", "suelo Level4Render.mesh"]
             ]
         }
     ]
