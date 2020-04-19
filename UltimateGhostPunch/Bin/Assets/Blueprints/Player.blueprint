@@ -15,12 +15,17 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-               [ "mesh", "Player Knight.mesh"],
-               [ "attachToBone", "sword Espada.mesh Player Mano.L"]
+               [ "mesh", "player Knight.mesh"],
+               [ "attachToBone", "sword Espada.mesh player Mano.L"]
             ]
         },
         {
-            "ComponentName": "Animator"
+            "ComponentName": "Animator",
+            "ComponentProperties": [
+               [ "anim", "Run player"],
+               [ "anim", "Jump player"],
+               [ "anim", "Idle player"]
+            ]
         },
         {
             "ComponentName": "PlayerAnimController",
