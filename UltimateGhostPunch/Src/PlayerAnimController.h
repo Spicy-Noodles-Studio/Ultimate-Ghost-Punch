@@ -9,6 +9,7 @@ class Jump;
 class Grab;
 class Block;
 class MeshRenderer;
+class GhostManager;
 
 
 
@@ -31,10 +32,12 @@ private:
 	Grab* grab;
 	// Block
 	Block* block;
+	// Ghost Manager
+	GhostManager* ghostManag;
 
 	enum PlayerAnimState
 	{
-		IDLE, RUN, JUMP, FALL, BLOCKING, GRABBING, GRABBED, STUNNED, NOT_LOOPING_STATE
+		IDLE, RUN, JUMP, FALL, BLOCKING, GRABBING, GRABBED, STUNNED, NOT_LOOPING_STATE, CHARGING_UGP, UGP
 	};
 
 	struct DelayedAnimation
@@ -70,8 +73,16 @@ private:
 	// Delay for the thrown animation
 	float thrownDelay;
 
+	/****************/
+	/*	  GHOST		*/
+	/****************/
+
+	std::string ghostMeshId, ghostMeshName;
+	std::string aliveMeshId, aliveMeshName;
+
 
 	Vector3 diffuse;
+
 
 public:
 	PlayerAnimController(GameObject* gameObject);
@@ -84,6 +95,7 @@ public:
 	void jumpAnimation();
 	void hurtAnimation();
 	void grabAnimation();
+	void grabFailedAnimation();
 	void quickAttackAnimation();
 	void strongAttackAnimation();
 	void blockAnimation();
@@ -105,6 +117,22 @@ public:
 
 	// Play animation "name" after a delay of "delay" seconds
 	void playAnimationWithDelay(std::string name, float delay);
+
+
+	/****************/
+	/*	  GHOST		*/
+	/****************/
+
+	enum PlayerMode
+	{
+		ALIVE, GHOST
+	};
+
+	void enterMode(PlayerMode mode);
+	void chargingGhostAnimation();
+	void punchingGhostAnimation();
+	void punchSuccessAnimation();
+
 private:
 
 	// Each of these functions checks if the state should transition to another one and makes the transition
@@ -113,13 +141,21 @@ private:
 	void updateJump();		// JUMP
 	void updateFall();		// FALL
 	void updateGrabbing();  // GRABBING
-	void updateGrabbed();  // GRABBED
+	void updateGrabbed();   // GRABBED
 	void updateBlocking();  // BLOCKING
 	void updateStunned();	// STUNNED
+	void updateUGP();		// UGP
 
 	void updateNotLoopingState(); // NOT LOOPING STATE (block, attacks...)
 
 	// Play delayed animations
 	void updateDelayedAnimations(float deltaTime);
+
+
+	/****************/
+	/*	  GHOST		*/
+	/****************/
+
+	PlayerMode currentMode;
 };
 

@@ -146,11 +146,7 @@ void PlayerController::checkInput()
 
 		//Block
 		if (block != nullptr) {
-			if (getKeyDown("S") || getButtonDown("B"))
-			{
-				block->block();
-				animController->blockAnimation();
-			}
+			if (getKeyDown("S") || getButtonDown("B"))	block->block();
 			if (block->blocking() && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
 		}
 

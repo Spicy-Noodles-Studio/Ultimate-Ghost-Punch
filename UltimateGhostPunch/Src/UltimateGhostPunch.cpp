@@ -9,12 +9,13 @@
 
 #include "Health.h"
 #include "GhostMovement.h"
+#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(UltimateGhostPunch);
 
 UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) :	UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr), 
 																	direction(0.0, 0.0, 0.0), state(State::NONE), duration(0.0f), force(0.0f),
-																	ghostSpeed(0.0f), chargeSpeedMult(0.0f)
+																	ghostSpeed(0.0f), chargeSpeedMult(0.0f), anim(nullptr)
 																	
 {
 	
@@ -29,6 +30,7 @@ void UltimateGhostPunch::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
+	anim = gameObject->getComponent<PlayerAnimController>();
 	if(ghostMovement != nullptr)	ghostSpeed = ghostMovement->getSpeed();
 	state = State::AVAILABLE;
 }
@@ -38,8 +40,10 @@ void UltimateGhostPunch::update(float deltaTime)
 	// Update the cooldown
 	if (duration > 0.0f && state == State::PUNCHING)
 		duration -= deltaTime;
-	else if (duration <= 0.0f)
+	else if (state != State::USED && duration <= 0.0f)
+	{
 		state = State::USED;
+	}
 }
 
 void UltimateGhostPunch::handleData(ComponentData* data)
@@ -68,12 +72,15 @@ void UltimateGhostPunch::charge()
 {
 	state = State::CHARGING;
 	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
+	if (anim != nullptr)  anim->chargingGhostAnimation();
 }
 
 void UltimateGhostPunch::aim(double x, double y)
 {
 	direction = { x, y, 0.0 };
 	direction.normalize();
+	if (direction.x != 0)
+		gameObject->transform->setRotation({ 0,90 * double(direction.x >= 0 ? 1 : -1),0 });
 }
 
 void UltimateGhostPunch::ghostPunch()
@@ -81,6 +88,7 @@ void UltimateGhostPunch::ghostPunch()
 	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
 	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
 	state = State::PUNCHING;
+	if (anim != nullptr)  anim->punchingGhostAnimation();
 }
 
 const UltimateGhostPunch::State& UltimateGhostPunch::getState()
@@ -91,4 +99,9 @@ const UltimateGhostPunch::State& UltimateGhostPunch::getState()
 const Vector3& UltimateGhostPunch::getDirection()
 {
 	return direction;
+}
+
+bool UltimateGhostPunch::isPunching()
+{
+	return state == State::PUNCHING;
 }

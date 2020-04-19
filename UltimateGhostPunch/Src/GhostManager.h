@@ -30,9 +30,6 @@ private:
 	PlayerUI* playerUI;
 	FightManager* fightManager;
 
-	std::string ghostMeshId, ghostMeshName;
-	std::string aliveMeshId, aliveMeshName;
-
 	Vector3 aliveScale;
 	Vector3 ghostScale;
 	Vector3 ghostSpawnOffset;

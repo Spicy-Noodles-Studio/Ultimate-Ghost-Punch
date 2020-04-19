@@ -6,6 +6,7 @@
 
 class RigidBody;
 class GhostMovement;
+class PlayerAnimController;
 
 class UltimateGhostPunch : public UserComponent
 {
@@ -15,6 +16,7 @@ public:
 private:
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
+	PlayerAnimController* anim;
 	Vector3 direction;
 	State state;
 	float duration;
@@ -38,6 +40,8 @@ public:
 
 	const State& getState();
 	const Vector3& getDirection();
+
+	bool isPunching();
 };
 
 #endif

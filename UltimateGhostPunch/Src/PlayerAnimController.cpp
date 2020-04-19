@@ -7,6 +7,7 @@
 
 #include <InputSystem.h>
 #include "Animator.h"
+#include "MeshRenderer.h"
 
 #include "Attack.h"
 #include "Jump.h"
@@ -19,11 +20,11 @@
 #include "GameManager.h"
 #include "RigidBody.h"
 #include "PlayerController.h"
-#include "MeshRenderer.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerAnimController);
 
-PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(), thrownDelay(0.35f)
+PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(), thrownDelay(0.35f), currentMode(ALIVE), aliveMeshId(""), aliveMeshName(""), ghostMeshId(""), ghostMeshName(""), ghostManag(nullptr)
 {
 }
 
@@ -33,6 +34,7 @@ void PlayerAnimController::start()
 	anim = gameObject->getComponent<Animator>();
 	body = gameObject->getComponent<RigidBody>();
 	mesh = gameObject->getComponent<MeshRenderer>();
+	ghostManag = gameObject->getComponent<GhostManager>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
@@ -51,7 +53,12 @@ void PlayerAnimController::start()
 	if (mesh == nullptr)
 		LOG("ERROR: MeshRenderer component not found in player.\n");
 	else
+	{
 		mesh->printAllBones();
+
+		aliveMeshId = mesh->getMeshId();
+		aliveMeshName = mesh->getMeshName();
+	}
 
 
 	diffuse = mesh->getDiffuse();
@@ -68,7 +75,7 @@ void PlayerAnimController::update(float deltaTime)
 	anim->updateAnimationSequence();
 
 	// Update sword position if necessary
-	if (swordState != HAND && state != GRABBING)
+	if (swordState != HAND && state != GRABBING && anim->getCurrentAnimation() != "GrabFail")
 	{
 		// Move sword back to hand
 		mesh->moveEntityToBone("player", "Mano.L", "sword");
@@ -106,7 +113,7 @@ void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 {
-	if (anim->getCurrentAnimation() == "GrabStart" || anim->getCurrentAnimation() == "GrabHold" || anim->getCurrentAnimation() == "GrabFailed")
+	if (anim->getCurrentAnimation() == "GrabStart" || anim->getCurrentAnimation() == "GrabHold")
 		return;
 
 	anim->playAnimation("GrabStart");
@@ -115,6 +122,14 @@ void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 
 	// Move Sword to back
 	mesh->moveEntityToBone("player", "Espalda", "sword");
+	swordState = SHEATHED;
+}
+
+void PlayerAnimController::grabFailedAnimation()
+{
+	notLoopAnimation("GrabFail");
+	// Move Sword to back
+	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
 	swordState = SHEATHED;
 }
 
@@ -259,16 +274,63 @@ void PlayerAnimController::updateState()
 	case PlayerAnimController::NOT_LOOPING_STATE:	// NOT_LOOPING_STATE //
 		updateNotLoopingState();
 		break;
+	case PlayerAnimController::UGP:					// UGP //
+		updateUGP();
+		break;
 	default:
 		break;
 	}
 }
 
 
+void PlayerAnimController::enterMode(PlayerMode mode)
+{
+	if (mode != currentMode)
+	{
+		switch (mode)
+		{
+		case PlayerAnimController::ALIVE:
+			mesh->changeMesh(aliveMeshId, aliveMeshName);
+			notLoopAnimation("Resurrect");
+			ghostManag->deactivateGhost();
+			break;
+		case PlayerAnimController::GHOST:
+			mesh->changeMesh(ghostMeshId, ghostMeshName);
+			notLoopAnimation("Appear");
+			anim->printAllAnimationsNames();
+			break;
+		default:
+			break;
+		}
+
+		currentMode = mode;
+	}
+}
+
+void PlayerAnimController::chargingGhostAnimation()
+{
+	anim->playAnimation("ChargeUGP");
+	anim->setLoop(true);
+	state = CHARGING_UGP;
+}
+
+void PlayerAnimController::punchingGhostAnimation()
+{
+	anim->playAnimation("UGP");
+	anim->setLoop(true);
+	state = UGP;
+}
+
+void PlayerAnimController::punchSuccessAnimation()
+{
+	anim->playAnimation("UGPSuccess");
+	anim->setLoop(false);
+}
+
 void PlayerAnimController::updateIdle()	//  IDLE //
 {
 	// TRANSITION TO FALL IF
-	if (!jump->isGrounded())
+	if (!jump->isGrounded() && currentMode == ALIVE)
 	{
 		state = FALL;
 		return;
@@ -286,7 +348,7 @@ void PlayerAnimController::updateIdle()	//  IDLE //
 void PlayerAnimController::updateRun() //  RUN //
 {
 	// TRANSITION TO FALL IF
-	if (!jump->isGrounded())
+	if (!jump->isGrounded() && currentMode == ALIVE)
 	{
 		state = FALL;
 		return;
@@ -302,6 +364,8 @@ void PlayerAnimController::updateRun() //  RUN //
 
 void PlayerAnimController::updateJump() //  JUMP //
 {
+	if (currentMode == GHOST) return;
+
 	if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded() && abs(body->getLinearVelocity().y) <= fallThreshold)
 	{
 		anim->playAnimationSequence({ "JumpChange", "Fall" }, true);
@@ -315,7 +379,7 @@ void PlayerAnimController::updateJump() //  JUMP //
 
 void PlayerAnimController::updateFall() //  FALL //
 {
-	if (!jump->isGrounded())
+	if (!jump->isGrounded() || currentMode == GHOST)
 		return;
 
 	// If isGrounded, the player has landed
@@ -326,6 +390,8 @@ void PlayerAnimController::updateFall() //  FALL //
 
 void PlayerAnimController::updateGrabbing() //  GRABBING //
 {
+	if (currentMode == GHOST) return;
+
 	if (anim->getCurrentAnimation() == "GrabStart" && anim->hasEnded())
 	{
 		if (grab->isGrabbing())
@@ -351,6 +417,8 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 
 void PlayerAnimController::updateGrabbed() //  GRABBED //
 {
+	if (currentMode == GHOST) return;
+
 	if (anim->getCurrentAnimation() == "GrabbedStart" && anim->hasEnded())
 	{
 		anim->playAnimation("GrabbedHold");
@@ -360,6 +428,8 @@ void PlayerAnimController::updateGrabbed() //  GRABBED //
 
 void PlayerAnimController::updateBlocking() //  BLOCKING //
 {
+	if (currentMode == GHOST) return;
+
 	if (anim->getCurrentAnimation() == "BlockHold" && !block->blocking())
 	{
 		anim->playAnimation("BlockEnd");
@@ -384,6 +454,8 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 
 void PlayerAnimController::updateStunned()
 {
+	if (currentMode == GHOST) return;
+
 	if (anim->getCurrentAnimation() == "GrabStart" && anim->hasEnded())
 	{
 		stunnedAnimation();
@@ -409,6 +481,20 @@ void PlayerAnimController::updateStunned()
 	}
 }
 
+void PlayerAnimController::updateUGP()
+{
+	if (anim->getCurrentAnimation() == "UGPSuccess" && anim->hasEnded())
+		enterMode(ALIVE);
+
+	// If it is not moving, UGP has finished
+	if (abs(body->getLinearVelocity().x) < runThreshold)
+	{
+		notLoopAnimation("UGPFail");
+		return;
+	}
+		
+}
+
 void PlayerAnimController::updateNotLoopingState()
 {
 	// Only transition when the animation has finished
@@ -416,9 +502,17 @@ void PlayerAnimController::updateNotLoopingState()
 		return;
 
 	// TRANSITION TO FALL IF
-	if (!jump->isGrounded())
+	if (currentMode == ALIVE && !jump->isGrounded())
 	{
 		state = FALL;
+		return;
+	}
+
+	// GHOST DISAPPEARING -> ALIVE RESURRECT
+	if (currentMode == GHOST && anim->getCurrentAnimation() == "Disappear")
+	{
+		enterMode(ALIVE);
+
 		return;
 	}
 
@@ -474,9 +568,11 @@ void PlayerAnimController::handleState()
 		}
 		break;
 	case PlayerAnimController::RUN:					// RUN //
-		if (anim->getCurrentAnimation() != "Run")
+		if (anim->getCurrentAnimation() != "Run" && anim->getCurrentAnimation() != "Move")
 		{
-			anim->playAnimation("Run");
+			if (currentMode == ALIVE) anim->playAnimation("Run");
+			else anim->playAnimation("Move");
+
 			anim->setLoop(true);
 		}
 		break;
@@ -515,6 +611,11 @@ void PlayerAnimController::handleData(ComponentData* data)
 		else if (prop.first == "thrownDelay") {
 			if (!(ss >> thrownDelay))
 				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "ghostMesh")
+		{
+			if (!(ss >> ghostMeshId >> ghostMeshName))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 	}
 }

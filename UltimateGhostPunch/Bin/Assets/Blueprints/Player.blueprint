@@ -30,7 +30,8 @@
             "ComponentProperties": [
                [ "runThreshold", "0.5f"],
                [ "fallThreshold", "1.0f"],
-               [ "thrownDelay", "0.35f"]
+               [ "thrownDelay", "0.35f"],
+               ["ghostMesh", "ghost Ghost.mesh"]
             ]
         },
         {
@@ -100,7 +101,7 @@
 		{
 		    "ComponentName": "Dodge",
              "ComponentProperties": [
-                ["force", "20"],
+                ["force", "40"],
                 ["cooldown", "2"]
             ]
 		},
@@ -108,7 +109,6 @@
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostTime", "10"],
-                ["ghostMesh", "ghost Ghost.mesh"],
                 ["ghostScale", "1 1 1"],
                 ["spawnOffset", "0 1.25 0"],
                 ["ghostDamage", "1"],

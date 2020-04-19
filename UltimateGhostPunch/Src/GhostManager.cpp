@@ -14,12 +14,13 @@
 #include "GameManager.h"
 #include "Score.h"
 #include "PlayerController.h"
+#include "PlayerAnimController.h"
+#include "UltimateGhostPunch.h"
 #include "PlayerIndex.h"
 REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
-													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2),aliveMeshId(""), aliveMeshName(""),
-													 ghostMeshId(""), ghostMeshName(""), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
+													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
 												     deathPosition(Vector3()), ghostSpawnOffset(Vector3())
 {
 
@@ -43,8 +44,6 @@ void GhostManager::start()
 	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
 
 	// Store some data for player resurrection
-	if (meshRenderer != nullptr) aliveMeshId = meshRenderer->getMeshId();
-	if (meshRenderer != nullptr) aliveMeshName = meshRenderer->getMeshName();
 	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity().y;
 	if (transform != nullptr) aliveScale = transform->getScale();
 }
@@ -93,11 +92,6 @@ void GhostManager::handleData(ComponentData* data)
 			if (!(ss >> resurrectionHealth))
 				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
 		}
-		else if (prop.first == "ghostMesh")
-		{
-			if (!(ss >> ghostMeshId >> ghostMeshName))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
 		else if (prop.first == "ghostScale")
 		{
 			if (!(ss >> ghostScale.x >> ghostScale.y >> ghostScale.z))
@@ -134,7 +128,22 @@ void GhostManager::onObjectEnter(GameObject* other)
 			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
-			deactivateGhost();
+			
+			auto anim = gameObject->getComponent<PlayerAnimController>();
+			if (anim != nullptr)
+			{
+				/*auto punch = gameObject->getComponent<UltimateGhostPunch>();
+				if (punch != nullptr && punch->isPunching())
+					anim->punchSuccessAnimation();
+				else*/
+					anim->notLoopAnimation("Disappear");
+			}
+
+			auto controll = gameObject->getComponent<PlayerController>();
+			if (controll != nullptr) controll->setActive(false);
+
+			movement->stop();
+			
 		}
 	}
 }
@@ -158,7 +167,8 @@ void GhostManager::activateGhost()
 	}
 
 	// Change player's mesh -> ghost mesh
-	if (meshRenderer != nullptr) meshRenderer->changeMesh(ghostMeshId, ghostMeshName);
+	auto anim = gameObject->getComponent<PlayerAnimController>();
+	if (anim != nullptr) anim->enterMode(PlayerAnimController::GHOST);
 
 	if (transform != nullptr) {
 		if (!deathPosChanged) deathPosition = transform->getPosition();
@@ -184,8 +194,8 @@ void GhostManager::deactivateGhost()
 		rigidBody->setGravity({ 0, playerGravity, 0 });
 	}
 
-	// Change player's mesh -> alive mesh
-	if (meshRenderer != nullptr) meshRenderer->changeMesh(aliveMeshId, aliveMeshName);
+	auto controll = gameObject->getComponent<PlayerController>();
+	if (controll != nullptr) controll->setActive(true);
 
 	// Change scale
 	if(transform!= nullptr) transform->setScale(aliveScale);
