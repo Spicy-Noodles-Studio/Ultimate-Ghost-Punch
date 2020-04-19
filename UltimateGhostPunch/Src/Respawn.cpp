@@ -70,9 +70,11 @@ void Respawn::spawn(const Vector3& spawnPos)
 	}
 	if (playerController != nullptr) playerController->setActive(false);
 
+	/* // AQUÍ: EFECTO VISUAL DE MODO INVENCIBLE
 	PlayerAnimController* animController = gameObject->getComponent<PlayerAnimController>();
 	if (animController != nullptr)
 		animController->resurrectAnimation();
+	*/
 
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;

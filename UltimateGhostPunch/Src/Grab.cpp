@@ -36,7 +36,7 @@ void Grab::update(float deltaTime)
 	else if (state == GRABBING && enemy == nullptr) // state is GRABBING but enemy is null ==> failed grab
 	{
 		PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
-		if (myAnim != nullptr) myAnim->notLoopAnimation("GrabFail");
+		if (myAnim != nullptr) myAnim->grabFailedAnimation();
 
 		state = IDLE;
 	}
