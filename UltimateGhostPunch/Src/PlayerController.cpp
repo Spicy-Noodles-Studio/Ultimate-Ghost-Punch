@@ -96,9 +96,6 @@ void PlayerController::checkInput()
 	if ((block == nullptr || !block->blocking()) && (dodge== nullptr || !dodge->isDodging())) {
 		//Movement
 		direction += Vector3(getHorizontalAxis(), 0, 0);
-		//Character rotation
-		if (direction.x != 0)
-			gameObject->transform->setRotation({ 0,90 * direction.x,0 });
 	}
 
 	//Acctions if the player isn�t in ghostManager mode

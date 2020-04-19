@@ -119,7 +119,8 @@ void PathRecorder::onObjectEnter(GameObject* other)
 			currentPlatform = graph->getIndex(endPos);
 
 		if (currentPlatform != -1) {
-			NavigationLink navLink = NavigationLink(states, iniPos, endPos, frame, time, currentPlatform);
+			RigidBody* rb = gameObject->getParent()->getComponent<RigidBody>();//TODO:gestion errores 
+			NavigationLink navLink = NavigationLink(states, iniPos, endPos, rb->getLinearVelocity(), frame, time, currentPlatform);
 			if (!lastPlatform.empty()) {
 				graph->addLinkToPlatform(lastPlatform.top(), navLink);
 			}

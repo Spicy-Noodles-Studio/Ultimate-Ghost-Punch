@@ -8,7 +8,7 @@ class Dodge;
 class Jump;
 
 enum class ActionInput {
-	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE
+	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP
 };
 
 class AIStateMachine :	public StateMachine
@@ -19,12 +19,14 @@ private:
 	Movement* movement;
 	Dodge* dodge;
 	Jump* jump;
+	Vector3 dir;
 
 public:
 	AIStateMachine(GameObject* gameObject);
 	virtual ~AIStateMachine();
 
 	virtual void start();
+	virtual void fixedUpdate(float deltaTime);
 
 private:
 	virtual void processActionInput();

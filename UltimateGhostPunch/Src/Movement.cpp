@@ -21,6 +21,10 @@ void Movement::move(Vector3 dir)
 {
 	if(rigidBody != nullptr &&  std::abs(rigidBody->getLinearVelocity().x) < maxVelocity)
 		rigidBody->addForce(dir * speed);
+
+	//Character rotation
+	if (dir.x != 0)
+		gameObject->transform->setRotation({ 0,90 * dir.x,0 });
 }
 
 void Movement::stop()

@@ -198,12 +198,12 @@ void State::loadState(const GaiaData& data)
 }
 
 //NAVIGATION LINK
-NavigationLink::NavigationLink() : connection(-1), linkStates(std::vector<State>()), frames(0), iniPos(Vector3()), endPos(Vector3()), duration(0.0f)
+NavigationLink::NavigationLink() : connection(-1), linkStates(std::vector<State>()), frames(0), iniPos(Vector3::ZERO), endPos(Vector3::ZERO), startVelocity(Vector3::ZERO), duration(0.0f)
 {
 }
 
-NavigationLink::NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, int frames, float duration, int connection) : 
-							   linkStates(states), connection(connection), iniPos(iniPos), endPos(endPos), frames(frames), duration(duration)
+NavigationLink::NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, int frames, float duration, int connection) :
+							   linkStates(states), connection(connection), iniPos(iniPos), endPos(endPos), frames(frames), duration(duration), startVelocity(startVelocity)
 {
 }
 
@@ -227,6 +227,11 @@ Vector3 NavigationLink::getEndPos() const
 	return endPos;
 }
 
+Vector3 NavigationLink::getStartVelocity() const
+{
+	return startVelocity;
+}
+
 int NavigationLink::getFrames() const
 {
 	return frames;
@@ -245,6 +250,7 @@ GaiaData NavigationLink::saveLink()
 	link.addElement<std::string>("duration", std::to_string(duration));
 	link.addElement<std::string>("iniPos", iniPos.toString());
 	link.addElement<std::string>("endPos", endPos.toString());
+	link.addElement<std::string>("startVelocity", startVelocity.toString());
 	std::vector<GaiaData>states;
 	for (State s : linkStates)
 		states.push_back(s.saveState());
@@ -270,6 +276,9 @@ void NavigationLink::loadLink(const GaiaData& data)
 
 	ss = std::stringstream(data.find("endPos").getValue());
 	ss >> endPos.x >> endPos.y >> endPos.z;
+
+	ss = std::stringstream(data.find("startVelocity").getValue());
+	ss >> startVelocity.x >> startVelocity.y >> startVelocity.z;
 
 	GaiaData states = data.find("states");
 	for (GaiaData::iterator it = states.begin(); it != states.end(); it++) {

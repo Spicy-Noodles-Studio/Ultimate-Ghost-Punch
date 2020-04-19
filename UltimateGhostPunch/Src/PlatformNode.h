@@ -35,18 +35,19 @@ public:
 class NavigationLink {
 private:
 	std::vector<State> linkStates;
-	Vector3 iniPos, endPos;
+	Vector3 iniPos, endPos, startVelocity;
 	int connection, frames;
 	float duration;
 
 public:
 	NavigationLink();
-	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, int frames, float duration, int connection);
+	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, int frames, float duration, int connection);
 
 	int getConnection() const;
 	std::vector<State> getStates() const;
 	Vector3 getIniPos() const;
 	Vector3 getEndPos() const;
+	Vector3 getStartVelocity() const;
 	int getFrames() const;
 	float getDuration() const;
 

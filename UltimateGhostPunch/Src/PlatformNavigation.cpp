@@ -1,9 +1,11 @@
 #include "PlatformNavigation.h"
 
 #include <GameObject.h>
+#include <RigidBody.h>
 #include <queue>
 
 #include "AIStateMachine.h"
+#include "Movement.h"
 
 PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), movingThroughLink(false), linkInUse(NavigationLink()), time(0.0f), lastState(-1)
 {
@@ -18,7 +20,7 @@ PlatformNavigation::~PlatformNavigation()
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
 {
 	this->platformGraph = platformGraph;	
-	target = platformGraph->getPlatforms()[platformGraph->getPlatforms().size() - 2];
+	target = platformGraph->getPlatforms()[1];//TODO: toma de decisiones para asignacion de target
 }
 
 void PlatformNavigation::setCharacter(GameObject* character)
@@ -74,9 +76,12 @@ std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
 	}
 
 	// Build path
-	int index =target.getIndex();
+	int index = target.getIndex();
 	while (index >= 0 && index<route.size() && startIndex != index) {
-		path.insert(path.begin(), { graph[route[index].first], route[index].second });
+		if(route[index].first >=0 && route[index].first<graph.size())
+			path.push_back( { graph[route[index].first], route[index].second });
+
+		std::reverse(path.begin(), path.end());
 		index = route[index].first;
 	}
 	return path;
@@ -92,6 +97,7 @@ void PlatformNavigation::moveToStartingPoint(const pathNode& node)
 		movingThroughLink = true;
 		lastState = 0;
 		linkInUse = node.platform.getEdge(node.index);
+		character->getParent()->getComponent<RigidBody>()->setLinearVelocity(linkInUse.getStartVelocity());
 		time = 0.0f;
 		return;
 	}
@@ -103,11 +109,15 @@ void PlatformNavigation::moveToStartingPoint(const pathNode& node)
 void PlatformNavigation::moveToPlatform()
 {
 	if (linkInUse.getDuration() < time || (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.5) {
+		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
+			stateMachine->addActionInput(ActionInput::STOP);
 		movingThroughLink = false;
 		time = 0.0f;
 		lastState = 0;
+		return;
 	}
 
+	Vector3 vel = character->getComponent<RigidBody>()->getLinearVelocity();
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
 		while (lastState >= 0 && lastState < states.size() && time > states[lastState].getTime()) {

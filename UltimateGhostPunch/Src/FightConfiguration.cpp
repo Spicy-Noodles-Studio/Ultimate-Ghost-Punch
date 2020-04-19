@@ -137,7 +137,7 @@ void FightConfiguration::start()
 
 	levelIndex = 0;
 	songIndex = 0;
-	time = 60;
+	time = MAX_TIME;
 	health = 4;
 	numPlayers = 0;
 
