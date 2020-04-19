@@ -43,16 +43,18 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
-	playerPositions = { {-20,20,0}, {20,20,0}, {-17.5,0,0}, {17.5,0,0} };
+	playerPositions = { {-20,20,0}, {20,20,0}, {-17.5,0,0}, {17.5,0,0} }; // TODO: quitar
 
 	// create game
 	createLevel();
 	createSpikes();
 	createKnights();
 #ifndef RECORD_PATH
-	createAI();
-#endif
+	createAI(); 
+	gameManager->getScore()->initScore(4, gameManager->getPlayerIndexes());
+#else
 	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
+#endif
 
 	fightTimer = gameManager->getTime();
 	finishTimer = 4.0f; // Hard Coded
@@ -171,7 +173,7 @@ void FightManager::createKnights()
 void FightManager::createAI()
 {
 	int nPlayers = gameManager->getNumPlayers();
-	int nAIPlayers = MAX_PLAYERS - nPlayers;
+	int nAIPlayers = 1; // MAX_PLAYERS - nPlayers;
 
 	for (int i = 0; i < nAIPlayers; i++)
 	{
@@ -180,7 +182,7 @@ void FightManager::createAI()
 
 		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
 
-		knight->getComponent<PlayerController>()->setActive(false);
+		//knight->getComponent<PlayerController>()->setActive(false);
 		knight->getComponent<PlayerIndex>()->setIndex(nPlayers + i + 1);
 
 		gameManager->getKnights().push_back(knight);

@@ -14,7 +14,7 @@ class PlatformNavigation : public StateAction
 public:
 	//enum class NavigationState { MOVING_RIGHT, MOVING_LEFT, JUMPING, CANCEL_JUMP, DODGE };
 
-	struct pathNode {
+	struct PathNode {
 		PlatformNode platform;
 		int index;
 	};
@@ -28,9 +28,9 @@ public:
 
 private:
 
-	std::vector<pathNode> getShortestPath(); //Dijkstra es suficiente
+	std::vector<PathNode> getShortestPath(); //Dijkstra es suficiente
 
-	void moveToStartingPoint(const pathNode& node);
+	void moveToStartingPoint(const PathNode& node);
 	void moveToPlatform();
 
 protected:

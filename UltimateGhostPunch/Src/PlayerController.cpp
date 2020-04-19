@@ -26,7 +26,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1), isBlocking(false)
+															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1)
 {
 
 }

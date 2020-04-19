@@ -1,0 +1,211 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Player",
+    "Tag": "Player",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": [
+               [ "position", "20 30 0"],
+               [ "scale", "0.6 0.6 0.6"],
+               [ "rotation", "0 90 0"]
+            ]
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": [
+               [ "mesh", "player Knight.mesh"],
+               [ "attachToBone", "sword Espada.mesh player Mano.L"]
+            ]
+        },
+        {
+            "ComponentName": "Animator",
+            "ComponentProperties": [
+               [ "anim", "Run player"],
+               [ "anim", "Jump player"],
+               [ "anim", "Idle player"]
+            ]
+        },
+        {
+            "ComponentName": "RigidBody",
+            "ComponentProperties":[ 
+               [ "shape", "Box"],
+               [ "mass", "5"],
+               [ "friction", "0.3"],
+               [ "restitution", "0"],
+               [ "damping", "0.6"],
+               [ "angularDamping", "0"],
+               [ "gravity", "0 -15 0"],
+               [ "offset", "0 0 0"],
+               [ "scale", "2 5.2 2"],
+               [ "kinematic", "0"],
+               [ "trigger", "0"],
+               [ "movementConstraints", "1 1 0"],
+               [ "rotationConstraints", "0 0 0"],
+               [ "collisionGroup", "IgnoreRaycast"]
+            ]
+        },
+        {
+            "ComponentName": "Movement",
+            "ComponentProperties": [
+                ["speed", "75"],
+                ["maxVelocity", "7.5"]
+            ]
+        },
+        {  
+            "ComponentName": "PlayerIndex",
+            "ComponentProperties":[ 
+                ["index", "0"]
+            ]
+        },
+        {
+            "ComponentName": "GhostMovement",
+            "ComponentProperties":[ 
+                ["maxSpeed", "5"]
+            ]
+        },
+        {
+            "ComponentName": "Respawn",
+            "ComponentProperties":[ 
+                ["respawnTime", "2"]
+            ]
+        },
+        {
+            "ComponentName": "UltimateGhostPunch",
+            "ComponentProperties": [
+                ["force", "200"],
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
+            ]
+        },
+        {
+            "ComponentName": "Health",
+            "ComponentProperties": [
+                ["health", "4"],
+                ["invDamTime", "2"]
+            ]
+        },
+		{
+		    "ComponentName": "Dodge",
+             "ComponentProperties": [
+                ["force", "100"],
+                ["cooldown", "2"],
+                ["duration", "0.15"],
+                ["atenuation", "0.3"]
+            ]
+		},
+        {
+            "ComponentName": "GhostManager",
+            "ComponentProperties": [
+                ["ghostTime", "10"],
+                ["ghostMesh", "ghost Espada.mesh"],
+                ["ghostScale", "1 1 1"],
+                ["spawnOffset", "0 1.25 0"],
+                ["ghostDamage", "1"],
+                ["resurrectionHealth", "2"]
+            ]
+        },
+        {
+            "ComponentName": "PlayerUI"
+        }
+    ],
+    "Children": [
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Attack Sensor",
+            "Tag": "attackSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "1 0 3.5"],
+                       [ "scale", "1 1.75 3"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Attack",
+                    "ComponentProperties":[
+                        ["quickCooldown", "0.5"],
+                        ["strongCooldown", "2"],
+                        ["quickDamage", "1"],
+                        ["strongDamage", "2"],
+                        ["attackDuration", "0.5"],
+                        ["quickCharge", "0.5"],
+                        ["strongCharge", "0.75"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Ground Sensor",
+            "Tag": "groundSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 -2.2 0"],
+                        ["scale", "0.75 0.75 0.75"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Jump",
+                    "ComponentProperties": [
+                        ["maxForce", "90"],
+				        ["jumpDecay", "0.65"],
+                        ["coyoteTime", "0.4"]
+                    ]       
+                },
+				{
+					"ComponentName": "Block",
+					"ComponentProperties": [
+                        ["maxBlockTime", "3"],
+				        ["blockRegenTime", "1.5"],
+						["blockGrabMargin", "1"]
+                    ]
+				},
+                {
+                    "ComponentName": "PathRecorder"
+                }
+            ]
+        },
+		{
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "Grab Sensor",
+            "Tag": "grabSensor",
+            "BlueprintPath": "Sensor",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 2.5"],
+                       [ "scale", "1 2 2"]
+                    ]
+                }
+            ],
+            "Components":
+            [
+                {
+                    "ComponentName": "Grab",
+					"ComponentProperties": [
+                        ["freezeDuration", "2"],
+                        ["grabDuration", "2"],
+                        ["throwForce", "15"]
+                    ]
+                }
+            ]
+        }
+    ]
+}

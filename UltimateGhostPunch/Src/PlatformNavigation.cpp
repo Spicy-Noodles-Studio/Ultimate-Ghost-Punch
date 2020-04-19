@@ -19,8 +19,8 @@ PlatformNavigation::~PlatformNavigation()
 
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
 {
-	this->platformGraph = platformGraph;	
-	target = platformGraph->getPlatforms()[1];//TODO: toma de decisiones para asignacion de target
+	this->platformGraph = platformGraph;
+	target = platformGraph->getPlatforms()[1];  //TODO: toma de decisiones para asignacion de target
 }
 
 void PlatformNavigation::setCharacter(GameObject* character)
@@ -28,9 +28,9 @@ void PlatformNavigation::setCharacter(GameObject* character)
 	this->character = character->findChildrenWithTag("groundSensor")[0];
 }
 
-std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
+std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 {
-	std::vector<pathNode> path;
+	std::vector<PathNode> path;
 	if (platformGraph == nullptr || character == nullptr)
 		return path; // Empty
 
@@ -41,9 +41,7 @@ std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
 		return path;
 
 	// Cost - Node index (order)
-	std::priority_queue<std::pair<int, int>,
-		std::vector<std::pair<int, int>>,
-		std::greater<std::pair<int, int>>> pq;
+	std::priority_queue<ii, std::vector<ii>, std::greater<ii>> pq;
 	pq.push({ 0, startIndex });
 
 	// Vector of distances
@@ -65,7 +63,7 @@ std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
 			NavigationLink edge = edges[i];
 			int toIndex = edge.getConnection();
 			float toCost = edge.getDuration();
-			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x);//Coste de reccorrer la plataforma
+			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x); // Coste de recorrer la plataforma
 			// If find a better cost
 			if (cost[index] + toCost + beginCost < cost[toIndex]) {
 				cost[toIndex] = cost[index] + toCost + beginCost;
@@ -77,9 +75,9 @@ std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
 
 	// Build path
 	int index = target.getIndex();
-	while (index >= 0 && index<route.size() && startIndex != index) {
-		if(route[index].first >=0 && route[index].first<graph.size())
-			path.push_back( { graph[route[index].first], route[index].second });
+	while (index >= 0 && index < route.size() && startIndex != index) {
+		if (route[index].first >= 0 && route[index].first < graph.size())
+			path.push_back({ graph[route[index].first], route[index].second });
 
 		std::reverse(path.begin(), path.end());
 		index = route[index].first;
@@ -87,13 +85,15 @@ std::vector<PlatformNavigation::pathNode> PlatformNavigation::getShortestPath()
 	return path;
 }
 
-void PlatformNavigation::moveToStartingPoint(const pathNode& node)
+void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 {
 	if (character == nullptr) return;
 
 	Vector3 startPos = node.platform.getEdge(node.index).getIniPos(), characterPos = character->transform->getWorldPosition();
 
-	if (std::abs(characterPos.x - startPos.x) < 0.5) {
+	float diff = std::abs(characterPos.x - startPos.x);
+	// If arrived to start point
+	if (diff < 0.5f) {
 		movingThroughLink = true;
 		lastState = 0;
 		linkInUse = node.platform.getEdge(node.index);
@@ -108,6 +108,7 @@ void PlatformNavigation::moveToStartingPoint(const pathNode& node)
 
 void PlatformNavigation::moveToPlatform()
 {
+	// If arrived to end of link, reset
 	if (linkInUse.getDuration() < time || (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.5) {
 		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
 			stateMachine->addActionInput(ActionInput::STOP);
@@ -121,6 +122,7 @@ void PlatformNavigation::moveToPlatform()
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
 		while (lastState >= 0 && lastState < states.size() && time > states[lastState].getTime()) {
+			// Inject input
 			for (Action action : states[lastState].getActions())
 				stateMachine->addActionInput((ActionInput)action);
 			lastState++;
@@ -136,12 +138,11 @@ void PlatformNavigation::update(float deltaTime)
 	}
 	else {
 		/* CALCULATIONS TO FOLLOW NODES CORRECTLY */
-		std::vector<pathNode> path = getShortestPath();
+		std::vector<PathNode> path = getShortestPath();
 
 		// Get next node
-		if (path.size() > 0) 
+		if (path.size() > 0)
 			// Go to next platform
 			moveToStartingPoint(path[0]);
 	}
-
 }
