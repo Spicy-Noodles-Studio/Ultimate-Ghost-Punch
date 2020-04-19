@@ -35,6 +35,7 @@ private:
 
 	void createLevel();
 	void createKnights();
+	void createAI();
 	void createSpikes();
 	void playSong();
 

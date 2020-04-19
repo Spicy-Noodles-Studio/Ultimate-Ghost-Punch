@@ -6,7 +6,7 @@
 #include <Vector3.h>
 #include <vector>
 
-enum class Action { Dash, Jump, MoveLeft, MoveRight, None };
+enum class Action { MoveRight, MoveLeft, Jump, CancelJump, Dash, None };
 
 class GaiaData;
 
@@ -74,6 +74,8 @@ public:
 	Vector3 getEnd() const;
 	Vector3 getMiddle() const;
 	int getIndex() const;
+	std::vector<NavigationLink> getEdges() const;
+	NavigationLink getEdge(int index) const;
 
 	void addEdge(const NavigationLink& link);
 	void removeLastEdge();

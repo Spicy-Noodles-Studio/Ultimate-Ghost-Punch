@@ -17,6 +17,7 @@ const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
 const int MIN_PLAYERS = 1;
+const int MAX_PLAYERS = 4;
 
 class InputSystem;
 class UILayout;

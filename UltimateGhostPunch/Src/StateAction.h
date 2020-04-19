@@ -13,7 +13,6 @@ public:
 protected:
 	virtual void update(float deltaTime) = 0;
 
-private:
 	/* 
 		My State Machine pointer
 		Each StateAction will inject its input through stateMachine pointer	

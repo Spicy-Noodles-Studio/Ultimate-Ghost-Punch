@@ -54,6 +54,17 @@ int PlatformNode::getIndex() const
 	return index;
 }
 
+std::vector<NavigationLink> PlatformNode::getEdges() const
+{
+	return edges;
+}
+
+NavigationLink PlatformNode::getEdge(int index) const
+{
+	if (index < 0 || index >= edges.size()) return NavigationLink();
+	else return edges[index];
+}
+
 void PlatformNode::addEdge(const NavigationLink& link)
 {
 	edges.push_back(link);

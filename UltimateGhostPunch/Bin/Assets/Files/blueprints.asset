@@ -1,6 +1,7 @@
 .//Assets//Blueprints//Camera.blueprint
 .//Assets//Blueprints//Sensor.blueprint
 .//Assets//Blueprints//Player.blueprint
+.//Assets//Blueprints//EnemyAI.blueprint
 .//Assets//Blueprints//Cubo.blueprint
 .//Assets//Blueprints//Sinbad.blueprint
 .//Assets//Blueprints//Spikes.blueprint

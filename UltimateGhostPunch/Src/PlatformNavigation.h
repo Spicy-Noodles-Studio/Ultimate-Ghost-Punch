@@ -1,15 +1,24 @@
 #pragma once
 #ifndef PLATFORM_NAVIGATION_H
 #define PLATFORM_NAVIGATION_H
+
 #include "StateAction.h"
 #include "PlatformGraph.h"
 #include "PlatformNode.h"
 
 
+typedef std::pair<int, int> ii;
+
 class PlatformNavigation : public StateAction
 {
 public:
-	enum class NavigationState { MOVING_RIGHT, MOVING_LEFT, JUMPING, CANCEL_JUMP, DODGE };
+	//enum class NavigationState { MOVING_RIGHT, MOVING_LEFT, JUMPING, CANCEL_JUMP, DODGE };
+
+	struct pathNode {
+		PlatformNode platform;
+		int index;
+	};
+
 public:
 	PlatformNavigation(StateMachine* stateMachine);
 	~PlatformNavigation();
@@ -18,7 +27,11 @@ public:
 	void setCharacter(GameObject* character);
 
 private:
-	std::vector<PlatformNode> getShortestPath(); //Dijkstra es suficiente
+
+	std::vector<pathNode> getShortestPath(); //Dijkstra es suficiente
+
+	void moveToStartingPoint(const pathNode& node);
+	void moveToPlatform();
 
 protected:
 	virtual void update(float deltaTime);
@@ -29,6 +42,11 @@ private:
 	PlatformNode target;	// Target Platform
 
 	GameObject* character;	// Source
+
+	bool movingThroughLink;
+	NavigationLink linkInUse;
+	double time;
+	int lastState;
 
 };
 

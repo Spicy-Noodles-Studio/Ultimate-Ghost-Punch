@@ -49,6 +49,9 @@ void FightManager::start()
 	createLevel();
 	createSpikes();
 	createKnights();
+#ifndef RECORD_PATH
+	createAI();
+#endif
 	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
 
 	fightTimer = gameManager->getTime();
@@ -160,6 +163,25 @@ void FightManager::createKnights()
 
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
 		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
+
+		gameManager->getKnights().push_back(knight);
+	}
+}
+
+void FightManager::createAI()
+{
+	int nPlayers = gameManager->getNumPlayers();
+	int nAIPlayers = MAX_PLAYERS - nPlayers;
+
+	for (int i = 0; i < nAIPlayers; i++)
+	{
+		GameObject* knight = instantiate("EnemyAI", playerTransforms[nPlayers+i].first);
+		knight->transform->setRotation(playerTransforms[nPlayers + i].second);
+
+		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+
+		knight->getComponent<PlayerController>()->setActive(false);
+		knight->getComponent<PlayerIndex>()->setIndex(nPlayers + i + 1);
 
 		gameManager->getKnights().push_back(knight);
 	}

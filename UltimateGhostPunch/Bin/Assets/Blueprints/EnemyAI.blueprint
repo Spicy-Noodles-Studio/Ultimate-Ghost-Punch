@@ -1,0 +1,26 @@
+ {
+    "ObjectType": "BLUEPRINT",
+    "ObjectName": "EnemyAI",
+    "Tag": "Player",
+    "BlueprintPath": "Player",
+    "ComponentModifications" : [
+        {  
+            "ComponentName": "PlayerIndex",
+            "ComponentProperties":[ 
+                ["index", "2"]
+            ]
+        },
+                {  
+            "ComponentName": "Transform",
+            "ComponentProperties":[ 
+                [ "position", "10 20 0"]
+            ]
+        }
+    ],
+    "Components":
+    [
+        {
+            "ComponentName": "AIStateMachine"
+        }
+    ]
+}

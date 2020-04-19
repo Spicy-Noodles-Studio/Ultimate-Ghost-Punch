@@ -16,7 +16,7 @@
 REGISTER_FACTORY(PathRecorder);
 
 PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()),
-													 currentPlatform(-1), actions(std::vector<Action>()), time(0.0f)
+currentPlatform(-1), actions(std::vector<Action>()), time(0.0f)
 {
 
 }
@@ -82,6 +82,9 @@ void PathRecorder::update(float deltaTime)
 			startRecording();
 			actions.push_back(Action::Jump);
 		}
+		else if (inputSystem->getKeyRelease("Space") && (jump == nullptr || jump->isJumping()))
+			actions.push_back(Action::CancelJump);
+
 		if (recording && inputSystem->getKeyPress("LEFT SHIFT"))
 			actions.push_back(Action::Dash);
 		if (recording && inputSystem->isKeyPressed("A"))
