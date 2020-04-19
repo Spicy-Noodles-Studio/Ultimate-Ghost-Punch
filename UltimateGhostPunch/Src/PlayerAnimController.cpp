@@ -52,6 +52,9 @@ void PlayerAnimController::start()
 		LOG("ERROR: MeshRenderer component not found in player.\n");
 	else
 		mesh->printAllBones();
+
+
+	diffuse = mesh->getDiffuse();
 }
 
 void PlayerAnimController::update(float deltaTime)
@@ -68,7 +71,7 @@ void PlayerAnimController::update(float deltaTime)
 	if (swordState != HAND && state != GRABBING)
 	{
 		// Move sword back to hand
-		gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Mano.L", "sword");
+		mesh->moveEntityToBone("player", "Mano.L", "sword");
 		swordState = HAND;
 	}
 
@@ -89,11 +92,16 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 	anim->setLoop(false);
 	state = JUMP;
 
+
+	mesh->setDiffuse(diffuse, 1);
 }
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
 	notLoopAnimation("Hurt");
+
+
+	mesh->setDiffuse({ 255,0,0 }, 1);
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
@@ -106,7 +114,7 @@ void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 	state = GRABBING;
 
 	// Move Sword to back
-	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
+	mesh->moveEntityToBone("player", "Espalda", "sword");
 	swordState = SHEATHED;
 }
 
@@ -195,7 +203,7 @@ void PlayerAnimController::grabbedByEnemyAnimation()
 	anim->setLoop(false);
 	state = GRABBING;
 
-	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
+	mesh->moveEntityToBone("player", "Espalda", "sword");
 	swordState = SHEATHED;
 }
 

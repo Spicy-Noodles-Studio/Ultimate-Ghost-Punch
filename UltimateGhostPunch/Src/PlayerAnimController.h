@@ -69,6 +69,10 @@ private:
 
 	// Delay for the thrown animation
 	float thrownDelay;
+
+
+	Vector3 diffuse;
+
 public:
 	PlayerAnimController(GameObject* gameObject);
 
