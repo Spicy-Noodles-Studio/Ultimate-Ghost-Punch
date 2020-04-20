@@ -46,6 +46,7 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
+	float getGhostTime();
 
 	void activateGhost();
 	void deactivateGhost();

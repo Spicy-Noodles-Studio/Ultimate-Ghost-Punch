@@ -6,9 +6,13 @@
 
 #include "GameManager.h"
 
+#include <Timer.h>
+#include "UltimateGhostPunch.h"
+
 REGISTER_FACTORY(DynamicCamera);
 
-DynamicCamera::DynamicCamera(GameObject* gameObject) : UserComponent(gameObject), smoothFactor(0.125f), minZ(20), maxZ(100), zoomFactor(1.0f)
+DynamicCamera::DynamicCamera(GameObject* gameObject) : UserComponent(gameObject), smoothFactor(0.125f), minZ(20), maxZ(100), zoomFactor(1.0f),
+time(0.0f), slowMoTime(3.0f), state(NORMAL)
 {
 }
 
@@ -19,6 +23,24 @@ DynamicCamera::~DynamicCamera()
 void DynamicCamera::update(float deltaTime)
 {
 	dynamicMove();
+
+	if (state != SLOWMO && someoneDoingUGP() && getMaxDistBetweenPlayers() < 5.0f)
+	{
+		Timer::GetInstance()->setTimeScale(0.3f);
+		zoomFactor = -30.0f;
+
+		time = slowMoTime;
+		state = SLOWMO;
+	}
+
+	if (time > 0.0f)
+		time -= deltaTime;
+	else if (state == SLOWMO)
+	{
+		Timer::GetInstance()->setTimeScale(1.0f);
+		zoomFactor = 1.0f;
+		state = NORMAL;
+	}
 }
 
 void DynamicCamera::handleData(ComponentData* data)
@@ -98,5 +120,19 @@ void DynamicCamera::dynamicMove()
 	Vector3 lerpDest = gameObject->transform->getPosition();
 	lerpDest.lerp(dest, smoothFactor);
 	gameObject->transform->setPosition(lerpDest);
+}
+
+bool DynamicCamera::someoneDoingUGP()
+{
+	// Vector with every player
+	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
+	// number of players
+	int n = players.size();
+
+	int i = 0;
+	while (i < n && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
+		i++;
+
+	return i < n;
 }
 

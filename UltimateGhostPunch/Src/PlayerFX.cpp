@@ -5,6 +5,7 @@
 
 #include "MeshRenderer.h"
 #include "Health.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerFX);
 
@@ -21,6 +22,8 @@ PlayerFX::~PlayerFX()
 void PlayerFX::start()
 {
 	mesh = gameObject->getComponent<MeshRenderer>();
+	health = gameObject->getComponent<Health>();
+	ghost = gameObject->getComponent<GhostManager>();
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		textureNames.push_back(mesh->getTexture(i));
@@ -33,6 +36,8 @@ void PlayerFX::start()
 	time = 0.0f;
 	hurtTime = 0.5f;
 	invencibleFrec = 0.1f;
+	ghostFXFrec = 0.1f;
+	ghostFXTime = 2.0f;
 
 	frecuency = invencibleFrec;
 	effect = NONE;
@@ -45,7 +50,7 @@ void PlayerFX::update(float deltaTime)
 	else
 		deactivateHurt();
 
-	if (gameObject->getComponent<Health>()->isInvencible())
+	if (health->isInvencible())
 	{
 		effect = INVENCIBLE;
 
@@ -68,9 +73,37 @@ void PlayerFX::update(float deltaTime)
 			}
 		}
 	}
-	else if(effect == INVENCIBLE)
+	else if (effect == INVENCIBLE)
 	{
 		deactivateInvencible();
+	}
+
+	if (ghost->isGhost() && ghost->getGhostTime() < ghostFXTime)
+	{
+		effect = GHOST;
+
+		if (frecuency > 0.0f)
+		{
+			frecuency -= deltaTime;
+			if (frecuency <= 0.0f)
+			{
+				activateGhostFX();
+				frecuency = -invencibleFrec;
+			}
+		}
+		else
+		{
+			frecuency += deltaTime;
+			if (frecuency >= 0.0f)
+			{
+				deactivateGhostFX();
+				frecuency = invencibleFrec;
+			}
+		}
+	}
+	else if (effect == GHOST)
+	{
+		deactivateGhostFX();
 	}
 }
 
@@ -82,6 +115,18 @@ void PlayerFX::handleData(ComponentData* data)
 
 		if (prop.first == "hurtTime") {
 			if (!(ss >> hurtTime))
+				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "invencibleFrec") {
+			if (!(ss >> invencibleFrec))
+				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "ghostFXFrec") {
+			if (!(ss >> ghostFXFrec))
+				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+		else if (prop.first == "ghostFXTime") {
+			if (!(ss >> ghostFXTime))
 				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 	}
@@ -106,17 +151,25 @@ void PlayerFX::deactivateHurt()
 
 void PlayerFX::activateInvencible()
 {
-	/*for (int i = 0; i < mesh->getSubentitiesSize(); i++)
-		mesh->setDiffuse(i, { 1,1,1 }, 1);*/
-	mesh->setVisible(false);
+	for (int i = 0; i < mesh->getSubentitiesSize(); i++) mesh->setDiffuse(i, { 1,1,1 }, 1);
 }
 
 void PlayerFX::deactivateInvencible()
 {
 	//effect = NONE;
 
-	/*for (int i = 0; i < mesh->getSubentitiesSize(); i++)
-		mesh->setDiffuse(i, diffuses[i], 1);*/
+	for (int i = 0; i < mesh->getSubentitiesSize(); i++) mesh->setDiffuse(i, diffuses[i], 1);
+}
+
+void PlayerFX::activateGhostFX()
+{
+	mesh->setVisible(false);
+}
+
+void PlayerFX::deactivateGhostFX()
+{
+	//effect = NONE;
+
 	mesh->setVisible(true);
 }
 
