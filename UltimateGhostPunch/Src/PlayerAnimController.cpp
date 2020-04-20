@@ -102,7 +102,10 @@ void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 	//notLoopAnimation("Hurt");
 	anim->playAnimation("Hurt");
 	anim->setLoop(false);
-	state = NOT_LOOPING_STATE;
+	if (jump->isGrounded())
+		state = NOT_LOOPING_STATE;
+	else
+		state = FALL;
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
@@ -576,7 +579,7 @@ void PlayerAnimController::handleState()
 		}
 		break;
 	case PlayerAnimController::FALL:					// FALL //
-		if (anim->getCurrentAnimation() != "Fall")
+		if (anim->getCurrentAnimation() != "Fall" && anim->getCurrentAnimation() != "Hurt")
 		{
 			anim->playAnimation("Fall");
 			anim->setLoop(true);
