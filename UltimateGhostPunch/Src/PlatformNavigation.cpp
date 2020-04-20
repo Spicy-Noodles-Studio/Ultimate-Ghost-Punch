@@ -119,7 +119,7 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 
 	float diff = std::abs(characterPos.x - startPos.x);
 	// If arrived to start point
-	if (diff < 0.5f) {
+	if (diff < 0.1f) {
 		movingThroughLink = true;
 		lastState = 0;
 		linkInUse = node.platform.getEdge(node.index);

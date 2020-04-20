@@ -4,15 +4,20 @@
 #include <MathUtils.h>
 
 #include "PlatformNavigation.h"
+#include "GhostNavigation.h"
 #include "GameManager.h"
 #include "Movement.h"
 #include "Jump.h"
 #include "Dodge.h"
+#include "GhostManager.h"
+#include "GhostMovement.h"
+#include "UltimateGhostPunch.h"
 
 REGISTER_FACTORY(AIStateMachine);
 
 AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
-															platformNavigation(nullptr), knights(nullptr)
+															ghostMovement(nullptr), ghostPunch(nullptr), platformNavigation(nullptr), ghostNavigation(nullptr),
+															ghostManager(nullptr), knights(nullptr)
 {
 
 }
@@ -32,11 +37,17 @@ void AIStateMachine::start()
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
 	dodge = gameObject->getComponent<Dodge>();
+	ghostMovement = gameObject->getComponent<GhostMovement>();
+	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
+	ghostManager = gameObject->getComponent<GhostManager>();
 
 	// Create states here
 
 	/* MOVING PLATFORM STATE ACTION */
 	createMovingPlatformsAction();
+
+	/*GHOST CONTROL ACTION*/
+	createGhostAction();
 
 	// Initialize auxialiar variables
 	timeTargetChange = 5.0f; // 5 seconds
@@ -52,6 +63,8 @@ void AIStateMachine::update(float deltaTime)
 		if (platformNavigation == nullptr) return;
 		changeTarget();
 	}
+
+	updateState();
 }
 
 void AIStateMachine::fixedUpdate(float deltaTime)
@@ -62,7 +75,7 @@ void AIStateMachine::fixedUpdate(float deltaTime)
 
 void AIStateMachine::processActionInput()
 {
-	for (auto input : actionInputs) {
+ 	for (auto input : actionInputs) {
 		switch (input)
 		{
 			/* MOVEMENT */
@@ -84,6 +97,16 @@ void AIStateMachine::processActionInput()
 		case ActionInput::STOP:
 			if (movement != nullptr)movement->stop();
 			dir = Vector3::ZERO;
+			break;
+			/*GHOST*/
+		case ActionInput::GHOST_MOVE:
+			if (ghostMovement != nullptr && ghostNavigation != nullptr)ghostMovement->move(ghostNavigation->getDirection());
+			break;
+		case ActionInput::GHOST_PUNCH:
+			if (ghostPunch != nullptr){
+				ghostPunch->aim(ghostNavigation->getDirection());//Provisional?
+				ghostPunch->ghostPunch();
+				}
 			break;
 			/* ATTACK */
 		default:
@@ -112,6 +135,14 @@ void AIStateMachine::createMovingPlatformsAction()
 	currentState = platformNavigation;
 }
 
+void AIStateMachine::createGhostAction()
+{
+	ghostNavigation = new GhostNavigation(this);
+	addStateAction(ghostNavigation);
+
+	ghostNavigation->setCharacter(gameObject);
+}
+
 void AIStateMachine::changeTarget()
 {
 	// TODO: de momento es random, cambiar si se quiere
@@ -123,4 +154,13 @@ void AIStateMachine::changeTarget()
 
 	// TO STUFF
 	platformNavigation->setTarget(target);
+	ghostNavigation->setTarget(target);
+}
+
+void AIStateMachine::updateState()
+{
+	if (ghostManager != nullptr) {
+		if (ghostManager->isGhost() && currentState != ghostNavigation) 
+			currentState = ghostNavigation;
+	}
 }

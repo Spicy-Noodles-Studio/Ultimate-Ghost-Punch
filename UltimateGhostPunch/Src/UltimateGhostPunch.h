@@ -34,6 +34,7 @@ public:
 
 	void charge();
 	void aim(double x, double y);
+	void aim(const Vector3& dir);
 	void ghostPunch();
 
 	const State& getState();

@@ -76,6 +76,11 @@ void UltimateGhostPunch::aim(double x, double y)
 	direction.normalize();
 }
 
+void UltimateGhostPunch::aim(const Vector3& dir)
+{
+	aim(dir.x, dir.y);
+}
+
 void UltimateGhostPunch::ghostPunch()
 {
 	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);

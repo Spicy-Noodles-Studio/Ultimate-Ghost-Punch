@@ -6,11 +6,15 @@
 class Movement;
 class Dodge;
 class Jump;
+class GhostMovement;
+class UltimateGhostPunch;
 
 class PlatformNavigation;
+class GhostNavigation;
+class GhostManager;
 
 enum class ActionInput {
-	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP
+	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH
 };
 
 class AIStateMachine :	public StateMachine
@@ -25,12 +29,16 @@ private:
 	Movement* movement;
 	Dodge* dodge;
 	Jump* jump;
-	Vector3 dir;
+	GhostMovement* ghostMovement;
+	UltimateGhostPunch* ghostPunch;
+	GhostManager* ghostManager;
 
 	/* States */
 	PlatformNavigation* platformNavigation;
+	GhostNavigation* ghostNavigation;
 
 	/* Auxiliar variables */
+	Vector3 dir;
 	float timeTargetChange;
 	float timerTargetChange;
 
@@ -47,9 +55,11 @@ private:
 
 	/* Call in start function */
 	void createMovingPlatformsAction();
+	void createGhostAction();
 
 	/* Funcs */
 	void changeTarget();
+	void updateState();
 };
 
 #endif
