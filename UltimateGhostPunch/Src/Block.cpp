@@ -80,7 +80,7 @@ void Block::block()
 		isBlocking = true;
 		timeElapsed = 0;
 		blockDirection = gameObject->getParent()->transform->getRotation().y;
-		auto anim = gameObject->getComponent<PlayerAnimController>();
+		auto anim = gameObject->getParent()->getComponent<PlayerAnimController>();
 		if(anim != nullptr) anim->blockAnimation();
 		LOG("BLOCKING\n");
 	}
