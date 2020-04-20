@@ -9,9 +9,17 @@ class DynamicCamera : public UserComponent
 private:
 	float minZ, maxZ;
 
+	enum CameraState {
+		NORMAL, SLOWMO
+	};
+	CameraState state;
+
 	//Cam's Z pos = max dist between players * zoomFactor
 	float zoomFactor;
 	float smoothFactor;
+
+	float time;
+	float slowMoTime;
 
 public:
 	DynamicCamera(GameObject* gameObject);
@@ -29,6 +37,8 @@ private:
 
 	// Applies a movement in the direction specified by the players' mid-point and distance
 	void dynamicMove();
+
+	bool someoneDoingUGP();
 
 };
 

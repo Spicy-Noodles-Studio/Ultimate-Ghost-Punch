@@ -168,6 +168,11 @@ bool GhostManager::isGhost()
 	return ghost;
 }
 
+float GhostManager::getGhostTime()
+{
+	return ghostTime;
+}
+
 void GhostManager::activateGhost()
 {
 	ghost = true;

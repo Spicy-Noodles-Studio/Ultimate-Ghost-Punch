@@ -11,6 +11,8 @@ class Block;
 class MeshRenderer;
 class GhostManager;
 
+class PlayerFX;
+
 class PlayerAnimController :
 	public UserComponent
 {
@@ -31,6 +33,8 @@ private:
 	Block* block;
 	// Ghost Manager
 	GhostManager* ghostManag;
+
+	PlayerFX* playerFX;
 
 	enum PlayerAnimState
 	{

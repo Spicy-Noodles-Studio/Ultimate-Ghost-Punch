@@ -34,7 +34,7 @@ private:
 	int health;
 	int time;
 
-	std::vector<std::string> levelNames = {"level5", "level2", "cave"};
+	std::vector<std::string> levelNames = {"level4", "level2", "cave"};
 	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
 
 	int levelIndex;
