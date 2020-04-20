@@ -129,10 +129,7 @@ void PlayerController::checkInput()
 			if (jump != nullptr)
 			{
 				if (getKey("Space") || getButton("A"))
-				{
 					jump->jump();
-					animController->jumpAnimation();
-				}
 				else if (getKeyUp("Space") || getButtonUp("A"))
 					jump->cancelJump();
 			}

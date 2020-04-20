@@ -92,9 +92,17 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 	if (anim->getCurrentAnimation() == "JumpStart" || anim->getCurrentAnimation() == "JumpChange" || anim->getCurrentAnimation() == "Fall")
 		return;
 
-	anim->playAnimation("JumpStart");
-	anim->setLoop(false);
-	state = JUMP;
+	if (state != GRABBING)
+	{
+		anim->playAnimation("JumpStart");
+		anim->setLoop(false);
+		state = JUMP;
+	}
+	else
+	{
+		anim->playAnimation("JumpStartGrabbing");
+		anim->setLoop(false);
+	}
 }
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
@@ -182,7 +190,14 @@ void PlayerAnimController::stunnedAnimation()
 
 void PlayerAnimController::dashAnimation()
 {
-	notLoopAnimation("DashFront");
+	if (state != GRABBING)
+		notLoopAnimation("DashFront");
+	else
+	{
+		anim->playAnimation("DashFrontGrabbing");
+		anim->setLoop(false);
+	}
+		
 }
 
 void PlayerAnimController::resurrectAnimation()
@@ -229,9 +244,20 @@ void PlayerAnimController::notLoopAnimation(std::string name)
 void PlayerAnimController::attackAnimation(int type) //  ATTACK ANIMATION //
 {
 	if (type == 0)
-		anim->playAnimation("AttackA");
+	{
+		if (jump->isGrounded())
+			anim->playAnimation("AttackA");
+		else
+			notLoopAnimation("AttackAAir");
+	}
 	else
-		anim->playAnimation("AttackB");
+	{
+		if (jump->isGrounded())
+			anim->playAnimation("AttackB");
+		else
+			anim->playAnimation("AttackB");
+			//notLoopAnimation("AttackAAir");
+	}
 
 	anim->setLoop(false);
 	state = NOT_LOOPING_STATE;
@@ -295,6 +321,7 @@ void PlayerAnimController::enterMode(PlayerMode mode)
 			mesh->changeMesh(ghostMeshId, ghostMeshName);
 			notLoopAnimation("Appear");
 			anim->printAllAnimationsNames();
+			ghostManag->activateGhost();
 			break;
 		default:
 			break;
@@ -325,6 +352,16 @@ void PlayerAnimController::punchSuccessAnimation()
 	state = NOT_LOOPING_STATE;
 }
 
+bool PlayerAnimController::checkIdle()
+{
+	return abs(body->getLinearVelocity().x) < runThreshold && (currentMode == ALIVE || abs(body->getLinearVelocity().y) < runThreshold);
+}
+
+bool PlayerAnimController::checkStartedFalling()
+{
+	return abs(body->getLinearVelocity().y) <= fallThreshold;
+}
+
 void PlayerAnimController::updateIdle()	//  IDLE //
 {
 	// TRANSITION TO FALL IF
@@ -335,7 +372,8 @@ void PlayerAnimController::updateIdle()	//  IDLE //
 	}
 
 	// TRANSITION TO RUN IF
-	if (abs(body->getLinearVelocity().x) >= runThreshold)
+	if (abs(body->getLinearVelocity().x) >= runThreshold
+		|| (currentMode == GHOST && abs(body->getLinearVelocity().y) >= runThreshold))
 	{
 		state = RUN;
 		return;
@@ -353,7 +391,7 @@ void PlayerAnimController::updateRun() //  RUN //
 	}
 
 	// TRANSITION TO IDLE IF
-	if (abs(body->getLinearVelocity().x) < runThreshold)
+	if (checkIdle())
 	{
 		state = IDLE;
 		return;
@@ -364,7 +402,7 @@ void PlayerAnimController::updateJump() //  JUMP //
 {
 	if (currentMode == GHOST) return;
 
-	if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded() && abs(body->getLinearVelocity().y) <= fallThreshold)
+	if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded() && checkStartedFalling())
 	{
 		anim->playAnimationSequence({ "JumpChange", "Fall" }, true);
 		anim->setLoop(false);
@@ -390,6 +428,31 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 {
 	if (currentMode == GHOST) return;
 
+	if (!grab->isGrabbing())
+	{
+		if (anim->getCurrentAnimation() == "JumpStartGrabbing" || anim->getCurrentAnimation() == "JumpChangeGrabbing")
+		{
+			state = JUMP; updateJump();
+		}
+		else if (anim->getCurrentAnimation() == "FallGrabbing")
+		{
+			state = FALL; updateFall();
+		}
+	}
+
+	if (anim->getCurrentAnimation() == "JumpStartGrabbing" && anim->hasEnded() && checkStartedFalling())
+	{
+		anim->playAnimationSequence({ "JumpChangeGrabbing", "FallGrabbing" }, true);
+		anim->setLoop(false);
+		return;
+	}
+
+	if (anim->getCurrentAnimation() == "FallGrabbing" && jump->isGrounded())
+	{
+		notLoopAnimation("LandGrabbing");
+		return;
+	}
+
 	if (anim->getCurrentAnimation() == "GrabStart" && anim->hasEnded())
 	{
 		if (grab->isGrabbing())
@@ -405,7 +468,29 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 		return;
 	}
 
-	if ((anim->getCurrentAnimation() == "GrabHold" && !grab->isGrabbing())
+	if (anim->getCurrentAnimation() == "DashFrontGrabbing" && anim->hasEnded())
+	{
+		if (grab->isGrabbing())
+		{
+			anim->playAnimation("GrabHold");
+			anim->setLoop(true);
+			return;
+		}
+	}
+
+	if (anim->getCurrentAnimation() == "GrabHold" && !checkIdle())
+	{
+		anim->playAnimation("RunGrabbing");
+		anim->setLoop(true);
+	}
+	else if (anim->getCurrentAnimation() == "RunGrabbing" && checkIdle())
+	{
+		anim->playAnimation("GrabHold");
+		anim->setLoop(true);
+	}
+	
+
+	if (((anim->getCurrentAnimation() == "GrabHold" || anim->getCurrentAnimation() == "DashFrontGrabbing" || anim->getCurrentAnimation() == "RunGrabbing") && !grab->isGrabbing())
 		|| (anim->getCurrentAnimation() == "GrabFail" && anim->hasEnded()))
 	{
 		state = IDLE;
@@ -482,11 +567,11 @@ void PlayerAnimController::updateStunned()
 void PlayerAnimController::updateUGP()
 {
 	// If it is not moving, UGP has finished
-	if (abs(body->getLinearVelocity().x) < runThreshold)
+	/*if (checkIdle())
 	{
 		notLoopAnimation("UGPFail");
 		return;
-	}
+	}*/
 		
 }
 
@@ -496,6 +581,12 @@ void PlayerAnimController::updateNotLoopingState()
 	if (anim->getCurrentAnimation() == "UGPSuccess" && anim->hasEnded())
 	{
 		enterMode(ALIVE);
+		return;
+	}
+
+	if (anim->getCurrentAnimation() == "Die" && anim->hasEnded())
+	{
+		enterMode(GHOST);
 		return;
 	}
 
@@ -510,16 +601,17 @@ void PlayerAnimController::updateNotLoopingState()
 		return;
 	}
 
-	// GHOST DISAPPEARING -> ALIVE RESURRECT
+	// GHOST DISAPPEARING -> DEACTIVATE PLAYER 
 	if (currentMode == GHOST && anim->getCurrentAnimation() == "Disappear")
 	{
-		enterMode(ALIVE);
+		mesh->setVisible(false);
+		gameObject->setActive(false);
 
 		return;
 	}
 
 	// TRANSITION TO IDLE IF
-	if (abs(body->getLinearVelocity().x) < runThreshold)
+	if (checkIdle())
 	{
 		state = IDLE;
 		return;

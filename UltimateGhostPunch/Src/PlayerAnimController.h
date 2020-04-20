@@ -127,6 +127,8 @@ public:
 	void punchSuccessAnimation();
 
 private:
+	bool checkIdle();
+	bool checkStartedFalling();
 
 	// Each of these functions checks if the state should transition to another one and makes the transition
 	void updateIdle();		// IDLE

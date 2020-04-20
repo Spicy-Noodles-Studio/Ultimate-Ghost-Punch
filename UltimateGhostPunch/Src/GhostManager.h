@@ -12,11 +12,12 @@ class MeshRenderer;
 class RigidBody;
 class PlayerUI;
 class FightManager;
+class PlayerAnimController;
 
 class GhostManager : public UserComponent
 {
 private:
-	bool ghost, used, deathPosChanged;
+	bool ghost, used, deathPosChanged, ended;
 
 	float ghostTime, playerGravity;
 	int ghostDamage, resurrectionHealth;
@@ -29,6 +30,7 @@ private:
 	RigidBody* rigidBody;
 	PlayerUI* playerUI;
 	FightManager* fightManager;
+	PlayerAnimController* anim;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
@@ -51,6 +53,7 @@ public:
 	void deactivateGhost();
 
 	void setDeathPosition(const Vector3& dPos);
+	bool ghostEnded();
 };
 
 #endif

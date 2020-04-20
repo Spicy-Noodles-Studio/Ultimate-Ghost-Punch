@@ -2,6 +2,7 @@
 
 #include "InterfaceSystem.h"
 #include "SceneManager.h"
+#include "GameManager.h"
 
 //------------------ EVENTS IMPLEMENTATION (esto ira en un archivo aparte!)
 
@@ -9,6 +10,7 @@
 bool backButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("mainMenu");
+	GameManager::GetInstance()->pauseGame(false);
 	return false;
 }
 

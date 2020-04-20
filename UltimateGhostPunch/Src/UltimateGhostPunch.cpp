@@ -43,6 +43,7 @@ void UltimateGhostPunch::update(float deltaTime)
 	else if (state != State::USED && duration <= 0.0f)
 	{
 		state = State::USED;
+		if (anim != nullptr)  anim->notLoopAnimation("UGPFail");
 	}
 }
 
