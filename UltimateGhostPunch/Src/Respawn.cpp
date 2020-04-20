@@ -9,6 +9,8 @@
 #include "Movement.h"
 #include "Health.h"
 
+#include "PlayerFX.h"
+
 REGISTER_FACTORY(Respawn);
 
 Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), initialPos(Vector3()), respawnTime(1.0f), respawning(false), time(0.0f), playerController(nullptr)
@@ -53,6 +55,11 @@ void Respawn::handleData(ComponentData* data)
 	}
 }
 
+float Respawn::getRespawnTime()
+{
+	return respawnTime;
+}
+
 void Respawn::respawn()
 {
 	spawn(initialPos);
@@ -70,11 +77,7 @@ void Respawn::spawn(const Vector3& spawnPos)
 	}
 	if (playerController != nullptr) playerController->setActive(false);
 
-	/* // AQUÍ: EFECTO VISUAL DE MODO INVENCIBLE
-	PlayerAnimController* animController = gameObject->getComponent<PlayerAnimController>();
-	if (animController != nullptr)
-		animController->resurrectAnimation();
-	*/
+	gameObject->getComponent<PlayerFX>()->activateInvencible();
 
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;

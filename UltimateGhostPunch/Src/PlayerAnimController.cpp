@@ -21,6 +21,7 @@
 #include "RigidBody.h"
 #include "PlayerController.h"
 #include "GhostManager.h"
+#include "PlayerFX.h"
 
 REGISTER_FACTORY(PlayerAnimController);
 
@@ -35,6 +36,7 @@ void PlayerAnimController::start()
 	body = gameObject->getComponent<RigidBody>();
 	mesh = gameObject->getComponent<MeshRenderer>();
 	ghostManag = gameObject->getComponent<GhostManager>();
+	playerFX = gameObject->getComponent<PlayerFX>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
@@ -100,6 +102,8 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
 	notLoopAnimation("Hurt");
+
+	playerFX->activateHurt();
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
@@ -142,6 +146,9 @@ void PlayerAnimController::blockAnimation() //  BLOCK ANIMATION //
 	anim->playAnimationSequence({ "BlockStart", "BlockHold" }, true);
 	anim->setLoop(false);
 	state = BLOCKING;
+
+
+	playerFX->activateShield();
 }
 
 void PlayerAnimController::blockedAttackAnimation()
@@ -425,6 +432,9 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 	{
 		anim->playAnimation("BlockEnd");
 		anim->setLoop(false);
+
+		playerFX->deactivateShield();
+
 		return;
 	}
 
