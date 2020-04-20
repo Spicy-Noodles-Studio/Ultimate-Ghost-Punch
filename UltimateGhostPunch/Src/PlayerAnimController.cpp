@@ -101,7 +101,13 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
-	notLoopAnimation("Hurt");
+	//notLoopAnimation("Hurt");
+	anim->playAnimation("Hurt");
+	anim->setLoop(false);
+	if (jump->isGrounded())
+		state = NOT_LOOPING_STATE;
+	else
+		state = FALL;
 
 	playerFX->activateHurt();
 }
@@ -323,6 +329,7 @@ void PlayerAnimController::punchSuccessAnimation()
 {
 	anim->playAnimation("UGPSuccess");
 	anim->setLoop(false);
+	state = NOT_LOOPING_STATE;
 }
 
 void PlayerAnimController::updateIdle()	//  IDLE //
@@ -484,9 +491,6 @@ void PlayerAnimController::updateStunned()
 
 void PlayerAnimController::updateUGP()
 {
-	if (anim->getCurrentAnimation() == "UGPSuccess" && anim->hasEnded())
-		enterMode(ALIVE);
-
 	// If it is not moving, UGP has finished
 	if (abs(body->getLinearVelocity().x) < runThreshold)
 	{
@@ -498,6 +502,13 @@ void PlayerAnimController::updateUGP()
 
 void PlayerAnimController::updateNotLoopingState()
 {
+
+	if (anim->getCurrentAnimation() == "UGPSuccess" && anim->hasEnded())
+	{
+		enterMode(ALIVE);
+		return;
+	}
+
 	// Only transition when the animation has finished
 	if (!anim->getLoop() && !anim->hasEnded())
 		return;
@@ -578,7 +589,7 @@ void PlayerAnimController::handleState()
 		}
 		break;
 	case PlayerAnimController::FALL:					// FALL //
-		if (anim->getCurrentAnimation() != "Fall")
+		if (anim->getCurrentAnimation() != "Fall" && anim->getCurrentAnimation() != "Hurt")
 		{
 			anim->playAnimation("Fall");
 			anim->setLoop(true);

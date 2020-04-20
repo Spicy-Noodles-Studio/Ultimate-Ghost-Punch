@@ -125,6 +125,10 @@ void GhostManager::onObjectEnter(GameObject* other)
 		{
 			int health = aux->getHealth();
 			aux->receiveDamage(ghostDamage);
+			auto otherAnim = other->getComponent<PlayerAnimController>();
+			if (otherAnim != nullptr)
+				otherAnim->hurtAnimation();
+
 			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
@@ -132,10 +136,10 @@ void GhostManager::onObjectEnter(GameObject* other)
 			auto anim = gameObject->getComponent<PlayerAnimController>();
 			if (anim != nullptr)
 			{
-				/*auto punch = gameObject->getComponent<UltimateGhostPunch>();
+				auto punch = gameObject->getComponent<UltimateGhostPunch>();
 				if (punch != nullptr && punch->isPunching())
 					anim->punchSuccessAnimation();
-				else*/
+				else
 					anim->notLoopAnimation("Disappear");
 			}
 
