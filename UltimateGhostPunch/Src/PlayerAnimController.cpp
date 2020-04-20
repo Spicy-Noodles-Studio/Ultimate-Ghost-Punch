@@ -59,9 +59,6 @@ void PlayerAnimController::start()
 		aliveMeshId = mesh->getMeshId();
 		aliveMeshName = mesh->getMeshName();
 	}
-
-
-	diffuse = mesh->getDiffuse();
 }
 
 void PlayerAnimController::update(float deltaTime)
@@ -98,17 +95,11 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 	anim->playAnimation("JumpStart");
 	anim->setLoop(false);
 	state = JUMP;
-
-
-	mesh->setDiffuse(diffuse, 1);
 }
 
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
 	notLoopAnimation("Hurt");
-
-
-	mesh->setDiffuse({ 255,0,0 }, 1);
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //

@@ -11,9 +11,6 @@ class Block;
 class MeshRenderer;
 class GhostManager;
 
-
-
-
 class PlayerAnimController :
 	public UserComponent
 {
@@ -79,10 +76,6 @@ private:
 
 	std::string ghostMeshId, ghostMeshName;
 	std::string aliveMeshId, aliveMeshName;
-
-
-	Vector3 diffuse;
-
 
 public:
 	PlayerAnimController(GameObject* gameObject);
