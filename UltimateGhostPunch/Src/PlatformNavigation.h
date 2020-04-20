@@ -26,6 +26,12 @@ public:
 	void setPlatformGraph(PlatformGraph* platformGraph);
 	void setCharacter(GameObject* character);
 
+	void setTarget(const Vector3& position);
+	void setTarget(GameObject* target);
+
+	/* Returns true if character is over target */
+	bool hasArrived() const;
+
 private:
 
 	std::vector<PathNode> getShortestPath(); //Dijkstra es suficiente

@@ -1,6 +1,7 @@
 #include "AIStateMachine.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <MathUtils.h>
 
 #include "PlatformNavigation.h"
 #include "GameManager.h"
@@ -10,7 +11,8 @@
 
 REGISTER_FACTORY(AIStateMachine);
 
-AIStateMachine::AIStateMachine(GameObject* gameObject) : StateMachine(gameObject), movement(nullptr), jump(nullptr), dodge(nullptr)
+AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
+															platformNavigation(nullptr), knights(nullptr)
 {
 
 }
@@ -22,6 +24,9 @@ AIStateMachine::~AIStateMachine()
 
 void AIStateMachine::start()
 {
+	/* GET ALL KNIGHTS */
+	knights = &GameManager::GetInstance()->getKnights();
+
 	//Get Components
 	movement = gameObject->getComponent<Movement>();
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
@@ -32,6 +37,21 @@ void AIStateMachine::start()
 
 	/* MOVING PLATFORM STATE ACTION */
 	createMovingPlatformsAction();
+
+	// Initialize auxialiar variables
+	timeTargetChange = 5.0f; // 5 seconds
+}
+
+void AIStateMachine::update(float deltaTime)
+{
+	StateMachine::update(deltaTime);
+
+	timerTargetChange += deltaTime;
+	if (timerTargetChange >= timeTargetChange) {
+		timerTargetChange = 0.0f;
+		if (platformNavigation == nullptr) return;
+		changeTarget();
+	}
 }
 
 void AIStateMachine::fixedUpdate(float deltaTime)
@@ -76,7 +96,7 @@ void AIStateMachine::processActionInput()
 
 void AIStateMachine::createMovingPlatformsAction()
 {
-	PlatformNavigation* platformNavigation = new PlatformNavigation(this);
+	platformNavigation = new PlatformNavigation(this);
 	addStateAction(platformNavigation);
 
 	/* ADD MORE DATA IF NEEDED */
@@ -90,4 +110,17 @@ void AIStateMachine::createMovingPlatformsAction()
 
 	// TODO: quitar cuando se unifiquen las IAs
 	currentState = platformNavigation;
+}
+
+void AIStateMachine::changeTarget()
+{
+	// TODO: de momento es random, cambiar si se quiere
+	int size = knights->size();
+
+	do {
+		target = knights->at(rand() % size);
+	} while (target == gameObject);
+
+	// TO STUFF
+	platformNavigation->setTarget(target);
 }

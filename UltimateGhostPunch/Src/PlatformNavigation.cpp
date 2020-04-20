@@ -20,12 +20,38 @@ PlatformNavigation::~PlatformNavigation()
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
 {
 	this->platformGraph = platformGraph;
-	target = platformGraph->getPlatforms()[1];  //TODO: toma de decisiones para asignacion de target
 }
 
 void PlatformNavigation::setCharacter(GameObject* character)
 {
 	this->character = character->findChildrenWithTag("groundSensor")[0];
+
+	// Inicial target should be current platform
+	setTarget(this->character->transform->getPosition());
+}
+
+void PlatformNavigation::setTarget(const Vector3& position)
+{
+	if (platformGraph == nullptr) return;
+
+	int index = platformGraph->getIndex(position);
+	const std::vector<PlatformNode>& graph = platformGraph->getPlatforms();
+
+	if (index < 0 || index >= graph.size()) return;
+
+	target = platformGraph->getPlatforms()[index];
+}
+
+void PlatformNavigation::setTarget(GameObject* target)
+{
+	setTarget(target->transform->getPosition());
+}
+
+bool PlatformNavigation::hasArrived() const
+{
+	if (character == nullptr || platformGraph == nullptr) return false;
+
+	return target.getIndex() == platformGraph->getIndex(character->transform->getWorldPosition());
 }
 
 std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
