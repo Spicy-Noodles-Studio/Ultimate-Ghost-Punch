@@ -56,6 +56,7 @@ private:
 	bool changeLevel(int value);
 
 	bool fightButtonClick();
+	bool backButtonClick();
 
 public:
 	FightConfiguration(GameObject* gameObject);

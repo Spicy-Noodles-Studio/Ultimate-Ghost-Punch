@@ -29,17 +29,25 @@ bool ScoreManager::resetButtonClick()
 	return false;
 }
 
+bool ScoreManager::backButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
+
 ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject), player1Text(NULL), player2Text(NULL), player3Text(NULL), player4Text(NULL),
 													player1Panel(NULL), player2Panel(NULL), player3Panel(NULL), player4Panel(NULL)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("resetButtonClick", UIEvent("ButtonClicked", [this]() {return resetButtonClick(); }));
+	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
 ScoreManager::~ScoreManager()
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("resetButtonClick");
+	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
 void ScoreManager::start()
