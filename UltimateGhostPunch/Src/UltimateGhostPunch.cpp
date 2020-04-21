@@ -49,11 +49,6 @@ void UltimateGhostPunch::preUpdate(float deltaTime)
 	}
 }
 
-void UltimateGhostPunch::update(float deltaTime)
-{
-	
-}
-
 void UltimateGhostPunch::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {

@@ -27,7 +27,7 @@
                     ]
                 },
                 {
-                    "ComponentName": "DynamicCamera",
+                    "ComponentName": "CameraController",
                     "ComponentProperties": [
                         ["minZ" , "40"],
                         ["maxZ" , "50"],

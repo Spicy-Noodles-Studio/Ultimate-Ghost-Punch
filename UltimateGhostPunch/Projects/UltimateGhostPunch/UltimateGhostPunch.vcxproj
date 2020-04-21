@@ -47,7 +47,7 @@
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
-    <ClCompile Include="..\..\Src\DynamicCamera.cpp" />
+    <ClCompile Include="..\..\Src\CameraController.cpp" />
     <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
     <ClCompile Include="..\..\Src\FightManager.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
@@ -82,7 +82,7 @@
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
-    <ClInclude Include="..\..\Src\DynamicCamera.h" />
+    <ClInclude Include="..\..\Src\CameraController.h" />
     <ClInclude Include="..\..\Src\FightConfiguration.h" />
     <ClInclude Include="..\..\Src\FightManager.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
