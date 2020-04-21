@@ -148,8 +148,11 @@ void GhostManager::onObjectEnter(GameObject* other)
 			if (anim != nullptr)
 			{
 				auto punch = gameObject->getComponent<UltimateGhostPunch>();
-				if (punch != nullptr && punch->isPunching())
+				if (punch != nullptr && punch->isPunching())	//GHOST PUNCH SUCCESS
+				{
 					anim->punchSuccessAnimation();
+					punch->punchSucceeded();
+				}
 				else
 					anim->notLoopAnimation("Disappear");
 			}

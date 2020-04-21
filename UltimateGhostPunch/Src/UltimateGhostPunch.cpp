@@ -37,6 +37,8 @@ void UltimateGhostPunch::start()
 
 void UltimateGhostPunch::update(float deltaTime)
 {
+	if (state == State::SUCCESS) return;
+
 	// Update the cooldown
 	if (duration > 0.0f && state == State::PUNCHING)
 		duration -= deltaTime;
@@ -105,4 +107,9 @@ const Vector3& UltimateGhostPunch::getDirection()
 bool UltimateGhostPunch::isPunching()
 {
 	return state == State::PUNCHING;
+}
+
+void UltimateGhostPunch::punchSucceeded()
+{
+	state = State::SUCCESS;
 }
