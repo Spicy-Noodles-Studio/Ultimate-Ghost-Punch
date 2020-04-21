@@ -588,6 +588,7 @@ void PlayerAnimController::updateUGP()
 void PlayerAnimController::updateNotLoopingState()
 {
 
+	// GHOST -> ALIVE RESURRECT
 	if (anim->getCurrentAnimation() == "UGPSuccess" && anim->hasEnded())
 	{
 		enterMode(ALIVE);
@@ -619,6 +620,7 @@ void PlayerAnimController::updateNotLoopingState()
 
 		return;
 	}
+
 
 	// TRANSITION TO IDLE IF
 	if (checkIdle())

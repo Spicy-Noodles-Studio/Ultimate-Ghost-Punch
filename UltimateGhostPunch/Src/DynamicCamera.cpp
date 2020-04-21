@@ -24,7 +24,7 @@ void DynamicCamera::update(float deltaTime)
 {
 	dynamicMove();
 
-	if (state != SLOWMO && someoneDoingUGP() && getMaxDistBetweenPlayers() < 5.0f)
+	/*if (state != SLOWMO && someoneDoingUGP() && getMaxDistBetweenPlayers() < 5.0f)
 	{
 		Timer::GetInstance()->setTimeScale(0.3f);
 		zoomFactor = -30.0f;
@@ -40,7 +40,7 @@ void DynamicCamera::update(float deltaTime)
 		Timer::GetInstance()->setTimeScale(1.0f);
 		zoomFactor = 1.0f;
 		state = NORMAL;
-	}
+	}*/
 }
 
 void DynamicCamera::handleData(ComponentData* data)

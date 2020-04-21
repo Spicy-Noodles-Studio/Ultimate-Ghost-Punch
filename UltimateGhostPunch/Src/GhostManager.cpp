@@ -154,7 +154,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 					punch->punchSucceeded();
 				}
 				else
-					anim->notLoopAnimation("Disappear");
+					anim->notLoopAnimation("UGPSuccess");
 			}
 
 			auto controll = gameObject->getComponent<PlayerController>();
