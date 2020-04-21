@@ -17,7 +17,7 @@ public:
 	PauseMenu(GameObject* gameObject);
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
 
 	// opens the Pause Menu and pauses the game
 	void setPaused(bool paused);

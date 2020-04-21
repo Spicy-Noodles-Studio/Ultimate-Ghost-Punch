@@ -26,7 +26,7 @@ void PauseMenu::start()
 	inputSystem = InputSystem::GetInstance();
 }
 
-void PauseMenu::update(float deltaTime)
+void PauseMenu::preUpdate(float deltaTime)
 {
 	if (inputSystem->getKeyPress("ESCAPE"))
 		setPaused(!GameManager::GetInstance()->gameIsPaused());
