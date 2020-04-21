@@ -12,7 +12,7 @@
 REGISTER_FACTORY(DynamicCamera);
 
 DynamicCamera::DynamicCamera(GameObject* gameObject) : UserComponent(gameObject), smoothFactor(0.125f), minZ(20), maxZ(100), zoomFactor(1.0f),
-time(0.0f), slowMoTime(3.0f), state(NORMAL)
+time(0.0f), slowMoTime(0.1f), state(NORMAL), ghostDoingUGP(nullptr)
 {
 }
 
@@ -20,25 +20,42 @@ DynamicCamera::~DynamicCamera()
 {
 }
 
+void DynamicCamera::preUpdate(float deltaTime)
+{
+	
+}
+
 void DynamicCamera::update(float deltaTime)
 {
-	dynamicMove();
+	if (state != SLOWMO)
+		dynamicMove();
 
-	if (state != SLOWMO && someoneDoingUGP() && getMaxDistBetweenPlayers() < 5.0f)
+	Vector3 lerpDest = gameObject->transform->getPosition();
+	lerpDest.lerp(dest, smoothFactor);
+	gameObject->transform->setPosition(lerpDest);
+
+	if (state != SLOWMO)
 	{
-		Timer::GetInstance()->setTimeScale(0.3f);
-		zoomFactor = -30.0f;
+		ghostDoingUGP = someoneDoingUGP();
 
-		time = slowMoTime;
-		state = SLOWMO;
+		if (ghostDoingUGP != nullptr && getMaxDistBetweenPlayers() < 5.0f)
+		{
+			Timer::GetInstance()->setTimeScale(0.3f);
+
+			time = slowMoTime;
+			state = SLOWMO;
+		}
 	}
+
+	if (state == SLOWMO && ghostDoingUGP != nullptr)
+		dest = { ghostDoingUGP->transform->getPosition().x, ghostDoingUGP->transform->getPosition().y, 20 };
 
 	if (time > 0.0f)
 		time -= deltaTime;
 	else if (state == SLOWMO)
 	{
 		Timer::GetInstance()->setTimeScale(1.0f);
-		zoomFactor = 1.0f;
+
 		state = NORMAL;
 	}
 }
@@ -115,14 +132,10 @@ void DynamicCamera::dynamicMove()
 	dist *= zoomFactor;
 	dist = std::min(maxZ, std::max(dist, minZ));
 
-	Vector3 dest = midPos + Vector3(0, 0, dist);
-
-	Vector3 lerpDest = gameObject->transform->getPosition();
-	lerpDest.lerp(dest, smoothFactor);
-	gameObject->transform->setPosition(lerpDest);
+	dest = midPos + Vector3(0, 0, dist);
 }
 
-bool DynamicCamera::someoneDoingUGP()
+GameObject* DynamicCamera::someoneDoingUGP()
 {
 	// Vector with every player
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
@@ -133,6 +146,7 @@ bool DynamicCamera::someoneDoingUGP()
 	while (i < n && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
 		i++;
 
-	return i < n;
+	if (i < n) return players[i];
+	return nullptr;
 }
 

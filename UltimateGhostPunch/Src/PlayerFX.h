@@ -21,8 +21,8 @@ private:
 	Health* health;
 	GhostManager* ghost;
 
-	std::vector<std::string> textureNames;
 	std::vector<Vector3> diffuses;
+	MeshRenderer* shieldMesh;
 
 	float time;
 	float hurtTime;
@@ -34,7 +34,9 @@ private:
 	float ghostFXFrec;
 
 private:
-	
+	void updateHurtFX(float deltaTime);
+	void updateInvencibleFX(float deltaTime);
+	void updateGhostFX(float deltaTime);
 
 public:
 	PlayerFX(GameObject* gameObject);
@@ -51,7 +53,6 @@ public:
 	void deactivateInvencible();
 
 	void activateGhostFX();
-
 	void deactivateGhostFX();
 
 	void activateShield();

@@ -3,6 +3,7 @@
 #define DYNAMIC_CAMERA_H
 
 #include <UserComponent.h>
+#include <Vector3.h>
 
 class DynamicCamera : public UserComponent
 {
@@ -21,10 +22,15 @@ private:
 	float time;
 	float slowMoTime;
 
+	Vector3 dest;
+
+	GameObject* ghostDoingUGP;
+
 public:
 	DynamicCamera(GameObject* gameObject);
 	~DynamicCamera();
 
+	virtual void preUpdate(float deltaTime);
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
@@ -38,7 +44,7 @@ private:
 	// Applies a movement in the direction specified by the players' mid-point and distance
 	void dynamicMove();
 
-	bool someoneDoingUGP();
+	GameObject* someoneDoingUGP();
 
 };
 

@@ -26,12 +26,11 @@ void PlayerFX::start()
 	ghost = gameObject->getComponent<GhostManager>();
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
-		textureNames.push_back(mesh->getTexture(i));
-
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		diffuses.push_back(mesh->getDiffuse(i));
 
-	gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>()->setVisible(false);
+	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
+
+	shieldMesh->setVisible(false);
 
 	time = 0.0f;
 	hurtTime = 0.5f;
@@ -45,11 +44,21 @@ void PlayerFX::start()
 
 void PlayerFX::update(float deltaTime)
 {
+	updateHurtFX(deltaTime);
+	updateInvencibleFX(deltaTime);
+	updateGhostFX(deltaTime);
+}
+
+void PlayerFX::updateHurtFX(float deltaTime)
+{
 	if (time > 0.0f)
 		time -= deltaTime;
 	else
 		deactivateHurt();
+}
 
+void PlayerFX::updateInvencibleFX(float deltaTime)
+{
 	if (health->isInvencible())
 	{
 		effect = INVENCIBLE;
@@ -74,10 +83,11 @@ void PlayerFX::update(float deltaTime)
 		}
 	}
 	else if (effect == INVENCIBLE)
-	{
 		deactivateInvencible();
-	}
+}
 
+void PlayerFX::updateGhostFX(float deltaTime)
+{
 	if (ghost->isGhost() && ghost->getGhostTime() < ghostFXTime)
 	{
 		effect = GHOST;
@@ -102,9 +112,7 @@ void PlayerFX::update(float deltaTime)
 		}
 	}
 	else if (effect == GHOST)
-	{
 		deactivateGhostFX();
-	}
 }
 
 void PlayerFX::handleData(ComponentData* data)
@@ -134,15 +142,18 @@ void PlayerFX::handleData(ComponentData* data)
 
 void PlayerFX::activateHurt()
 {
+	if (mesh == nullptr) return;
+
 	time = hurtTime;
-	//effect = HURT;
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
-		mesh->setDiffuse(i, { 1,0,0 }, 1);
+		mesh->setDiffuse(i, { 255,0,0 }, 1);
 }
 
 void PlayerFX::deactivateHurt()
 {
+	if (mesh == nullptr) return;
+
 	effect = NONE;
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
@@ -151,38 +162,44 @@ void PlayerFX::deactivateHurt()
 
 void PlayerFX::activateInvencible()
 {
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++) mesh->setDiffuse(i, { 1,1,1 }, 1);
+	if (mesh == nullptr) return;
+
+	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
+		mesh->setDiffuse(i, { 255,255,255 }, 1);
 }
 
 void PlayerFX::deactivateInvencible()
 {
-	//effect = NONE;
+	if (mesh == nullptr) return;
 
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++) mesh->setDiffuse(i, diffuses[i], 1);
+	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
+		mesh->setDiffuse(i, diffuses[i], 1);
 }
 
 void PlayerFX::activateGhostFX()
 {
+	if (mesh == nullptr) return;
 	mesh->setVisible(false);
 }
 
 void PlayerFX::deactivateGhostFX()
 {
-	//effect = NONE;
-
+	if (mesh == nullptr) return;
 	mesh->setVisible(true);
 }
 
 void PlayerFX::activateShield()
 {
+	if (mesh == nullptr) return;
 	effect = SHIELD;
 
-	gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>()->setVisible(true);
+	shieldMesh->setVisible(true);
 }
 
 void PlayerFX::deactivateShield()
 {
+	if (mesh == nullptr) return;
 	effect = NONE;
 
-	gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>()->setVisible(false);
+	shieldMesh->setVisible(false);
 }

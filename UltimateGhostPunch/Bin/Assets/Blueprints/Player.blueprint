@@ -133,8 +133,8 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "1 0 1.65"],
-                       [ "scale", "1 1 2"]
+                       [ "position", "1 0 3.65"],
+                       [ "scale", "1 1 4"]
                     ]
                 }
             ],
@@ -147,7 +147,7 @@
                         ["strongCooldown", "2"],
                         ["quickDamage", "1"],
                         ["strongDamage", "2"],
-                        ["attackDuration", "0.5"],
+                        ["attackDuration", "0.2"],
                         ["quickCharge", "0.25"],
                         ["strongCharge", "0.6"]
                     ]

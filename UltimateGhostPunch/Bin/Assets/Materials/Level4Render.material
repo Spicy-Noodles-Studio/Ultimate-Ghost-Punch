@@ -5,7 +5,7 @@ material Statue {
     technique {
         pass {
             lighting on
-            ambient 0.8000000715255737 0.6803412437438965 0.17807233333587646 1.0
+            ambient 1 1 1 1.0
             diffuse 0.640000066757203 0.5442730031054168 0.1424578687914888 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
@@ -37,7 +37,7 @@ material Window {
     technique {
         pass {
             lighting on
-            ambient 0.17020611464977264 0.17335528135299683 0.12309832870960236 1.0
+            ambient 1 1 1 1.0
             diffuse 0.13616489374883312 0.13868422714895345 0.09847866443512832 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
@@ -69,7 +69,7 @@ material Granito {
     technique {
         pass {
             lighting on
-            ambient 0.6038162708282471 0.5686049461364746 0.42915090918540955 1.0
+            ambient 1 1 1 1.0
             diffuse 0.4830530238606485 0.45488396368747885 0.34332073246420514 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
@@ -101,7 +101,7 @@ material Column {
     technique {
         pass {
             lighting on
-            ambient 0.5447011590003967 0.7582091093063354 0.8549789190292358 1.0
+            ambient 1 1 1 1.0
             diffuse 0.4357609336936612 0.6065672964836253 0.6839831454155316 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0

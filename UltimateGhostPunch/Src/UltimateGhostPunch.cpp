@@ -35,7 +35,7 @@ void UltimateGhostPunch::start()
 	state = State::AVAILABLE;
 }
 
-void UltimateGhostPunch::update(float deltaTime)
+void UltimateGhostPunch::preUpdate(float deltaTime)
 {
 	if (state == State::SUCCESS) return;
 
@@ -47,6 +47,11 @@ void UltimateGhostPunch::update(float deltaTime)
 		state = State::USED;
 		if (anim != nullptr)  anim->notLoopAnimation("UGPFail");
 	}
+}
+
+void UltimateGhostPunch::update(float deltaTime)
+{
+	
 }
 
 void UltimateGhostPunch::handleData(ComponentData* data)
