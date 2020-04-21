@@ -2,6 +2,9 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+
+#include "PlayerAnimController.h"
+
 #include <sstream>
 
 REGISTER_FACTORY(Jump);
@@ -73,6 +76,9 @@ void Jump::jump()
 	rigidBody->addImpulse(Vector3(0.0, 1.0, 0.0) * jumpForce);
 	jumping = true;
 	coyoteTimer = 0.0f;
+
+	auto animController = gameObject->getParent()->getComponent<PlayerAnimController>();
+	if(animController != nullptr) animController->jumpAnimation();
 }
 
 void Jump::cancelJump()

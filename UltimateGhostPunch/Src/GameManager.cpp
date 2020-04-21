@@ -69,8 +69,6 @@ void GameManager::setLevel(std::string level)
 {
 	this->level = level;
 	this->lastLevel = level;
-	//Leer archivo config del nivel y guardar las posiciones de players/obst�culos para crearlos
-	//Leer el l�mite inferior del nivel: bottomLimit = ...
 }
 
 std::string GameManager::getLevel()

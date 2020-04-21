@@ -50,8 +50,8 @@ public:
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
 
-	void quickAttack();
-	void strongAttack();
+	bool quickAttack();
+	bool strongAttack();
 };
 
 #endif

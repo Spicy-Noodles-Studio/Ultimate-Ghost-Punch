@@ -172,24 +172,28 @@ void Attack::attack()
 }
 
 
-void Attack::quickAttack()
+bool Attack::quickAttack()
 {
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = QUICK;
 		charge(quickAttackCooldown, quickChargeTime);
+		return true;
 	}
 	else
 		LOG("Attack on CD...\n");
+	return false;
 }
 
-void Attack::strongAttack()
+bool Attack::strongAttack()
 {
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = STRONG;
 		charge(strongAttackCooldown, strongChargeTime);
+		return true;
 	}
 	else
 		LOG("Attack on CD...\n");
+	return false;
 }

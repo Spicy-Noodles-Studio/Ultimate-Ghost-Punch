@@ -6,15 +6,17 @@
 
 class RigidBody;
 class GhostMovement;
+class PlayerAnimController;
 
 class UltimateGhostPunch : public UserComponent
 {
 public:
-	enum class State { NONE, AVAILABLE, CHARGING, PUNCHING, USED };
+	enum class State { NONE, AVAILABLE, CHARGING, PUNCHING, USED, SUCCESS };
 
 private:
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
+	PlayerAnimController* anim;
 	Vector3 direction;
 	State state;
 	float duration;
@@ -29,7 +31,8 @@ public:
 	virtual ~UltimateGhostPunch();
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
+	//virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void charge();
@@ -38,6 +41,9 @@ public:
 
 	const State& getState();
 	const Vector3& getDirection();
+
+	bool isPunching();
+	void punchSucceeded();
 };
 
 #endif

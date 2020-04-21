@@ -24,6 +24,8 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+	float getRespawnTime();
+
 	//Spawns in the original position;
 	void respawn();
 	void spawn(const Vector3& spawnPos);

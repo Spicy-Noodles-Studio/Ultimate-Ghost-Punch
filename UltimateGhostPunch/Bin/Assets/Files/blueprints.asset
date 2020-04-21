@@ -1,9 +1,14 @@
 .//Assets//Blueprints//Camera.blueprint
 .//Assets//Blueprints//Sensor.blueprint
 .//Assets//Blueprints//Player.blueprint
+.//Assets//Blueprints//Ghost.blueprint
 .//Assets//Blueprints//Cubo.blueprint
 .//Assets//Blueprints//Sinbad.blueprint
 .//Assets//Blueprints//Spikes.blueprint
 .//Assets//Blueprints//DeathZone.blueprint
 .//Assets//Blueprints//Level1.blueprint
 .//Assets//Blueprints//Level2.blueprint
+.//Assets//Blueprints//Level4.blueprint
+.//Assets//Blueprints//Level5.blueprint
+.//Assets//Blueprints//Level5Render.blueprint
+.//Assets//Blueprints//Level4Render.blueprint

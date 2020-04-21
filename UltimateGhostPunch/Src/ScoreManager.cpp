@@ -31,6 +31,7 @@ bool ScoreManager::resetButtonClick()
 
 bool ScoreManager::backButtonClick()
 {
+	GameManager::GetInstance()->pauseGame(false);
 	SceneManager::GetInstance()->changeScene("mainMenu");
 	return false;
 }

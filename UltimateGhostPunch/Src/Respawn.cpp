@@ -5,8 +5,11 @@
 #include <sstream>
 
 #include "PlayerController.h"
+#include "PlayerAnimController.h"
 #include "Movement.h"
 #include "Health.h"
+
+#include "PlayerFX.h"
 
 REGISTER_FACTORY(Respawn);
 
@@ -52,6 +55,11 @@ void Respawn::handleData(ComponentData* data)
 	}
 }
 
+float Respawn::getRespawnTime()
+{
+	return respawnTime;
+}
+
 void Respawn::respawn()
 {
 	spawn(initialPos);
@@ -61,7 +69,8 @@ void Respawn::spawn(const Vector3& spawnPos)
 {
 	Movement* movement = gameObject->getComponent<Movement>();
 	Health* health = gameObject->getComponent<Health>();
-	
+	PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
+
 	if (movement != nullptr) movement->stop();
 	if (health != nullptr) {
 		health->setInvencible(true);
@@ -69,9 +78,13 @@ void Respawn::spawn(const Vector3& spawnPos)
 	}
 	if (playerController != nullptr) playerController->setActive(false);
 
+	gameObject->getComponent<PlayerFX>()->activateInvencible();
+
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;
 	respawning = true;
+
+	if (anim != nullptr) anim->resurrectAnimation();
 }
 
 bool Respawn::isRespawning()

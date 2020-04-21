@@ -1,0 +1,25 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "PlayerGhost",
+    "Tag": "Ghost",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties":[
+                [ "position", "0 0 0"],
+                [ "scale", "0.6 0.6 0.6"]
+            ]
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": [
+                [ "mesh", "ghost Ghost.mesh"],
+                [ "visible", "false"]
+            ]
+        },
+        {
+            "ComponentName": "Animator"
+        }
+    ]
+}
