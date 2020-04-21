@@ -37,6 +37,12 @@ bool FightConfiguration::fightButtonClick()
 	return false;
 }
 
+bool FightConfiguration::backButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
+
 bool FightConfiguration::changeHealth(int value)
 {
 	health += value;
@@ -105,6 +111,7 @@ FightConfiguration::FightConfiguration(GameObject* gameObject) :	UserComponent(g
 	interfaceSystem->registerEvent("+levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(+1); }));
 
 	interfaceSystem->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
+	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
 FightConfiguration::~FightConfiguration()
@@ -123,6 +130,7 @@ FightConfiguration::~FightConfiguration()
 	interfaceSystem->unregisterEvent("+levelButtonClick");
 
 	interfaceSystem->unregisterEvent("fightButtonClick");
+	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
 void FightConfiguration::start()

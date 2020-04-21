@@ -162,6 +162,10 @@ void GhostManager::onObjectEnter(GameObject* other)
 
 			movement->stop();
 			
+			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
+			if (!aux->isAlive())
+				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
+			
 		}
 	}
 }

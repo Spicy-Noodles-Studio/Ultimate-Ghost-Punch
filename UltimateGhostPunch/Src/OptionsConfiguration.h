@@ -52,6 +52,8 @@ private:
 	bool changeMusicVolume();
 	bool changeGamma();
 
+	bool backButtonClick();
+
 public:
 	OptionsConfiguration(GameObject* gameObject);
 	virtual ~OptionsConfiguration();

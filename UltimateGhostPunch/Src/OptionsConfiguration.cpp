@@ -83,6 +83,12 @@ bool OptionsConfiguration::changeGamma()
 	return false;
 }
 
+bool OptionsConfiguration::backButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
+
 // -----
 
 OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL),musicScroll(NULL),gammaScroll(NULL)
@@ -97,6 +103,7 @@ OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserCompone
 	InterfaceSystem::GetInstance()->registerEvent("gammaScrollChange", UIEvent("ScrollChange", [this]() {return changeGamma(); }));
 
 	InterfaceSystem::GetInstance()->registerEvent("resolutionApplyButtonClick", UIEvent("ButtonClicked", [this]() {return resolutionButtonClick(); }));
+	InterfaceSystem::GetInstance()->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 	currResolution = -1;
 }
 
@@ -112,6 +119,7 @@ OptionsConfiguration::~OptionsConfiguration()
 	InterfaceSystem::GetInstance()->unregisterEvent("gammaScrollChange");
 
 	InterfaceSystem::GetInstance()->unregisterEvent("resolutionApplyButtonClick");
+	InterfaceSystem::GetInstance()->unregisterEvent("backButtonClick");
 }
 
 void OptionsConfiguration::start()
