@@ -56,6 +56,7 @@
     <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
+    <ClCompile Include="..\..\Src\PlatformMovement.cpp" />
     <ClCompile Include="..\..\Src\PlatformNavigation.cpp" />
     <ClCompile Include="..\..\Src\PlayerIndex.cpp" />
     <ClCompile Include="..\..\Src\PlatformGraph.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
+    <ClInclude Include="..\..\Src\PlatformMovement.h" />
     <ClInclude Include="..\..\Src\PlatformNavigation.h" />
     <ClInclude Include="..\..\Src\PlayerIndex.h" />
     <ClInclude Include="..\..\Src\PlatformGraph.h" />

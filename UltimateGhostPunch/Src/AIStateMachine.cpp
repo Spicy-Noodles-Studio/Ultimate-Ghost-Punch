@@ -4,7 +4,9 @@
 #include <MathUtils.h>
 
 #include "PlatformNavigation.h"
+#include "PlatformMovement.h"
 #include "GhostNavigation.h"
+
 #include "GameManager.h"
 #include "Movement.h"
 #include "Jump.h"
@@ -16,8 +18,8 @@
 REGISTER_FACTORY(AIStateMachine);
 
 AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
-															ghostMovement(nullptr), ghostPunch(nullptr), platformNavigation(nullptr), ghostNavigation(nullptr),
-															ghostManager(nullptr), knights(nullptr)
+															ghostMovement(nullptr), ghostPunch(nullptr), platformGraph(nullptr), platformNavigation(nullptr),
+															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr)
 {
 
 }
@@ -32,7 +34,12 @@ void AIStateMachine::start()
 	/* GET ALL KNIGHTS */
 	knights = &GameManager::GetInstance()->getKnights();
 
-	//Get Components
+	/* GET GRAPH INFO */
+	GameObject* level = findGameObjectWithName(GameManager::GetInstance()->getLastLevel());
+	if (level != nullptr) {
+		platformGraph = level->getComponent<PlatformGraph>();
+	}
+	/* GET COMPONENTS */
 	movement = gameObject->getComponent<Movement>();
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
@@ -42,15 +49,19 @@ void AIStateMachine::start()
 	ghostManager = gameObject->getComponent<GhostManager>();
 
 	// Create states here
+	/* PLATFORM NAVIGATION STATE */
+	createPlatformNavigation();
 
-	/* MOVING PLATFORM STATE ACTION */
-	createMovingPlatformsAction();
+	/* PLATFORM MOVEMENT STATE */
+	createPlatformMovement();
 
-	/*GHOST CONTROL ACTION*/
-	createGhostAction();
+	/* GHOST NAVIGATION STATE */
+	createGhostNavigation();
 
-	// Initialize auxialiar variables
+	// Initialize auxiliar variables
 	timeTargetChange = 5.0f; // 5 seconds
+
+	currentState = platformMovement; // By default
 }
 
 void AIStateMachine::update(float deltaTime)
@@ -117,25 +128,27 @@ void AIStateMachine::processActionInput()
 	}
 }
 
-void AIStateMachine::createMovingPlatformsAction()
+void AIStateMachine::createPlatformNavigation()
 {
 	platformNavigation = new PlatformNavigation(this);
 	addStateAction(platformNavigation);
 
 	/* ADD MORE DATA IF NEEDED */
 	/* GRAPH DATA */
-	GameObject* aux = findGameObjectWithName(GameManager::GetInstance()->getLastLevel());
-	if (aux != nullptr) {
-		PlatformGraph* platformGraph = aux->getComponent<PlatformGraph>(); //TODO: gestion de errores (ademas esta feo)
-		platformNavigation->setPlatformGraph(platformGraph);
-	}
+	platformNavigation->setPlatformGraph(platformGraph);
 	platformNavigation->setCharacter(gameObject);
-
-	// TODO: quitar cuando se unifiquen las IAs
-	currentState = platformNavigation;
 }
 
-void AIStateMachine::createGhostAction()
+void AIStateMachine::createPlatformMovement()
+{
+	platformMovement = new PlatformMovement(this);
+	addStateAction(platformMovement);
+
+	platformMovement->setTargetPosition(Vector3::ZERO);
+	platformMovement->setCharacter(gameObject);
+}
+
+void AIStateMachine::createGhostNavigation()
 {
 	ghostNavigation = new GhostNavigation(this);
 	addStateAction(ghostNavigation);
@@ -155,6 +168,13 @@ void AIStateMachine::changeTarget()
 	// TO STUFF
 	platformNavigation->setTarget(target);
 	ghostNavigation->setTarget(target);
+
+	// TODO: cambiar el cambio de estado
+	int index = platformGraph->getIndex(target->transform->getPosition());
+	if (index < 0) return;
+	PlatformNode node = platformGraph->getPlatforms()[index];
+	platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
+	platformMovement->setTargetPosition(target->transform->getPosition());
 }
 
 void AIStateMachine::updateState()

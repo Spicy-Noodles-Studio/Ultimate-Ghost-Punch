@@ -9,7 +9,9 @@ class Jump;
 class GhostMovement;
 class UltimateGhostPunch;
 
+class PlatformGraph;
 class PlatformNavigation;
+class PlatformMovement;
 class GhostNavigation;
 class GhostManager;
 
@@ -25,6 +27,9 @@ private:
 	/* Knight it would be focused */
 	GameObject* target;
 
+	/* GRAPH INFO */
+	PlatformGraph* platformGraph;
+
 	/* COMPONENTS NEEDED */
 	Movement* movement;
 	Dodge* dodge;
@@ -35,6 +40,7 @@ private:
 
 	/* States */
 	PlatformNavigation* platformNavigation;
+	PlatformMovement* platformMovement;
 	GhostNavigation* ghostNavigation;
 
 	/* Auxiliar variables */
@@ -54,8 +60,9 @@ private:
 	virtual void processActionInput();
 
 	/* Call in start function */
-	void createMovingPlatformsAction();
-	void createGhostAction();
+	void createPlatformNavigation();
+	void createPlatformMovement();
+	void createGhostNavigation();
 
 	/* Funcs */
 	void changeTarget();
