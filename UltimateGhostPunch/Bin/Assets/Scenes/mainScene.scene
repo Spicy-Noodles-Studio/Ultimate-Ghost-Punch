@@ -23,7 +23,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "fight.layout"],
-                        ["event" , "BackButton backButtonClick | ResumeButton resumeButtonClick"]
+                        ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick"]
                     ]
                 },
                 {

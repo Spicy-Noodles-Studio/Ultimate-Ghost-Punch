@@ -7,13 +7,30 @@
 #include "GameManager.h"
 #include "UILayout.h"
 
+#include <SceneManager.h>
+
 #include "ComponentRegister.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PauseMenu);
+
+bool PauseMenu::backButtonClick()
+{
+	GameManager::GetInstance()->pauseGame(false);
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
 
 PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), pauseMenu(NULL)
 {
 	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false;}));
+	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+}
+
+PauseMenu::~PauseMenu()
+{
+	InterfaceSystem::GetInstance()->unregisterEvent("backButtonClick");
+	InterfaceSystem::GetInstance()->unregisterEvent("resumeButtonClick");
 }
 
 void PauseMenu::start()

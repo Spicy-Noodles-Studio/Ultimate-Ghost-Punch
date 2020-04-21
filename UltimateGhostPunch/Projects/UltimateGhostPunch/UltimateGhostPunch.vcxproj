@@ -74,7 +74,6 @@
     <ClCompile Include="..\..\Src\Score.cpp" />
     <ClCompile Include="..\..\Src\ScoreManager.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
-    <ClCompile Include="GhostAnimController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
@@ -106,7 +105,6 @@
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
     <ClInclude Include="..\..\Src\Jump.h" />
-    <ClInclude Include="GhostAnimController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Health.h" />

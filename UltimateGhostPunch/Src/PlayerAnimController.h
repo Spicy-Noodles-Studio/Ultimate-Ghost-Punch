@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef PLAYER_ANIM_CONTROLLER_H
+#define PLAYER_ANIM_CONTROLLER_H
+
 #include <UserComponent.h>
 #include <queue>
 
@@ -158,3 +162,4 @@ private:
 	PlayerMode currentMode;
 };
 
+#endif

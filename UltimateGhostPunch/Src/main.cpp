@@ -2,8 +2,6 @@
 
 #include "InterfaceSystem.h"
 #include "SceneManager.h"
-#include "GameManager.h"
-	/***GameManager::GetInstance()->pauseGame(false);backButtonClick***/
 
 #ifdef _DEBUG
 int main()

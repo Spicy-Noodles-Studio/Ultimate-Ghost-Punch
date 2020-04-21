@@ -69,9 +69,6 @@
     <ClCompile Include="..\..\Src\Obstacle.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\DynamicCamera.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\PauseMenu.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -97,9 +94,6 @@
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Respawn.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PauseMenu.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\GameManager.cpp">
@@ -144,9 +138,6 @@
     <ClCompile Include="..\..\Src\PathRecorder.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="GhostAnimController.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\PlayerFX.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -188,9 +179,6 @@
     <ClInclude Include="..\..\Src\Obstacle.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\DynamicCamera.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\PauseMenu.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
@@ -218,9 +206,6 @@
     <ClInclude Include="..\..\Src\Score.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\PauseMenu.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClCompile>
     <ClInclude Include="..\..\Src\GameManager.h">
       <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
@@ -261,9 +246,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\PathRecorder.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GhostAnimController.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\PlayerFX.h">
