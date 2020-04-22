@@ -57,10 +57,10 @@ void Dodge::handleData(ComponentData* data)
 	}
 }
 
-void Dodge::dodge()
+bool Dodge::dodge()
 {
 	if (state == State::IDLE) {
-		Vector3 dir = Vector3();
+		Vector3 dir = Vector3::ZERO;
 		dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
 
 		if (rigidBody != nullptr) {
@@ -70,7 +70,9 @@ void Dodge::dodge()
 		}
 		state = State::DODGING;
 		time = duration;
+		return true;
 	}
+	return false;
 }
 
 void Dodge::endDodge()

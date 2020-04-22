@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
+#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(Health);
 
@@ -81,6 +82,8 @@ void Health::receiveDamage(int damage)
 			invencible = true;
 			time = invencibleDamageTime;
 		}
+
+		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
 }
 

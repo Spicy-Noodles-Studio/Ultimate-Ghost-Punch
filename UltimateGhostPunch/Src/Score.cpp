@@ -46,14 +46,14 @@ void Score::initScore(int numOfPlayers, std::vector<int> playerIndexes)
 	}
 }
 
-void Score::attackDone(int PlayerIndex, bool groundAttack)
+void Score::attackDone(int playerIndex, bool groundAttack)
 {
 	
 	/*if(groundAttack)
 	playerScores.at(PlayerIndex)->numOfGroundAttacks++;
 	else
 		playerScores.at(PlayerIndex)->numOfAirAttacks++;*/
-	playerScores.at(PlayerIndex - 1)->numOfTotalAttacks++;
+	playerScores.at(playerIndex - 1)->numOfTotalAttacks++;
 }
 
 void Score::receiveHitFrom(int playerIndex, int fromIndex)

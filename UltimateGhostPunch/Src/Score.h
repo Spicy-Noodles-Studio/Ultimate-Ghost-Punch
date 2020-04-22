@@ -16,8 +16,6 @@ class Score
 		int percertOfHits;
 
 		int numOfSuccessfullGrabs;
-		//int numOfGroundAttacks;
-		//int numOfAirAttacks;
 
 		int amountOfDamageDealt;
 		int livesStolenAsGhost;
@@ -41,7 +39,7 @@ public:
 	Score();
 	~Score();
 	void initScore(int numOfPlayers, std::vector<int> playerIndexes);
-	void attackDone(int PlayerIndex,bool groundAttack);
+	void attackDone(int playerIndex,bool groundAttack);
 	void receiveHitFrom(int playerIndex, int fromIndex);
 	void damageRecivedFrom(int playerIndex, int fromIndex,int amount);
 	void damagedBySpike(int playerIndex);

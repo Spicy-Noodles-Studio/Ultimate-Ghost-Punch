@@ -15,7 +15,8 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "suelo Level5.mesh"]
+                ["mesh", "suelo Level5.mesh"],
+                ["visible", "0"]
             ]
         },
         {
@@ -30,6 +31,14 @@
             "ComponentProperties": [
                 ["levelStart", "-25 23 0"],
                 ["levelEnd", "25 -5 0"]
+            ]
+        },
+        {
+            "ComponentName": "Light",
+            "ComponentProperties": [
+                ["type", "Point"],
+                ["position", "0 1 -5"],
+                ["colour", "1 1 1"]
             ]
         }
     ]

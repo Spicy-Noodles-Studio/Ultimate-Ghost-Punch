@@ -15,7 +15,8 @@
         {
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
-                ["mesh", "suelo Level4.mesh"]
+                ["mesh", "suelo Level4.mesh"],
+                ["visible", "0"]
             ]
         },
         {

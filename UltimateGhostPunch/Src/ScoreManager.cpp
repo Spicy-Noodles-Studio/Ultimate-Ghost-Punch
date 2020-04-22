@@ -29,41 +29,38 @@ bool ScoreManager::resetButtonClick()
 	return false;
 }
 
-ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject), player1Text(NULL), player2Text(NULL), player3Text(NULL), player4Text(NULL),
-													player1Panel(NULL), player2Panel(NULL), player3Panel(NULL), player4Panel(NULL)
+bool ScoreManager::backButtonClick()
+{
+	GameManager::GetInstance()->pauseGame(false);
+	SceneManager::GetInstance()->changeScene("mainMenu");
+	return false;
+}
+
+ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("resetButtonClick", UIEvent("ButtonClicked", [this]() {return resetButtonClick(); }));
+	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
 ScoreManager::~ScoreManager()
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("resetButtonClick");
+	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
 void ScoreManager::start()
 {
 	
-	player1Text = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P1");
-	player1Text.setVisible(false);
-	player2Text = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P2");
-	player2Text.setVisible(false);
-	player3Text = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P3");
-	player3Text.setVisible(false);
-	player4Text = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P4");
-	player4Text.setVisible(false);
-
-
-	player1Panel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P1Background");
-	player1Panel.setVisible(false);
-	player2Panel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P2Background");
-	player2Panel.setVisible(false);
-	player3Panel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P3Background");
-	player3Panel.setVisible(false);
-	player4Panel = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("P4Background");
-	player4Panel.setVisible(false);
-	
+	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
+	for (int i = 0; i < 4; i++)
+	{
+		std::string name = "P" + std::to_string(i + 1);
+		texts.push_back(root.getChild(name));
+		name = name + "Background";
+		panels.push_back(root.getChild(name));
+	}
 	manager = GameManager::GetInstance();
 
 	reposition(manager->getPlayerIndexes().size());
@@ -100,38 +97,13 @@ void ScoreManager::reposition(int numOfPlayers)
 	{
 		float textPos = iTextPos + size * i;
 		float panelPos = iPanelPos + size * i;
-		if (i == 0)
-		{
-			player1Text.setVisible(true);
-			player1Text.setPosition(textPos, 0.1);
-			player1Panel.setVisible(true);
-			player1Panel.setPosition(panelPos, 0.2);
-			player1Panel.setSize(size, 0.6);
-		}
-		if (i == 1)
-		{
-			player2Text.setVisible(true);
-			player2Text.setPosition(textPos, 0.1);
-			player2Panel.setVisible(true);
-			player2Panel.setPosition(panelPos, 0.2);
-			player2Panel.setSize(size, 0.6);
-		}
-		if (i == 2)
-		{
-			player3Text.setVisible(true);
-			player3Text.setPosition(textPos, 0.1);
-			player3Panel.setVisible(true);
-			player3Panel.setPosition(panelPos, 0.2);
-			player3Panel.setSize(size, 0.6);
-		}
-		if (i == 3)
-		{
-			player4Text.setVisible(true);
-			player4Text.setPosition(textPos, 0.1);
-			player4Panel.setVisible(true);
-			player4Panel.setPosition(panelPos, 0.2);
-			player4Panel.setSize(size, 0.6);
-		}
+
+		texts.at(i).setVisible(true);
+		texts.at(i).setPosition(textPos, 0.1);
+		panels.at(i).setVisible(true);
+		panels.at(i).setPosition(panelPos, 0.2);
+		panels.at(i).setSize(size, 0.6);
+		
 	}
 }
 
@@ -151,14 +123,7 @@ void ScoreManager::setIndexOfPlayersKilled(int playerIndex)
 		text = text + "P";
 		text += std::to_string(score->getIndexOfPlayersKilled(playerIndex).at(i));
 	}
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText(text);
-	else if (playerIndex == 2)
-		player2Panel.getChild(name2).getChild(name).setText(text);
-	else if (playerIndex == 3)
-		player3Panel.getChild(name2).getChild(name).setText(text);
-	else
-		player4Panel.getChild(name2).getChild(name).setText(text);
+		panels.at(playerIndex - 1).getChild(name2).getChild(name).setText(text);
 }
 
 void ScoreManager::setPercentOfHits(int playerIndex)
@@ -170,30 +135,9 @@ void ScoreManager::setPercentOfHits(int playerIndex)
 	name2 += "ScrollablePane";
 
 	std::string text = "Succesfull attacks: ";
-	if (playerIndex == 1)
-	{ 
-		text += std::to_string(score->getPercentOfHits(playerIndex));
-		text += "%";
-		player1Panel.getChild(name2).getChild(name).setText(text);
-	}
-	else if (playerIndex == 2)
-	{
-		text += std::to_string(score->getPercentOfHits(playerIndex));
-		text += "%";
-		player2Panel.getChild(name2).getChild(name).setText(text);
-	}
-	else if (playerIndex == 3)
-	{
-		text += std::to_string(score->getPercentOfHits(playerIndex));
-		text += "%";
-		player3Panel.getChild(name2).getChild(name).setText(text);
-	}
-	else
-	{
-		text += std::to_string(score->getPercentOfHits(playerIndex));
-		text += "%";
-		player4Panel.getChild(name2).getChild(name).setText(text);
-	}
+	text += std::to_string(score->getPercentOfHits(playerIndex));
+	text += "%";
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText(text);
 }
 
 void ScoreManager::setSuccessfullGrabs(int playerIndex)
@@ -203,17 +147,8 @@ void ScoreManager::setSuccessfullGrabs(int playerIndex)
 	name = name + "SuccesfullGrabs";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-
-
-
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
-	else if (playerIndex == 2)
-		player2Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
-	else if (playerIndex == 3)
-		player3Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
-	else
-		player4Panel.getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Successful grabs: " + std::to_string(score->getSuccessfullGrabs(playerIndex)));
+	
 }
 
 void ScoreManager::setTotalAttacks(int playerIndex)
@@ -223,15 +158,7 @@ void ScoreManager::setTotalAttacks(int playerIndex)
 	name = name + "Attacks";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Attacks made: " + std::to_string(score->getNumberOfGroundAttacks(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Attacks made: " + std::to_string(score->getNumberOfGroundAttacks(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Attacks made: " + std::to_string(score->getNumberOfGroundAttacks(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Attacks made: " + std::to_string(score->getNumberOfGroundAttacks(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Attacks made: " + std::to_string(score->getNumberOfGroundAttacks(playerIndex)));
 }
 
 void ScoreManager::setAmountOfDamageDealt(int playerIndex)
@@ -241,15 +168,7 @@ void ScoreManager::setAmountOfDamageDealt(int playerIndex)
 	name = name + "DamageDealt";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
 }
 
 void ScoreManager::setLifesAsGhost(int playerIndex)
@@ -259,15 +178,7 @@ void ScoreManager::setLifesAsGhost(int playerIndex)
 	name = name + "LivesStolen";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Lives stolen: " + std::to_string(score->getLifesAsGhost(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Lives stolen: " + std::to_string(score->getLifesAsGhost(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Lives stolen: " + std::to_string(score->getLifesAsGhost(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Lives stolen: " + std::to_string(score->getLifesAsGhost(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Lives stolen: " + std::to_string(score->getLifesAsGhost(playerIndex)));
 }
 
 void ScoreManager::setTimesHittedBySpikes(int playerIndex)
@@ -277,15 +188,7 @@ void ScoreManager::setTimesHittedBySpikes(int playerIndex)
 	name = name + "DamageTakenByEnviroment";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Enviromental hit: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 }
 
 void ScoreManager::setAmountOfFalls(int playerIndex)
@@ -295,14 +198,7 @@ void ScoreManager::setAmountOfFalls(int playerIndex)
 	name = name + "TimesFallen";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 }
 
 void ScoreManager::setTotalDamageSuffer(int playerIndex)
@@ -312,14 +208,7 @@ void ScoreManager::setTotalDamageSuffer(int playerIndex)
 	name = name + "TotalDamageTaken";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
 }
 
 void ScoreManager::setEnviromentDeaths(int playerIndex)
@@ -330,12 +219,6 @@ void ScoreManager::setEnviromentDeaths(int playerIndex)
 	name = name + "DeathsByEnviroment";
 	std::string name2 = "P" + std::to_string(playerIndex);
 	name2 += "ScrollablePane";
-	if (playerIndex == 1)
-		player1Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
-	else if (playerIndex == 2)
-			player2Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
-	else if (playerIndex == 3)
-			player3Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
-	else
-			player4Panel.getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+	panels.at(playerIndex - 1).getChild(name2).getChild(name).setText("Enviromental deaths: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+	
 }

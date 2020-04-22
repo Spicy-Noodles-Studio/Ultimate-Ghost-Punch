@@ -27,7 +27,7 @@ public:
 
 	virtual void handleData(ComponentData* data);
 
-	void dodge();
+	bool dodge();
 	void endDodge();
 	bool isDodging();
 };

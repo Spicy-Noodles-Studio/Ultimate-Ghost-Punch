@@ -14,11 +14,11 @@ class Health;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
-class Animator;
 
 class Vector3;
 class Grab;
 class Block;
+class PlayerAnimController;
 
 
 class PlayerController : public UserComponent
@@ -38,7 +38,7 @@ private:
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
-	Animator* anim;
+	PlayerAnimController* animController;
 	Block* block;
 	Dodge* dodge;
 	Grab* grab;

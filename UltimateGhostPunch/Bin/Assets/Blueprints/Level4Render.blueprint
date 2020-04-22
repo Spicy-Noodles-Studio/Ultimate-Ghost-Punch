@@ -1,0 +1,22 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Level4Render",
+    "Tag": "render",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform",
+            "ComponentProperties": [
+                ["position", "0 0 0"],
+                ["scale", "1 1 1"],
+                ["rotation", "0 90 0"]
+            ]
+        },
+        {
+            "ComponentName": "MeshRenderer",
+            "ComponentProperties": [
+                ["mesh", "suelo Level4Render.mesh"]
+            ]
+        }
+    ]
+}

@@ -7,16 +7,17 @@
 
 class RigidBody;
 class GameObject;
+class Score;
 
 class Grab : public UserComponent
 {
 private:
 	enum State { IDLE, GRABBING, GRABBED, BLOCKED };
 	
-	float grabDuration, remain, freezeDuration, throwForce;
+	float grabDuration, remain, freezeDuration, throwForce,
+			cooldown, grabTimer, grabVerticalOffset, dropHorizontalOffset;
 
 	State state;
-	State last;
 
 	PlayerController* controller;
 
@@ -24,6 +25,14 @@ private:
 	PlayerController* enemyController;
 
 	Vector3 enemyDiff;
+	bool enemyFollowing;
+	Vector3 grabbedPosition;
+	int prevOrientation;
+	float enemyFollowingThreshold;
+	int id;
+	Score* score;
+	void resetEnemy();
+	void grabEnemy();
 public:
 	Grab(GameObject* gameObject);
 
@@ -31,12 +40,16 @@ public:
 	virtual void update(float deltaTime);
 	virtual void onObjectStay(GameObject* other);
 
+	virtual void onObjectEnter(GameObject* other);
+	virtual void onObjectExit(GameObject* other);
+
 	virtual void handleData(ComponentData* data);
 
 	void grab();
 	void drop();
 
 	bool isGrabbing() const;
+	bool isOnCooldown() const;
 };
 
 #endif

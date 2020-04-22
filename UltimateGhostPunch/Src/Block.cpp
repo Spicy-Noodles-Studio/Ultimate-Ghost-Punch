@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include "Health.h"
+#include "PlayerAnimController.h"
 
 #include "ComponentRegister.h"
 
@@ -79,6 +80,8 @@ void Block::block()
 		isBlocking = true;
 		timeElapsed = 0;
 		blockDirection = gameObject->getParent()->transform->getRotation().y;
+		auto anim = gameObject->getParent()->getComponent<PlayerAnimController>();
+		if(anim != nullptr) anim->blockAnimation();
 		LOG("BLOCKING\n");
 	}
 }
@@ -96,6 +99,10 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 		LOG("Attack blocked\n");
 		if (blockTime <= 0) 
 			isBlocking = false;
+
+		// Attack blocked animation
+		PlayerAnimController* anim = gameObject->getParent()->getComponent<PlayerAnimController>();
+		if (anim != nullptr) anim->blockedAttackAnimation();
 
 		return true;
 	}
