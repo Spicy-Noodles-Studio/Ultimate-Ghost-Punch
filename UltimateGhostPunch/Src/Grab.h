@@ -28,7 +28,8 @@ private:
 	Vector3 grabbedPosition;
 	int prevOrientation;
 	float enemyFollowingThreshold;
-
+	int id;
+	Score* score;
 	void resetEnemy();
 	void grabEnemy();
 public:

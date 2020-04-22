@@ -57,19 +57,21 @@ void Obstacle::onCollisionEnter(GameObject* other)
 
 		// The player receives damage
 		Score* score = GameManager::GetInstance()->getScore();
+		int otherId = other->getComponent<PlayerIndex>()->getIndex();
 		Health* health = other->getComponent<Health>();
 		if (health == nullptr) return;
 		int h = health->getHealth();
 		health->receiveDamage(damage);
-		if (h != health->getHealth())
-			score->damagedBySpike(other->getComponent<PlayerIndex>()->getIndex());
+		if (h != health->getHealth()&&score!=nullptr)
+			score->damagedBySpike(otherId);
 		// If the player has died, add an offset to the respawn position, in case it resurrects
 		if (!health->isAlive()) {
 			GhostManager* ghostManager = other->getComponent<GhostManager>();
 			if (ghostManager != nullptr) {
 				respawnOffset.x *= xDir;
 				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
-				score->deathByEnviromentHazard(other->getComponent<PlayerIndex>()->getIndex());
+				if(score!=nullptr)
+				score->deathByEnviromentHazard(otherId);
 			}
 		}
 		else {
