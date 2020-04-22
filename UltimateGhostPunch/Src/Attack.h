@@ -5,7 +5,7 @@
 #include <UserComponent.h>
 
 class RigidBody;
-
+class Score;
 class Attack : public UserComponent
 {
 private:
@@ -40,6 +40,8 @@ private:
 
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
+	int id;
+	Score* score;
 
 public:
 	Attack(GameObject* gameObject);
