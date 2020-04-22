@@ -7,6 +7,7 @@
 
 class RigidBody;
 class GameObject;
+class Score;
 
 class Grab : public UserComponent
 {
