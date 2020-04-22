@@ -22,9 +22,19 @@
         {
             "ComponentName": "Animator",
             "ComponentProperties": [
-               [ "anim", "Run player"],
-               [ "anim", "Jump player"],
                [ "anim", "Idle player"]
+            ]
+        },
+        {
+            "ComponentName": "PlayerFX"
+        },
+        {
+            "ComponentName": "PlayerAnimController",
+            "ComponentProperties": [
+               [ "runThreshold", "0.5f"],
+               [ "fallThreshold", "1.0f"],
+               [ "thrownDelay", "0.35f"],
+               ["ghostMesh", "ghost Ghost.mesh"]
             ]
         },
         {
@@ -203,6 +213,28 @@
                         ["freezeDuration", "2"],
                         ["grabDuration", "2"],
                         ["throwForce", "15"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Shield",
+            "Tag": "shield",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       [ "position", "0 0 0"],
+                       [ "scale", "5.5 5.5 5.5"]
+                    ]
+                },
+                {
+                    "ComponentName": "MeshRenderer",
+                    "ComponentProperties": [
+                        [ "mesh", "shield Sphere.mesh"],
+                        [ "material", "shield Shield"]
                     ]
                 }
             ]
