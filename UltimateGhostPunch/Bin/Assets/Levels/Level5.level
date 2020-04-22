@@ -1,0 +1,13 @@
+{
+    "LevelBlueprint" : "Level5",
+    "LevelRenderBlueprint" : "Level5Render",
+    "PlayerTransforms":[
+        ["-15 2.5 0", "0 90 0"],
+        ["15 2.5 0", "0 -90 0"],
+        ["-7.5 2.5 0", "0 90 0"],
+        ["7.5 2.5 0", "0 -90 0"]
+    ],
+    "SpikesTransforms":[
+        ["0 8 0", "0 0 180"]
+    ]
+}

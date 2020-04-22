@@ -68,7 +68,8 @@ void PlayerController::fixedUpdate(float deltaTime)
 {
 	//Movement
 	if (ghostManager == nullptr || !ghostManager->isGhost())
-		if (movement != nullptr) movement->move(direction);
+		if ((block == nullptr || !block->blocking()) && (dodge == nullptr || !dodge->isDodging())) 
+			if (movement != nullptr) movement->move(direction);
 }
 
 void PlayerController::handleData(ComponentData* data)
@@ -91,12 +92,8 @@ void PlayerController::handleData(ComponentData* data)
 
 void PlayerController::checkInput()
 {
-	direction = Vector3(0, 0, 0);
-
-	if ((block == nullptr || !block->blocking()) && (dodge== nullptr || !dodge->isDodging())) {
-		//Movement
-		direction += Vector3(getHorizontalAxis(), 0, 0);
-	}
+	//Movement
+	direction = Vector3(getHorizontalAxis(), 0, 0);
 
 	//Acctions if the player isn�t in ghostManager mode
 	if (ghostManager == nullptr || !ghostManager->isGhost()) {

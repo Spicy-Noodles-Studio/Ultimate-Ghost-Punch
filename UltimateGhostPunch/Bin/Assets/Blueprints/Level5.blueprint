@@ -30,7 +30,9 @@
             "ComponentName": "PlatformGraph",
             "ComponentProperties": [
                 ["levelStart", "-25 23 0"],
-                ["levelEnd", "25 -5 0"]
+                ["levelEnd", "25 -5 0"],
+                ["saveFilename", "Level5Graph.graph"],
+                ["loadFilename", "Level5Graph.graph"]
             ]
         },
         {

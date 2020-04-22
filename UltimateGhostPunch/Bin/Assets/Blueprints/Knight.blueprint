@@ -59,7 +59,7 @@
         {
             "ComponentName": "Movement",
             "ComponentProperties": [
-                ["speed", "75"],
+                ["speed", "200"],
                 ["maxVelocity", "7.5"]
             ]
         },

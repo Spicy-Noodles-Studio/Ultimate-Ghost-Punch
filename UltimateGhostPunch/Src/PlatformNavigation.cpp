@@ -150,17 +150,14 @@ void PlatformNavigation::moveToPlatform()
 		movingThroughLink = false;
 		time = 0.0f;
 		lastState = 0;
-		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex()) {
+		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex()) 
 			((AIStateMachine*)stateMachine)->startPlatformMovement();
-			LOG("Link ended %f %f", time, linkInUse.getDuration());
-		}
 		return;
 	}
 
 	Vector3 vel = character->getComponent<RigidBody>()->getLinearVelocity();
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
-		LOG("In link");
 		while (lastState >= 0 && lastState < states.size() && time > states[lastState].getTime()) {
 			// Inject input
 			for (Action action : states[lastState].getActions())
@@ -175,17 +172,15 @@ void PlatformNavigation::update(float deltaTime)
 	if (movingThroughLink) {
 		moveToPlatform();
 		time += deltaTime;
-		LOG("Link %f", linkInUse.getIniPos().x);
 	}
 	else {
 		/* CALCULATIONS TO FOLLOW NODES CORRECTLY */
 		std::vector<PathNode> path = getShortestPath();
 		// Get next node
-		if (path.size() > 0) {
+		if (path.size() > 0) 
 			// Go to next platform
-			LOG("Platform %d", path[0].platform.getIndex());
 			moveToStartingPoint(path[0]);
-		}
+
 		else 
 			((AIStateMachine*)stateMachine)->startPlatformMovement();
 	}

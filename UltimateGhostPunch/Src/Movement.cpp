@@ -19,9 +19,12 @@ Movement::~Movement()
 
 void Movement::move(Vector3 dir)
 {
-	if(rigidBody != nullptr &&  std::abs(rigidBody->getLinearVelocity().x) < maxVelocity)
-		rigidBody->addForce(dir * speed);
-
+	if (rigidBody != nullptr) {
+		if (std::abs(rigidBody->getLinearVelocity().x) < maxVelocity)
+			rigidBody->addForce(dir * speed);
+		else
+			rigidBody->setLinearVelocity({ maxVelocity * dir.x, rigidBody->getLinearVelocity().y, 0 });
+	}
 	//Character rotation
 	if (dir.x != 0)
 		gameObject->transform->setRotation({ 0,90 * dir.x,0 });
@@ -31,7 +34,7 @@ void Movement::stop()
 {
 	if (rigidBody != nullptr)
 	{
-		rigidBody->setLinearVelocity({0,rigidBody->getLinearVelocity().y,0});
+		rigidBody->setLinearVelocity({ 0,rigidBody->getLinearVelocity().y,0 });
 		rigidBody->clearForces();
 	}
 }
@@ -49,7 +52,7 @@ void Movement::handleData(ComponentData* data)
 
 		if (prop.first == "speed")
 		{
-			if(!(ss >> speed))
+			if (!(ss >> speed))
 				LOG("MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
 		}
 		else if (prop.first == "maxVelocity")

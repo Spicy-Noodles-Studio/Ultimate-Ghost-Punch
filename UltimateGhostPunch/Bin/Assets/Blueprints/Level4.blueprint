@@ -25,6 +25,15 @@
                 ["mesh", "suelo"],
                 ["friction", "1.9"]
             ]
+        },
+        {
+            "ComponentName": "PlatformGraph",
+            "ComponentProperties": [
+                ["levelStart", "-25 10 0"],
+                ["levelEnd", "25 -5 0"],
+                ["saveFilename", "Level4Graph.graph"],
+                ["loadFilename", "Level4Graph.graph"]
+            ]
         }
     ]
 }
