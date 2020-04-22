@@ -10,11 +10,13 @@
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player 1" />
                      <Property name="Font" value="Batang8" />
+                     <Property name="Visible" value="False" />
                 </Window>
         ## P1 PANEL
          <Window type="TaharezLook/StaticImage" name="P1Background" >
             <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
             <Window type="TaharezLook/ScrollablePane" name="P1ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
@@ -87,11 +89,13 @@
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player 2" />
                      <Property name="Font" value="Batang8" />
+                     <Property name="Visible" value="False" />
                 </Window>
         ## P2 PANEL
         <Window type="TaharezLook/StaticImage" name="P2Background" >
             <Property name="Area" value="{{0.3,0},{0.2,0},{0.5,0},{0.8,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
             <Window type="TaharezLook/ScrollablePane" name="P2ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
@@ -164,11 +168,13 @@
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player 3" />
                      <Property name="Font" value="Batang8" />
+                     <Property name="Visible" value="False" />
                 </Window>
         ## P3 PANEL
         <Window type="TaharezLook/StaticImage" name="P3Background" >
             <Property name="Area" value="{{0.5,0},{0.2,0},{0.7,0},{0.8,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
                 <Window type="TaharezLook/ScrollablePane" name="P3ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
@@ -241,11 +247,13 @@
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
                     <Property name="Text" value="Player 4" />
                      <Property name="Font" value="Batang8" />
+                     <Property name="Visible" value="False" />
                 </Window>
         ## P4 PANEL
         <Window type="TaharezLook/StaticImage" name="P4Background" >
             <Property name="Area" value="{{0.7,0},{0.2,0},{0.9,0},{0.8,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
                 <Window type="TaharezLook/ScrollablePane" name="P4ScrollablePane" >
                 <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
