@@ -59,9 +59,11 @@ void AIStateMachine::start()
 	createGhostNavigation();
 
 	// Initialize auxiliar variables
-	timeTargetChange = 5.0f; // 5 seconds
+	timeTargetChange = 3.0f; // 5 seconds
 
 	currentState = platformMovement; // By default
+
+	changeTarget();
 }
 
 void AIStateMachine::update(float deltaTime)
@@ -71,7 +73,6 @@ void AIStateMachine::update(float deltaTime)
 	timerTargetChange += deltaTime;
 	if (timerTargetChange >= timeTargetChange) {
 		timerTargetChange = 0.0f;
-		if (platformNavigation == nullptr) return;
 		changeTarget();
 	}
 
@@ -84,14 +85,30 @@ void AIStateMachine::fixedUpdate(float deltaTime)
 		movement->move(dir);
 }
 
+void AIStateMachine::startPlatformNavigation()
+{
+	currentState = platformNavigation;
+}
+
+void AIStateMachine::startPlatformMovement()
+{
+	currentState = platformMovement;
+}
+
+void AIStateMachine::startGhostNavigation()
+{
+	currentState = ghostNavigation;
+}
+
 void AIStateMachine::processActionInput()
 {
+	dir = Vector3::ZERO;
  	for (auto input : actionInputs) {
 		switch (input)
 		{
 			/* MOVEMENT */
 		case ActionInput::MOVE_RIGHT:
-			dir = Vector3::RIGHT;
+			dir = Vector3::RIGHT;		
 			break;
 		case ActionInput::MOVE_LEFT:
 			dir = Vector3::NEGATIVE_RIGHT;
@@ -122,7 +139,6 @@ void AIStateMachine::processActionInput()
 			/* ATTACK */
 		default:
 			LOG("ActionInput no procesado");
-			dir = Vector3::ZERO;
 			break;
 		}
 	}
@@ -144,6 +160,7 @@ void AIStateMachine::createPlatformMovement()
 	platformMovement = new PlatformMovement(this);
 	addStateAction(platformMovement);
 
+	platformMovement->setPlatformGraph(platformGraph);
 	platformMovement->setTargetPosition(Vector3::ZERO);
 	platformMovement->setCharacter(gameObject);
 }
@@ -166,21 +183,25 @@ void AIStateMachine::changeTarget()
 	} while (target == gameObject);
 
 	// TO STUFF
-	platformNavigation->setTarget(target);
-	ghostNavigation->setTarget(target);
+	if(platformNavigation != nullptr) platformNavigation->setTarget(target);
+	if(ghostNavigation != nullptr) ghostNavigation->setTarget(target);
 
 	// TODO: cambiar el cambio de estado
-	int index = platformGraph->getIndex(target->transform->getPosition());
-	if (index < 0) return;
-	PlatformNode node = platformGraph->getPlatforms()[index];
-	platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
-	platformMovement->setTargetPosition(target->transform->getPosition());
+	if (platformGraph != nullptr && platformMovement != nullptr) {
+		int index = platformGraph->getIndex(target->transform->getPosition());		
+		if (index < 0) return;
+		PlatformNode node = platformGraph->getPlatforms()[index];
+		platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
+		platformMovement->setTargetPosition(target->transform->getPosition());
+	}
 }
 
 void AIStateMachine::updateState()
 {
 	if (ghostManager != nullptr) {
-		if (ghostManager->isGhost() && currentState != ghostNavigation) 
-			currentState = ghostNavigation;
+		if (ghostManager->isGhost() && currentState != ghostNavigation)
+			startGhostNavigation();
+		if (!ghostManager->isGhost() && currentState == ghostNavigation)
+			startPlatformNavigation();
 	}
 }

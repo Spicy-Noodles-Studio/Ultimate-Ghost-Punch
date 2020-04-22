@@ -198,12 +198,12 @@ void State::loadState(const GaiaData& data)
 }
 
 //NAVIGATION LINK
-NavigationLink::NavigationLink() : connection(-1), linkStates(std::vector<State>()), frames(0), iniPos(Vector3::ZERO), endPos(Vector3::ZERO), startVelocity(Vector3::ZERO), duration(0.0f)
+NavigationLink::NavigationLink() : connection(-1), linkStates(std::vector<State>()), frames(0), iniPos(Vector3::ZERO), endPos(Vector3::ZERO), startVelocity(Vector3::ZERO), startForce(Vector3::ZERO), duration(0.0f), startDirection(-1)
 {
 }
 
-NavigationLink::NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, int frames, float duration, int connection) :
-							   linkStates(states), connection(connection), iniPos(iniPos), endPos(endPos), frames(frames), duration(duration), startVelocity(startVelocity)
+NavigationLink::NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, const Vector3& startForce, int frames, float duration, int connection, int startDirection) :
+							   linkStates(states), connection(connection), iniPos(iniPos), endPos(endPos), frames(frames), duration(duration), startVelocity(startVelocity), startForce(startForce), startDirection(startDirection)
 {
 }
 
@@ -232,9 +232,19 @@ Vector3 NavigationLink::getStartVelocity() const
 	return startVelocity;
 }
 
+Vector3 NavigationLink::getStartForce() const
+{
+	return startForce;
+}
+
 int NavigationLink::getFrames() const
 {
 	return frames;
+}
+
+int NavigationLink::getDirection() const
+{
+	return startDirection;
 }
 
 float NavigationLink::getDuration() const
@@ -246,11 +256,13 @@ GaiaData NavigationLink::saveLink()
 {
 	GaiaData link;
 	link.addElement<std::string>("connection", std::to_string(connection));
+	link.addElement<std::string>("direction", std::to_string(startDirection));
 	link.addElement<std::string>("frames", std::to_string(frames));
 	link.addElement<std::string>("duration", std::to_string(duration));
 	link.addElement<std::string>("iniPos", iniPos.toString());
 	link.addElement<std::string>("endPos", endPos.toString());
 	link.addElement<std::string>("startVelocity", startVelocity.toString());
+	link.addElement<std::string>("startForce", startForce.toString());
 	std::vector<GaiaData>states;
 	for (State s : linkStates)
 		states.push_back(s.saveState());
@@ -264,6 +276,9 @@ void NavigationLink::loadLink(const GaiaData& data)
 
 	ss = std::stringstream(data.find("connection").getValue());
 	ss >> connection;
+
+	ss = std::stringstream(data.find("direction").getValue());
+	ss >> startDirection;
 
 	ss = std::stringstream(data.find("frames").getValue());
 	ss >> frames;
@@ -279,6 +294,9 @@ void NavigationLink::loadLink(const GaiaData& data)
 
 	ss = std::stringstream(data.find("startVelocity").getValue());
 	ss >> startVelocity.x >> startVelocity.y >> startVelocity.z;
+
+	ss = std::stringstream(data.find("startForce").getValue());
+	ss >> startForce.x >> startForce.y >> startForce.z;
 
 	GaiaData states = data.find("states");
 	for (GaiaData::iterator it = states.begin(); it != states.end(); it++) {

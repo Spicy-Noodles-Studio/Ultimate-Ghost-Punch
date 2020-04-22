@@ -31,7 +31,7 @@ void Movement::stop()
 {
 	if (rigidBody != nullptr)
 	{
-		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->setLinearVelocity({0,rigidBody->getLinearVelocity().y,0});
 		rigidBody->clearForces();
 	}
 }

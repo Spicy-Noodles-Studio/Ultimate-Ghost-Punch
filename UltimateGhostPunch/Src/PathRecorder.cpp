@@ -15,8 +15,9 @@
 
 REGISTER_FACTORY(PathRecorder);
 
-PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()),
-currentPlatform(-1), actions(std::vector<Action>()), time(0.0f)
+PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), controllerIndex(-1), frame(-1), 
+													 lastPlatform(std::stack<int>()), states(std::vector<State>()), currentPlatform(-1), actions(std::vector<Action>()), time(0.0f),
+													 startVelocity(Vector3::ZERO), iniPos(Vector3::ZERO), startForce(Vector3::ZERO), startDirection(-1)
 {
 
 }
@@ -119,9 +120,8 @@ void PathRecorder::onObjectEnter(GameObject* other)
 		if (graph != nullptr)
 			currentPlatform = graph->getIndex(endPos);
 
-		if (currentPlatform != -1) {
-			RigidBody* rb = gameObject->getParent()->getComponent<RigidBody>();//TODO:gestion errores 
-			NavigationLink navLink = NavigationLink(states, iniPos, endPos, rb->getLinearVelocity(), frame, time, currentPlatform);
+		if (currentPlatform != -1) {			
+			NavigationLink navLink = NavigationLink(states, iniPos, endPos, startVelocity, startForce, frame, time, currentPlatform, startDirection);
 			if (!lastPlatform.empty()) {
 				graph->addLinkToPlatform(lastPlatform.top(), navLink);
 			}
@@ -157,6 +157,15 @@ void PathRecorder::startRecording()
 {
 	iniPos = gameObject->transform->getWorldPosition();
 	recording = true;
+	startDirection = (gameObject->transform->getRotation().y == 90) ? 1 : -1;
+
+	if (gameObject->getParent()) {
+		RigidBody* rb = gameObject->getParent()->getComponent<RigidBody>();
+		if (rb != nullptr) {
+			startVelocity = rb->getLinearVelocity();
+			startForce = rb->getTotalForce();
+		}
+	}
 }
 
 void PathRecorder::eraseLastLink()

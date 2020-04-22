@@ -19,18 +19,16 @@ void PlatformMovement::update(float deltaTime)
 	if (character == nullptr) return;
 	Vector3 currentPosition = character->transform->getPosition();
 
-	float tolerance = 2.0f; // Tolerancia alta para cuando el target sea la posicion de un enemigo
+	float limitOffset = 1.0f, targetOffset = 2.0f; // Tolerancia alta para cuando el target sea la posicion de un enemigo
 	/* Off limits */
-	if (targetPosition.x < leftLimit + tolerance || targetPosition.x > rightLimit - tolerance){
-		stateMachine->addActionInput(ActionInput::STOP);
-		//MAYBE CHANGE TARGET OR STATE
-		//OR LIMITS
+	if (targetPosition.x < leftLimit + limitOffset || targetPosition.x > rightLimit - limitOffset || differentPlatforms()){
+		((AIStateMachine*)stateMachine)->startPlatformNavigation();//Change to platform navigation
 		return;
 	}
 
 	/* If arrived */
 	float diff = abs(targetPosition.x - currentPosition.x);
-	if (diff < tolerance) {
+	if (diff < targetOffset) {
 		stateMachine->addActionInput(ActionInput::STOP);
 		return;
 	}
@@ -40,8 +38,13 @@ void PlatformMovement::update(float deltaTime)
 	stateMachine->addActionInput(input);
 
 	// DE MOMENTO, de manera random mete un jump y/o un dash
-	if (random(0.0, 100.0) < 15.0) stateMachine->addActionInput(ActionInput::JUMP);
-	if (random(0.0, 100.0) < 15.0) stateMachine->addActionInput(ActionInput::DODGE);
+	//if (random(0.0, 100.0) < 15.0) stateMachine->addActionInput(ActionInput::JUMP);
+	//if (random(0.0, 100.0) < 15.0) stateMachine->addActionInput(ActionInput::DODGE);
+}
+
+void PlatformMovement::setPlatformGraph(PlatformGraph* platformGraph)
+{
+	this->platformGraph = platformGraph;
 }
 
 void PlatformMovement::setCharacter(GameObject* character)
@@ -58,4 +61,9 @@ void PlatformMovement::setLimits(float left, float right)
 {
 	leftLimit = left;
 	rightLimit = right;
+}
+
+bool PlatformMovement::differentPlatforms()
+{
+	return platformGraph != nullptr && platformGraph->getIndex(targetPosition) != platformGraph->getIndex(character->transform->getPosition());
 }

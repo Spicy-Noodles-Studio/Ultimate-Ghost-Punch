@@ -123,8 +123,19 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 		movingThroughLink = true;
 		lastState = 0;
 		linkInUse = node.platform.getEdge(node.index);
-		character->getParent()->getComponent<RigidBody>()->setLinearVelocity(linkInUse.getStartVelocity());
 		time = 0.0f;
+		
+
+		//Set rigidbody to link´s inicial state
+		if (character->getParent()) {
+			character->getParent()->transform->setRotation({ 0, 90.0 * linkInUse.getDirection(),0 });
+			RigidBody* rb = character->getParent()->getComponent<RigidBody>();
+			if (rb != nullptr) {
+				rb->setLinearVelocity(linkInUse.getStartVelocity());
+				rb->clearForces();
+				rb->addForce(linkInUse.getStartForce());
+			}
+		}		
 		return;
 	}
 
@@ -135,18 +146,21 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 void PlatformNavigation::moveToPlatform()
 {
 	// If arrived to end of link, reset
-	if (linkInUse.getDuration() < time || (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.5) {
-		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
-			stateMachine->addActionInput(ActionInput::STOP);
+	if (linkInUse.getDuration() < time || (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.1) {
 		movingThroughLink = false;
 		time = 0.0f;
 		lastState = 0;
+		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex()) {
+			((AIStateMachine*)stateMachine)->startPlatformMovement();
+			LOG("Link ended %f %f", time, linkInUse.getDuration());
+		}
 		return;
 	}
 
 	Vector3 vel = character->getComponent<RigidBody>()->getLinearVelocity();
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
+		LOG("In link");
 		while (lastState >= 0 && lastState < states.size() && time > states[lastState].getTime()) {
 			// Inject input
 			for (Action action : states[lastState].getActions())
@@ -161,14 +175,18 @@ void PlatformNavigation::update(float deltaTime)
 	if (movingThroughLink) {
 		moveToPlatform();
 		time += deltaTime;
+		LOG("Link %f", linkInUse.getIniPos().x);
 	}
 	else {
 		/* CALCULATIONS TO FOLLOW NODES CORRECTLY */
 		std::vector<PathNode> path = getShortestPath();
-
 		// Get next node
-		if (path.size() > 0)
+		if (path.size() > 0) {
 			// Go to next platform
+			LOG("Platform %d", path[0].platform.getIndex());
 			moveToStartingPoint(path[0]);
+		}
+		else 
+			((AIStateMachine*)stateMachine)->startPlatformMovement();
 	}
 }

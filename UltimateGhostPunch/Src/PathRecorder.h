@@ -27,10 +27,10 @@ private:
 	std::vector<State> states;
 	std::stack<int> lastPlatform;
 
-	int controllerIndex, frame, currentPlatform;
+	int controllerIndex, frame, currentPlatform, startDirection;
 	float time;
 
-	Vector3 iniPos;
+	Vector3 iniPos, startVelocity, startForce;
 	std::vector<Action> actions;
 
 	void eraseLastLink();

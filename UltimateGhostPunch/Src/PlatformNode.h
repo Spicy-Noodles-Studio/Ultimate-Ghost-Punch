@@ -35,20 +35,22 @@ public:
 class NavigationLink {
 private:
 	std::vector<State> linkStates;
-	Vector3 iniPos, endPos, startVelocity;
-	int connection, frames;
+	Vector3 iniPos, endPos, startVelocity, startForce;
+	int connection, frames, startDirection;
 	float duration;
 
 public:
 	NavigationLink();
-	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, int frames, float duration, int connection);
+	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, const Vector3& startForce, int frames, float duration, int connection, int startDirection);
 
 	int getConnection() const;
 	std::vector<State> getStates() const;
 	Vector3 getIniPos() const;
 	Vector3 getEndPos() const;
 	Vector3 getStartVelocity() const;
+	Vector3 getStartForce() const;
 	int getFrames() const;
+	int getDirection() const;
 	float getDuration() const;
 
 	GaiaData saveLink();

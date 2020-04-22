@@ -56,6 +56,10 @@ public:
 	virtual void update(float deltaTime);
 	virtual void fixedUpdate(float deltaTime);
 
+	void startPlatformNavigation();
+	void startPlatformMovement();
+	void startGhostNavigation();
+
 private:
 	virtual void processActionInput();
 
