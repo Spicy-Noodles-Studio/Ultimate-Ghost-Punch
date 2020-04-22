@@ -53,7 +53,7 @@ void PlayerFX::updateHurtFX(float deltaTime)
 {
 	if (time > 0.0f)
 		time -= deltaTime;
-	else
+	else if(effect == HURT)
 		deactivateHurt();
 }
 

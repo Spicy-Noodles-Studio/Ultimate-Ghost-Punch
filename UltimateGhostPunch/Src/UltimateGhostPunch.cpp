@@ -5,6 +5,7 @@
 #include <RigidBody.h>
 #include <Scene.h>
 #include <Camera.h>
+#include <MathUtils.h>
 #include <sstream>
 
 #include "Health.h"
@@ -37,7 +38,12 @@ void UltimateGhostPunch::start()
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
-	if (state == State::SUCCESS) return;
+	if (state == State::SUCCESS || state == State::USED) { 
+		Vector3 rotation = gameObject->transform->getRotation();
+		rotation.z = 0.0;
+		gameObject->transform->setRotation(rotation);
+		return; 
+	}
 
 	// Update the cooldown
 	if (duration > 0.0f && state == State::PUNCHING)
@@ -80,10 +86,16 @@ void UltimateGhostPunch::charge()
 
 void UltimateGhostPunch::aim(double x, double y)
 {
+	if (x == 0 && y == 0) return;
 	direction = { x, y, 0.0 };
 	direction.normalize();
-	if (direction.x != 0)
-		gameObject->transform->setRotation({ 0,90 * double(direction.x >= 0 ? 1 : -1),0 });
+	float flippedX = direction.x >= 0 ? 1.0f : -1.0f;
+	float flippedY = direction.y >= 0 ? 1.0f : -1.0f;
+	if (direction.x != 0) {
+		float angle = acos(direction.dot(Vector3::RIGHT * flippedX));
+		Vector3 finalDirection = Vector3(0.0, 90.0f * flippedX, angle * RAD_TO_DEG * flippedX * flippedY);
+		gameObject->transform->setRotation(finalDirection);
+	}
 }
 
 void UltimateGhostPunch::ghostPunch()
