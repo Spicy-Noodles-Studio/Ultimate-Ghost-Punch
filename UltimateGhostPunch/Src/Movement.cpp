@@ -43,8 +43,7 @@ void Movement::handleData(ComponentData* data)
 
 		if (prop.first == "speed")
 		{
-			if(!(ss >> speed))
-				LOG("MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(speed);
 		}
 		else
 			LOG("MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());

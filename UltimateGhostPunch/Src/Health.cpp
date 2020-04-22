@@ -38,15 +38,12 @@ void Health::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "health")
-		{
-			if (!(ss >> health))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+		if (prop.first == "health") {
+			setInt(health);
 		}
 		else if (prop.first == "invDamTime")
 		{
-			if (!(ss >> invencibleDamageTime))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(invencibleDamageTime);
 		}
 		else
 			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());

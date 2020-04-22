@@ -61,18 +61,16 @@ void PlatformGraph::handleData(ComponentData* data)
 
 		if (prop.first == "levelStart")
 		{
-			if (!(ss >> levelStart.x >> levelStart.y >> levelStart.z))
-				LOG("PLATFORM GRAPH: Invalid value for property %s", prop.first.c_str());
+			setVector3(levelStart);
 		}
 		else if (prop.first == "levelEnd") {
-			if (!(ss >> levelEnd.x >> levelEnd.y >> levelEnd.z))
-				LOG("PLATFORM GRAPH: Invalid value for property %s", prop.first.c_str());
+			setVector3(levelEnd);
 		}
 		else if (prop.first == "saveFilename") {
-			saveFilename = prop.second;
+			setString(saveFilename);
 		}
 		else if (prop.first == "loadFilename") {
-			loadFilename = prop.second;
+			setString(loadFilename);
 		}
 		else
 			LOG("PLATFORM GRAPH: Invalid property with name %s", prop.first.c_str());

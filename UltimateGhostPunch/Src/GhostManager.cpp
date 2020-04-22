@@ -91,33 +91,27 @@ void GhostManager::handleData(ComponentData* data)
 
 		if (prop.first == "ghostTime")
 		{
-			if (!(ss >> ghostTime))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(ghostTime);
 		}
 		else if (prop.first == "ghostDamage")
 		{
-			if (!(ss >> ghostDamage))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(ghostDamage);
 		}
 		else if (prop.first == "resurrectionHealth")
 		{
-			if (!(ss >> resurrectionHealth))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(resurrectionHealth);
 		}
 		else if (prop.first == "ghostScale")
 		{
-			if (!(ss >> ghostScale.x >> ghostScale.y >> ghostScale.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(ghostScale);
 		}
 		else if (prop.first == "spawnOffset")
 		{
-			if (!(ss >> ghostSpawnOffset.x >> ghostSpawnOffset.y >> ghostSpawnOffset.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(ghostSpawnOffset);
 		}
 		else if (prop.first == "deathPosition")
 		{
-			if (!(ss >> deathPosition.x >> deathPosition.y >> deathPosition.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(deathPosition);
 		}
 		else
 			LOG("GHOST MANAGER: Invalid property name \"%s\"", prop.first.c_str());

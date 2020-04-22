@@ -50,22 +50,20 @@ void Block::update(float deltaTime)
 
 void Block::handleData(ComponentData* data)
 {
+
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "maxBlockTime")
 		{
-			if (!(ss >> maxBlockTime))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+			setFloat(maxBlockTime);
 		}
 		else if (prop.first == "blockRegenTime") {
-			if(!(ss >> blockRegenTime))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+			setFloat(blockRegenTime);
 		}
 		else if (prop.first == "blockGrabMargin") {
-			if(!(ss >> blockGrabMargin))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+			setFloat(blockGrabMargin);
 
 		}
 		else

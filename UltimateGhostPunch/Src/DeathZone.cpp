@@ -28,8 +28,7 @@ void DeathZone::handleData(ComponentData* data)
 
 		if (prop.first == "fallDamage")
 		{
-			if (!(ss >> fallDamage))
-				LOG("DEATH ZONE: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(fallDamage);
 		}
 		else
 			LOG("DEATH ZONE: Invalid property name \"%s\"", prop.first.c_str());

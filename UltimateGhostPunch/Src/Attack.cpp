@@ -66,32 +66,25 @@ void Attack::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "quickCooldown") {
-			if (!(ss >> quickAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(quickAttackCooldown);
 		}
 		else if (prop.first == "strongCooldown") {
-			if (!(ss >> strongAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(strongAttackCooldown);
 		}
 		else if (prop.first == "quickDamage") {
-			if (!(ss >> quickAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(quickAttackDamage);
 		}
 		else if (prop.first == "strongDamage") {
-			if (!(ss >> strongAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(strongAttackDamage);
 		}
 		else if (prop.first == "attackDuration") {
-			if (!(ss >> attackDuration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(attackDuration);
 		}
 		else if (prop.first == "quickCharge") {
-			if (!(ss >> quickChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(quickChargeTime);
 		}
 		else if (prop.first == "strongCharge") {
-			if (!(ss >> strongChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(strongChargeTime);
 		}
 		else
 			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());

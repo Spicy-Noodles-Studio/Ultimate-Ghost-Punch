@@ -107,19 +107,16 @@ void Grab::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
-		
+
 		if (prop.first == "freezeDuration")
 		{
-			if (!(ss >> freezeDuration))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(freezeDuration);
 		}
 		else if (prop.first == "throwForce") {
-			if (!(ss >> throwForce))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(throwForce);
 		}
 		else if (prop.first == "grabDuration") {
-			if (!(ss >> grabDuration))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(grabDuration);
 		}
 		else if (prop.first == "cooldown") {
 			if (!(ss >> cooldown))

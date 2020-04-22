@@ -48,36 +48,28 @@ void CameraController::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "minZ") {
-			if (!(ss >> minZ))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(minZ);
 		}
 		else if (prop.first == "maxZ") {
-			if (!(ss >> maxZ))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(maxZ);
 		}
 		else if (prop.first == "smoothFactor") {
-			if (!(ss >> smoothFactor))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(smoothFactor);
 		}
 		else if (prop.first == "zoomFactor") {
-			if (!(ss >> zoomFactor))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(zoomFactor);
 		}
 		else if (prop.first == "slowMoTime") {
-			if (!(ss >> slowMoTime))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(slowMoTime);
 		}
 		else if (prop.first == "slowMoDistance") {
-			if (!(ss >> slowMoDistance))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(slowMoDistance);
 		}
 		else if (prop.first == "slowMoTimeScale") {
-			if (!(ss >> slowMoTimeScale))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(slowMoTimeScale);
 		}
 		else if (prop.first == "slowMoZ") {
-			if (!(ss >> slowMoZ))
-				LOG("DYNAMIC CAMERA: Invalid value for property with name \"%s\"", prop.first.c_str());
+			setFloat(slowMoZ);
 		}
 		else
 			LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());

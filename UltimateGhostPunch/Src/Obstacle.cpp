@@ -29,19 +29,13 @@ void Obstacle::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "damage") {
-			if (!(ss >> damage))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+			setInt(damage);
 		}
 		else if (prop.first == "pushStrength") {
-			if (!(ss >> pushStrength))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+			setFloat(pushStrength);
 		}
 		else if (prop.first == "respawnOffset") {
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
-			else
-				respawnOffset = { x,y,z };
+			setVector3(respawnOffset);
 		}
 		else
 			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());

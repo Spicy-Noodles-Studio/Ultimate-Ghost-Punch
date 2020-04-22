@@ -707,16 +707,13 @@ void PlayerAnimController::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "runThreshold") {
-			if (!(ss >> runThreshold))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(runThreshold);
 		}
 		else if (prop.first == "strongCooldown") {
-			if (!(ss >> fallThreshold))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(fallThreshold);
 		}
 		else if (prop.first == "thrownDelay") {
-			if (!(ss >> thrownDelay))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(thrownDelay);
 		}
 		else if (prop.first == "ghostMesh")
 		{

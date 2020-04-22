@@ -55,16 +55,13 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "force") {
-			if (!(ss >> force))
-				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(force);
 		}
 		else if (prop.first == "duration") {
-			if (!(ss >> duration))
-				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(duration);
 		}
 		else if (prop.first == "chargeSpeedMult") {
-			if (!(ss >> chargeSpeedMult))
-				LOG("ULTIMATE GHOST PUNCH: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(chargeSpeedMult);
 		}
 		else
 			LOG("ULTIMATE GHOST PUNCH: Invalid property name \"%s\"", prop.first.c_str());
