@@ -9,7 +9,7 @@
             "ComponentProperties": [
                [ "position", "20 30 0"],
                [ "scale", "0.6 0.6 0.6"],
-               [ "rotation", "0 90 0"]
+               [ "rotation", "0 0 0"]
             ]
         },
         {
@@ -30,8 +30,8 @@
             "ComponentProperties": [
                [ "runThreshold", "0.5f"],
                [ "fallThreshold", "1.0f"],
-               [ "thrownDelay", "0.35f"],
-               ["ghostMesh", "ghost Ghost.mesh"]
+               [ "thrownDelay", "0.25f"],
+               [ "ghostMesh", "ghost Ghost.mesh"]
             ]
         },
         {

@@ -8,8 +8,8 @@
         {
             "ComponentName": "Transform",
             "ComponentProperties": [
-                ["position", "0 -10 0"],
-                ["scale", "100 1 10"]
+                ["position", "0 -20 0"],
+                ["scale", "200 1 10"]
             ]
         }
     ],

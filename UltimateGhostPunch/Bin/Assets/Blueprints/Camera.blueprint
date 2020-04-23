@@ -21,7 +21,9 @@
             "ComponentName": "Light",
             "ComponentProperties": [
                 ["type", "Directional"],
-                ["colour", "1 1 1"]
+                ["intensity", "1"],
+                ["colour", "1 1 1"],
+                ["direction", "0 0 -1"]
             ]
         },
         {

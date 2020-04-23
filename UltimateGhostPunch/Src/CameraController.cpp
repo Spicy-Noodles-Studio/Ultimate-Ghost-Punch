@@ -72,7 +72,7 @@ void CameraController::handleData(ComponentData* data)
 			setFloat(slowMoZ);
 		}
 		else
-			LOG("DYNAMIC CAMERA: Invalid property with name \"%s\"", prop.first.c_str());
+			LOG("CAMERA CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 	}
 }
 

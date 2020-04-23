@@ -70,7 +70,7 @@ material Lava {
         pass {
             lighting on
             ambient 1 1 1 1.0
-            diffuse 0.640000066757203 0.0 0.0023541232921797522 1.0
+            diffuse 1 0.1 0.1 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
             

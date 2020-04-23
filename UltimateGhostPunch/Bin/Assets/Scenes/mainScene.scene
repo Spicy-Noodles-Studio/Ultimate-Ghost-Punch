@@ -53,6 +53,23 @@
                     "ComponentName" : "FightManager"
                 }
             ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "AmbientLight",
+            "Tag": "ambientLight",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Light",
+                    "ComponentProperties": [
+                        ["type" , "Directional"],
+                        ["intensity" , "3"],
+                        ["colour" , "1 1 1"],
+                        ["direction" , "0 -1 0"]
+                    ]
+                }
+            ]
         }
     ]
 }
