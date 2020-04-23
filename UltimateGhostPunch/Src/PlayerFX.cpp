@@ -53,7 +53,7 @@ void PlayerFX::updateHurtFX(float deltaTime)
 {
 	if (time > 0.0f)
 		time -= deltaTime;
-	else
+	else if(effect == HURT)
 		deactivateHurt();
 }
 
@@ -168,6 +168,8 @@ void PlayerFX::deactivateInvencible()
 {
 	if (mesh == nullptr) return;
 
+	effect = NONE;
+
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		mesh->setDiffuse(i, diffuses[i], 1);
 }
@@ -181,6 +183,7 @@ void PlayerFX::activateGhostFX()
 void PlayerFX::deactivateGhostFX()
 {
 	if (mesh == nullptr) return;
+	effect = NONE;
 	mesh->setVisible(true);
 }
 
