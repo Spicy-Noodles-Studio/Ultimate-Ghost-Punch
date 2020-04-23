@@ -219,7 +219,7 @@ void FightManager::createLights()
 {
 	for (int i = 0; i < nLights; i++)
 	{
-		GameObject* light = instantiate("Light");
+		GameObject* light = instantiate("Light", lights[i].position);
 		Light* lightComp = light->getComponent<Light>();
 
 		if (lights[i].type == "Point")
@@ -229,11 +229,9 @@ void FightManager::createLights()
 		else if (lights[i].type == "Directional")
 			lightComp->setType(Light::Directional);
 
-		lightComp->setPosition(lights[i].position);
 		lightComp->setIntensity(lights[i].intensity);
 		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
-		if (lights[i].type != "Point")
-			lightComp->setDirection(lights[i].direction);
+		light->transform->setDirection(lights[i].direction);
 	}
 }
 

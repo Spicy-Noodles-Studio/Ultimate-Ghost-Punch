@@ -173,7 +173,7 @@ material Granito {
             lighting on
             ambient 0.6038162708282471 0.5686049461364746 0.42915090918540955 1.0
             diffuse 0.2830530238606485 0.25488396368747885 0.14332073246420514 1.0
-            specular 0.5 0.5 0.5 1.0 12.5
+            specular 0 0 0 1.0 5.5
             emissive 0.0 0.0 0.0 1.0
             
             alpha_to_coverage off 

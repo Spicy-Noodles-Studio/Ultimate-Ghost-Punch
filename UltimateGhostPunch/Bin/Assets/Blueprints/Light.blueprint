@@ -5,6 +5,9 @@
     "Components":
     [
         {
+            "ComponentName": "Transform"
+        },
+        {
             "ComponentName": "Light"
         }
     ]

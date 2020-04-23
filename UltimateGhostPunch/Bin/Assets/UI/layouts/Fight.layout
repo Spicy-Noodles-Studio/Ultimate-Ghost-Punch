@@ -9,7 +9,7 @@
                 <Property name="Area" value="{{0.5,0},{0.1,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="0" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
         </Window>
         ## WINNER PANEL
         <Window type="TaharezLook/StaticImage" name="WinnerBackground" >
@@ -20,7 +20,7 @@
                 <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Winner: " />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PAUSE MENU
@@ -37,7 +37,7 @@
 				<Property name="DownButton" value="OptionsButton" />
 				<Property name="LeftButton" value="BackButton" />
 				<Property name="RightButton" value="OptionsButton" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             # OPTIONS
             <Window type="TaharezLook/Button" name="OptionsButton" >
@@ -48,7 +48,7 @@
 				<Property name="DownButton" value="BackButton" />
 				<Property name="LeftButton" value="ResumeButton" />
 				<Property name="RightButton" value="BackButton" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             # BACK BUTTON
             <Window type="TaharezLook/Button" name="BackButton" >
@@ -59,32 +59,32 @@
 				<Property name="DownButton" value="ResumeButton" />
 				<Property name="LeftButton" value="OptionsButton" />
 				<Property name="RightButton" value="ResumeButton" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PLAYER 1 INFO
         <Window type="TaharezLook/StaticImage" name="Player1Background" >
             <Property name="Area" value="{{0.1,0},{0.88,0},{0.25,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Alpha" value="0.3" />
+            <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
             <Window type="TaharezLook/StaticText" name="Player1Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FFFF0000']P1" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player1HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player1StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PLAYER 1 INDICATOR
@@ -93,31 +93,31 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FFFF0000']P1" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         ## PLAYER 2 INFO
         <Window type="TaharezLook/StaticImage" name="Player2Background" >
             <Property name="Area" value="{{0.3,0},{0.88,0},{0.45,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Alpha" value="0.3" />
+            <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
             <Window type="TaharezLook/StaticText" name="Player2Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FF0000FF']P2" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player2HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player2StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PLAYER 2 INDICATOR
@@ -126,31 +126,31 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FF0000FF']P2" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         ## PLAYER 3 INFO
         <Window type="TaharezLook/StaticImage" name="Player3Background" >
             <Property name="Area" value="{{0.5,0},{0.88,0},{0.65,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Alpha" value="0.3" />
+            <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
             <Window type="TaharezLook/StaticText" name="Player3Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FFFF0000']P3" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player3HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player3StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PLAYER 3 INDICATOR
@@ -159,31 +159,31 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FFFF0000']P3" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         ## PLAYER 4 INFO
         <Window type="TaharezLook/StaticImage" name="Player4Background" >
             <Property name="Area" value="{{0.7,0},{0.88,0},{0.85,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Alpha" value="0.3" />
+            <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
             <Window type="TaharezLook/StaticText" name="Player4Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FF00FFFF']P4" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player4HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player4StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
-                <Property name="Font" value="Batang8" />
+                <Property name="Font" value="Sans" />
             </Window>
         </Window>
         ## PLAYER 4 INDICATOR
@@ -192,7 +192,7 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FF00FFFF']P4" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
     </Window>
 </GUILayout>
