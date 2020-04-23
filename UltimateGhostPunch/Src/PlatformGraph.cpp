@@ -195,7 +195,8 @@ int PlatformGraph::getIndex(const Vector3& pos)
 	float minYDiff = INFINITY, yDiff = 0.0f;
 	for (int i = 0; i < platforms.size(); i++) {
 		PlatformNode node = platforms[i];
-		if (node.getBegining().x > pos.x + playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x || node.getEnd().y > pos.y + playerCollisionSize.y)
+		if (node.getBegining().x > pos.x + playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x ||	// Off limits
+			node.getEnd().y > pos.y + playerCollisionSize.y || abs(node.getEnd().y - pos.y) > playerCollisionSize.y)	// Height difference in range
 			continue;
 		yDiff = pos.y - node.getEnd().y;
 		if (yDiff < minYDiff) {

@@ -117,6 +117,9 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 
 	Vector3 startPos = node.platform.getEdge(node.index).getIniPos(), characterPos = character->transform->getWorldPosition();
 
+	// Si la diferencia en altura el muy grande, node no es valido
+	if (std::abs(characterPos.y - startPos.y) > 1.0f) return;
+
 	float diff = std::abs(characterPos.x - startPos.x);
 	// If arrived to start point
 	if (diff < 0.1f) {
@@ -158,11 +161,18 @@ void PlatformNavigation::moveToPlatform()
 	Vector3 vel = character->getComponent<RigidBody>()->getLinearVelocity();
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
-		while (lastState >= 0 && lastState < states.size() && time > states[lastState].getTime()) {
+		bool processed = false;
+		while (lastState >= 0 && lastState < states.size() && time >= states[lastState].getTime()) {
 			// Inject input
 			for (Action action : states[lastState].getActions())
 				stateMachine->addActionInput((ActionInput)action);
 			lastState++;
+			processed = true;
+		}
+		// Compensate time diference by injecting last state input again (unless was the last one)
+		if (!processed && lastState - 1 >= 0 && lastState - 1 < states.size() - 1) {
+			for (Action action : states[lastState - 1].getActions())
+				stateMachine->addActionInput((ActionInput)action);
 		}
 	}
 }
