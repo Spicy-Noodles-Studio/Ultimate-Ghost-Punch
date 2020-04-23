@@ -29,7 +29,7 @@
                 {
                     "ComponentName": "CameraController",
                     "ComponentProperties": [
-                        ["minZ" , "40"],
+                        ["minZ" , "20"],
                         ["maxZ" , "50"],
                         ["zoomFactor" , "2.0f"],
                         ["smoothFactor" , "0.125f"]
@@ -51,6 +51,29 @@
             [
                 {
                     "ComponentName" : "FightManager"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "AmbientLight",
+            "Tag": "ambientLight",
+            "BlueprintPath": "Light",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName" : "Light",
+                    "ComponentProperties": [
+                        ["type" , "Directional"],
+                        ["intensity" , "3"],
+                        ["colour" , "1 1 1"]
+                    ]
+                },
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       ["direction" , "0 -1 0"]
+                    ]
                 }
             ]
         }

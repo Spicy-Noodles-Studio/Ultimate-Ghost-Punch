@@ -34,7 +34,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "mainMenu.layout"],
-                        ["event" , "SinglePlayerButton singlePlayerButtonClick | MultiplayerButton multiplayerButtonClick | OptionsButton optionsButtonClick | ExitButton exitButtonClick"]
+                        ["event" , "SinglePlayerButton multiplayerButtonClick | MultiplayerButton multiplayerButtonClick | OptionsButton optionsButtonClick | ExitButton exitButtonClick"]
                     ]
                 }
             ]

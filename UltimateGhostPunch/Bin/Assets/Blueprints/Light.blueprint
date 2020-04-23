@@ -1,0 +1,14 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Light",
+    "Tag": "light",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform"
+        },
+        {
+            "ComponentName": "Light"
+        }
+    ]
+}
