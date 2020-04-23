@@ -7,7 +7,8 @@
 #include "AIStateMachine.h"
 #include "Movement.h"
 
-PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), movingThroughLink(false), linkInUse(NavigationLink()), time(0.0f), lastState(-1)
+PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), movingThroughLink(false),
+																	 linkInUse(NavigationLink()), time(0.0f), lastState(-1)
 {
 
 }
@@ -24,7 +25,10 @@ void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
 
 void PlatformNavigation::setCharacter(GameObject* character)
 {
-	this->character = character->findChildrenWithTag("groundSensor")[0];
+	if (character == nullptr) return;
+	std::vector<GameObject*> gameObjects = character->findChildrenWithTag("groundSensor");
+	if (!gameObjects.size()) return;
+	this->character = gameObjects[0];
 
 	// Inicial target should be current platform
 	setTarget(this->character->transform->getPosition());
@@ -44,6 +48,8 @@ void PlatformNavigation::setTarget(const Vector3& position)
 
 void PlatformNavigation::setTarget(GameObject* target)
 {
+	if (target == nullptr) return;
+
 	setTarget(target->transform->getPosition());
 }
 
@@ -128,9 +134,8 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 		linkInUse = node.platform.getEdge(node.index);
 		time = 0.0f;
 		
-
 		//Set rigidbody to link´s inicial state
-		if (character->getParent()) {
+		if (character->getParent() != nullptr) {
 			character->getParent()->transform->setRotation({ 0, 90.0 * linkInUse.getDirection(),0 });
 			RigidBody* rb = character->getParent()->getComponent<RigidBody>();
 			if (rb != nullptr) {
@@ -170,7 +175,7 @@ void PlatformNavigation::moveToPlatform()
 			processed = true;
 		}
 		// Compensate time diference by injecting last state input again (unless was the last one)
-		if (!processed && lastState - 1 >= 0 && lastState - 1 < states.size() - 1) {
+		if (!processed && lastState - 1 >= 0 && lastState < states.size()) {
 			for (Action action : states[lastState - 1].getActions())
 				stateMachine->addActionInput((ActionInput)action);
 		}

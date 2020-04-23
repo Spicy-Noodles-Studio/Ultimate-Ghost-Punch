@@ -6,14 +6,11 @@
 #include "PlatformGraph.h"
 #include "PlatformNode.h"
 
-
 typedef std::pair<int, int> ii;
 
 class PlatformNavigation : public StateAction
 {
 public:
-	//enum class NavigationState { MOVING_RIGHT, MOVING_LEFT, JUMPING, CANCEL_JUMP, DODGE };
-
 	struct PathNode {
 		PlatformNode platform;
 		int index;
@@ -34,7 +31,7 @@ public:
 
 private:
 
-	std::vector<PathNode> getShortestPath(); //Dijkstra es suficiente
+	std::vector<PathNode> getShortestPath(); // Dijkstra
 
 	void moveToStartingPoint(const PathNode& node);
 	void moveToPlatform();
