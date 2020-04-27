@@ -9,9 +9,13 @@
 #include <vector>
 #include <string>
 
+class Sound;
 
 class SoundManager : public UserComponent
 {
+
+private:
+
 
 public:
 	SoundManager(GameObject* gameObject);

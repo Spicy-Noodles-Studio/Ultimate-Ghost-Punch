@@ -2,6 +2,8 @@
 
 #include <ComponentRegister.h>
 
+#include <ResourcesManager.h>
+
 
 REGISTER_FACTORY(SoundManager);
 
@@ -17,7 +19,6 @@ SoundManager::~SoundManager()
 
 void SoundManager::start()
 {
-	
 }
 
 void SoundManager::update(float deltaTime)
