@@ -30,7 +30,7 @@ bool MainMenu::optionsButtonClick()
 
 bool MainMenu::exitButtonClick()
 {
-	RenderSystem::GetInstance()->closeWindow();
+	//RenderSystem::GetInstance()->closeWindow();
 	return false;
 }
 

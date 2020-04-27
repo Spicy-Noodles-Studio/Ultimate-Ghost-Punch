@@ -35,6 +35,9 @@
                 ["preset" , "mountains"],
                 ["maxDistance" , "100000"]
             ]
+        },
+		{
+            "ComponentName": "CameraEffects"
         }
     ]
 }

@@ -12,13 +12,9 @@
 class CameraEffects : public UserComponent
 {
 private:
-	float alpha;
+	float max, min, current;
 
 	
-	Ogre::ResourcePtr resptr;
-	Ogre::Material* mat;
-
-
 	enum State { IDLE, FADEIN, FADEOUT, SHAKE };
 
 	State state;
@@ -27,6 +23,9 @@ public:
 	CameraEffects(GameObject* gameObject);
 	virtual ~CameraEffects();
 	virtual void fixedUpdate(float deltaTime);
+	virtual void start();
+	void fadeOut();
+	void fadeIn();
 	
 };
 
