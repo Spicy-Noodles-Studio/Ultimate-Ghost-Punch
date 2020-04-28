@@ -29,6 +29,9 @@
         {
             "ComponentName": "SoundListener"
         },
+		{
+            "ComponentName": "SoundManager"
+        },
         {
             "ComponentName": "Reverb",
             "ComponentProperties": [
