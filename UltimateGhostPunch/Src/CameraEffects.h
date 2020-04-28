@@ -29,7 +29,7 @@ private:
 	Vector3 rotationDir;
 	float dir;
 	float moves;
-	float totalMoves;
+	float time;
 	float vel;
 	float minRange;
 	float maxRange;

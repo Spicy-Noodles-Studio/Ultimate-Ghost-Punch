@@ -26,9 +26,9 @@ void CameraEffects::start()
 	shakeDir = Vector3(0, 0, 0);
 	dir = 1.0;
 	moves = 0;
-	totalMoves = 0;
+	time = 0;
 	vel = 2.0f;
-	duration = 100;
+	duration = 2000;
 	minRange = -5;
 	maxRange = 5;
 
@@ -68,13 +68,13 @@ void CameraEffects::fixedUpdate(float deltaTime)
 		cam->rotate(rotationDir * dir);
 		
 		moves += dir;
-		totalMoves++;
-		if (moves >= maxRange || moves <= -minRange) dir *= -1;
+		time += 20;
+		if ((moves >= maxRange && dir > 0) || (moves <= -minRange && dir < 0)) dir *= -1;
 
-		if (totalMoves >= duration) {
+		if (time >= duration) {
 			state = IDLE;
 			cam->setRotation(initialRotation);
-			totalMoves = 0;
+			time = 0;
 			moves = 0;
 		}
 
