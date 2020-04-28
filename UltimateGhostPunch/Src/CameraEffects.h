@@ -10,7 +10,6 @@
 
 
 class Transform;
-class InputSystem;
 
 
 class CameraEffects : public UserComponent
@@ -23,7 +22,6 @@ private:
 
 	State state;
 	Transform* cam;
-	InputSystem* input;
 	Vector3 shakeDir;
 	Vector3 initialRotation;
 	Vector3 rotationDir;
@@ -44,7 +42,6 @@ public:
 	void fadeOut();
 	void fadeIn();
 	void shake(Vector3 rotDir);
-	void checkInput();
 	virtual void handleData(ComponentData* data);
 	
 };

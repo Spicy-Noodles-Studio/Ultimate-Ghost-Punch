@@ -33,14 +33,13 @@ void CameraEffects::start()
 	maxRange = 5;
 
 	cam = gameObject->getComponent<Transform>();
-	input = InputSystem::GetInstance();
 
 	initialRotation = cam->getRotation();
 }
 
 void CameraEffects::fixedUpdate(float deltaTime)
 {
-	checkInput();
+	
 
 
 	if (state == FADEOUT) {
@@ -105,12 +104,6 @@ void CameraEffects::shake(Vector3 rotDir)
 	}
 }
 
-void CameraEffects::checkInput()
-{
-	if (input->getKeyPress("N")) fadeOut();
-	else if (input->getKeyPress("M")) fadeIn();
-	else if (input->getKeyPress("B")) shake(Vector3(0,0,1));
-}
 
 void CameraEffects::handleData(ComponentData* data)
 {
