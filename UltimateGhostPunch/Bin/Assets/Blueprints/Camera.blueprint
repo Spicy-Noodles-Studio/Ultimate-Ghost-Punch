@@ -44,8 +44,10 @@
 		{
             "ComponentName": "CameraEffects",
 			"ComponentProperties": [
-                ["preset" , "mountains"],
-                ["maxDistance" , "100000"]
+                ["vel" , "2"],
+				["minRange" , "-5"],
+				["maxRange" , "5"],
+                ["duration" , "100"]
             ]
         }
     ]
