@@ -12,7 +12,6 @@
 class Transform;
 class InputSystem;
 
-class SoundManager;
 
 class CameraEffects : public UserComponent
 {
@@ -36,8 +35,6 @@ private:
 	float maxRange;
 	float duration;
 
-
-	SoundManager* sm;
 
 public: 
 	CameraEffects(GameObject* gameObject);

@@ -4,7 +4,6 @@
 #include "RenderSystem.h"
 #include "Camera.h"
 #include "InputSystem.h"
-#include "SoundManager.h"
 
 REGISTER_FACTORY(CameraEffects);
 
@@ -37,8 +36,6 @@ void CameraEffects::start()
 	input = InputSystem::GetInstance();
 
 	initialRotation = cam->getRotation();
-
-	sm = gameObject->getComponent<SoundManager>();
 }
 
 void CameraEffects::fixedUpdate(float deltaTime)
@@ -92,7 +89,6 @@ void CameraEffects::fadeOut()
 	if (state == IDLE)
 	state = FADEOUT;
 
-	sm->playSound("despacito");
 }
 
 void CameraEffects::fadeIn()
