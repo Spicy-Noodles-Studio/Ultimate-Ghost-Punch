@@ -76,6 +76,47 @@
                     ]
                 }
             ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LevelRender",
+            "Tag": "levelRender",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": [
+                        ["position", "0 0 0"],
+                        ["scale", "1 1 1"],
+                        ["rotation", "0 90 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "MeshRenderer"
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LevelCollider",
+            "Tag": "levelCollider",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": [
+                        ["position", "0 0 0"],
+                        ["scale", "1 1 1"],
+                        ["rotation", "0 90 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "MeshRenderer"
+                },
+                {
+                    "ComponentName": "Strider"
+                }
+            ]
         }
     ]
 }
