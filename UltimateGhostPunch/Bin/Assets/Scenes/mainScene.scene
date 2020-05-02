@@ -99,7 +99,7 @@
         {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "LevelCollider",
-            "Tag": "levelCollider",
+            "Tag": "suelo",
             "Components":
             [
                 {

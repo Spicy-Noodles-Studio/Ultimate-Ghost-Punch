@@ -165,7 +165,7 @@
                     "ComponentName": "Transform",
                     "ComponentProperties":[
                        [ "position", "0 -2.2 0"],
-                        ["scale", "0.75 0.75 0.75"]
+                        ["scale", "1.1 0.75 1.1"]
                     ]
                 }
             ],
