@@ -96,7 +96,6 @@ void Attack::onObjectStay(GameObject* other)
 {
 	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
 	{
-		
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
 
@@ -115,10 +114,8 @@ void Attack::onObjectStay(GameObject* other)
 		PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
-			
 			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
 			{
-				
 				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
@@ -135,6 +132,7 @@ void Attack::onObjectStay(GameObject* other)
 			state = NOT_ATTACKING;
 
 		}
+		/* PARECE CODIGO MUERTO (no lo he comprobado) */
 		else {
 			Health* enemyHealth = other->getComponent<Health>();
 			int health = enemyHealth->getHealth();
@@ -192,4 +190,9 @@ bool Attack::strongAttack()
 	else
 		LOG("Attack on CD...\n");
 	return false;
+}
+
+bool Attack::isAttacking() const
+{
+	return state == AttackState::CHARGING;
 }

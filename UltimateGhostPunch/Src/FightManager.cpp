@@ -92,12 +92,11 @@ void FightManager::createLevel()
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
 
-	// instantiate collider mesh
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
 	// Configuramos el mesh visual
 	configureLevelRender(renderName);
-	//Configuramos el mesh de colision
+	// Configuramos el mesh de colision
 	configureLevelCollider(colliderName);
 
 	// read player initial transforms
