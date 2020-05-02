@@ -22,7 +22,7 @@
             "ComponentName": "RigidBody",
             "ComponentProperties": [
                 ["shape", "Box"],
-                ["mass", "0"],
+                ["mass", "1"],
                 ["friction", "1"],
                 ["restitution", "0"],
                 ["damping", "0"],
@@ -30,7 +30,7 @@
                 ["gravity", "0 0 0"],
                 ["offset", "0 0 0"],
                 ["scale", "1 1 1"],
-                ["kinematic", "0"],
+                ["kinematic", "1"],
                 ["trigger", "0"],
                 ["movementConstraints", "1 1 1"],
                 ["rotationConstraints", "0 0 0"]
