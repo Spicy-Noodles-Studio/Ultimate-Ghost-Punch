@@ -79,8 +79,7 @@ void PlayerController::handleData(ComponentData* data)
 
 		if (prop.first == "controllerIndex")
 		{
-			if (!(ss >> controllerIndex))
-				LOG("PLAYER CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(controllerIndex);
 		}
 		else
 			LOG("PLAYER CONTROLLER: Invalid property name \"%s\"", prop.first.c_str());

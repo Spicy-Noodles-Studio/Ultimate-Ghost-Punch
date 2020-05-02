@@ -14,13 +14,15 @@
             "ComponentName": "Transform",
             "ComponentProperties": [
                 ["position", "0 10 50"], 
-                ["rotation", "0 0 0"]
+                ["rotation", "0 0 0"],
+                ["direction", "0 0 -1"]
             ]
         },
         {
             "ComponentName": "Light",
             "ComponentProperties": [
                 ["type", "Directional"],
+                ["intensity", "1"],
                 ["colour", "1 1 1"]
             ]
         },
@@ -30,8 +32,19 @@
         {
             "ComponentName": "Reverb",
             "ComponentProperties": [
-                ["preset" , "mountains"],
-                ["maxDistance" , "100000"]
+                ["vel" , "4"],
+				["minRange" , "-5"],
+				["maxRange" , "5"],
+                ["duration" , "100"]
+            ]
+        },
+		{
+            "ComponentName": "CameraEffects",
+			"ComponentProperties": [
+                ["vel" , "2"],
+				["minRange" , "-5"],
+				["maxRange" , "5"],
+                ["duration" , "1500"]
             ]
         }
     ]

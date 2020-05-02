@@ -53,16 +53,13 @@ void Jump::handleData(ComponentData* data)
 
 		if (prop.first == "maxForce")
 		{
-			if(!(ss >> jumpForce))
-				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
+			setFloat(jumpForce);
 		}
 		else if (prop.first == "jumpDecay") {
-			if(!(ss >> jumpDecay))
-				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
+			setFloat(jumpDecay);
 		}
 		else if (prop.first == "coyoteTime") {
-			if (!(ss >> coyoteTime))
-				LOG("JUMP: wrong value for property %s.\n", prop.first.c_str());
+			setFloat(coyoteTime);
 		}
 	}
 }

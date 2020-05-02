@@ -122,20 +122,16 @@ void PlayerFX::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "hurtTime") {
-			if (!(ss >> hurtTime))
-				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(hurtTime);
 		}
 		else if (prop.first == "invencibleFrec") {
-			if (!(ss >> invencibleFrec))
-				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(invencibleFrec);
 		}
 		else if (prop.first == "ghostFXFrec") {
-			if (!(ss >> ghostFXFrec))
-				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(ghostFXFrec);
 		}
 		else if (prop.first == "ghostFXTime") {
-			if (!(ss >> ghostFXTime))
-				LOG("PLAYERFX: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(ghostFXTime);
 		}
 	}
 }
@@ -172,6 +168,8 @@ void PlayerFX::deactivateInvencible()
 {
 	if (mesh == nullptr) return;
 
+	effect = NONE;
+
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		mesh->setDiffuse(i, diffuses[i], 1);
 }
@@ -185,6 +183,7 @@ void PlayerFX::activateGhostFX()
 void PlayerFX::deactivateGhostFX()
 {
 	if (mesh == nullptr) return;
+	effect = NONE;
 	mesh->setVisible(true);
 }
 

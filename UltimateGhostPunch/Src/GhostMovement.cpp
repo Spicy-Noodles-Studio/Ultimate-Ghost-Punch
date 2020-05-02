@@ -29,8 +29,7 @@ void GhostMovement::handleData(ComponentData* data)
 
 		if (prop.first == "maxSpeed")
 		{
-			if (!(ss >> maxSpeed))
-				LOG("GHOST MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(maxSpeed);
 		}
 		else
 			LOG("GHOST MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());

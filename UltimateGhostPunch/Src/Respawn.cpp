@@ -47,8 +47,7 @@ void Respawn::handleData(ComponentData* data)
 
 		if (prop.first == "respawnTime")
 		{
-			if (!(ss >> respawnTime))
-				LOG("RESPAWN: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(respawnTime);
 		}
 		else
 			LOG("RESPAWN: Invalid property name \"%s\"", prop.first.c_str());

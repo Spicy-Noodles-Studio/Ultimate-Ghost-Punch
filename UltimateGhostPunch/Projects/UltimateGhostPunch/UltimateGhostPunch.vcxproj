@@ -43,6 +43,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\CameraEffects.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
@@ -77,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
+    <ClInclude Include="..\..\Src\CameraEffects.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />

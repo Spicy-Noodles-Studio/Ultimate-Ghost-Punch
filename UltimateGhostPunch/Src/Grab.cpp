@@ -24,6 +24,8 @@ controller(nullptr), enemyController(nullptr), enemyDiff(Vector3()), cooldown(2.
 void Grab::start()
 {
 	controller = gameObject->getParent()->getComponent<PlayerController>();
+	id= gameObject->getParent()->getComponent<PlayerIndex>()->getIndex();
+	score = GameManager::GetInstance()->getScore();
 }
 
 void Grab::update(float deltaTime)
@@ -105,19 +107,16 @@ void Grab::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
-		
+
 		if (prop.first == "freezeDuration")
 		{
-			if (!(ss >> freezeDuration))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(freezeDuration);
 		}
 		else if (prop.first == "throwForce") {
-			if (!(ss >> throwForce))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(throwForce);
 		}
 		else if (prop.first == "grabDuration") {
-			if (!(ss >> grabDuration))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(grabDuration);
 		}
 		else if (prop.first == "cooldown") {
 			if (!(ss >> cooldown))
@@ -197,7 +196,7 @@ void Grab::grabEnemy()
 	PlayerAnimController* enemyAnim = enemy->getComponent<PlayerAnimController>();
 	PlayerAnimController* myAnim = gameObject->getParent()->getComponent<PlayerAnimController>();
 
-	Score* score = GameManager::GetInstance()->getScore();
+	
 	//Check if we have been blocked
 	std::vector<GameObject*> aux = enemy->findChildrenWithTag("groundSensor");
 	Block* enemyBlock = nullptr;
@@ -226,7 +225,8 @@ void Grab::grabEnemy()
 
 	//Grab the enemy
 	enemyDiff = enemy->transform->getPosition() - gameObject->getParent()->transform->getPosition();
-	score->grabbedBy(enemy->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+	if(score!=nullptr)
+	score->grabbedBy(enemy->getComponent<PlayerIndex>()->getIndex(), id);
 	state = GRABBED;
 	remain = grabDuration;
 	enemy = enemy;

@@ -8,6 +8,7 @@
         <Window type="TaharezLook/StaticImage" name="LogoImage" >
             <Property name="Area" value="{{0.3,0},{0.2,0},{0.7,0},{0.4,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property Name="Image" Value="set:LogoImageset image:Logo" />
         </Window>
         # SINGLE PLAYER
         <Window type="TaharezLook/Button" name="SinglePlayerButton" >
@@ -18,7 +19,7 @@
 			<Property name="DownButton" value="MultiplayerButton" />
 			<Property name="LeftButton" value="ExitButton" />
 			<Property name="RightButton" value="MultiplayerButton" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         # MULTIPLAYER
         <Window type="TaharezLook/Button" name="MultiplayerButton" >
@@ -29,7 +30,7 @@
 			<Property name="DownButton" value="OptionsButton" />
 			<Property name="LeftButton" value="SinglePlayerButton" />
 			<Property name="RightButton" value="OptionsButton" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         # OPTIONS
         <Window type="TaharezLook/Button" name="OptionsButton" >
@@ -40,7 +41,7 @@
 			<Property name="DownButton" value="ExitButton" />
 			<Property name="LeftButton" value="MultiplayerButton" />
 			<Property name="RightButton" value="ExitButton" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         # EXIT
         <Window type="TaharezLook/Button" name="ExitButton" >
@@ -51,14 +52,14 @@
 			<Property name="DownButton" value="SinglePlayerButton" />
 			<Property name="LeftButton" value="OptionsButton" />
 			<Property name="RightButton" value="SinglePlayerButton" />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
         # INFO TEXT
         <Window type="TaharezLook/StaticText" name="InfoText" >
             <Property name="Area" value="{{0.2,0},{0.95,0},{0.9,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Text" value="Ultimate Ghost Punch v1.0 is powered by Gaia. All rights reserved. Spicy Noodles (C) 2020." />
-            <Property name="Font" value="Batang8" />
+            <Property name="Font" value="Sans" />
         </Window>
     </Window>
 </GUILayout>

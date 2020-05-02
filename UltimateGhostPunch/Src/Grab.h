@@ -7,6 +7,7 @@
 
 class RigidBody;
 class GameObject;
+class Score;
 
 class Grab : public UserComponent
 {
@@ -28,7 +29,8 @@ private:
 	Vector3 grabbedPosition;
 	int prevOrientation;
 	float enemyFollowingThreshold;
-
+	int id;
+	Score* score;
 	void resetEnemy();
 	void grabEnemy();
 public:

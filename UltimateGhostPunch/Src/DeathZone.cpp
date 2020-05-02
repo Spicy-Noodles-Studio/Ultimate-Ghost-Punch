@@ -28,8 +28,7 @@ void DeathZone::handleData(ComponentData* data)
 
 		if (prop.first == "fallDamage")
 		{
-			if (!(ss >> fallDamage))
-				LOG("DEATH ZONE: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(fallDamage);
 		}
 		else
 			LOG("DEATH ZONE: Invalid property name \"%s\"", prop.first.c_str());
@@ -43,13 +42,14 @@ void DeathZone::onObjectEnter(GameObject* other)
 		Health* health = other->getComponent<Health>();
 		if (health != nullptr) {
 			Score* score = GameManager::GetInstance()->getScore();
+			int id = other->getComponent<PlayerIndex>()->getIndex();
 			int h = health->getHealth();
 			health->receiveDamage(fallDamage);
-			if (h != health->getHealth())
-				score->fall(other->getComponent<PlayerIndex>()->getIndex());
+			if (h != health->getHealth()&&score!=nullptr)
+				score->fall(id);
 
-			if (!health->isAlive())
-				score->deathByEnviromentHazard(other->getComponent<PlayerIndex>()->getIndex());
+			if (!health->isAlive() && score != nullptr)
+				score->deathByEnviromentHazard(id);
 
 			Respawn* respawn = other->getComponent<Respawn>();
 			if (respawn != nullptr); respawn->respawn();

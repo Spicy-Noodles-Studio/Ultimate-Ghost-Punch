@@ -21,8 +21,7 @@ void PlayerIndex::handleData(ComponentData* data)
 
 		if (prop.first == "index")
 		{
-			if (!(ss >> index))
-				LOG("PLAYER INDEX: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(index);
 		}
 		else
 			LOG("PLAYER INDEX: Invalid property name \"%s\"", prop.first.c_str());

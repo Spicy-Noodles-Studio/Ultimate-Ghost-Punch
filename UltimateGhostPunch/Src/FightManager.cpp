@@ -6,6 +6,7 @@
 #include <UILayout.h>
 #include <GaiaData.h>
 #include <RigidBody.h>
+#include <Light.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
@@ -15,8 +16,8 @@
 
 REGISTER_FACTORY(FightManager);
 
-FightManager::FightManager(GameObject* gameObject) :	UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL),
-														winnerPanel(NULL), winnerText(NULL), fightTimer(-1.0f), finishTimer(-1.0f), winner(-1)
+FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL),
+winnerPanel(NULL), winnerText(NULL), fightTimer(-1.0f), finishTimer(-1.0f), winner(-1)
 {
 
 }
@@ -42,12 +43,12 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
-	playerPositions = { {-20,20,0}, {20,20,0}, {-17.5,0,0}, {17.5,0,0} };
 
 	// create game
 	createLevel();
 	createSpikes();
 	createKnights();
+	createLights();
 	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
 
 	fightTimer = gameManager->getTime();
@@ -58,16 +59,16 @@ void FightManager::start()
 
 void FightManager::update(float deltaTime)
 {
-	if (fightTimer > 0)	{
+	if (fightTimer > 0) {
 		fightTimer -= deltaTime;
 		if (fightTimer < 0.0f) fightTimer = 0.0f;
 		timeText.setText(std::to_string((int)fightTimer % 60));
 	}
-	else if(fightTimer == 0) {//If its negative it means match its not timed
+	else if (fightTimer == 0) {//If its negative it means match its not timed
 		// end game
 		if (winner == -1) chooseWinner();
 		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f) { 
+		if (finishTimer <= 0.0f) {
 			gameManager->getKnights().clear();
 			SceneManager::GetInstance()->changeScene("leaderBoard");
 		}
@@ -95,11 +96,7 @@ void FightManager::createLevel()
 	// instantiate render mesh
 	instantiate(levelData.find("LevelRenderBlueprint").getValue().c_str());
 
-	/*GameObject* backWall = instantiate("Cubo", { 0,0,-10 });
-	backWall->getComponent<Transform>()->setScale({ 190,150,1 });
-	backWall->getComponent<RigidBody>()->setKinematic(true);*/
-
-	// player initial transforms
+	// read player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
 	for (int i = 0; i < playerData.size(); i++)
 	{
@@ -119,7 +116,7 @@ void FightManager::createLevel()
 		playerTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
 	}
 
-	// spikes transforms
+	// read spikes transforms
 	GaiaData spikesData = levelData.find("SpikesTransforms");
 	nSpikes = spikesData.size();
 	for (int i = 0; i < nSpikes; i++)
@@ -138,6 +135,49 @@ void FightManager::createLevel()
 			continue;
 		}
 		spikesTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
+	}
+
+	// read lights data
+	GaiaData lightsData = levelData.find("Lights");
+	nLights = lightsData.size();
+	for (int i = 0; i < nLights; i++)
+	{
+		std::stringstream ss(lightsData[i][0].getValue());
+		std::string type;
+		if (!(ss >> type)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(lightsData[i][1].getValue());
+		double posX, posY, posZ;
+		if (!(ss >> posX >> posY >> posZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(lightsData[i][2].getValue());
+		float intensity;
+		if (!(ss >> intensity)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(lightsData[i][3].getValue());
+		double colX, colY, colZ;
+		if (!(ss >> colX >> colY >> colZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
+			continue;
+		}
+
+		ss = std::stringstream(lightsData[i][4].getValue());
+		double dirX, dirY, dirZ;
+		if (!(ss >> dirX >> dirY >> dirZ)) {
+			LOG_ERROR("FIGHT MANAGER", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
+			continue;
+		}
+
+		lights.push_back({ type, { posX, posY, posZ }, intensity, { colX, colY, colZ }, { dirX, dirY, dirZ } });
 	}
 }
 
@@ -175,6 +215,26 @@ void FightManager::createSpikes()
 	}
 }
 
+void FightManager::createLights()
+{
+	for (int i = 0; i < nLights; i++)
+	{
+		GameObject* light = instantiate("Light", lights[i].position);
+		Light* lightComp = light->getComponent<Light>();
+
+		if (lights[i].type == "Point")
+			lightComp->setType(Light::Point);
+		else if (lights[i].type == "Spotlight")
+			lightComp->setType(Light::Spotlight);
+		else if (lights[i].type == "Directional")
+			lightComp->setType(Light::Directional);
+
+		lightComp->setIntensity(lights[i].intensity);
+		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
+		light->transform->setDirection(lights[i].direction);
+	}
+}
+
 void FightManager::chooseWinner()
 {
 	fightTimer = 0.0f;
@@ -199,7 +259,7 @@ void FightManager::chooseWinner()
 		}
 	}
 
-	
+
 	winnerPanel.setVisible(true);
 
 	if (tie)

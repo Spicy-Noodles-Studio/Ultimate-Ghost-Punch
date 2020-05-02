@@ -27,14 +27,12 @@ void Dodge::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
-		
+
 		if (prop.first == "force") {
-			if (!(ss >> force))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(force);
 		}
 		else if (prop.first == "cooldown") {
-			if (!(ss >> cooldown))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(cooldown);
 		}
 		else
 			LOG("DODGE: Invalid property name %s", prop.first.c_str());

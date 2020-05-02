@@ -29,19 +29,13 @@ void Obstacle::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "damage") {
-			if (!(ss >> damage))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+			setInt(damage);
 		}
 		else if (prop.first == "pushStrength") {
-			if (!(ss >> pushStrength))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
+			setFloat(pushStrength);
 		}
 		else if (prop.first == "respawnOffset") {
-			double x, y, z;
-			if (!(ss >> x >> y >> z))
-				LOG("OBSTACLE: Invalid value \"%s\"", prop.second.c_str());
-			else
-				respawnOffset = { x,y,z };
+			setVector3(respawnOffset);
 		}
 		else
 			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
@@ -57,19 +51,21 @@ void Obstacle::onCollisionEnter(GameObject* other)
 
 		// The player receives damage
 		Score* score = GameManager::GetInstance()->getScore();
+		int otherId = other->getComponent<PlayerIndex>()->getIndex();
 		Health* health = other->getComponent<Health>();
 		if (health == nullptr) return;
 		int h = health->getHealth();
 		health->receiveDamage(damage);
-		if (h != health->getHealth())
-			score->damagedBySpike(other->getComponent<PlayerIndex>()->getIndex());
+		if (h != health->getHealth()&&score!=nullptr)
+			score->damagedBySpike(otherId);
 		// If the player has died, add an offset to the respawn position, in case it resurrects
 		if (!health->isAlive()) {
 			GhostManager* ghostManager = other->getComponent<GhostManager>();
 			if (ghostManager != nullptr) {
 				respawnOffset.x *= xDir;
 				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
-				score->deathByEnviromentHazard(other->getComponent<PlayerIndex>()->getIndex());
+				if(score!=nullptr)
+				score->deathByEnviromentHazard(otherId);
 			}
 		}
 		else {

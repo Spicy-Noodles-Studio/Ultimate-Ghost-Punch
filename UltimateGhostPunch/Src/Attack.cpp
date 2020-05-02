@@ -28,7 +28,8 @@ Attack::~Attack()
 void Attack::start()
 {
 	attackTrigger = gameObject->getComponent<RigidBody>();
-
+	id = gameObject->getParent()->getComponent<PlayerIndex>()->getIndex();
+	score = GameManager::GetInstance()->getScore();
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);
 }
@@ -65,32 +66,25 @@ void Attack::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "quickCooldown") {
-			if (!(ss >> quickAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(quickAttackCooldown);
 		}
 		else if (prop.first == "strongCooldown") {
-			if (!(ss >> strongAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(strongAttackCooldown);
 		}
 		else if (prop.first == "quickDamage") {
-			if (!(ss >> quickAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(quickAttackDamage);
 		}
 		else if (prop.first == "strongDamage") {
-			if (!(ss >> strongAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(strongAttackDamage);
 		}
 		else if (prop.first == "attackDuration") {
-			if (!(ss >> attackDuration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(attackDuration);
 		}
 		else if (prop.first == "quickCharge") {
-			if (!(ss >> quickChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(quickChargeTime);
 		}
 		else if (prop.first == "strongCharge") {
-			if (!(ss >> strongChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(strongChargeTime);
 		}
 		else
 			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
@@ -102,7 +96,7 @@ void Attack::onObjectStay(GameObject* other)
 {
 	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
 	{
-		Score* score = GameManager::GetInstance()->getScore();
+		
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
 
@@ -118,17 +112,19 @@ void Attack::onObjectStay(GameObject* other)
 
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 		Block* enemyBlock = nullptr;
+		PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
 		if (enemyBlock != nullptr) {
 			
 			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
 			{
+				
 				Health* enemyHealth = other->getComponent<Health>();
-				score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
-				score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
+				score->receiveHitFrom(otherIndex->getIndex(),id );
+				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
 				if (!enemyHealth->isAlive())
 				{
-					score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+					score->killedBy(otherIndex->getIndex(), id);
 				}
 			}
 			
@@ -143,12 +139,12 @@ void Attack::onObjectStay(GameObject* other)
 			Health* enemyHealth = other->getComponent<Health>();
 			int health = enemyHealth->getHealth();
 			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
-			score->receiveHitFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+			score->receiveHitFrom(otherIndex->getIndex(),id);
 			if(health!= enemyHealth->getHealth())
-				score->damageRecivedFrom(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), damage);
+				score->damageRecivedFrom(otherIndex->getIndex(), id, damage);
 			if (!enemyHealth->isAlive())
 			{
-				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getParent()->getComponent<PlayerIndex>()->getIndex());
+				score->killedBy(otherIndex->getIndex(),id);
 			}
 		}
 	}
@@ -167,7 +163,7 @@ void Attack::attack()
 	state = ATTACKING;
 	activeTime = attackDuration;
 	attackTrigger->setActive(true);
-	GameManager::GetInstance()->getScore()->attackDone(gameObject->getParent()->getComponent<PlayerIndex>()->getIndex(), false);
+	score->attackDone(id, false);
 	LOG("Attack!\n");
 }
 
