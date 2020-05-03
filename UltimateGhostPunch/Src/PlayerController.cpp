@@ -26,7 +26,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1), isBlocking(false), animController(nullptr)
+															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1), grabed(false), animController(nullptr)
 {
 
 }
@@ -187,6 +187,16 @@ void PlayerController::checkInput()
 void PlayerController::setControllerIndex(int index)
 {
 	controllerIndex = index;
+}
+
+bool PlayerController::isGrabed()
+{
+	return grabed;
+}
+
+void PlayerController::setGrabed(bool grabed)
+{
+	this->grabed = grabed;
 }
 
 bool PlayerController::getKeyDown(const std::string& key)

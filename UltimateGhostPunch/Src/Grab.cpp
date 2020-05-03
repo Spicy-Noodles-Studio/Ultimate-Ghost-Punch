@@ -148,7 +148,7 @@ void Grab::grab()
 {
 	if (state == IDLE && grabTimer <= 0 && canGrab())
 	{
-		if (enemy != nullptr) grabEnemy();
+		if (enemy != nullptr && !enemy->getComponent<PlayerController>()->isGrabed()) grabEnemy();
 		else grabMissed();
 
 		grabTimer = cooldown;
@@ -206,8 +206,11 @@ void Grab::resetEnemy()
 	if (enemyRB != nullptr) { enemyRB->setTrigger(false); enemyRB->setActive(true); }
 
 	//Return control to the enemy
-	if (enemyController != nullptr)enemyController->setActive(true);
-
+	if (enemyController != nullptr)
+	{
+		enemyController->setGrabed(false);
+		enemyController->setActive(true);
+	}
 	if (enemyAnim != nullptr) enemyAnim->thrownAwayAnimation();
 
 	//Play throw animation
@@ -257,7 +260,11 @@ void Grab::grabEnemy()
 	remain = grabDuration;
 	enemyController = enemy->getComponent<PlayerController>();
 	enemyDiff = enemy->transform->getPosition() - parent->transform->getPosition();
-	if (enemyController != nullptr) enemyController->setActive(false);//freeze the enemy
+	if (enemyController != nullptr)
+	{
+		enemyController->setGrabed(true);
+		enemyController->setActive(false); //freeze the enemy
+	}
 	grabbedPosition = parent->transform->getPosition() + Vector3(0, parent->transform->getScale().y * grabVerticalOffset, 0);
 
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();

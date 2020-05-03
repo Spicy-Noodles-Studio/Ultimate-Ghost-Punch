@@ -2,7 +2,9 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
+
 #include "PlayerAnimController.h"
+#include "Grab.h"
 
 REGISTER_FACTORY(Health);
 
@@ -69,6 +71,11 @@ void Health::receiveDamage(int damage)
 {
 	if (alive && !invencible)
 	{
+		Grab* aux = gameObject->findChildrenWithTag("grabSensor")[0]->getComponent<Grab>();
+
+		if (aux->isGrabbing())
+			aux->drop();
+
 		health -= damage;
 		if (health < 0) health = 0;
 
