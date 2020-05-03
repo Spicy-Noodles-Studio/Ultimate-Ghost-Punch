@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="loadingScreenRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        #Tips Text
+        <Window type="TaharezLook/StaticText" name="Tips" >
+                    <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="TEXTO DE PRUEBA" />
+                     <Property name="Font" value="Sans" />
+                     <Property name="Visible" value="True" />
+		</Window>
+        ## Game Logo
+		<Window type="TaharezLook/StaticImage" name="GameLogo" >
+            <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="True" />
+		</Window>
+    </Window>
+</GUILayout>

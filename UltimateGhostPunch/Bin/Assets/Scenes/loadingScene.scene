@@ -1,0 +1,22 @@
+{
+    "SceneName": "LoadingScene",
+    "SceneObjects": [
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LoadingScreen",
+            "Tag": "loadingScreen",
+            "Components":
+            [
+                {
+                    "ComponentName": "LoadingScreen"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "MainCamera",
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera"
+        }
+    ]
+}
