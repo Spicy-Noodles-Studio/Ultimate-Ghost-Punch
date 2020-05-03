@@ -13,9 +13,9 @@
 
 REGISTER_FACTORY(Attack);
 
-Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr),currentAttack(NONE),state(NOT_ATTACKING),activeTime(0.0f), attackDuration(0.5f),
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
-										 quickAttackCooldown(0.5f),cooldown(0.0f)
+										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(1.0f), strongAttackScale(1.0f), offset(0.0f), id(0), score(nullptr)
 {
 
 }
@@ -32,6 +32,7 @@ void Attack::start()
 	score = GameManager::GetInstance()->getScore();
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	offset = gameObject->transform->getPosition().z;
 }
 
 void Attack::update(float deltaTime)
@@ -85,6 +86,12 @@ void Attack::handleData(ComponentData* data)
 		}
 		else if (prop.first == "strongCharge") {
 			setFloat(strongChargeTime);
+		}
+		else if (prop.first == "quickAttackScale") {
+			setFloat(quickAttackScale);
+		}
+		else if (prop.first == "strongAttackScale") {
+			setFloat(strongAttackScale);
 		}
 		else
 			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
@@ -165,12 +172,30 @@ void Attack::attack()
 	LOG("Attack!\n");
 }
 
+void Attack::setUpTriggerAttack(float scale)
+{
+	Transform* attackTransform = attackTrigger->gameObject->transform;
+	// Scale trigger
+	Vector3 scaleRatio = Vector3::IDENTITY;
+	Vector3 currentScale = attackTransform->getScale();
+	scaleRatio.z = scale;
+	attackTrigger->multiplyScale(scaleRatio);
+	scaleRatio *= currentScale;
+
+	float diff = offset * scaleRatio.z / currentScale.z;
+
+	// Move an offset
+	Vector3 position = attackTransform->getPosition();
+	position.z = diff;
+	attackTransform->setPosition(position);
+}
 
 bool Attack::quickAttack()
 {
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = QUICK;
+		setUpTriggerAttack(quickAttackScale);
 		charge(quickAttackCooldown, quickChargeTime);
 		return true;
 	}
@@ -184,6 +209,7 @@ bool Attack::strongAttack()
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = STRONG;
+		setUpTriggerAttack(strongAttackScale);
 		charge(strongAttackCooldown, strongChargeTime);
 		return true;
 	}
