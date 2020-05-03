@@ -8,21 +8,32 @@
 class RigidBody;
 class GameObject;
 class Score;
+class Block;
+class Dodge;
+class Attack;
+class PlayerAnimController;
 
 class Grab : public UserComponent
 {
 private:
-	enum State { IDLE, GRABBING, GRABBED, BLOCKED };
+	enum State { IDLE, GRABBED, BLOCKED };
 	
 	float grabDuration, remain, freezeDuration, throwForce,
 			cooldown, grabTimer, grabVerticalOffset, dropHorizontalOffset;
 
 	State state;
 
+	GameObject* parent;
 	PlayerController* controller;
+	PlayerAnimController* myAnim;
 
 	GameObject* enemy;
 	PlayerController* enemyController;
+	PlayerAnimController* enemyAnim;
+
+	Dodge* dodge;
+	Block* block;
+	Attack* attack;
 
 	Vector3 enemyDiff;
 	bool enemyFollowing;
@@ -31,8 +42,10 @@ private:
 	float enemyFollowingThreshold;
 	int id;
 	Score* score;
+
 	void resetEnemy();
 	void grabEnemy();
+
 public:
 	Grab(GameObject* gameObject);
 
@@ -47,9 +60,11 @@ public:
 
 	void grab();
 	void drop();
+	void grabMissed();
 
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
+	bool canGrab() const;
 };
 
 #endif

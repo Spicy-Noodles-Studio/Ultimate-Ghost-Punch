@@ -3,24 +3,32 @@
 #include <GameObject.h>
 #include <RigidBody.h>
 #include <sstream>
-#include "Movement.h"
 #include "ComponentRegister.h"
 
 REGISTER_FACTORY(Dodge);
 
-Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject), cooldown(1.0f), force(10.0f), cd(0.0f)
+Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject), cooldown(1.0f), force(10.0f), time(0.0f), duration(0.25f), playerGravity(0, -10, 0), atenuation(0.3f)
 {
 }
 
 void Dodge::update(float deltaTime)
 {
-	// Update the cooldown
-	if (cd > 0.0f)
-		cd -= deltaTime;
+	if (state != State::IDLE) {
+		if (time > 0.0f)
+			time -= deltaTime;
 
-	if (cd <= 0.0f)
-		state = IDLE;
+		if (time <= 0.0f) {
+			if (state == State::DODGING) endDodge();
+			else state = State::IDLE;
+		}
+	}
 
+}
+
+void Dodge::start()
+{
+	rigidBody = gameObject->getComponent<RigidBody>();
+	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity();
 }
 
 void Dodge::handleData(ComponentData* data)
@@ -29,10 +37,20 @@ void Dodge::handleData(ComponentData* data)
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "force") {
-			setFloat(force);
+			if (!(ss >> force))
+				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
 		}
 		else if (prop.first == "cooldown") {
-			setFloat(cooldown);
+			if (!(ss >> cooldown))
+				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+		}
+		else if (prop.first == "duration") {
+			if (!(ss >> duration))
+				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+		}
+		else if (prop.first == "atenuation") {
+			if (!(ss >> atenuation))
+				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
 		}
 		else
 			LOG("DODGE: Invalid property name %s", prop.first.c_str());
@@ -41,19 +59,33 @@ void Dodge::handleData(ComponentData* data)
 
 bool Dodge::dodge()
 {
-	if (state == IDLE) {
-		Vector3 dir = Vector3();
+	if (state == State::IDLE) {
+		Vector3 dir = Vector3::ZERO;
 		dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
 
-		RigidBody* rb = gameObject->getComponent<RigidBody>();
-		if(rb!=nullptr) rb->addImpulse(dir * force);
-
-		cd = cooldown;
-		state = CD;
-
+		if (rigidBody != nullptr) {
+			rigidBody->setGravity({ 0,0,0 });
+			rigidBody->setLinearVelocity({ 0,0,0 });
+			rigidBody->addImpulse(dir * force);
+		}
+		state = State::DODGING;
+		time = duration;
 		return true;
 	}
 	return false;
 }
 
+void Dodge::endDodge()
+{
+	state = State::CD;
+	time = cooldown;
+	if (rigidBody != nullptr) {
+		rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * atenuation);
+		rigidBody->setGravity(playerGravity);
+	}
+}
 
+bool Dodge::isDodging()
+{
+	return state == State::DODGING;
+}

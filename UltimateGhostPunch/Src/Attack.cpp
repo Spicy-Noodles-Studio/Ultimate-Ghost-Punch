@@ -193,3 +193,8 @@ bool Attack::strongAttack()
 		LOG("Attack on CD...\n");
 	return false;
 }
+
+bool Attack::isAttacking() const
+{
+	return state == ATTACKING || state == CHARGING;
+}

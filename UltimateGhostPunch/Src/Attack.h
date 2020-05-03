@@ -54,6 +54,7 @@ public:
 
 	bool quickAttack();
 	bool strongAttack();
+	bool isAttacking() const;
 };
 
 #endif
