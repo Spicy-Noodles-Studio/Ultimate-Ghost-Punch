@@ -28,8 +28,6 @@ dodge(nullptr), block(nullptr)
 
 void Grab::start()
 {
-	attack = gameObject->getComponent<Attack>();
-
 	parent = gameObject->getParent();
 	if (parent != nullptr) {
 		controller = parent->getComponent<PlayerController>();
@@ -39,6 +37,9 @@ void Grab::start()
 
 		std::vector<GameObject*> aux = parent->findChildrenWithTag("groundSensor");
 		if (aux.size() > 0) block = aux[0]->getComponent<Block>();
+
+		aux = parent->findChildrenWithTag("attackSensor");
+		if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
 
 	}
 
@@ -192,7 +193,7 @@ bool Grab::isOnCooldown() const
 
 bool Grab::canGrab() const
 {
-	return block != nullptr && !block->blocking() && dodge != nullptr && !dodge->isDodging() && attack != nullptr && attack->isAttacking();
+	return (block == nullptr || !block->blocking()) && (dodge == nullptr || !dodge->isDodging()) && (attack == nullptr || !attack->isAttacking());
 }
 
 void Grab::resetEnemy()
