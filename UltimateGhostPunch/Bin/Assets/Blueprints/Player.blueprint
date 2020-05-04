@@ -135,7 +135,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "1 0 3.65"],
+                       [ "position", "0 0 3.65"],
                        [ "scale", "1 1 4"]
                     ]
                 }
@@ -152,8 +152,10 @@
                         ["attackDuration", "0.2"],
                         ["quickCharge", "0.25"],
                         ["strongCharge", "0.6"],
-                        ["quickAttackScale", "1.0"],
-                        ["strongAttackScale", "1.375"]
+                        ["quickAttackScale", "1.0 1.0 1.0"],
+                        ["strongAttackScale", "1.0 5.0 1.375"],
+                        ["quickAttackOffset", "0.0 0.0 3.65"],
+                        ["strongAttackOffset", "0.0 2.2 5.15"]
                     ]
                 }
             ]

@@ -38,14 +38,15 @@ private:
 
 	RigidBody* attackTrigger;
 
-	float quickAttackScale;
-	float strongAttackScale;
-	float offset;
+	Vector3 quickAttackScale;
+	Vector3 strongAttackScale;
+	Vector3 quickAttackOffset;
+	Vector3 strongAttackOffset;
 
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
 
-	void setUpTriggerAttack(float scale);
+	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
 
 	int id;
 	Score* score;

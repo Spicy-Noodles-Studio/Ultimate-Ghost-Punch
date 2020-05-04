@@ -15,7 +15,8 @@ REGISTER_FACTORY(Attack);
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
-										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(1.0f), strongAttackScale(1.0f), offset(0.0f), id(0), score(nullptr)
+										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), score(nullptr)
 {
 
 }
@@ -32,7 +33,6 @@ void Attack::start()
 	score = GameManager::GetInstance()->getScore();
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);
-	offset = gameObject->transform->getPosition().z;
 }
 
 void Attack::update(float deltaTime)
@@ -88,10 +88,16 @@ void Attack::handleData(ComponentData* data)
 			setFloat(strongChargeTime);
 		}
 		else if (prop.first == "quickAttackScale") {
-			setFloat(quickAttackScale);
+			setVector3(quickAttackScale);
 		}
 		else if (prop.first == "strongAttackScale") {
-			setFloat(strongAttackScale);
+			setVector3(strongAttackScale);
+		}
+		else if (prop.first == "quickAttackOffset") {
+			setVector3(quickAttackOffset);
+		}
+		else if (prop.first == "strongAttackOffset") {
+			setVector3(strongAttackOffset);
 		}
 		else
 			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
@@ -172,22 +178,17 @@ void Attack::attack()
 	LOG("Attack!\n");
 }
 
-void Attack::setUpTriggerAttack(float scale)
+void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 	// Scale trigger
-	Vector3 scaleRatio = Vector3::IDENTITY;
+	Vector3 scaleRatio = scale;
 	Vector3 currentScale = attackTransform->getScale();
-	scaleRatio.z = scale;
 	attackTrigger->multiplyScale(scaleRatio);
 	scaleRatio *= currentScale;
 
-	float diff = offset * scaleRatio.z / currentScale.z;
-
 	// Move an offset
-	Vector3 position = attackTransform->getPosition();
-	position.z = diff;
-	attackTransform->setPosition(position);
+	attackTransform->setPosition(offset);
 }
 
 bool Attack::quickAttack()
@@ -195,7 +196,7 @@ bool Attack::quickAttack()
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = QUICK;
-		setUpTriggerAttack(quickAttackScale);
+		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
 		charge(quickAttackCooldown, quickChargeTime);
 		return true;
 	}
@@ -209,7 +210,7 @@ bool Attack::strongAttack()
 	if (cooldown <= 0.0f)
 	{
 		currentAttack = STRONG;
-		setUpTriggerAttack(strongAttackScale);
+		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
 		charge(strongAttackCooldown, strongChargeTime);
 		return true;
 	}
