@@ -17,6 +17,11 @@ class PlayerAnimController;
 class GhostManager : public UserComponent
 {
 private:
+	enum GhostMode
+	{
+		ALIVE, GHOST, DYING
+	};
+
 	bool ghost, used, deathPosChanged, ended;
 
 	float ghostTime, playerGravity;
@@ -38,6 +43,8 @@ private:
 
 	Vector3 deathPosition;
 
+	GhostMode mode;
+
 public:
 	GhostManager(GameObject* gameObject);
 	virtual ~GhostManager();
@@ -55,6 +62,9 @@ public:
 
 	void setDeathPosition(const Vector3& dPos);
 	bool ghostEnded();
+
+	void deactivatePlayer();
+	void handlePlayerDeath();
 };
 
 #endif
