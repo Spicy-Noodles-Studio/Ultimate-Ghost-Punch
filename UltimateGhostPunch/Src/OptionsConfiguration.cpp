@@ -42,11 +42,30 @@ bool OptionsConfiguration::resolutionButtonClick()
 	return false;
 }
 
+bool OptionsConfiguration::resetConfigButtonClick()
+{
+	fullscreen = false;
+	resolution = 1;
+	soundsVolume = 100;
+	musicVolume = 100;
+	gamma = 100;
+
+
+	changeResolution(0);
+	musicScroll.setScrollPositionScrollBar(musicVolume);
+	volumeScroll.setScrollPositionScrollBar(soundsVolume);
+	gammaScroll.setScrollPositionScrollBar(gamma);
+	checkbox.setCheckBoxState(false);
+	changeFullscreen(false);
+
+	return false;
+}
+
 bool OptionsConfiguration::changeResolution(int value)
 {
 	resolution += value;
 
-	if (resolution < 0) resolution = 0;
+	if (resolution < 1) resolution = 0;
 	if (resolution > resolutionNames.size() - 1) resolution = resolutionNames.size() - 1;
 
 	resolutionText.setText(resolutionNames[resolution]);
@@ -96,7 +115,7 @@ bool OptionsConfiguration::backButtonClick()
 // -----
 
 OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL),musicScroll(NULL),gammaScroll(NULL), interfaceSystem(nullptr),windowManager(nullptr),renderSystem(nullptr),soundSystem(nullptr),
-resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL),root(NULL)
+resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL),root(NULL),checkbox(NULL)
 {
 	interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
@@ -108,6 +127,7 @@ resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL),root(NU
 	interfaceSystem->registerEvent("volumeMusicScrollChange", UIEvent("ScrollChange", [this]() {return changeMusicVolume(); }));
 	interfaceSystem->registerEvent("gammaScrollChange", UIEvent("ScrollChange", [this]() {return changeGamma(); }));
 
+	interfaceSystem->registerEvent("resetConfigurationsButtonClick", UIEvent("ButtonClicked", [this]() {return resetConfigButtonClick(); }));
 	interfaceSystem->registerEvent("resolutionApplyButtonClick", UIEvent("ButtonClicked", [this]() {return resolutionButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 	currResolution = -1;
@@ -131,13 +151,14 @@ OptionsConfiguration::~OptionsConfiguration()
 	interfaceSystem->unregisterEvent("volumeMusicScrollChange");
 	interfaceSystem->unregisterEvent("gammaScrollChange");
 
+	interfaceSystem->unregisterEvent("resetConfigurationsButtonClick");
 	interfaceSystem->unregisterEvent("resolutionApplyButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
 void OptionsConfiguration::start()
 {
-	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
+	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
 	resolutionButton = root.getChild("ResolutionApplyButton");
 	
 	volumeScroll = root.getChild("SoundScroll");
@@ -147,7 +168,7 @@ void OptionsConfiguration::start()
 	volumeText = root.getChild("SoundVolume");
 	musicText = root.getChild("MusicVolume");
 	gammaText=root.getChild("Gamma");
-	UIElement checkbox = root.getChild("FullscreenYesButton");
+	checkbox = root.getChild("FullscreenYesButton");
 
 
 
@@ -157,6 +178,8 @@ void OptionsConfiguration::start()
 	gamma = windowManager->getBrightness();
 
 	resolution = windowManager->getActualResolutionId();
+	if (resolution == 0)
+		resolution = 1;
 	//fullscreen = WindowManager::GetInstance()->getFullscreen();
 
 	changeResolution(0);
