@@ -30,19 +30,23 @@ void Jump::update(float deltaTime)
 
 void Jump::onObjectEnter(GameObject* other)
 {
-	if (other->getTag() == "suelo") {
+	bool overPlayer = other->getTag() == "Player" && other != gameObject->getParent();
+	if (other->getTag() == "suelo" || overPlayer) {
 		grounded = true;
 		coyoteTimer = 0.0f;
 		jumping = false; // Cannot be jumping if is on floor
+		if (overPlayer) playersBelow++;
 	}
 }
 
 void Jump::onObjectExit(GameObject* other)
 {
-	if (other->getTag() == "suelo") {
+	bool overPlayer = other->getTag() == "Player" && other != gameObject->getParent();
+	if (other->getTag() == "suelo" || overPlayer) {
 		grounded = false;
 		if(!jumping)
 			coyoteTimer = coyoteTime;
+		if (overPlayer) playersBelow--;
 	}
 }
 
@@ -101,7 +105,7 @@ void Jump::setCoyoteTime(float time)
 
 bool Jump::isGrounded()
 {
-	return grounded;
+	return grounded || playersBelow;
 }
 
 bool Jump::isJumping()
@@ -111,5 +115,5 @@ bool Jump::isJumping()
 
 bool Jump::canJump()
 {
-	return grounded || coyoteTimer > 0.0f;
+	return isGrounded() || coyoteTimer > 0.0f;
 }
