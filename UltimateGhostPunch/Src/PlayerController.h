@@ -4,8 +4,8 @@
 
 #include <UserComponent.h>
 
-class PlayerIndex;
 class InputSystem;
+class PlayerIndex;
 class Movement;
 class Attack;
 class Dodge;

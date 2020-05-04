@@ -1,6 +1,7 @@
 #include "Block.h"
 #include <sstream>
 
+#include "Attack.h"
 #include "Health.h"
 #include "PlayerAnimController.h"
 
@@ -9,16 +10,23 @@
 REGISTER_FACTORY(Block);
 
 Block::Block(GameObject* gameObject) : UserComponent(gameObject), isGrounded(false), isBlocking(false),blockRegenTime(1.5f), timeElapsed(0.0f), maxBlockTime(0.5f), blockTime(0.5f), 
-									   blockGrabMargin(0.25f), blockDirection(0)
+									   blockGrabMargin(0.25f), blockDirection(0), attack(nullptr)
 {
 }
 
-
+Block::~Block()
+{
+}
 
 void Block::start()
 {
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
+	auto children = gameObject->getParent()->findChildrenWithTag("attackSensor");
+	if(children.size())
+		attack = children[0]->getComponent<Attack>();
+	if (attack == nullptr)
+		LOG_ERROR("BLOCK", "Cannot find Attack component");
 }
 
 void Block::update(float deltaTime)
@@ -50,7 +58,6 @@ void Block::update(float deltaTime)
 
 void Block::handleData(ComponentData* data)
 {
-
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -64,17 +71,15 @@ void Block::handleData(ComponentData* data)
 		}
 		else if (prop.first == "blockGrabMargin") {
 			setFloat(blockGrabMargin);
-
 		}
 		else
 			LOG("BLOCK: Invalid property name %s", prop.first.c_str());
-
 	}
 }
 
 void Block::block()
 {
-	if (!isBlocking && blockTime > 0 && isGrounded) {
+	if (!isBlocking && blockTime > 0 && isGrounded && !attack->isAttacking()) {
 		isBlocking = true;
 		timeElapsed = 0;
 		blockDirection = gameObject->getParent()->transform->getRotation().y;
@@ -127,8 +132,7 @@ void Block::onObjectExit(GameObject* other)
 
 bool Block::getGrabBlock() const
 {
-	if (isBlocking && blockTime > maxBlockTime - blockGrabMargin) return true;
-	else return false;
+	return isBlocking && blockTime > maxBlockTime - blockGrabMargin;
 }
 
 bool Block::blocking() const

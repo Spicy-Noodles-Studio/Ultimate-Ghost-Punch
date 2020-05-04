@@ -23,8 +23,12 @@ private:
 
 	float blockDirection;
 
+	// To check if player is attacking
+	Attack* attack;
+
 public:
 	Block(GameObject* gameObject);
+	virtual ~Block();
 
 	void block();
 	void unblock();

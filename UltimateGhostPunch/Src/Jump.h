@@ -16,6 +16,7 @@ private:
 	float coyoteTime;	// Extra time when leaving a platform so jumping is still able
 	float coyoteTimer;
 
+	int playersBelow;		// Used as a boolean, count number of players the sensor is colliding with
 	bool grounded;		// Only true when sensor detects collision with floor
 	bool jumping;		
 
