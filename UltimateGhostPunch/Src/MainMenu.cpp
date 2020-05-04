@@ -1,4 +1,5 @@
 #include "MainMenu.h"
+#include <ComponentRegister.h>
 #include <InterfaceSystem.h>
 #include <RenderSystem.h>
 #include <SceneManager.h>
@@ -6,8 +7,6 @@
 #include <GameObject.h>
 
 #include "GameManager.h"
-
-#include <ComponentRegister.h>
 
 REGISTER_FACTORY(MainMenu);
 
@@ -35,7 +34,7 @@ bool MainMenu::exitButtonClick()
 	return false;
 }
 
-MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject)
+MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 

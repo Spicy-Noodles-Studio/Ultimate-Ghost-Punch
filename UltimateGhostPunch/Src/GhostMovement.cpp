@@ -1,13 +1,13 @@
 #include "GhostMovement.h"
 #include <ComponentRegister.h>
-#include <GameObject.h>
 #include <InputSystem.h>
+#include <GameObject.h>
 #include <RigidBody.h>
 #include <sstream>
 
 REGISTER_FACTORY(GhostMovement);
 
-GhostMovement::GhostMovement(GameObject* g) :UserComponent(g), rigidBody(nullptr), maxSpeed(2.0f)
+GhostMovement::GhostMovement(GameObject* gameObject) :UserComponent(gameObject), rigidBody(nullptr), maxSpeed(2.0f)
 {
 
 }
@@ -39,7 +39,8 @@ void GhostMovement::handleData(ComponentData* data)
 void GhostMovement::move(Vector3 dir)
 {
 	dir *= maxSpeed;
-	if (rigidBody != nullptr) rigidBody->setLinearVelocity(dir);
+	if (rigidBody != nullptr)
+		rigidBody->setLinearVelocity(dir);
 }
 
 void GhostMovement::setSpeed(float speed)

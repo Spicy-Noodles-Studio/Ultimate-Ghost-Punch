@@ -2,8 +2,8 @@
 #ifndef PLAYER_UI_H
 #define PLAYER_UI_H
 
-#include "UserComponent.h"
-#include "UIElement.h"
+#include <UserComponent.h>
+#include <UIElement.h>
 
 class Camera;
 class Health;

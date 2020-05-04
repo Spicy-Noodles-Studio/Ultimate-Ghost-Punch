@@ -1,25 +1,25 @@
 #include "FightManager.h"
-#include "Score.h"
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
-#include <GaiaData.h>
+#include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <Light.h>
-#include <MeshRenderer.h>
 #include <Strider.h>
+#include <GaiaData.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
 #include "Health.h"
+#include "Score.h"
 #include "FightConfiguration.h"
 #include "GameManager.h"
 
 REGISTER_FACTORY(FightManager);
 
-FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL),
-winnerPanel(NULL), winnerText(NULL), fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
+FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
+fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
 {
 
 }
@@ -37,7 +37,8 @@ void FightManager::start()
 	if (mainCamera != nullptr)
 		fightLayout = mainCamera->getComponent<UILayout>();
 
-	if (fightLayout != nullptr) {
+	if (fightLayout != nullptr)
+	{
 		timeText = fightLayout->getRoot().getChild("Time");
 		winnerPanel = fightLayout->getRoot().getChild("WinnerBackground");
 		winnerText = winnerPanel.getChild("Winner");
@@ -55,22 +56,31 @@ void FightManager::start()
 
 	fightTimer = gameManager->getTime();
 	finishTimer = 4.0f; // Hard Coded
+
 	gameManager->pauseGame(false);
 	playSong();
 }
 
 void FightManager::update(float deltaTime)
 {
-	if (fightTimer > 0) {
+	if (fightTimer > 0)
+	{
 		fightTimer -= deltaTime;
-		if (fightTimer < 0.0f) fightTimer = 0.0f;
+		if (fightTimer < 0.0f)
+			fightTimer = 0.0f;
+
 		timeText.setText(std::to_string((int)fightTimer % 60));
 	}
-	else if (fightTimer == 0) {//If its negative it means match its not timed
-		// end game
-		if (winner == -1) chooseWinner();
+	else if (fightTimer == 0)
+	{
+		// If its negative it means match its not timed
+		// End game
+		if (winner == -1)
+			chooseWinner();
+
 		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f) {
+		if (finishTimer <= 0.0f)
+		{
 			gameManager->getKnights().clear();
 			SceneManager::GetInstance()->changeScene("leaderBoard");
 		}
@@ -81,6 +91,7 @@ void FightManager::playerDie()
 {
 	int nPlayers = gameManager->getNumPlayers();
 	nPlayers--;
+
 	if (nPlayers == 1)
 		chooseWinner();
 	else
@@ -94,8 +105,10 @@ void FightManager::createLevel()
 
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
+
 	// Configuramos el mesh visual
 	configureLevelRender(renderName);
+
 	// Configuramos el mesh de colision
 	configureLevelCollider(colliderName);
 
@@ -105,14 +118,16 @@ void FightManager::createLevel()
 	{
 		std::stringstream ss(playerData[i][0].getValue());
 		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ)) {
+		if (!(ss >> posX >> posY >> posZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(playerData[i][1].getValue());
 		double rotX, rotY, rotZ;
-		if (!(ss >> rotX >> rotY >> rotZ)) {
+		if (!(ss >> rotX >> rotY >> rotZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
 			continue;
 		}
@@ -126,14 +141,16 @@ void FightManager::createLevel()
 	{
 		std::stringstream ss(spikesData[i][0].getValue());
 		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ)) {
+		if (!(ss >> posX >> posY >> posZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(spikesData[i][1].getValue());
 		double rotX, rotY, rotZ;
-		if (!(ss >> rotX >> rotY >> rotZ)) {
+		if (!(ss >> rotX >> rotY >> rotZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
 			continue;
 		}
@@ -147,35 +164,40 @@ void FightManager::createLevel()
 	{
 		std::stringstream ss(lightsData[i][0].getValue());
 		std::string type;
-		if (!(ss >> type)) {
+		if (!(ss >> type))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(lightsData[i][1].getValue());
 		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ)) {
+		if (!(ss >> posX >> posY >> posZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(lightsData[i][2].getValue());
 		float intensity;
-		if (!(ss >> intensity)) {
+		if (!(ss >> intensity))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(lightsData[i][3].getValue());
 		double colX, colY, colZ;
-		if (!(ss >> colX >> colY >> colZ)) {
+		if (!(ss >> colX >> colY >> colZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(lightsData[i][4].getValue());
 		double dirX, dirY, dirZ;
-		if (!(ss >> dirX >> dirY >> dirZ)) {
+		if (!(ss >> dirX >> dirY >> dirZ))
+		{
 			LOG_ERROR("FIGHT MANAGER", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
 			continue;
 		}
@@ -191,11 +213,18 @@ void FightManager::playSong()
 
 void FightManager::configureLevelRender(const std::string& name)
 {
-	GameObject* levelRender = findGameObjectWithName("LevelRender"); 
-	if (levelRender == nullptr) { LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene"); return; }
+	GameObject* levelRender = findGameObjectWithName("LevelRender");
+	if (levelRender == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene");
+		return;
+	}
 
 	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr) { LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return; }
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+	}
 
 	meshRenderer->setMesh("levelRender", name);
 	meshRenderer->attachEntityToNode("levelRender");
@@ -204,13 +233,22 @@ void FightManager::configureLevelRender(const std::string& name)
 void FightManager::configureLevelCollider(const std::string& name)
 {
 	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
-	if (levelCollider == nullptr) { LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return; }
+	if (levelCollider == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return;
+	}
 
 	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr) { LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return; }
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+	}
 
 	Strider* strider = levelCollider->getComponent<Strider>();
-	if (strider == nullptr) { LOG_ERROR("FIGHT MANAGER", "Strider not found"); return; }
+	if (strider == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "Strider not found"); return;
+	}
 
 	meshRenderer->setMesh("levelCollider", name);
 	meshRenderer->attachEntityToNode("levelCollider");
@@ -277,13 +315,16 @@ void FightManager::chooseWinner()
 	bool tie = false;
 	int majorHealth = 0;
 	int majorIndex = 0;
+
 	for (int i = 0; i < knights.size(); i++)
 	{
 		Health* health = knights[i]->getComponent<Health>();
 		if (health == nullptr) continue;
 
-		if (health->isAlive()) {
-			if (health->getHealth() > majorHealth) {
+		if (health->isAlive())
+		{
+			if (health->getHealth() > majorHealth)
+			{
 				majorHealth = health->getHealth();
 				majorIndex = i;
 			}
@@ -291,8 +332,6 @@ void FightManager::chooseWinner()
 				tie = true;
 		}
 	}
-
-
 	winnerPanel.setVisible(true);
 
 	if (tie)

@@ -16,20 +16,6 @@ Movement::~Movement()
 
 }
 
-void Movement::move(Vector3 dir)
-{
-	if(rigidBody != nullptr) rigidBody->addForce(dir * speed);
-}
-
-void Movement::stop()
-{
-	if (rigidBody != nullptr)
-	{
-		rigidBody->setLinearVelocity({0,0,0});
-		rigidBody->clearForces();
-	}
-}
-
 void Movement::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
@@ -50,9 +36,24 @@ void Movement::handleData(ComponentData* data)
 	}
 }
 
-void Movement::setSpeed(float spd)
+void Movement::move(Vector3 dir)
 {
-	speed = spd;
+	if(rigidBody != nullptr)
+		rigidBody->addForce(dir * speed);
+}
+
+void Movement::stop()
+{
+	if (rigidBody != nullptr)
+	{
+		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->clearForces();
+	}
+}
+
+void Movement::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 float Movement::getSpeed() const

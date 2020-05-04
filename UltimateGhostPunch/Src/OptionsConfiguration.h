@@ -2,28 +2,26 @@
 #ifndef OPTIONS_CONFIGURATION_H
 #define OPTIONS_CONFIGURATION_H
 
-#include "UserComponent.h"
+#include <UserComponent.h>
+#include <UIElement.h>
 
 #include <vector>
 #include <string>
-#include "UIElement.h"
 
 const int MAX_VOLUME = 100;
 const int MAX_GAMMA = 100;
 
-
-
 class InterfaceSystem;
-class WindowManager;
 class RenderSystem;
 class SoundSystem;
+class WindowManager;
 
 class OptionsConfiguration : public UserComponent
 {
 	InterfaceSystem* interfaceSystem;
-	WindowManager* windowManager;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
+	WindowManager* windowManager;
 
 	UIElement resolutionButton;
 	UIElement volumeScroll;
@@ -49,7 +47,6 @@ class OptionsConfiguration : public UserComponent
 	std::vector<std::pair<int, int>> resolutions;
 
 private:
-	// events
 	bool resolutionButtonClick();
 
 	bool changeResolution(int value);

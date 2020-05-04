@@ -4,19 +4,18 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerIndex.h"
 #include "Health.h"
 #include "Block.h"
-#include "ComponentRegister.h"
-#include "GameManager.h"
 #include "Score.h"
-#include "PlayerIndex.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(Attack);
 
-Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), score(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
 										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), score(nullptr)
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0)
 {
 
 }
@@ -28,11 +27,13 @@ Attack::~Attack()
 
 void Attack::start()
 {
-	attackTrigger = gameObject->getComponent<RigidBody>();
 	id = gameObject->getParent()->getComponent<PlayerIndex>()->getIndex();
+	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
+
 	// Deactivate the trigger until the attack is used
-	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	if (attackTrigger != nullptr)
+		attackTrigger->setActive(false);
 }
 
 void Attack::update(float deltaTime)
@@ -66,37 +67,48 @@ void Attack::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "quickCooldown") {
+		if (prop.first == "quickCooldown")
+		{
 			setFloat(quickAttackCooldown);
 		}
-		else if (prop.first == "strongCooldown") {
+		else if (prop.first == "strongCooldown")
+		{
 			setFloat(strongAttackCooldown);
 		}
-		else if (prop.first == "quickDamage") {
+		else if (prop.first == "quickDamage")
+		{
 			setInt(quickAttackDamage);
 		}
-		else if (prop.first == "strongDamage") {
+		else if (prop.first == "strongDamage")
+		{
 			setInt(strongAttackDamage);
 		}
-		else if (prop.first == "attackDuration") {
+		else if (prop.first == "attackDuration")
+		{
 			setFloat(attackDuration);
 		}
-		else if (prop.first == "quickCharge") {
+		else if (prop.first == "quickCharge")
+		{
 			setFloat(quickChargeTime);
 		}
-		else if (prop.first == "strongCharge") {
+		else if (prop.first == "strongCharge")
+		{
 			setFloat(strongChargeTime);
 		}
-		else if (prop.first == "quickAttackScale") {
+		else if (prop.first == "quickAttackScale")
+		{
 			setVector3(quickAttackScale);
 		}
-		else if (prop.first == "strongAttackScale") {
+		else if (prop.first == "strongAttackScale")
+		{
 			setVector3(strongAttackScale);
 		}
-		else if (prop.first == "quickAttackOffset") {
+		else if (prop.first == "quickAttackOffset")
+		{
 			setVector3(quickAttackOffset);
 		}
-		else if (prop.first == "strongAttackOffset") {
+		else if (prop.first == "strongAttackOffset")
+		{
 			setVector3(strongAttackOffset);
 		}
 		else
@@ -104,10 +116,9 @@ void Attack::handleData(ComponentData* data)
 	}
 }
 
-
 void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
+	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING) // If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
@@ -123,19 +134,22 @@ void Attack::onObjectStay(GameObject* other)
 		}
 
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
-		Block* enemyBlock = nullptr;
 		PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
-		if (enemyBlock != nullptr) {
+		Block* enemyBlock = nullptr;
+
+		if (aux.size() > 0)
+			enemyBlock = aux[0]->getComponent<Block>();
+
+		if (enemyBlock != nullptr)
+		{
 			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
 			{
 				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
+
 				if (!enemyHealth->isAlive())
-				{
 					score->killedBy(otherIndex->getIndex(), id);
-				}
 			}
 			
 			// Deactivate the trigger until the next attack is used
@@ -143,20 +157,6 @@ void Attack::onObjectStay(GameObject* other)
 
 			// Reset the current attack state
 			state = NOT_ATTACKING;
-
-		}
-		/* PARECE CODIGO MUERTO (no lo he comprobado) */
-		else {
-			Health* enemyHealth = other->getComponent<Health>();
-			int health = enemyHealth->getHealth();
-			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
-			score->receiveHitFrom(otherIndex->getIndex(),id);
-			if(health!= enemyHealth->getHealth())
-				score->damageRecivedFrom(otherIndex->getIndex(), id, damage);
-			if (!enemyHealth->isAlive())
-			{
-				score->killedBy(otherIndex->getIndex(),id);
-			}
 		}
 	}
 }
@@ -181,6 +181,7 @@ void Attack::attack()
 void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
 	Transform* attackTransform = attackTrigger->gameObject->transform;
+
 	// Scale trigger
 	Vector3 scaleRatio = scale;
 	Vector3 currentScale = attackTransform->getScale();
@@ -202,6 +203,7 @@ bool Attack::quickAttack()
 	}
 	else
 		LOG("Attack on CD...\n");
+
 	return false;
 }
 
@@ -216,6 +218,7 @@ bool Attack::strongAttack()
 	}
 	else
 		LOG("Attack on CD...\n");
+
 	return false;
 }
 

@@ -9,16 +9,18 @@
 #include <vector>
 #include <string>
 
+class InputSystem;
 class GameManager;
 class UILayout;
-class InputSystem;
 
 class FightManager : public UserComponent
 {
 private:
-	struct LightData {
+	struct LightData
+	{
 		std::string type;
 		Vector3 position;
+
 		float intensity;
 		Vector3 colour;
 		Vector3 direction;
@@ -26,6 +28,7 @@ private:
 
 	GameManager* gameManager;
 	UILayout* fightLayout;
+
 	UIElement timeText;
 	UIElement winnerPanel;
 	UIElement winnerText;
@@ -38,9 +41,9 @@ private:
 	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
 	std::vector<LightData> lights; // position, intensity, colour, direction
+
 	int nSpikes;
 	int nLights;
-
 	int winner;
 
 	void createLevel();

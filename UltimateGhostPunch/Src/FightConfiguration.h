@@ -49,7 +49,6 @@ private:
 
 	int isIndexConnected(int index);
 
-	// events
 	bool changeHealth(int value);
 	bool changeTime(int value);
 	bool changeSong(int value);

@@ -14,9 +14,10 @@ private:
 	UIElement pauseMenu;
 
 	bool backButtonClick();
+
 public:
 	PauseMenu(GameObject* gameObject);
-	~PauseMenu();
+	virtual ~PauseMenu();
 
 	virtual void start();
 	virtual void preUpdate(float deltaTime);

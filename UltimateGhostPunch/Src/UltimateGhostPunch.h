@@ -17,8 +17,10 @@ private:
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
 	PlayerAnimController* anim;
+
 	Vector3 direction;
 	State state;
+
 	float duration;
 	float force;
 	float ghostSpeed;
@@ -32,7 +34,6 @@ public:
 
 	virtual void start();
 	virtual void preUpdate(float deltaTime);
-	//virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void charge();

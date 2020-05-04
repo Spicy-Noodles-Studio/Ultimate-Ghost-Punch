@@ -2,10 +2,11 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
 
-#include "UserComponent.h"
-#include "Score.h"
+#include <UserComponent.h>
 #include <vector>
 #include <string>
+
+#include "Score.h"
 
 class GameObject;
 
@@ -15,7 +16,6 @@ private:
 	static GameManager* instance;
 
 	bool paused;
-
 	int numPlayers;
 
 	std::vector<int> playerIndexes;
@@ -30,9 +30,9 @@ private:
 	int health;
 	int time;
 	int maxTime;
-	Score scores;
-	// Bottom limit of the level 
 	float bottomLimit;
+
+	Score scores;
 
 public:
 	GameManager();
@@ -44,11 +44,12 @@ public:
 
 	virtual void start();
 
-	void setNumPlayers(int nPlayers);
-	int getNumPlayers();
 	void reset();
 	void pauseGame(bool setPaused);
 	bool gameIsPaused();
+
+	void setNumPlayers(int nPlayers);
+	int getNumPlayers();
 
 	void setPlayerIndexes(std::vector<int> playerIndexes);
 	std::vector<int>& getPlayerIndexes();
@@ -56,12 +57,10 @@ public:
 
 	void setLevel(std::string level);
 	std::string getLevel();
-
 	std::string getLastLevel();
 
 	void setSong(std::string song);
 	std::string getSong();
-
 	std::string getLastSong();
 
 	void setHealth(int health);
@@ -69,8 +68,6 @@ public:
 
 	void setTime(int time);
 	int getTime();
-
-	
 	int getInitialTime();
 
 	Score* getScore();

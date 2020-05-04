@@ -38,7 +38,7 @@ private:
 	float time;
 	float invencibleDamageTime;
 
-	bool alive; // player alive
+	bool alive;
 	bool invencible;
 };
 

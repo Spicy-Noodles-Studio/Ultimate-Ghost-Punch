@@ -3,23 +3,34 @@
 #define GRAB_H
 
 #include <UserComponent.h>
-#include "PlayerController.h"
 
-class RigidBody;
 class GameObject;
+class RigidBody;
 class Score;
 class Block;
 class Dodge;
 class Attack;
+class PlayerController;
 class PlayerAnimController;
 
 class Grab : public UserComponent
 {
 private:
 	enum State { IDLE, GRABBED, BLOCKED };
-	
-	float grabDuration, remain, freezeDuration, throwForce,
-			cooldown, grabTimer, grabVerticalOffset, dropHorizontalOffset;
+
+	int id;
+
+	float grabDuration;
+	float freezeDuration;
+
+	float throwForce;
+
+	float remain;
+	float cooldown;
+	float grabTimer;
+
+	float grabVerticalOffset;
+	float dropHorizontalOffset;
 
 	State state;
 
@@ -31,31 +42,30 @@ private:
 	PlayerController* enemyController;
 	PlayerAnimController* enemyAnim;
 
-	Dodge* dodge;
+	Score* score;
 	Block* block;
+	Dodge* dodge;
 	Attack* attack;
 
 	Vector3 enemyDiff;
 	bool enemyFollowing;
+
 	Vector3 grabbedPosition;
 	int prevOrientation;
 	float enemyFollowingThreshold;
-	int id;
-	Score* score;
 
 	void resetEnemy();
 	void grabEnemy();
 
 public:
 	Grab(GameObject* gameObject);
+	virtual ~Grab();
 
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void onObjectStay(GameObject* other);
-
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
-
 	virtual void handleData(ComponentData* data);
 
 	void grab();

@@ -2,19 +2,20 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <sstream>
 
 #include "PlayerAnimController.h"
 
-#include <sstream>
-
 REGISTER_FACTORY(Jump);
 
-Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), coyoteTime(0.5f), coyoteTimer(0.0f), grounded(false), jumping(false), rigidBody(nullptr)
+Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f), playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr)
 {
+
 }
 
 Jump::~Jump()
 {
+
 }
 
 void Jump::start()
@@ -25,19 +26,25 @@ void Jump::start()
 void Jump::update(float deltaTime)
 {
 	// Manage coyote time so jumping is possible when not grounded for a certain time
-	if (coyoteTimer >= 0.0f) coyoteTimer -= deltaTime;
+	if (coyoteTimer >= 0.0f)
+		coyoteTimer -= deltaTime;
 }
 
 void Jump::onObjectEnter(GameObject* other)
 {
 	bool isFloor = other->getTag() == "suelo";
 	bool isPlayer = other->getTag() == "Player" && other != gameObject->getParent();
-	if (isFloor || isPlayer) {
+
+	if (isFloor || isPlayer)
+	{
 		if(isFloor)
 			grounded = true;
+
 		coyoteTimer = 0.0f;
 		jumping = false; // Cannot be jumping if is on floor
-		if (isPlayer) playersBelow++;
+
+		if (isPlayer)
+			playersBelow++;
 	}
 }
 
@@ -45,28 +52,36 @@ void Jump::onObjectExit(GameObject* other)
 {
 	bool isFloor = other->getTag() == "suelo";
 	bool isPlayer = other->getTag() == "Player" && other != gameObject->getParent();
-	if (isFloor || isPlayer) {
+
+	if (isFloor || isPlayer)
+	{
 		if (isFloor)
 			grounded = false;
+
 		if(!jumping)
 			coyoteTimer = coyoteTime;
-		if (isPlayer) playersBelow--;
+
+		if (isPlayer)
+			playersBelow--;
 	}
 }
 
 void Jump::handleData(ComponentData* data)
 {
-	for (auto prop : data->getProperties()) {
+	for (auto prop : data->getProperties())
+	{
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "maxForce")
 		{
 			setFloat(jumpForce);
 		}
-		else if (prop.first == "jumpDecay") {
+		else if (prop.first == "jumpDecay")
+		{
 			setFloat(jumpDecay);
 		}
-		else if (prop.first == "coyoteTime") {
+		else if (prop.first == "coyoteTime")
+		{
 			setFloat(coyoteTime);
 		}
 	}
@@ -83,13 +98,15 @@ void Jump::jump()
 	coyoteTimer = 0.0f;
 
 	auto animController = gameObject->getParent()->getComponent<PlayerAnimController>();
-	if(animController != nullptr) animController->jumpAnimation();
+	if(animController != nullptr)
+		animController->jumpAnimation();
 }
 
 void Jump::cancelJump()
 {
 	if (!jumping) return;
 	Vector3 velocity = rigidBody->getLinearVelocity();
+
 	if (velocity.y < 0.0) return; // Is falling
 	velocity.y *= jumpDecay;
 

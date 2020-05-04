@@ -15,14 +15,15 @@ private:
 	{
 		NONE, HURT, INVENCIBLE, SHIELD, GHOST
 	};
+
 	Effect effect;
 
+	MeshRenderer* shieldMesh;
 	MeshRenderer* mesh;
 	Health* health;
 	GhostManager* ghost;
 
 	std::vector<Vector3> diffuses;
-	MeshRenderer* shieldMesh;
 
 	float time;
 	float hurtTime;

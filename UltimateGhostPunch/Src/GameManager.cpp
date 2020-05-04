@@ -39,6 +39,29 @@ void GameManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
+void GameManager::reset()
+{
+	Timer::GetInstance()->setTimeScale(1.0f);
+	paused = false;
+}
+
+void GameManager::pauseGame(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	if (paused)
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	else
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+}
+
+bool GameManager::gameIsPaused()
+{
+	return paused;
+}
+
 void GameManager::setNumPlayers(int nPlayers)
 {
 	this->numPlayers = nPlayers;
@@ -84,8 +107,8 @@ std::string GameManager::getLastLevel()
 
 void GameManager::setSong(std::string song)
 {
-	this->lastSong = song;
 	this->song = song;
+	this->lastSong = song;
 }
 
 std::string GameManager::getSong()
@@ -127,27 +150,4 @@ int GameManager::getInitialTime()
 Score* GameManager::getScore()
 {
 	return &scores;
-}
-
-void GameManager::reset()
-{
-	Timer::GetInstance()->setTimeScale(1.0f);
-	paused = false;
-}
-
-void GameManager::pauseGame(bool setPaused)
-{
-	if (paused == setPaused) return;
-
-	paused = setPaused;
-
-	if (paused)
-		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	else
-		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
-}
-
-bool GameManager::gameIsPaused()
-{
-	return paused;
 }

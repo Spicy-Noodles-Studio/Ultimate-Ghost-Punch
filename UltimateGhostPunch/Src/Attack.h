@@ -6,16 +6,19 @@
 
 class RigidBody;
 class Score;
+
 class Attack : public UserComponent
 {
 private:
+	int id;
+
 	float cooldown;
 	float quickAttackCooldown;
 	float strongAttackCooldown;
 
+	float chargeTime;
 	float quickChargeTime;
 	float strongChargeTime;
-	float chargeTime;
 
 	int quickAttackDamage;
 	int strongAttackDamage;
@@ -37,6 +40,7 @@ private:
 	AttackState state;
 
 	RigidBody* attackTrigger;
+	Score* score;
 
 	Vector3 quickAttackScale;
 	Vector3 strongAttackScale;
@@ -47,9 +51,6 @@ private:
 	void attack();
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
-
-	int id;
-	Score* score;
 
 public:
 	Attack(GameObject* gameObject);

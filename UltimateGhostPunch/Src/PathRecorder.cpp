@@ -1,27 +1,27 @@
 #include "PathRecorder.h"
-
-#include <GameObject.h>
-#include <InputSystem.h>
-#include <RigidBody.h>
 #include <ComponentRegister.h>
+#include <InputSystem.h>
+#include <GameObject.h>
+#include <RigidBody.h>
 
 #include "PlatformGraph.h"
 #include "PlatformNode.h"
 #include "PlayerController.h"
 #include "Health.h"
-#include "GhostManager.h"
 #include "Jump.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(PathRecorder);
 
-PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()),
-													 currentPlatform(-1)
+PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), graph(nullptr), health(nullptr), jump(nullptr), ghostManager(nullptr),
+states(std::vector<State>()), lastPlatform(std::stack<int>()), recording(false), controllerIndex(0), frame(-1), currentPlatform(-1)
 {
 
 }
 
 PathRecorder::~PathRecorder()
 {
+
 }
 
 void PathRecorder::start()
@@ -33,7 +33,8 @@ void PathRecorder::start()
 	frame = 0;
 
 	GameObject* aux = findGameObjectWithName("Level1");
-	if(aux != nullptr) graph = aux->getComponent<PlatformGraph>();
+	if (aux != nullptr)
+		graph = aux->getComponent<PlatformGraph>();
 
 	inputSystem = InputSystem::GetInstance();
 
@@ -42,7 +43,8 @@ void PathRecorder::start()
 	controllerIndex = gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
 
 	std::vector<GameObject*> v = gameObject->findChildrenWithTag("groundSensor");
-	if (v.size() > 0) jump = v[0]->getComponent<Jump>();
+	if (v.size() > 0)
+		jump = v[0]->getComponent<Jump>();
 }
 
 void PathRecorder::update(float deltaTime)
@@ -56,9 +58,8 @@ void PathRecorder::update(float deltaTime)
 		graph->removeLastLink(currentPlatform);
 
 	//Removes all links of the last platform we have been at
-	else if (inputSystem->getKeyPress("L")) {
+	else if (inputSystem->getKeyPress("L"))
 		graph->clearConnections(currentPlatform);
-	}
 
 	//Removes all connections
 	else if (inputSystem->getKeyPress("P"))
@@ -72,9 +73,11 @@ void PathRecorder::update(float deltaTime)
 	else if (inputSystem->getKeyPress("I"))
 		eraseRecordedLinks();
 
-	if (controllerIndex == 4) {
+	if (controllerIndex == 4)
+	{
 		//If it is an actual jump
-		if (inputSystem->getKeyPress("Space") && (jump == nullptr ||jump->canJump())) {
+		if (inputSystem->getKeyPress("Space") && (jump == nullptr || jump->canJump()))
+		{
 			saveState(Action::Jump);
 			startRecording();
 		}
@@ -85,31 +88,35 @@ void PathRecorder::update(float deltaTime)
 		else if (recording && inputSystem->isKeyPressed("D"))
 			saveState(Action::MoveRight);
 	}
+
 	//If we recived damage we stop recording
 	if (health != nullptr && health->isInvencible())
 		stopRecording();
+
 	if (ghostManager != nullptr && ghostManager->isGhost())
 		stopRecording();
 
-	if (recording) frame++;
-
+	if (recording)
+		frame++;
 }
 
 void PathRecorder::onObjectEnter(GameObject* other)
 {
-	if (controllerIndex == 4 && other->getTag() == "suelo" && recording) {
+	if (controllerIndex == 4 && other->getTag() == "suelo" && recording)
+	{
 		Vector3 endPos = gameObject->transform->getWorldPosition();
 
-		if (currentPlatform != -1) lastPlatform.push(currentPlatform);
+		if (currentPlatform != -1)
+			lastPlatform.push(currentPlatform);
 
-		if (graph != nullptr) 
+		if (graph != nullptr)
 			currentPlatform = graph->getIndex(endPos);
 
-		if (currentPlatform != -1) {
+		if (currentPlatform != -1)
+		{
 			NavigationLink navLink = NavigationLink(states, iniPos, endPos, frame, currentPlatform);
-			if (!lastPlatform.empty()) {
+			if (!lastPlatform.empty())
 				graph->addLinkToPlatform(lastPlatform.top(), navLink);
-			}			
 		}
 		stopRecording();
 	}
@@ -118,7 +125,8 @@ void PathRecorder::onObjectEnter(GameObject* other)
 void PathRecorder::onObjectExit(GameObject* other)
 {
 	//Start recording
-	if (controllerIndex == 4 && other->getTag() == "suelo" && !recording) {
+	if (controllerIndex == 4 && other->getTag() == "suelo" && !recording)
+	{
 		saveState(Action::None);
 		startRecording();
 	}
@@ -129,6 +137,12 @@ void PathRecorder::saveState(Action action)
 	states.push_back(State(action, frame, gameObject->transform->getWorldPosition()));
 }
 
+void PathRecorder::startRecording()
+{
+	iniPos = gameObject->transform->getWorldPosition();
+	recording = true;
+}
+
 void PathRecorder::stopRecording()
 {
 	recording = false;
@@ -136,15 +150,10 @@ void PathRecorder::stopRecording()
 	states.clear();
 }
 
-void PathRecorder::startRecording()
-{
-	iniPos = gameObject->transform->getWorldPosition();
-	recording = true;
-}
-
 void PathRecorder::eraseLastLink()
 {
-	if (graph != nullptr && !lastPlatform.empty()) {
+	if (graph != nullptr && !lastPlatform.empty())
+	{
 		graph->removeLastLink(lastPlatform.top());
 		lastPlatform.pop();
 	}
@@ -152,8 +161,6 @@ void PathRecorder::eraseLastLink()
 
 void PathRecorder::eraseRecordedLinks()
 {
-	while (!lastPlatform.empty()) {
+	while (!lastPlatform.empty())
 		eraseLastLink();
-	}
 }
-

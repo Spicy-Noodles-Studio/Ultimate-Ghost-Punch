@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef PLAYER_ANIM_CONTROLLER_H
 #define PLAYER_ANIM_CONTROLLER_H
 
@@ -8,23 +7,21 @@
 
 class InputSystem;
 class Animator;
+class MeshRenderer;
 class RigidBody;
 class Jump;
 class Grab;
 class Block;
-class MeshRenderer;
 class GhostManager;
-
 class PlayerFX;
 
-class PlayerAnimController :
-	public UserComponent
+class PlayerAnimController : public UserComponent
 {
 private:
-	// MeshRenderer
-	MeshRenderer* mesh;
 	// Input
 	InputSystem* inputSystem;
+	// MeshRenderer
+	MeshRenderer* mesh;
 	// Animator
 	Animator* anim;
 	// RigidBody
@@ -37,7 +34,7 @@ private:
 	Block* block;
 	// Ghost Manager
 	GhostManager* ghostManag;
-
+	// Player FX
 	PlayerFX* playerFX;
 
 	enum PlayerAnimState
@@ -55,6 +52,7 @@ private:
 	PlayerAnimState state;
 
 	// Variables for state change:
+
 	// -- Threshold for -> RUN transition
 	float runThreshold;
 	// -- Threshold for -> FALL transition
@@ -69,6 +67,7 @@ private:
 	{
 		HAND, SHEATHED
 	};
+
 	// Indicates the current position of the sword
 	SwordState swordState;
 	
@@ -87,38 +86,42 @@ private:
 
 public:
 	PlayerAnimController(GameObject* gameObject);
-
+	virtual ~PlayerAnimController();
 
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void jumpAnimation();
+	void dashAnimation();
+	void tauntAnimation();
 	void hurtAnimation();
-	void grabAnimation();
-	void grabFailedAnimation();
+	void stunnedAnimation();
+	void resurrectAnimation();
+
 	void quickAttackAnimation();
 	void strongAttackAnimation();
+
+	void grabAnimation();
+	void grabFailedAnimation();
+	void grabbedByEnemyAnimation();
+
 	void blockAnimation();
 	void blockedAttackAnimation();
 	void blockedEnemyGrabAnimation();
 	void enemyBlockedMyGrabAnimation();
-	void stunnedAnimation();
-	void dashAnimation();
-	void resurrectAnimation();
-	void tauntAnimation();
+
 	void throwEnemyAnimation();
 	void thrownAwayAnimation();
-	void grabbedByEnemyAnimation();
 
 	// Play a not looping animation
 	void notLoopAnimation(std::string name);
+
 	// 0 for QUICK | 1 for STRONG
 	void attackAnimation(int type);
 
 	// Play animation "name" after a delay of "delay" seconds
 	void playAnimationWithDelay(std::string name, float delay);
-
 
 	/****************/
 	/*	  GHOST		*/
@@ -147,13 +150,11 @@ private:
 	void updateGrabbed();   // GRABBED
 	void updateBlocking();  // BLOCKING
 	void updateStunned();	// STUNNED
-	void updateUGP();		// UGP
 
 	void updateNotLoopingState(); // NOT LOOPING STATE (block, attacks...)
 
 	// Play delayed animations
 	void updateDelayedAnimations(float deltaTime);
-
 
 	/****************/
 	/*	  GHOST		*/

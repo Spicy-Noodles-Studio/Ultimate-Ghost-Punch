@@ -17,10 +17,16 @@ class PlayerAnimController;
 class GhostManager : public UserComponent
 {
 private:
-	bool ghost, used, deathPosChanged, ended;
+	bool ghost;
+	bool used;
+	bool deathPosChanged;
+	bool ended;
 
-	float ghostTime, playerGravity;
-	int ghostDamage, resurrectionHealth;
+	float ghostTime;
+	float playerGravity;
+
+	int ghostDamage;
+	int resurrectionHealth;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -35,7 +41,6 @@ private:
 	Vector3 aliveScale;
 	Vector3 ghostScale;
 	Vector3 ghostSpawnOffset;
-
 	Vector3 deathPosition;
 
 public:
@@ -48,13 +53,13 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
+	bool ghostEnded();
 	float getGhostTime();
 
 	void activateGhost();
 	void deactivateGhost();
 
 	void setDeathPosition(const Vector3& dPos);
-	bool ghostEnded();
 };
 
 #endif

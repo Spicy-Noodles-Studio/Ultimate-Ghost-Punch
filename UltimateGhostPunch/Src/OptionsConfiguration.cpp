@@ -1,19 +1,17 @@
 #include "OptionsConfiguration.h"
-
-
+#include <ComponentRegister.h>
 #include <InterfaceSystem.h>
+#include <RenderSystem.h>
 #include <SoundSystem.h>
 #include <WindowManager.h>
-#include <RenderSystem.h>
-#include <Window.h>
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
 #include <UIElement.h>
 #include <Camera.h>
+#include <Window.h>
 
 #include "GameManager.h"
-#include "ComponentRegister.h"
 
 REGISTER_FACTORY(OptionsConfiguration);
 
@@ -38,7 +36,7 @@ bool OptionsConfiguration::resolutionButtonClick()
 			windowManager->setActualResolutionId(currResolution);
 		}
 	}
-	
+
 	return false;
 }
 
@@ -46,8 +44,11 @@ bool OptionsConfiguration::changeResolution(int value)
 {
 	resolution += value;
 
-	if (resolution < 0) resolution = 0;
-	if (resolution > resolutionNames.size() - 1) resolution = resolutionNames.size() - 1;
+	if (resolution < 0)
+		resolution = 0;
+
+	if (resolution > resolutionNames.size() - 1)
+		resolution = resolutionNames.size() - 1;
 
 	resolutionText.setText(resolutionNames[resolution]);
 
@@ -64,15 +65,15 @@ bool OptionsConfiguration::changeFullscreen(bool value)
 
 bool OptionsConfiguration::changeSoundVolume()
 {
-	volumeText.setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() *MAX_VOLUME+0.5)));
+	volumeText.setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setSoundEffectsVolume(volumeScroll.getScrollPositionScrollBar());
-	
+
 	return false;
 }
 
 bool OptionsConfiguration::changeMusicVolume()
 {
-	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME+0.5)));
+	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
 
 	return false;
@@ -80,7 +81,7 @@ bool OptionsConfiguration::changeMusicVolume()
 
 bool OptionsConfiguration::changeGamma()
 {
-	gammaText.setText(std::to_string((int)(gammaScroll.getScrollPositionScrollBar() * MAX_GAMMA +0.5)));
+	gammaText.setText(std::to_string((int)(gammaScroll.getScrollPositionScrollBar() * MAX_GAMMA + 0.5)));
 	renderSystem->changeParamOfShader("LuminancePS", "brigh", gammaScroll.getScrollPositionScrollBar());
 	windowManager->setBrightness(gammaScroll.getScrollPositionScrollBar());
 
@@ -95,8 +96,9 @@ bool OptionsConfiguration::backButtonClick()
 
 // -----
 
-OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL),musicScroll(NULL),gammaScroll(NULL), interfaceSystem(nullptr),windowManager(nullptr),renderSystem(nullptr),soundSystem(nullptr),
-resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL),root(NULL)
+OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL), musicScroll(NULL), gammaScroll(NULL),
+interfaceSystem(nullptr), renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr),
+resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL), root(NULL)
 {
 	interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
@@ -139,31 +141,29 @@ void OptionsConfiguration::start()
 {
 	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
 	resolutionButton = root.getChild("ResolutionApplyButton");
-	
+
 	volumeScroll = root.getChild("SoundScroll");
-	musicScroll= root.getChild("MusicScroll");
-	gammaScroll= root.getChild("GammaScroll");
+	musicScroll = root.getChild("MusicScroll");
+	gammaScroll = root.getChild("GammaScroll");
+
 	resolutionText = root.getChild("Resolution");
+
 	volumeText = root.getChild("SoundVolume");
 	musicText = root.getChild("MusicVolume");
-	gammaText=root.getChild("Gamma");
+	gammaText = root.getChild("Gamma");
+
 	UIElement checkbox = root.getChild("FullscreenYesButton");
-
-
-
 
 	musicVolume = soundSystem->getMusicVolume();
 	soundsVolume = soundSystem->getSoundVolume();
 	gamma = windowManager->getBrightness();
 
 	resolution = windowManager->getActualResolutionId();
-	//fullscreen = WindowManager::GetInstance()->getFullscreen();
-
 	changeResolution(0);
+
 	musicScroll.setScrollPositionScrollBar(musicVolume);
 	volumeScroll.setScrollPositionScrollBar(soundsVolume);
 	gammaScroll.setScrollPositionScrollBar(gamma);
-	checkbox.setCheckBoxState(windowManager->getFullscreen());
 
-	
+	checkbox.setCheckBoxState(windowManager->getFullscreen());
 }

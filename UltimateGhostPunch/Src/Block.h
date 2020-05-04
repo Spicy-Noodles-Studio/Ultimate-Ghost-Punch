@@ -3,10 +3,8 @@
 #define BLOCK_H
 
 #include <UserComponent.h>
-#include <GameObject.h>
-#include <RigidBody.h>
 
-#include "PlayerController.h"
+class Attack;
 
 class Block : public UserComponent
 {
@@ -23,28 +21,26 @@ private:
 
 	float blockDirection;
 
-	// To check if player is attacking
-	Attack* attack;
+	Attack* attack; // To check if player is attacking
 
 public:
 	Block(GameObject* gameObject);
 	virtual ~Block();
 
-	void block();
-	void unblock();
-	bool blockAttack(float damage, Vector3 otherPosition);
-	
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
+	void block();
+	void unblock();
+	bool blockAttack(float damage, Vector3 otherPosition);
+
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
 	bool getGrabBlock() const;
-
 	bool blocking() const;
 };
 
