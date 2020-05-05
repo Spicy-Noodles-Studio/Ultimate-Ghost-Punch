@@ -29,15 +29,6 @@
         {
             "ComponentName": "SoundListener"
         },
-        {
-            "ComponentName": "Reverb",
-            "ComponentProperties": [
-                ["vel" , "4"],
-				["minRange" , "-5"],
-				["maxRange" , "5"],
-                ["duration" , "100"]
-            ]
-        },
 		{
             "ComponentName": "CameraEffects",
 			"ComponentProperties": [
