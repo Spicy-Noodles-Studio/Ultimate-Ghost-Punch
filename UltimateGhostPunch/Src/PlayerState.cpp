@@ -54,7 +54,7 @@ bool PlayerState::canBlock() const
 
 bool PlayerState::canDodge() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (attack == nullptr || !attack->isAttacking()) && (grab == nullptr || !grab->isGrabbing());
+	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (attack == nullptr || !attack->isAttacking());
 }
 
 bool PlayerState::canGrab() const

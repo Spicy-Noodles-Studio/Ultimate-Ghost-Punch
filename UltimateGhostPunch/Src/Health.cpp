@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "PlayerAnimController.h"
+#include "Block.h"
 #include "Grab.h"
 
 REGISTER_FACTORY(Health);
@@ -72,7 +73,18 @@ void Health::receiveDamage(int damage)
 {
 	if (alive && !invencible)
 	{
-		std::vector<GameObject*> aux = gameObject->findChildrenWithTag("grabSensor");
+		std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
+		Block* block = nullptr;
+
+		if (aux.size() > 0)
+		{
+			block = aux[0]->getComponent<Block>();
+
+			if (block != nullptr && block->isBlocking())
+				block->unblock();
+		}
+
+		aux = gameObject->findChildrenWithTag("grabSensor");
 		Grab* grab = nullptr;
 
 		if (aux.size() > 0)
