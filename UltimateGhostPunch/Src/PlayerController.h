@@ -4,8 +4,8 @@
 
 #include <UserComponent.h>
 
-class PlayerIndex;
 class InputSystem;
+class PlayerIndex;
 class Movement;
 class Attack;
 class Dodge;
@@ -24,8 +24,6 @@ class PlayerAnimController;
 class PlayerController : public UserComponent
 {
 private:
-	bool isBlocking;
-
 	PlayerIndex *playerIndex;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
@@ -82,12 +80,7 @@ public:
 	// Manages player's input and generates a movement direction
 	void checkInput();
 
-	void setBlocking(bool _block);
-
-	int getPlayerIndex() const;
 	int getControllerIndex()const;
-	void setPlayerIndex(int index);
-
 	void setControllerIndex(int index);
 };
 

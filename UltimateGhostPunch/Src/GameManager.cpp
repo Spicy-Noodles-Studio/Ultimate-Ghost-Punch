@@ -33,8 +33,8 @@ GameManager* GameManager::GetInstance()
 
 void GameManager::start()
 {
-	level = "";
-	song = "";
+	/*level = "";
+	song = "";*/
 
 	dontDestroyOnLoad(gameObject);
 }
