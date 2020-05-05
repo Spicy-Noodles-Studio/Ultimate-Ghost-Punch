@@ -1,5 +1,5 @@
 {
-    "SceneName": "LoadingScene",
+    "SceneName": "LoadingScreen",
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
@@ -42,7 +42,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "loadingScreen.layout"]
+                        ["layout" , "LoadingScreen.layout"]
                     ]
                 }
             ]

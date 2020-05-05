@@ -27,7 +27,7 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	return false;
 }
 
-OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject) : OptionsConfiguration(gameObject), screen(nullptr), pauseMenu(NULL), optionsMenu(NULL)
+OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject) : OptionsMenu(gameObject), screen(nullptr), pauseMenu(NULL), optionsMenu(NULL)
 {
 	interfaceSystem->registerEvent("backToMenuButtonClick", UIEvent("ButtonClicked", [this]() {return backToMenuButtonClick(); }));
 }

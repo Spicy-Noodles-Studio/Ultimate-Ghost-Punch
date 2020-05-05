@@ -11,7 +11,7 @@ class Transform;
 class MeshRenderer;
 class RigidBody;
 class PlayerUI;
-class FightManager;
+class Game;
 class PlayerAnimController;
 class PlayerController;
 
@@ -41,7 +41,7 @@ private:
 	MeshRenderer* meshRenderer;
 	RigidBody* rigidBody;
 	PlayerUI* playerUI;
-	FightManager* fightManager;
+	Game* game;
 	PlayerAnimController* anim;
 	PlayerController* control;
 

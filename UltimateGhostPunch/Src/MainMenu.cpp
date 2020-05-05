@@ -12,19 +12,19 @@ REGISTER_FACTORY(MainMenu);
 
 bool MainMenu::singlePlayerButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("mainScene");
+	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	return false;
 }
 
 bool MainMenu::multiplayerButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("fightConfig");
+	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("options");
+	SceneManager::GetInstance()->changeScene("OptionsMenu");
 	return false;
 }
 

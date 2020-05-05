@@ -2,11 +2,11 @@
 #ifndef OPTIONS_MENU_SCREEN_H
 #define OPTIONS_MENU_SCREEN_H
 
-#include "OptionsConfiguration.h"
+#include "OptionsMenu.h"
 
 class GameObject;
 
-class OptionsMenuScreen : public OptionsConfiguration
+class OptionsMenuScreen : public OptionsMenu
 {
 private:
 	GameObject* screen;

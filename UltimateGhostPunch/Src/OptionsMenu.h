@@ -1,6 +1,6 @@
 #pragma once
-#ifndef OPTIONS_CONFIGURATION_H
-#define OPTIONS_CONFIGURATION_H
+#ifndef OPTIONS_MENU_H
+#define OPTIONS_MENU_H
 
 #include <UserComponent.h>
 #include <UIElement.h>
@@ -16,7 +16,7 @@ class RenderSystem;
 class SoundSystem;
 class WindowManager;
 
-class OptionsConfiguration : public UserComponent
+class OptionsMenu : public UserComponent
 {
 protected:
 	InterfaceSystem* interfaceSystem;
@@ -62,8 +62,8 @@ protected:
 	bool backButtonClick();
 
 public:
-	OptionsConfiguration(GameObject* gameObject);
-	virtual ~OptionsConfiguration();
+	OptionsMenu(GameObject* gameObject);
+	virtual ~OptionsMenu();
 
 	virtual void start();
 };

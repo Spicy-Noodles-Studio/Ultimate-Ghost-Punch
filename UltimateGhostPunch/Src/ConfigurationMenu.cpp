@@ -1,4 +1,4 @@
-#include "FightConfiguration.h"
+#include "ConfigurationMenu.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
 #include <InputSystem.h>
@@ -9,11 +9,11 @@
 
 #include "GameManager.h"
 
-REGISTER_FACTORY(FightConfiguration);
+REGISTER_FACTORY(ConfigurationMenu);
 
 // EVENTS----
 
-bool FightConfiguration::changeHealth(int value)
+bool ConfigurationMenu::changeHealth(int value)
 {
 	health += value;
 
@@ -25,7 +25,7 @@ bool FightConfiguration::changeHealth(int value)
 	return false;
 }
 
-bool FightConfiguration::changeTime(int value)
+bool ConfigurationMenu::changeTime(int value)
 {
 	time += value;
 
@@ -40,7 +40,7 @@ bool FightConfiguration::changeTime(int value)
 	return false;
 }
 
-bool FightConfiguration::changeSong(int value)
+bool ConfigurationMenu::changeSong(int value)
 {
 	songIndex += value;
 
@@ -55,7 +55,7 @@ bool FightConfiguration::changeSong(int value)
 	return false;
 }
 
-bool FightConfiguration::changeLevel(int value)
+bool ConfigurationMenu::changeLevel(int value)
 {
 	levelIndex += value;
 
@@ -70,7 +70,7 @@ bool FightConfiguration::changeLevel(int value)
 	return false;
 }
 
-bool FightConfiguration::fightButtonClick()
+bool ConfigurationMenu::fightButtonClick()
 {
 	// set data
 	GameManager* gameManager = GameManager::GetInstance();
@@ -91,19 +91,19 @@ bool FightConfiguration::fightButtonClick()
 		gameManager->setTime(-1);
 
 	// change scene
-	SceneManager::GetInstance()->changeScene("mainScene", true);
+	SceneManager::GetInstance()->changeScene("Game", true);
 	return false;
 }
 
-bool FightConfiguration::backButtonClick()
+bool ConfigurationMenu::backButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("mainMenu");
+	SceneManager::GetInstance()->changeScene("MainMenu");
 	return false;
 }
 
 // -----
 
-FightConfiguration::FightConfiguration(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
+ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
 numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
@@ -123,7 +123,7 @@ numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
-FightConfiguration::~FightConfiguration()
+ConfigurationMenu::~ConfigurationMenu()
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("-healthButtonClick");
@@ -142,7 +142,7 @@ FightConfiguration::~FightConfiguration()
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
-void FightConfiguration::start()
+void ConfigurationMenu::start()
 {
 	inputSystem = InputSystem::GetInstance();
 
@@ -168,12 +168,12 @@ void FightConfiguration::start()
 
 }
 
-void FightConfiguration::update(float deltaTime)
+void ConfigurationMenu::update(float deltaTime)
 {
 	checkInput();
 }
 
-void FightConfiguration::checkInput()
+void ConfigurationMenu::checkInput()
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -195,7 +195,7 @@ void FightConfiguration::checkInput()
 	}
 }
 
-void FightConfiguration::fillSlot(int slotIndex, int deviceIndex)
+void ConfigurationMenu::fillSlot(int slotIndex, int deviceIndex)
 {
 	slots[slotIndex].first = deviceIndex;
 
@@ -214,7 +214,7 @@ void FightConfiguration::fillSlot(int slotIndex, int deviceIndex)
 		fightButton.setVisible(true);
 }
 
-void FightConfiguration::clearSlot(int index)
+void ConfigurationMenu::clearSlot(int index)
 {
 	slots[index].first = -1;
 	slots[index].second.setVisible(false);
@@ -225,7 +225,7 @@ void FightConfiguration::clearSlot(int index)
 		fightButton.setVisible(false);
 }
 
-void FightConfiguration::reorderSlots(int index)
+void ConfigurationMenu::reorderSlots(int index)
 {
 	for (int i = index; i < numPlayers; i++)
 	{
@@ -234,7 +234,7 @@ void FightConfiguration::reorderSlots(int index)
 	}
 }
 
-int FightConfiguration::isIndexConnected(int index)
+int ConfigurationMenu::isIndexConnected(int index)
 {
 	int i = 0;
 	while (i < numPlayers - 1 && slots[i].first != index)

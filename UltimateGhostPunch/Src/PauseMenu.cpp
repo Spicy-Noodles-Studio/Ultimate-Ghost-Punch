@@ -13,7 +13,7 @@ REGISTER_FACTORY(PauseMenu);
 bool PauseMenu::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("mainMenu");
+	SceneManager::GetInstance()->changeScene("MainMenu");
 
 	return false;
 }

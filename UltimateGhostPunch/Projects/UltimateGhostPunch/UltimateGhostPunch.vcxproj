@@ -52,10 +52,10 @@
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\CameraController.cpp" />
-    <ClCompile Include="..\..\Src\FightConfiguration.cpp" />
-    <ClCompile Include="..\..\Src\FightManager.cpp" />
+    <ClCompile Include="..\..\Src\ConfigurationMenu.cpp" />
+    <ClCompile Include="..\..\Src\Game.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
-    <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
+    <ClCompile Include="..\..\Src\OptionsMenu.cpp" />
     <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
@@ -92,10 +92,10 @@
     <ClInclude Include="..\..\Src\MainMenu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\CameraController.h" />
-    <ClInclude Include="..\..\Src\FightConfiguration.h" />
-    <ClInclude Include="..\..\Src\FightManager.h" />
+    <ClInclude Include="..\..\Src\ConfigurationMenu.h" />
+    <ClInclude Include="..\..\Src\Game.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
-    <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
+    <ClInclude Include="..\..\Src\OptionsMenu.h" />
     <ClInclude Include="..\..\Src\OptionsMenuScreen.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />

@@ -1,4 +1,4 @@
-#include "OptionsConfiguration.h"
+#include "OptionsMenu.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
 #include <RenderSystem.h>
@@ -12,11 +12,11 @@
 
 #include "GameManager.h"
 
-REGISTER_FACTORY(OptionsConfiguration);
+REGISTER_FACTORY(OptionsMenu);
 
 // EVENTS----
 
-bool OptionsConfiguration::resolutionButtonClick()
+bool OptionsMenu::resolutionButtonClick()
 {
 	if (currResolution != resolution)
 	{
@@ -39,7 +39,7 @@ bool OptionsConfiguration::resolutionButtonClick()
 	return false;
 }
 
-bool OptionsConfiguration::resetConfigButtonClick()
+bool OptionsMenu::resetConfigButtonClick()
 {
 	fullscreen = false;
 	resolution = 1;
@@ -59,7 +59,7 @@ bool OptionsConfiguration::resetConfigButtonClick()
 	return false;
 }
 
-bool OptionsConfiguration::changeResolution(int value)
+bool OptionsMenu::changeResolution(int value)
 {
 	resolution += value;
 
@@ -74,7 +74,7 @@ bool OptionsConfiguration::changeResolution(int value)
 	return false;
 }
 
-bool OptionsConfiguration::changeFullscreen(bool value)
+bool OptionsMenu::changeFullscreen(bool value)
 {
 	fullscreen = value;
 	windowManager->setFullscreen(fullscreen);
@@ -82,7 +82,7 @@ bool OptionsConfiguration::changeFullscreen(bool value)
 	return false;
 }
 
-bool OptionsConfiguration::changeSoundVolume()
+bool OptionsMenu::changeSoundVolume()
 {
 	volumeText.setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setSoundEffectsVolume(volumeScroll.getScrollPositionScrollBar());
@@ -90,7 +90,7 @@ bool OptionsConfiguration::changeSoundVolume()
 	return false;
 }
 
-bool OptionsConfiguration::changeMusicVolume()
+bool OptionsMenu::changeMusicVolume()
 {
 	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
@@ -98,7 +98,7 @@ bool OptionsConfiguration::changeMusicVolume()
 	return false;
 }
 
-bool OptionsConfiguration::changeGamma()
+bool OptionsMenu::changeGamma()
 {
 	gammaText.setText(std::to_string((int)(gammaScroll.getScrollPositionScrollBar() * MAX_GAMMA + 0.5)));
 	renderSystem->changeParamOfShader("LuminancePS", "brigh", gammaScroll.getScrollPositionScrollBar());
@@ -107,15 +107,15 @@ bool OptionsConfiguration::changeGamma()
 	return false;
 }
 
-bool OptionsConfiguration::backButtonClick()
+bool OptionsMenu::backButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("mainMenu");
+	SceneManager::GetInstance()->changeScene("MainMenu");
 	return false;
 }
 
 // -----
 
-OptionsConfiguration::OptionsConfiguration(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL), musicScroll(NULL), gammaScroll(NULL),
+OptionsMenu::OptionsMenu(GameObject* gameObject) : UserComponent(gameObject), resolutionButton(NULL), volumeScroll(NULL), musicScroll(NULL), gammaScroll(NULL),
 interfaceSystem(nullptr), renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr),
 resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL), checkbox(NULL), root(NULL)
 {
@@ -142,7 +142,7 @@ resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL), checkb
 	resolutions = windowManager->getAvailableResolutionsForWindow();
 }
 
-OptionsConfiguration::~OptionsConfiguration()
+OptionsMenu::~OptionsMenu()
 {
 	interfaceSystem->unregisterEvent("-resolutionButtonClick");
 	interfaceSystem->unregisterEvent("+resolutionButtonClick");
@@ -158,7 +158,7 @@ OptionsConfiguration::~OptionsConfiguration()
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
-void OptionsConfiguration::start()
+void OptionsMenu::start()
 {
 	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
 	root.setVisible(true);

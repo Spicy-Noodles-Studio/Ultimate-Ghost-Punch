@@ -1,6 +1,6 @@
-.//Assets//Scenes//mainMenu.scene
-.//Assets//Scenes//mainScene.scene
-.//Assets//Scenes//options.scene
-.//Assets//Scenes//fightConfig.scene
-.//Assets//Scenes//leaderBoard.scene
-.//Assets//Scenes//loadingScene.scene
+.//Assets//Scenes//MainMenu.scene
+.//Assets//Scenes//OptionsMenu.scene
+.//Assets//Scenes//ConfigurationMenu.scene
+.//Assets//Scenes//Game.scene
+.//Assets//Scenes//StatsMenu.scene
+.//Assets//Scenes//LoadingScreen.scene

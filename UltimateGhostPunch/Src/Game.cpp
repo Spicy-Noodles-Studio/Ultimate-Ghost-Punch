@@ -1,4 +1,4 @@
-#include "FightManager.h"
+#include "Game.h"
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
@@ -14,23 +14,23 @@
 #include "Health.h"
 #include "GhostManager.h"
 #include "Score.h"
-#include "FightConfiguration.h"
+#include "ConfigurationMenu.h"
 #include "GameManager.h"
 
-REGISTER_FACTORY(FightManager);
+REGISTER_FACTORY(Game);
 
-FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
 fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
 {
 
 }
 
-FightManager::~FightManager()
+Game::~Game()
 {
 
 }
 
-void FightManager::start()
+void Game::start()
 {
 	gameManager = GameManager::GetInstance();
 
@@ -63,7 +63,7 @@ void FightManager::start()
 	playSong();
 }
 
-void FightManager::update(float deltaTime)
+void Game::update(float deltaTime)
 {
 	if (fightTimer > 0)
 	{
@@ -84,12 +84,12 @@ void FightManager::update(float deltaTime)
 		if (finishTimer <= 0.0f)
 		{
 			gameManager->getKnights().clear();
-			SceneManager::GetInstance()->changeScene("leaderBoard");
+			SceneManager::GetInstance()->changeScene("StatsMenu");
 		}
 	}
 }
 
-void FightManager::playerDie()
+void Game::playerDie()
 {
 	int nPlayers = gameManager->getNumPlayers();
 	nPlayers--;
@@ -100,7 +100,7 @@ void FightManager::playerDie()
 		gameManager->setNumPlayers(nPlayers);
 }
 
-void FightManager::createLevel()
+void Game::createLevel()
 {
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
@@ -208,12 +208,12 @@ void FightManager::createLevel()
 	}
 }
 
-void FightManager::playSong()
+void Game::playSong()
 {
 	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
 }
 
-void FightManager::configureLevelRender(const std::string& name)
+void Game::configureLevelRender(const std::string& name)
 {
 	GameObject* levelRender = findGameObjectWithName("LevelRender");
 	if (levelRender == nullptr)
@@ -232,7 +232,7 @@ void FightManager::configureLevelRender(const std::string& name)
 	meshRenderer->attachEntityToNode("levelRender");
 }
 
-void FightManager::configureLevelCollider(const std::string& name)
+void Game::configureLevelCollider(const std::string& name)
 {
 	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
 	if (levelCollider == nullptr)
@@ -259,7 +259,7 @@ void FightManager::configureLevelCollider(const std::string& name)
 	strider->setFriction(0.5f);
 }
 
-void FightManager::createKnights()
+void Game::createKnights()
 {
 	int nPlayers = gameManager->getNumPlayers();
 
@@ -281,7 +281,7 @@ void FightManager::createKnights()
 	}
 }
 
-void FightManager::createSpikes()
+void Game::createSpikes()
 {
 	for (int i = 0; i < nSpikes; i++)
 	{
@@ -290,7 +290,7 @@ void FightManager::createSpikes()
 	}
 }
 
-void FightManager::createLights()
+void Game::createLights()
 {
 	for (int i = 0; i < nLights; i++)
 	{
@@ -310,7 +310,7 @@ void FightManager::createLights()
 	}
 }
 
-void FightManager::chooseWinner()
+void Game::chooseWinner()
 {
 	fightTimer = 0.0f;
 

@@ -15,13 +15,13 @@
 #include "PlayerIndex.h"
 #include "PlayerUI.h"
 #include "UltimateGhostPunch.h"
-#include "FightManager.h"
+#include "Game.h"
 #include "GameManager.h"
 
 REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), deathPosChanged(false), ended(false), ghost(false), used(false),
-													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), anim(nullptr),
+													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), game(nullptr), anim(nullptr),
 													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO)
 {
 }
@@ -44,7 +44,7 @@ void GhostManager::start()
 	control = gameObject->getComponent<PlayerController>();
 
 	GameObject* aux = findGameObjectWithName("FightManager");
-	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
+	if (aux != nullptr) game = aux->getComponent<Game>();
 
 	// Store some data for player resurrection
 	if (rigidBody != nullptr)
@@ -68,7 +68,7 @@ void GhostManager::update(float deltaTime)
 	{
 		if (ghostTime > 0)
 			ghostTime -= deltaTime;
-		else if (!ended && fightManager != nullptr) {
+		else if (!ended && game != nullptr) {
 			ended = true;
 			ghost = false;
 			if (anim != nullptr) anim->notLoopAnimation("Disappear");
@@ -276,7 +276,7 @@ void GhostManager::deactivatePlayer()
 	if (movement != nullptr) movement->stop();
 	if (meshRenderer != nullptr) meshRenderer->setVisible(false);
 	if (playerUI != nullptr) playerUI->setVisible(false);
-	fightManager->playerDie();
+	game->playerDie();
 	gameObject->setActive(false);
 }
 

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef FIGHT_MANAGER_H
-#define FIGHT_MANAGER_H
+#ifndef GAME_H
+#define GAME_H
 
 #include <UserComponent.h>
 #include <UIElement.h>
@@ -13,7 +13,7 @@ class InputSystem;
 class GameManager;
 class UILayout;
 
-class FightManager : public UserComponent
+class Game : public UserComponent
 {
 private:
 	struct LightData
@@ -59,8 +59,8 @@ private:
 	void chooseWinner();
 
 public:
-	FightManager(GameObject* gameObject);
-	virtual ~FightManager();
+	Game(GameObject* gameObject);
+	virtual ~Game();
 
 	virtual void start();
 	virtual void update(float deltaTime);

@@ -1,14 +1,14 @@
 {
-    "SceneName": "Options",
+    "SceneName": "OptionsMenu",
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
-            "ObjectName": "OptionsConfiguration",
-            "Tag": "optionsConfiguration",
+            "ObjectName": "OptionsMenu",
+            "Tag": "optionsMenu",
             "Components":
             [
                 {
-                    "ComponentName" : "OptionsConfiguration"
+                    "ComponentName" : "OptionsMenu"
                 }
             ]
         },
@@ -22,7 +22,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "options.layout"],
+                        ["layout" , "OptionsMenu.layout"],
                         ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
                     ]
                 }
