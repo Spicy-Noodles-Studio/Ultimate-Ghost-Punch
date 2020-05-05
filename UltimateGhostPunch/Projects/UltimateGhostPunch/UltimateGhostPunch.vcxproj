@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
+    <ClCompile Include="..\..\Src\Countdown.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="..\..\Src\FightManager.cpp" />
     <ClCompile Include="..\..\Src\GameManager.cpp" />
     <ClCompile Include="..\..\Src\OptionsConfiguration.cpp" />
+    <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
     <ClCompile Include="..\..\Src\PlayerAnimController.cpp" />
@@ -81,6 +83,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
+    <ClInclude Include="..\..\Src\Countdown.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
@@ -93,6 +96,7 @@
     <ClInclude Include="..\..\Src\FightManager.h" />
     <ClInclude Include="..\..\Src\GameManager.h" />
     <ClInclude Include="..\..\Src\OptionsConfiguration.h" />
+    <ClInclude Include="..\..\Src\OptionsMenuScreen.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
     <ClInclude Include="..\..\Src\PlayerAnimController.h" />

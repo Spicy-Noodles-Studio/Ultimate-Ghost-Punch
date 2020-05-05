@@ -12,6 +12,31 @@
                 }
             ]
         },
+		{
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Countdown",
+            "Tag": "countdown",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Countdown",
+					"ComponentProperties": [
+                        ["time" , "10"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "OptionsMenu",
+            "Tag": "optionsMenu",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "OptionsMenuScreen"
+                }
+            ]
+        },
         {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
@@ -23,7 +48,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "fight.layout"],
-                        ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick"]
+                        ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick |OptionsButton pauseOptionsButtonClick"]
                     ]
                 },
                 {
@@ -33,6 +58,25 @@
                         ["maxZ" , "50"],
                         ["zoomFactor" , "2.0f"],
                         ["smoothFactor" , "0.125f"]
+                    ]
+                }
+            ],
+            "Children": 
+            [
+                {
+                    "ObjectType": "GAMEOBJECT",
+                    "ObjectName": "OptionsMenuScreen",
+                    "Tag": "optionsMenuScreen",
+                    "Components":
+                    [
+                        {
+                            "ComponentName": "UILayout",
+                            "ComponentProperties": 
+                            [
+                                ["layout" , "options.layout"],
+                                ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backToMenuButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
+                            ]
+                        }
                     ]
                 }
             ]
