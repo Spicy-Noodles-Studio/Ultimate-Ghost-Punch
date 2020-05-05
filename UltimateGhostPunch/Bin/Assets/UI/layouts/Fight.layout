@@ -218,6 +218,7 @@
                 <Property name="MaxSize" value="{{5000,0},{0.5,0}}" />
 				<Property name="Size" value="{{5000,0},{0.5,0}}" />
                 <Property name="Text" value="" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans72" />
 				<Property name="HorzFormatting" value="WordWrapCentred" />
         </Window>

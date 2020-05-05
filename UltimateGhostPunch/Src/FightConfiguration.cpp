@@ -32,7 +32,7 @@ bool FightConfiguration::fightButtonClick()
 	else gameManager->setTime(-1);
 
 	// change scene
-	SceneManager::GetInstance()->changeScene("mainScene", true);
+	SceneManager::GetInstance()->changeScene("mainScene",true);
 
 	return false;
 }

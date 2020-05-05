@@ -158,7 +158,9 @@ OptionsConfiguration::~OptionsConfiguration()
 
 void OptionsConfiguration::start()
 {
+	
 	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
+	root.setVisible(true);
 	resolutionButton = root.getChild("ResolutionApplyButton");
 	
 	volumeScroll = root.getChild("SoundScroll");

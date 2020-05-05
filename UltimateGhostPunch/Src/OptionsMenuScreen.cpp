@@ -40,6 +40,7 @@ void OptionsMenuScreen::start()
 	screen = findGameObjectWithName("OptionsMenuScreen");
 	root = screen->getComponent<UILayout>()->getRoot();
 	optionsMenu = root.getChild("OptionsBackground");
+	optionsMenu.setVisible(true);
 	root.setVisible(false);
 	root.setEnabled(false);
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
