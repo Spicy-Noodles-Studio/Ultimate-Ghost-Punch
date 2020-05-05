@@ -56,8 +56,12 @@ void Countdown::preUpdate(float deltaTime)
 		last = current;
 
 		time -= deltaTime;
-
+		if (time >= 1)
 		text.setText(std::to_string((int)time));
+		else { 
+			text.setPosition(0.3f, 0.25f);
+			text.setText("FIGHT!"); 
+		}
 
 		if (time <= 0) { 
 			startGame(); 
