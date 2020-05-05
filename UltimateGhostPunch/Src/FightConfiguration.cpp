@@ -237,7 +237,7 @@ void FightConfiguration::reorderSlots(int index)
 int FightConfiguration::isIndexConnected(int index)
 {
 	int i = 0;
-	while (i < numPlayers && slots[i].first != index)
+	while (i < numPlayers - 1 && slots[i].first != index)
 		i++;
 
 	if (slots[i].first == index)

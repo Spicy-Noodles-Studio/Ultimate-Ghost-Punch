@@ -9,8 +9,8 @@ class Block;
 class Dodge;
 class Grab;
 class Movement;
-class UltimateGhostPunch;
 class GhostManager;
+class UltimateGhostPunch;
 
 class PlayerState : public UserComponent
 {

@@ -7,6 +7,7 @@
 #include "PlayerController.h"
 #include "PlayerAnimController.h"
 #include "PlayerState.h"
+#include "PlayerFX.h"
 #include "Health.h"
 
 REGISTER_FACTORY(Block);
@@ -120,6 +121,13 @@ void Block::block()
 void Block::unblock()
 {
 	blocking = false;
+
+	if (parent == nullptr) return;
+
+	auto playerFX = parent->getComponent<PlayerFX>();
+
+	if (playerFX != nullptr)
+		playerFX->deactivateShield();
 }
 
 bool Block::blockAttack(float damage, Vector3 otherPosition)

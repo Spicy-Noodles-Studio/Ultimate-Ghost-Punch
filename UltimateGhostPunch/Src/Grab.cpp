@@ -283,6 +283,9 @@ void Grab::grabEnemy()
 	if (score != nullptr)
 		score->grabbedBy(enemy->getComponent<PlayerIndex>()->getIndex(), id);
 
+	if (enemyBlock != nullptr && enemyBlock->isBlocking())
+		enemyBlock->unblock();
+
 	state = GRABBED;
 	remain = grabDuration;
 	enemyController = enemy->getComponent<PlayerController>();
