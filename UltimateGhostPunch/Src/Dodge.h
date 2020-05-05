@@ -32,7 +32,7 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
-	bool dodge();
+	void dodge();
 	void endDodge();
 	bool isDodging();
 };

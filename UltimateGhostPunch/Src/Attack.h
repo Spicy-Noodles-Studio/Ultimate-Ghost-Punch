@@ -47,6 +47,8 @@ private:
 	Vector3 quickAttackOffset;
 	Vector3 strongAttackOffset;
 
+	GameObject* parent;
+
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
 
@@ -61,8 +63,8 @@ public:
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
 
-	bool quickAttack();
-	bool strongAttack();
+	void quickAttack();
+	void strongAttack();
 	bool isAttacking() const;
 };
 

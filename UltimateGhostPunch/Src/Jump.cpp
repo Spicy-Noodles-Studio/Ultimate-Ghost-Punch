@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "PlayerAnimController.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(Jump);
 
@@ -20,7 +21,8 @@ Jump::~Jump()
 
 void Jump::start()
 {
-	rigidBody = gameObject->getParent()->getComponent<RigidBody>();
+	parent = gameObject->getParent();
+	if (parent != nullptr) rigidBody = parent->getComponent<RigidBody>();
 }
 
 void Jump::update(float deltaTime)
@@ -33,11 +35,11 @@ void Jump::update(float deltaTime)
 void Jump::onObjectEnter(GameObject* other)
 {
 	bool isFloor = other->getTag() == "suelo";
-	bool isPlayer = other->getTag() == "Player" && other != gameObject->getParent();
+	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
 
 	if (isFloor || isPlayer)
 	{
-		if(isFloor)
+		if (isFloor)
 			grounded = true;
 
 		coyoteTimer = 0.0f;
@@ -51,14 +53,14 @@ void Jump::onObjectEnter(GameObject* other)
 void Jump::onObjectExit(GameObject* other)
 {
 	bool isFloor = other->getTag() == "suelo";
-	bool isPlayer = other->getTag() == "Player" && other != gameObject->getParent();
+	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
 
 	if (isFloor || isPlayer)
 	{
 		if (isFloor)
 			grounded = false;
 
-		if(!jumping)
+		if (!jumping)
 			coyoteTimer = coyoteTime;
 
 		if (isPlayer)
@@ -89,7 +91,10 @@ void Jump::handleData(ComponentData* data)
 
 void Jump::jump()
 {
-	if (jumping || !canJump()) return;
+	if (parent == nullptr) return;
+	PlayerState* aux = parent->getComponent<PlayerState>();
+
+	if (jumping || !canJump() || (aux != nullptr && !aux->canJump())) return;
 
 	// Cancel vertical velocity so impulse doesnt lose strenght
 	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
@@ -97,9 +102,8 @@ void Jump::jump()
 	jumping = true;
 	coyoteTimer = 0.0f;
 
-	auto animController = gameObject->getParent()->getComponent<PlayerAnimController>();
-	if(animController != nullptr)
-		animController->jumpAnimation();
+	auto animController = parent->getComponent<PlayerAnimController>();
+	if (animController != nullptr) animController->jumpAnimation();
 }
 
 void Jump::cancelJump()

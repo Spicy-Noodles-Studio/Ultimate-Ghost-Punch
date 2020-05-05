@@ -24,8 +24,8 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
-jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
-direction(Vector3::ZERO), controllerIndex(1), grabed(false)
+															 jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
+															 direction(Vector3::ZERO), controllerIndex(1), grabed(false)
 {
 
 }
@@ -71,9 +71,8 @@ void PlayerController::update(float deltaTime)
 
 void PlayerController::fixedUpdate(float deltaTime)
 {
-	if (ghostManager == nullptr || !ghostManager->isGhost())
-		if (movement != nullptr)
-			movement->move(direction);
+	if (movement != nullptr)
+		movement->move(direction);
 }
 
 void PlayerController::handleData(ComponentData* data)
@@ -93,64 +92,45 @@ void PlayerController::handleData(ComponentData* data)
 
 void PlayerController::checkInput()
 {
+	//Movement
 	direction = Vector3(0, 0, 0);
-
-	if (block == nullptr || !block->isBlocking())
-	{
-		//Movement
-		direction += Vector3(getHorizontalAxis(), 0, 0);
-
-		//Character rotation
-		if (direction.x != 0)
-			gameObject->transform->setRotation({ 0,90 * direction.x,0 });
-	}
+	direction += Vector3(getHorizontalAxis(), 0, 0);
 
 	//Acctions if the player isn't in ghostManager mode
 	if (ghostManager == nullptr || !ghostManager->isGhost())
 	{
-		//If we are not blocking
-		if (block == nullptr || !block->isBlocking())
+		//Attack
+		if (attack != nullptr)
 		{
-			//Attack
-			if (attack != nullptr)
-			{
-				//Quick attack
-				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X"))
-				{
-					if (attack->quickAttack())
-						animController->quickAttackAnimation();
-				}
-				//Strong attack
-				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
-				{
-					if (attack->strongAttack())
-						animController->strongAttackAnimation();
-				}
-			}
+			//Quick attack
+			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X"))
+				attack->quickAttack();
+			//Strong attack
+			else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
+				attack->strongAttack();
+		}
 
-			//Dodge
-			if (dodge != nullptr)
-				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
-					if (dodge->dodge())
-						animController->dashAnimation();
+		//Dodge
+		if (dodge != nullptr)
+			if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
+				dodge->dodge();
 
-			//Jump
-			if (jump != nullptr)
-			{
-				if (getKey("Space") || getButton("A"))
-					jump->jump();
-				else if (getKeyUp("Space") || getButtonUp("A"))
-					jump->cancelJump();
-			}
+		//Jump
+		if (jump != nullptr)
+		{
+			if (getKey("Space") || getButton("A"))
+				jump->jump();
+			else if (getKeyUp("Space") || getButtonUp("A"))
+				jump->cancelJump();
+		}
 
-			//Grab
-			if (grab != nullptr)
-			{
-				if (getKey("E") || getButton("LB"))
-					grab->grab();
-				else if (getKeyUp("E") || getButtonUp("LB"))
-					grab->drop();
-			}
+		//Grab
+		if (grab != nullptr)
+		{
+			if (getKey("E") || getButton("LB"))
+				grab->grab();
+			else if (getKeyUp("E") || getButtonUp("LB"))
+				grab->drop();
 		}
 
 		//Block
@@ -165,10 +145,10 @@ void PlayerController::checkInput()
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK"))
-			animController->tauntAnimation();
+			if(animController!= nullptr) animController->tauntAnimation();
 	}
 
-	//Actions if the player is in ghostManager mode
+	//Actions if the player is in ghost mode
 	else if (ghostManager != nullptr && ghostManager->isGhost())
 	{
 		direction += Vector3(0, getVerticalAxis(), 0);
@@ -179,28 +159,22 @@ void PlayerController::checkInput()
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
 
 			//Charge
-			if (ghostPunch->getState() == UltimateGhostPunch::State::AVAILABLE)
-			{
-				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
-					ghostPunch->charge();
-			}
-			else if (ghostPunch->getState() == UltimateGhostPunch::State::CHARGING)
-			{
-				//Aim
-				if (controllerIndex == 4)
-					ghostPunchMouseAim();
-				else
-					ghostPunch->aim(horizontal, -vertical);
+			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
+				ghostPunch->charge();
 
-				//Ghost Punch
-				if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
-					ghostPunch->ghostPunch();
-			}
+			//Aim
+			if (controllerIndex == 4)
+				ghostPunchMouseAim();
+			else
+				ghostPunch->aim(horizontal, -vertical);
+
+			//Ghost Punch
+			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
+				ghostPunch->ghostPunch();
 		}
 
 		//Ghost Movement
-		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
-			if (ghostMovement != nullptr) ghostMovement->move(direction);
+		if (ghostMovement != nullptr) ghostMovement->move(direction);
 	}
 }
 

@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "PlayerState.h"
+#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(Dodge);
 
@@ -74,7 +75,7 @@ void Dodge::handleData(ComponentData* data)
 	}
 }
 
-bool Dodge::dodge()
+void Dodge::dodge()
 {
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 
@@ -93,10 +94,9 @@ bool Dodge::dodge()
 		state = State::DODGING;
 		time = duration;
 
-		return true;
+		PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
+		if (anim != nullptr) anim->dashAnimation();
 	}
-
-	return false;
 }
 
 void Dodge::endDodge()

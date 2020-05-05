@@ -10,6 +10,7 @@ class Jump : public UserComponent
 {
 private:
 	RigidBody* rigidBody;
+	GameObject* parent;
 
 	float jumpForce;	// Force used to add impulse
 	float jumpDecay;	// Rate of attenuation when jump is cancelled

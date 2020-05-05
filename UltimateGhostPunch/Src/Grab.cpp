@@ -44,14 +44,15 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
-	int newOrientation = (parent->transform->getRotation().y >= 0) ? 1 : -1;
-
 	if (remain > 0.0f) remain -= deltaTime;
 	if (grabTimer > 0.0f) grabTimer -= deltaTime;
 
+	if (parent == nullptr) return;
+	int newOrientation = (parent->transform->getRotation().y >= 0) ? 1 : -1;
+
 	if (state == GRABBED)
 	{
-		if (enemy != nullptr && parent != nullptr)
+		if (enemy != nullptr)
 		{
 			Vector3 objPos;
 			float dist = (grabbedPosition - enemy->transform->getPosition()).magnitude();
@@ -155,7 +156,8 @@ void Grab::handleData(ComponentData* data)
 
 void Grab::grab()
 {
-	PlayerState* aux = gameObject->getParent()->getComponent<PlayerState>();
+	if (parent == nullptr) return;
+	PlayerState* aux = parent->getComponent<PlayerState>();
 
 	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
 	{
@@ -170,7 +172,7 @@ void Grab::grab()
 
 void Grab::drop()
 {
-	if (state != GRABBED || enemy == nullptr)
+	if (state != GRABBED || enemy == nullptr || parent == nullptr)
 		return;
 
 	resetEnemy();

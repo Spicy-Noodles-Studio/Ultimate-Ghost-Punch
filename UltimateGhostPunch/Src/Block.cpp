@@ -24,6 +24,7 @@ Block::~Block()
 
 void Block::start()
 {
+	parent = gameObject->getParent();
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
 }
@@ -98,15 +99,16 @@ void Block::onObjectExit(GameObject* other)
 
 void Block::block()
 {
-	PlayerState* aux = gameObject->getParent()->getComponent<PlayerState>();
+	if (parent == nullptr) return;
+	PlayerState* aux = parent->getComponent<PlayerState>();
 
 	if (!blocking && blockTime > 0 && grounded && aux->canBlock())
 	{
 		blocking = true;
 		timeElapsed = 0;
-		blockDirection = gameObject->getParent()->transform->getRotation().y;
+		blockDirection = parent->transform->getRotation().y;
 
-		auto anim = gameObject->getParent()->getComponent<PlayerAnimController>();
+		auto anim = parent->getComponent<PlayerAnimController>();
 
 		if(anim != nullptr)
 			anim->blockAnimation();
@@ -122,8 +124,10 @@ void Block::unblock()
 
 bool Block::blockAttack(float damage, Vector3 otherPosition)
 {
-	if (blocking && ((blockDirection > 0 && otherPosition.x > gameObject->getParent()->transform->getPosition().x) ||
-	   (blockDirection < 0 && otherPosition.x < gameObject->getParent()->transform->getPosition().x)))
+	if (parent == nullptr) return false;
+
+	if (blocking && ((blockDirection > 0 && otherPosition.x > parent->transform->getPosition().x) ||
+	   (blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))
 	{
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
@@ -132,7 +136,7 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 			blocking = false;
 
 		// Attack blocked animation
-		PlayerAnimController* anim = gameObject->getParent()->getComponent<PlayerAnimController>();
+		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 
 		if (anim != nullptr)
 			anim->blockedAttackAnimation();
@@ -141,7 +145,7 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 	}
 	else
 	{
-		Health* health = gameObject->getParent()->getComponent<Health>();
+		Health* health = parent->getComponent<Health>();
 
 		if (health != nullptr)
 			health->receiveDamage(damage);

@@ -81,6 +81,7 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 
 void UltimateGhostPunch::charge()
 {
+	if(state == State::AVAILABLE)
 	state = State::CHARGING;
 	if (ghostMovement != nullptr)
 		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
@@ -92,6 +93,7 @@ void UltimateGhostPunch::charge()
 void UltimateGhostPunch::aim(double x, double y)
 {
 	if (x == 0 && y == 0) return;
+	if (state != State::CHARGING) return;
 
 	direction = { x, y, 0.0 };
 	direction.normalize();
@@ -109,15 +111,14 @@ void UltimateGhostPunch::aim(double x, double y)
 
 void UltimateGhostPunch::ghostPunch()
 {
-	if (rigidBody != nullptr)
-		rigidBody->addImpulse(direction * force);
+	if (state != State::CHARGING) return;
 
-	if (ghostMovement != nullptr)
-		ghostMovement->setSpeed(ghostSpeed);
+	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
+
+	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
 
 	state = State::PUNCHING;
-	if (anim != nullptr) 
-		anim->punchingGhostAnimation();
+	if (anim != nullptr) anim->punchingGhostAnimation();
 }
 
 const UltimateGhostPunch::State& UltimateGhostPunch::getState()

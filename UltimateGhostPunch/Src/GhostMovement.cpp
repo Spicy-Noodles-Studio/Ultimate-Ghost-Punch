@@ -5,6 +5,8 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(GhostMovement);
 
 GhostMovement::GhostMovement(GameObject* gameObject) :UserComponent(gameObject), rigidBody(nullptr), maxSpeed(2.0f)
@@ -38,9 +40,12 @@ void GhostMovement::handleData(ComponentData* data)
 
 void GhostMovement::move(Vector3 dir)
 {
-	dir *= maxSpeed;
-	if (rigidBody != nullptr)
-		rigidBody->setLinearVelocity(dir);
+	PlayerState* aux = gameObject->getComponent<PlayerState>();
+	if (aux != nullptr && aux->canGhostMove()) {
+		dir *= maxSpeed;
+		if (rigidBody != nullptr)
+			rigidBody->setLinearVelocity(dir);
+	}
 }
 
 void GhostMovement::setSpeed(float speed)
