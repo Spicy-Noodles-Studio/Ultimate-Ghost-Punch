@@ -21,7 +21,7 @@ REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
 													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
-												     deathPosition(Vector3()), ghostSpawnOffset(Vector3()), anim(nullptr), mode(ALIVE)
+												     deathPosition(Vector3()), ghostSpawnOffset(Vector3()), anim(nullptr), control(nullptr), mode(ALIVE)
 {
 }
 
@@ -40,6 +40,7 @@ void GhostManager::start()
 	rigidBody = gameObject->getComponent<RigidBody>();
 	anim = gameObject->getComponent<PlayerAnimController>();
 	playerUI = gameObject->getComponent<PlayerUI>();
+	control = gameObject->getComponent<PlayerController>();
 
 	GameObject* aux = findGameObjectWithName("FightManager");
 	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
@@ -56,19 +57,7 @@ void GhostManager::update(float deltaTime)
 		if (anim != nullptr) anim->notLoopAnimation("Die");
 		mode = DYING;
 		// Deactivate controller while player dies
-		auto control = gameObject->getComponent<PlayerController>();
 		if (control != nullptr) control->setActive(false);
-		/*if (!used && !ghost)
-		{
-			if (anim != nullptr) anim->notLoopAnimation("Die");
-			ghost = true;
-			// Deactivate controller while player dies
-			auto control = gameObject->getComponent<PlayerController>();
-			if (control != nullptr) control->setActive(false);
-		}
-		else if (used && !ghost && fightManager != nullptr) {
-			deactivatePlayer();
-		}*/
 	}
 
 	if (ghost)
@@ -205,7 +194,6 @@ void GhostManager::activateGhost()
 	// Reactivate controller
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr) control->setActive(true);
-	LOG("CONTROL ***ACTIVADO\n");
 	mode = GHOST;
 }
 

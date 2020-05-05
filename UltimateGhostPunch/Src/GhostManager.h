@@ -13,6 +13,7 @@ class RigidBody;
 class PlayerUI;
 class FightManager;
 class PlayerAnimController;
+class PlayerController;
 
 class GhostManager : public UserComponent
 {
@@ -36,6 +37,7 @@ private:
 	PlayerUI* playerUI;
 	FightManager* fightManager;
 	PlayerAnimController* anim;
+	PlayerController* control;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
