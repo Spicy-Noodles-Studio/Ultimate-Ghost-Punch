@@ -31,7 +31,6 @@ void Countdown::start()
 	started = false;
 	charged = false;
 	paused = false;
-	time = 5;
 
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
 
@@ -78,7 +77,7 @@ void Countdown::handleData(ComponentData* data)
 	for (auto prop : data->getProperties()) {
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "initTime") {
+		if (prop.first == "time") {
 			setFloat(time);
 		}else
 			LOG("DODGE: Invalid property name %s", prop.first.c_str());
