@@ -7,6 +7,8 @@
 #include <GaiaData.h>
 #include <RigidBody.h>
 #include <Light.h>
+#include <MeshRenderer.h>
+#include <Strider.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
@@ -17,7 +19,7 @@
 REGISTER_FACTORY(FightManager);
 
 FightManager::FightManager(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL),
-winnerPanel(NULL), winnerText(NULL), fightTimer(-1.0f), finishTimer(-1.0f), winner(-1)
+winnerPanel(NULL), winnerText(NULL), fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
 {
 
 }
@@ -90,11 +92,12 @@ void FightManager::createLevel()
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
 
-	// instantiate collider mesh
-	instantiate(levelData.find("LevelBlueprint").getValue().c_str());
-
-	// instantiate render mesh
-	instantiate(levelData.find("LevelRenderBlueprint").getValue().c_str());
+	std::string renderName = levelData.find("RenderMesh").getValue();
+	std::string colliderName = levelData.find("ColliderMesh").getValue();
+	// Configuramos el mesh visual
+	configureLevelRender(renderName);
+	// Configuramos el mesh de colision
+	configureLevelCollider(colliderName);
 
 	// read player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
@@ -184,6 +187,36 @@ void FightManager::createLevel()
 void FightManager::playSong()
 {
 	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
+}
+
+void FightManager::configureLevelRender(const std::string& name)
+{
+	GameObject* levelRender = findGameObjectWithName("LevelRender"); 
+	if (levelRender == nullptr) { LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene"); return; }
+
+	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr) { LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return; }
+
+	meshRenderer->setMesh("levelRender", name);
+	meshRenderer->attachEntityToNode("levelRender");
+}
+
+void FightManager::configureLevelCollider(const std::string& name)
+{
+	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
+	if (levelCollider == nullptr) { LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return; }
+
+	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr) { LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return; }
+
+	Strider* strider = levelCollider->getComponent<Strider>();
+	if (strider == nullptr) { LOG_ERROR("FIGHT MANAGER", "Strider not found"); return; }
+
+	meshRenderer->setMesh("levelCollider", name);
+	meshRenderer->attachEntityToNode("levelCollider");
+	meshRenderer->setVisible(false);
+	strider->stride("levelCollider");
+	strider->setFriction(0.5f);
 }
 
 void FightManager::createKnights()
