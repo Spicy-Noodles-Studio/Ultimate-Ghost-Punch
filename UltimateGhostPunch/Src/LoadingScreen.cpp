@@ -6,7 +6,10 @@
 #include <WindowManager.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include "GameManager.h"
+#include <Camera.h>
+#include <UILayout.h>
+#include <UIElement.h>
+#include <time.h>
 
 REGISTER_FACTORY(LoadingScreen);
 
@@ -18,18 +21,48 @@ LoadingScreen::~LoadingScreen()
 {
 }
 
+std::string LoadingScreen::getRandomTip()
+{
+	srand(time(NULL));
+
+	int i = (rand() % tipsVector.size()) - 1;
+
+	return tipsVector[i];
+}
+
 void LoadingScreen::start()
 {
-	logo = instantiate("Cubo", { 0, 10, 0 });
-	logo->getComponent<RigidBody>()->setGravity({ 0,0,0 });
-	LOG("Nivel: %s", GameManager::GetInstance()->getLevel().c_str());
+	sceneToLoad = "NO SCENE";
+	loadDelay = 0;
+
+	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
+	UIElement tipsText = root.getChild("Tips");
+	tipsText.setText(getRandomTip());
+	tipsText.setProperty("HorzFormatting", "WordWrapCentred");
+
 }
 
 void LoadingScreen::update(float deltaTime)
 {
-	if (logo) logo->transform->rotate({ 0,0.1f,0 });
+	if(sceneToLoad == "NO SCENE") loadDelay += deltaTime;
+
+	if (loadDelay > 1.0f) {
+		sceneToLoad = SceneManager::GetInstance()->getSceneToLoad();
+		if (sceneToLoad != "NO SCENE") SceneManager::GetInstance()->changeScene(sceneToLoad);
+	}
 }
 
 void LoadingScreen::handleData(ComponentData* data)
 {
+	int i = 1;
+	for (auto prop : data->getProperties()) {
+		std::stringstream ss(prop.second);
+
+		std::string propName = "tip" + std::to_string(i);
+		if (prop.first == propName)
+		{
+			tipsVector.push_back(prop.second);
+		}
+		i++;
+	}
 }
