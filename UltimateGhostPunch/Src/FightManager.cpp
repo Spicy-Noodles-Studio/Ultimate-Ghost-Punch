@@ -12,6 +12,7 @@
 #include "PlayerController.h"
 #include "PlayerIndex.h"
 #include "Health.h"
+#include "GhostManager.h"
 #include "Score.h"
 #include "FightConfiguration.h"
 #include "GameManager.h"
@@ -46,6 +47,7 @@ void FightManager::start()
 	winnerPanel.setVisible(false);
 
 	playerIndexes = gameManager->getPlayerIndexes();
+	playerColours = gameManager->getPlayerColours();
 
 	// create game
 	createLevel();
@@ -272,6 +274,8 @@ void FightManager::createKnights()
 
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
 		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
+		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
+		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
 
 		gameManager->getKnights().push_back(knight);
 	}

@@ -43,6 +43,8 @@ private:
 	Vector3 ghostSpawnOffset;
 	Vector3 deathPosition;
 
+	Vector3 playerColour;
+
 public:
 	GhostManager(GameObject* gameObject);
 	virtual ~GhostManager();
@@ -60,6 +62,7 @@ public:
 	void deactivateGhost();
 
 	void setDeathPosition(const Vector3& dPos);
+	void setPlayerColour(const Vector3& colour);
 };
 
 #endif

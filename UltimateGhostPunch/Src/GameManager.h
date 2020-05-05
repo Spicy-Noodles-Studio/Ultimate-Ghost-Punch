@@ -18,6 +18,7 @@ private:
 	bool paused;
 	int numPlayers;
 
+	std::vector<Vector3> playerColours;
 	std::vector<int> playerIndexes;
 	std::vector<GameObject*> knights;
 
@@ -54,6 +55,7 @@ public:
 	void setPlayerIndexes(std::vector<int> playerIndexes);
 	std::vector<int>& getPlayerIndexes();
 	std::vector<GameObject*>& getKnights();
+	std::vector<Vector3>& getPlayerColours();
 
 	void setLevel(std::string level);
 	std::string getLevel();

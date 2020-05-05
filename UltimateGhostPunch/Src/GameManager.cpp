@@ -35,6 +35,7 @@ void GameManager::start()
 {
 	level = "";
 	song = "";
+	playerColours = { {1,1,1}, {0,0,1}, {0,1,0}, {0,1,1} };
 
 	dontDestroyOnLoad(gameObject);
 }
@@ -86,6 +87,11 @@ std::vector<int>& GameManager::getPlayerIndexes()
 std::vector<GameObject*>& GameManager::getKnights()
 {
 	return knights;
+}
+
+std::vector<Vector3>& GameManager::getPlayerColours()
+{
+	return playerColours;
 }
 
 void GameManager::setLevel(std::string level)

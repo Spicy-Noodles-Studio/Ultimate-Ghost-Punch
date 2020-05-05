@@ -34,6 +34,7 @@ private:
 	UIElement winnerText;
 
 	std::vector<int> playerIndexes;
+	std::vector<Vector3> playerColours;
 
 	float fightTimer; // If time is -1, then infinite
 	float finishTimer; // Time taken to send us back to MainMenu

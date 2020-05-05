@@ -225,6 +225,10 @@ void GhostManager::activateGhost()
 		transform->setPosition(transform->getPosition() + ghostSpawnOffset);
 	}
 
+	// Set player colour
+	if (meshRenderer != nullptr)
+		meshRenderer->setDiffuse(0, playerColour, 1);
+
 	// Reactivate controller
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr)
@@ -272,4 +276,9 @@ void GhostManager::setDeathPosition(const Vector3& dPos)
 {
 	deathPosChanged = true;
 	deathPosition = dPos;
+}
+
+void GhostManager::setPlayerColour(const Vector3& colour)
+{
+	playerColour = colour;
 }
