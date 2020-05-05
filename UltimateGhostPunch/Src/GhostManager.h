@@ -13,6 +13,7 @@ class RigidBody;
 class PlayerUI;
 class FightManager;
 class PlayerAnimController;
+class PlayerController;
 
 class GhostManager : public UserComponent
 {
@@ -21,6 +22,11 @@ private:
 	bool used;
 	bool deathPosChanged;
 	bool ended;
+	
+	enum GhostMode
+	{
+		ALIVE, GHOST, DYING
+	};
 
 	float ghostTime;
 	float playerGravity;
@@ -37,6 +43,7 @@ private:
 	PlayerUI* playerUI;
 	FightManager* fightManager;
 	PlayerAnimController* anim;
+	PlayerController* control;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
@@ -44,6 +51,7 @@ private:
 	Vector3 deathPosition;
 
 	Vector3 playerColour;
+	GhostMode mode;
 
 public:
 	GhostManager(GameObject* gameObject);
@@ -63,6 +71,9 @@ public:
 
 	void setDeathPosition(const Vector3& dPos);
 	void setPlayerColour(const Vector3& colour);
+
+	void deactivatePlayer();
+	void handlePlayerDeath();
 };
 
 #endif
