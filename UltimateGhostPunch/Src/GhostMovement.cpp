@@ -42,6 +42,10 @@ void GhostMovement::move(Vector3 dir)
 {
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 	if (aux != nullptr && aux->canGhostMove()) {
+		//Character rotation
+		if (dir.x != 0)
+			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+
 		dir *= maxSpeed;
 		if (rigidBody != nullptr)
 			rigidBody->setLinearVelocity(dir);
