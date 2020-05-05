@@ -56,12 +56,6 @@
                [ "collisionGroup", "IgnoreRaycast"]
             ]
         },
-        {
-            "ComponentName": "Movement",
-            "ComponentProperties": [
-                ["speed", "75"]
-            ]
-        },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
@@ -75,23 +69,15 @@
             ]
         },
         {
+            "ComponentName": "Movement",
+            "ComponentProperties": [
+                ["speed", "75"]
+            ]
+        },
+        {
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
                 ["maxSpeed", "5"]
-            ]
-        },
-        {
-            "ComponentName": "Respawn",
-            "ComponentProperties":[ 
-                ["respawnTime", "2"]
-            ]
-        },
-        {
-            "ComponentName": "UltimateGhostPunch",
-            "ComponentProperties": [
-                ["force", "200"],
-                ["duration" , "0.333"],
-                ["chargeSpeedMult" , "0.3"]
             ]
         },
         {
@@ -111,6 +97,20 @@
             ]
 		},
         {
+            "ComponentName": "Respawn",
+            "ComponentProperties":[ 
+                ["respawnTime", "2"]
+            ]
+        },
+        {
+            "ComponentName": "UltimateGhostPunch",
+            "ComponentProperties": [
+                ["force", "200"],
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
+            ]
+        },
+        {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostTime", "10"],
@@ -122,6 +122,9 @@
         },
         {
             "ComponentName": "PlayerUI"
+        },
+        {
+            "ComponentName": "PlayerState"
         }
     ],
     "Children": [

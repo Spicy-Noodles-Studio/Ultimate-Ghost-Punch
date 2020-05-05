@@ -4,8 +4,6 @@
 
 #include <UserComponent.h>
 
-class Attack;
-
 class Block : public UserComponent
 {
 private:
@@ -16,12 +14,10 @@ private:
 
 	float timeElapsed; //Time elapsed for regen
 
-	bool isGrounded;
-	bool isBlocking;
+	bool grounded;
+	bool blocking;
 
 	float blockDirection;
-
-	Attack* attack; // To check if player is attacking
 
 public:
 	Block(GameObject* gameObject);
@@ -40,8 +36,8 @@ public:
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
-	bool getGrabBlock() const;
-	bool blocking() const;
+	bool wasGrabBlocked() const;
+	bool isBlocking() const;
 };
 
 #endif

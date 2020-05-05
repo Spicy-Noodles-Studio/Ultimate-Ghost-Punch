@@ -8,10 +8,9 @@
 #include "PlayerController.h"
 #include "PlayerAnimController.h"
 #include "PlayerIndex.h"
+#include "PlayerState.h"
 #include "Score.h"
 #include "Block.h"
-#include "Dodge.h"
-#include "Attack.h"
 #include "GhostManager.h"
 #include "GameManager.h"
 
@@ -19,7 +18,7 @@ REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
 grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), controller(nullptr), myAnim(nullptr), enemy(nullptr), enemyController(nullptr), enemyAnim(nullptr),
-enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr), dodge(nullptr), block(nullptr), attack(nullptr)
+enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr)
 {
 
 }
@@ -37,16 +36,7 @@ void Grab::start()
 	{
 		id = parent->getComponent<PlayerIndex>()->getIndex();
 		controller = parent->getComponent<PlayerController>();
-		dodge = parent->getComponent<Dodge>();
 		myAnim = parent->getComponent<PlayerAnimController>();
-
-		std::vector<GameObject*> aux = parent->findChildrenWithTag("groundSensor");
-		if (aux.size() > 0)
-			block = aux[0]->getComponent<Block>();
-
-		aux = parent->findChildrenWithTag("attackSensor");
-		if (aux.size() > 0)
-			attack = aux[0]->getComponent<Attack>();
 	}
 
 	score = GameManager::GetInstance()->getScore();
@@ -165,7 +155,9 @@ void Grab::handleData(ComponentData* data)
 
 void Grab::grab()
 {
-	if (state == IDLE && grabTimer <= 0 && canGrab())
+	PlayerState* aux = gameObject->getParent()->getComponent<PlayerState>();
+
+	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
 	{
 		if (enemy != nullptr && !enemy->getComponent<PlayerController>()->isGrabed())
 			grabEnemy();
@@ -216,11 +208,6 @@ bool Grab::isOnCooldown() const
 	return cooldown > 0;
 }
 
-bool Grab::canGrab() const
-{
-	return (block == nullptr || !block->blocking()) && (dodge == nullptr || !dodge->isDodging()) && (attack == nullptr || !attack->isAttacking());
-}
-
 void Grab::resetEnemy()
 {
 	grabTimer = cooldown;
@@ -267,7 +254,7 @@ void Grab::grabEnemy()
 	if (aux.size() > 0)
 		enemyBlock = aux[0]->getComponent<Block>();
 
-	if (enemyBlock != nullptr && enemyBlock->getGrabBlock())
+	if (enemyBlock != nullptr && enemyBlock->wasGrabBlocked())
 	{
 		int dir = (parent->transform->getRotation().y >= 0) ? 1 : -1;
 		int enemyDir = (enemy->transform->getRotation().y >= 0) ? 1 : -1;

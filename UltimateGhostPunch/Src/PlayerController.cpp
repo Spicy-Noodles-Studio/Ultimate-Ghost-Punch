@@ -95,7 +95,7 @@ void PlayerController::checkInput()
 {
 	direction = Vector3(0, 0, 0);
 
-	if (block == nullptr || !block->blocking())
+	if (block == nullptr || !block->isBlocking())
 	{
 		//Movement
 		direction += Vector3(getHorizontalAxis(), 0, 0);
@@ -109,7 +109,7 @@ void PlayerController::checkInput()
 	if (ghostManager == nullptr || !ghostManager->isGhost())
 	{
 		//If we are not blocking
-		if (block == nullptr || !block->blocking())
+		if (block == nullptr || !block->isBlocking())
 		{
 			//Attack
 			if (attack != nullptr)
@@ -159,7 +159,7 @@ void PlayerController::checkInput()
 			if (getKeyDown("S") || getButtonDown("B"))
 				block->block();
 
-			if (block->blocking() && (getKeyUp("S") || getButtonUp("B")))
+			if (block->isBlocking() && (getKeyUp("S") || getButtonUp("B")))
 				block->unblock();
 		}
 

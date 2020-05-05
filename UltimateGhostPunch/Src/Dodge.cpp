@@ -4,6 +4,8 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(Dodge);
 
 Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), state(IDLE), playerGravity(0, -10, 0), cooldown(1.0f), force(10.0f), time(0.0f), duration(0.25f), atenuation(0.3f)
@@ -15,6 +17,7 @@ Dodge::~Dodge()
 {
 
 }
+
 void Dodge::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
@@ -73,7 +76,9 @@ void Dodge::handleData(ComponentData* data)
 
 bool Dodge::dodge()
 {
-	if (state == State::IDLE)
+	PlayerState* aux = gameObject->getComponent<PlayerState>();
+
+	if (state == State::IDLE && aux->canDodge())
 	{
 		Vector3 dir = Vector3::ZERO;
 		dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;

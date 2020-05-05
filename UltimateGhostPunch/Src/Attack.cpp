@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include "PlayerIndex.h"
+#include "PlayerState.h"
 #include "Health.h"
 #include "Block.h"
 #include "Score.h"
@@ -194,7 +195,9 @@ void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 
 bool Attack::quickAttack()
 {
-	if (cooldown <= 0.0f)
+	PlayerState* aux = gameObject->getParent()->getComponent<PlayerState>();
+
+	if (cooldown <= 0.0f && aux->canAttack())
 	{
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
@@ -209,7 +212,9 @@ bool Attack::quickAttack()
 
 bool Attack::strongAttack()
 {
-	if (cooldown <= 0.0f)
+	PlayerState* aux = gameObject->getParent()->getComponent<PlayerState>();
+
+	if (cooldown <= 0.0f && aux->canAttack())
 	{
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);

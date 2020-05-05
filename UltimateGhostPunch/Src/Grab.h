@@ -7,9 +7,6 @@
 class GameObject;
 class RigidBody;
 class Score;
-class Block;
-class Dodge;
-class Attack;
 class PlayerController;
 class PlayerAnimController;
 
@@ -43,9 +40,6 @@ private:
 	PlayerAnimController* enemyAnim;
 
 	Score* score;
-	Block* block;
-	Dodge* dodge;
-	Attack* attack;
 
 	Vector3 enemyDiff;
 	bool enemyFollowing;
@@ -74,7 +68,6 @@ public:
 
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
-	bool canGrab() const;
 };
 
 #endif

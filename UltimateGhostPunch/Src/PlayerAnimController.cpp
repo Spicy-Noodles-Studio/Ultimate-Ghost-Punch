@@ -591,7 +591,7 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 {
 	if (currentMode == GHOST) return;
 
-	if (anim->getCurrentAnimation() == "BlockHold" && !block->blocking())
+	if (anim->getCurrentAnimation() == "BlockHold" && !block->isBlocking())
 	{
 		anim->playAnimation("BlockEnd");
 		anim->setLoop(false);
@@ -608,7 +608,7 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 		return;
 	}
 
-	if (anim->getCurrentAnimation() == "BlockAttack" && anim->hasEnded() && block->blocking())
+	if (anim->getCurrentAnimation() == "BlockAttack" && anim->hasEnded() && block->isBlocking())
 	{
 		anim->playAnimation("BlockHold");
 		anim->setLoop(true);
