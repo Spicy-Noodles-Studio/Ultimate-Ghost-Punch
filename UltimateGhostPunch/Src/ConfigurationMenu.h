@@ -1,6 +1,6 @@
 #pragma once
-#ifndef FIGHT_CONFIGURATION_H
-#define FIGHT_CONFIGURATION_H
+#ifndef CONFIGURATION_MENU_H
+#define CONFIGURATION_MENU_H
 
 #include <UserComponent.h>
 #include <UIElement.h>
@@ -21,7 +21,7 @@ const int MIN_PLAYERS = 1;
 class InputSystem;
 class UILayout;
 
-class FightConfiguration : public UserComponent
+class ConfigurationMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
@@ -49,7 +49,6 @@ private:
 
 	int isIndexConnected(int index);
 
-	// events
 	bool changeHealth(int value);
 	bool changeTime(int value);
 	bool changeSong(int value);
@@ -59,8 +58,8 @@ private:
 	bool backButtonClick();
 
 public:
-	FightConfiguration(GameObject* gameObject);
-	virtual ~FightConfiguration();
+	ConfigurationMenu(GameObject* gameObject);
+	virtual ~ConfigurationMenu();
 
 	virtual void start();
 	virtual void update(float deltaTime);

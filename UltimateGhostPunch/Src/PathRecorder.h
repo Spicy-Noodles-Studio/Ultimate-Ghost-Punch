@@ -1,33 +1,36 @@
 #pragma once
-
 #ifndef PATH_RECORDER_H
 #define PATH_RECORDER_H
 
 #include <UserComponent.h>
 #include <stack>
 
+class InputSystem;
 class RigidBody;
 class PlatformGraph;
-class InputSystem;
 class State;
 class Health;
-class GhostManager;
 class Jump;
+class GhostManager;
 enum class Action;
 
 class PathRecorder : public UserComponent
 {
 private:
-	bool recording;
-	PlatformGraph* graph;
 	InputSystem* inputSystem;
+	PlatformGraph* graph;
+
 	Health* health;
-	GhostManager* ghostManager;
 	Jump* jump;
+	GhostManager* ghostManager;
+
 	std::vector<State> states;
 	std::stack<int> lastPlatform;
 
-	int controllerIndex, frame, currentPlatform;
+	bool recording;
+	int controllerIndex;
+	int frame;
+	int currentPlatform;
 
 	Vector3 iniPos;
 
@@ -36,19 +39,17 @@ private:
 
 public:
 	PathRecorder(GameObject* gameObject);
-	~PathRecorder();
+	virtual ~PathRecorder();
 
 	virtual void start();
 	virtual void update(float deltaTime);
-
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
 	void saveState(Action action);
-	
-	void stopRecording();
-	void startRecording();
 
+	void startRecording();
+	void stopRecording();
 };
 
-#endif 
+#endif

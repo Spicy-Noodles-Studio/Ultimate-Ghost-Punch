@@ -9,7 +9,8 @@
 
 REGISTER_FACTORY(PlayerFX);
 
-PlayerFX::PlayerFX(GameObject* gameObject) : UserComponent(gameObject)
+PlayerFX::PlayerFX(GameObject* gameObject) : UserComponent(gameObject), effect(NONE), shieldMesh(nullptr), mesh(nullptr), health(nullptr), ghost(nullptr), diffuses(),
+time(0), hurtTime(0.5f), invencibleFrec(0.1f), frecuency(invencibleFrec), ghostFXFrec(0.1f), ghostFXTime(2)
 {
 
 }
@@ -21,25 +22,15 @@ PlayerFX::~PlayerFX()
 
 void PlayerFX::start()
 {
+	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
+	shieldMesh->setVisible(false);
+
 	mesh = gameObject->getComponent<MeshRenderer>();
 	health = gameObject->getComponent<Health>();
 	ghost = gameObject->getComponent<GhostManager>();
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		diffuses.push_back(mesh->getDiffuse(i));
-
-	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
-
-	shieldMesh->setVisible(false);
-
-	time = 0.0f;
-	hurtTime = 0.5f;
-	invencibleFrec = 0.1f;
-	ghostFXFrec = 0.1f;
-	ghostFXTime = 2.0f;
-
-	frecuency = invencibleFrec;
-	effect = NONE;
 }
 
 void PlayerFX::update(float deltaTime)
@@ -47,6 +38,31 @@ void PlayerFX::update(float deltaTime)
 	updateHurtFX(deltaTime);
 	updateInvencibleFX(deltaTime);
 	updateGhostFX(deltaTime);
+}
+
+void PlayerFX::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "hurtTime")
+		{
+			setFloat(hurtTime);
+		}
+		else if (prop.first == "invencibleFrec")
+		{
+			setFloat(invencibleFrec);
+		}
+		else if (prop.first == "ghostFXFrec")
+		{
+			setFloat(ghostFXFrec);
+		}
+		else if (prop.first == "ghostFXTime")
+		{
+			setFloat(ghostFXTime);
+		}
+	}
 }
 
 void PlayerFX::updateHurtFX(float deltaTime)
@@ -113,27 +129,6 @@ void PlayerFX::updateGhostFX(float deltaTime)
 	}
 	else if (effect == GHOST)
 		deactivateGhostFX();
-}
-
-void PlayerFX::handleData(ComponentData* data)
-{
-	for (auto prop : data->getProperties())
-	{
-		std::stringstream ss(prop.second);
-
-		if (prop.first == "hurtTime") {
-			setFloat(hurtTime);
-		}
-		else if (prop.first == "invencibleFrec") {
-			setFloat(invencibleFrec);
-		}
-		else if (prop.first == "ghostFXFrec") {
-			setFloat(ghostFXFrec);
-		}
-		else if (prop.first == "ghostFXTime") {
-			setFloat(ghostFXTime);
-		}
-	}
 }
 
 void PlayerFX::activateHurt()

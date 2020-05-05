@@ -8,11 +8,12 @@
 class CameraController : public UserComponent
 {
 private:
-	enum CameraState {
+	enum CameraState
+	{
 		MIDPOINT, SLOWMO
 	};
-	CameraState state;
 
+	CameraState state;
 	float minZ, maxZ;
 
 	// Cam's Z pos = max dist between players * zoomFactor
@@ -32,7 +33,7 @@ private:
 
 public:
 	CameraController(GameObject* gameObject);
-	~CameraController();
+	virtual ~CameraController();
 
 	virtual void preUpdate(float deltaTime);
 	virtual void update(float deltaTime);

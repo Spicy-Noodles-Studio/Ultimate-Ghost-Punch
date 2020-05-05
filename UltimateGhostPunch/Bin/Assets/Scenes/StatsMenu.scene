@@ -1,5 +1,5 @@
 {
-    "SceneName": "FightConfig",
+    "SceneName": "StatsMenu",
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
@@ -22,7 +22,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "leaderBoard.layout"],
+                        ["layout" , "StatsMenu.layout"],
                         ["event" , "BackButton backButtonClick | ResetButton resetButtonClick"]
                     ]
                 }

@@ -1,30 +1,28 @@
 #pragma once
-#ifndef OPTIONS_CONFIGURATION_H
-#define OPTIONS_CONFIGURATION_H
+#ifndef OPTIONS_MENU_H
+#define OPTIONS_MENU_H
 
-#include "UserComponent.h"
+#include <UserComponent.h>
+#include <UIElement.h>
 
 #include <vector>
 #include <string>
-#include "UIElement.h"
 
 const int MAX_VOLUME = 100;
 const int MAX_GAMMA = 100;
 
-
-
 class InterfaceSystem;
-class WindowManager;
 class RenderSystem;
 class SoundSystem;
+class WindowManager;
 
-class OptionsConfiguration : public UserComponent
+class OptionsMenu : public UserComponent
 {
 protected:
 	InterfaceSystem* interfaceSystem;
-	WindowManager* windowManager;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
+	WindowManager* windowManager;
 
 	UIElement resolutionButton;
 	UIElement volumeScroll;
@@ -51,7 +49,6 @@ protected:
 	std::vector<std::pair<int, int>> resolutions;
 
 protected:
-	// events
 	bool resolutionButtonClick();
 	bool resetConfigButtonClick();
 
@@ -65,8 +62,8 @@ protected:
 	bool backButtonClick();
 
 public:
-	OptionsConfiguration(GameObject* gameObject);
-	virtual ~OptionsConfiguration();
+	OptionsMenu(GameObject* gameObject);
+	virtual ~OptionsMenu();
 
 	virtual void start();
 };

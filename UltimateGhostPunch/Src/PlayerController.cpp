@@ -1,38 +1,38 @@
 #include "PlayerController.h"
-
-#include <sstream>
 #include <ComponentRegister.h>
-#include <GameObject.h>
-
 #include <InputSystem.h>
+#include <GameObject.h>
 #include <Scene.h>
 #include <Camera.h>
 #include <Light.h>
+#include <sstream>
 
+#include "PlayerUI.h"
 #include "Movement.h"
 #include "Attack.h"
+#include "Dodge.h"
 #include "Jump.h"
+#include "Grab.h"
+#include "Block.h"
 #include "Health.h"
 #include "GhostManager.h"
 #include "GhostMovement.h"
-#include "Dodge.h"
 #include "UltimateGhostPunch.h"
 #include "PlayerAnimController.h"
-#include "Grab.h"
-#include "Block.h"
 #include "GameManager.h"
-#include "PlayerUI.h"
 
 REGISTER_FACTORY(PlayerController);
 
-PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), movement(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-															 health(nullptr),jump(nullptr), attack(nullptr), direction(Vector3()), controllerIndex(1), animController(nullptr)
+PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
+															 jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
+															 direction(Vector3::ZERO), controllerIndex(1), grabed(false)
 {
 
 }
 
 PlayerController::~PlayerController()
 {
+
 }
 
 void PlayerController::start()
@@ -41,22 +41,27 @@ void PlayerController::start()
 
 	movement = gameObject->getComponent<Movement>();
 	health = gameObject->getComponent<Health>();
+	dodge = gameObject->getComponent<Dodge>();
 
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
-	dodge = gameObject->getComponent<Dodge>();
 	animController = gameObject->getComponent<PlayerAnimController>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
-	if (aux.size() > 0) block = aux[0]->getComponent<Block>();
+	if (aux.size() > 0)
+		jump = aux[0]->getComponent<Jump>();
+
+	if (aux.size() > 0)
+		block = aux[0]->getComponent<Block>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
-	if (aux.size() > 0) attack = aux[0]->getComponent<Attack>();
+	if (aux.size() > 0)
+		attack = aux[0]->getComponent<Attack>();
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
-	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
+	if (aux.size() > 0)
+		grab = aux[0]->getComponent<Grab>();
 }
 
 void PlayerController::update(float deltaTime)
@@ -66,9 +71,8 @@ void PlayerController::update(float deltaTime)
 
 void PlayerController::fixedUpdate(float deltaTime)
 {
-	//Movement
-	if (ghostManager == nullptr || !ghostManager->isGhost())
-		if (movement != nullptr) movement->move(direction);
+	if (movement != nullptr)
+		movement->move(direction);
 }
 
 void PlayerController::handleData(ComponentData* data)
@@ -86,74 +90,65 @@ void PlayerController::handleData(ComponentData* data)
 	}
 }
 
-
-
 void PlayerController::checkInput()
 {
+	//Movement
 	direction = Vector3(0, 0, 0);
+	direction += Vector3(getHorizontalAxis(), 0, 0);
 
-	if (block == nullptr || !block->blocking()) {
-		//Movement
-		direction += Vector3(getHorizontalAxis(), 0, 0);
-		//Character rotation
-		if (direction.x != 0)
-			gameObject->transform->setRotation({ 0,90 * direction.x,0 });
-	}
+	//Acctions if the player isn't in ghostManager mode
+	if (ghostManager == nullptr || !ghostManager->isGhost())
+	{
+		//Attack
+		if (attack != nullptr)
+		{
+			//Quick attack
+			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X"))
+				attack->quickAttack();
+			//Strong attack
+			else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
+				attack->strongAttack();
+		}
 
-	//Acctions if the player isn�t in ghostManager mode
-	if (ghostManager == nullptr || !ghostManager->isGhost()) {
+		//Dodge
+		if (dodge != nullptr)
+			if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
+				dodge->dodge();
 
-		//If we are not blocking
-		if (block == nullptr || !block->blocking()) {
-			//Attack
-			if (attack != nullptr) {
-				//Quick attack
-				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X")) {
-					if (attack->quickAttack()) animController->quickAttackAnimation();
-				}
-				//Strong attack
-				else if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('r')) || getButtonDown("Y"))
-				{
-					if (attack->strongAttack()) animController->strongAttackAnimation();
-				}
-			}
-			//Dodge
-			if (dodge != nullptr)
-				if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
-				{
-					if (dodge->dodge()) animController->dashAnimation();
-				}
+		//Jump
+		if (jump != nullptr)
+		{
+			if (getKey("Space") || getButton("A"))
+				jump->jump();
+			else if (getKeyUp("Space") || getButtonUp("A"))
+				jump->cancelJump();
+		}
 
-			//Jump
-			if (jump != nullptr)
-			{
-				if (getKey("Space") || getButton("A"))
-					jump->jump();
-				else if (getKeyUp("Space") || getButtonUp("A"))
-					jump->cancelJump();
-			}
-
-			//Grab
-			if (grab != nullptr) {
-				if (getKey("E") || getButton("LB"))	grab->grab();
-				else if (getKeyUp("E") || getButtonUp("LB")) grab->drop();
-			}
+		//Grab
+		if (grab != nullptr)
+		{
+			if (getKey("E") || getButton("LB"))
+				grab->grab();
+			else if (getKeyUp("E") || getButtonUp("LB"))
+				grab->drop();
 		}
 
 		//Block
-		if (block != nullptr) {
-			if (getKeyDown("S") || getButtonDown("B"))	block->block();
-			if (block->blocking() && (getKeyUp("S") || getButtonUp("B"))) block->unblock();
+		if (block != nullptr)
+		{
+			if (getKeyDown("S") || getButtonDown("B"))
+				block->block();
+
+			if (block->isBlocking() && (getKeyUp("S") || getButtonUp("B")))
+				block->unblock();
 		}
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK"))
-		{
-			animController->tauntAnimation();
-		}
+			if(animController!= nullptr) animController->tauntAnimation();
 	}
 
-	//Actions if the player is in ghostManager mode
+	//Actions if the player is in ghost mode
 	else if (ghostManager != nullptr && ghostManager->isGhost())
 	{
 		direction += Vector3(0, getVerticalAxis(), 0);
@@ -162,31 +157,45 @@ void PlayerController::checkInput()
 		if (ghostPunch != nullptr)
 		{
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
-			//Charge
-			if (ghostPunch->getState() == UltimateGhostPunch::State::AVAILABLE) {
-				if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
-					ghostPunch->charge();
-			}
-			else if (ghostPunch->getState() == UltimateGhostPunch::State::CHARGING) {
-				//Aim
-				if (controllerIndex == 4) ghostPunchMouseAim();
-				else ghostPunch->aim(horizontal, -vertical);
 
-				//Ghost Punch
-				if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
-					ghostPunch->ghostPunch();
-			}
+			//Charge
+			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
+				ghostPunch->charge();
+
+			//Aim
+			if (controllerIndex == 4)
+				ghostPunchMouseAim();
+			else
+				ghostPunch->aim(horizontal, -vertical);
+
+			//Ghost Punch
+			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
+				ghostPunch->ghostPunch();
 		}
 
 		//Ghost Movement
-		if (ghostPunch == nullptr || (ghostPunch->getState() != UltimateGhostPunch::State::PUNCHING))
-			if (ghostMovement != nullptr) ghostMovement->move(direction);
+		if (ghostMovement != nullptr) ghostMovement->move(direction);
 	}
+}
+
+int PlayerController::getControllerIndex() const
+{
+	return controllerIndex;
 }
 
 void PlayerController::setControllerIndex(int index)
 {
 	controllerIndex = index;
+}
+
+bool PlayerController::isGrabed()
+{
+	return grabed;
+}
+
+void PlayerController::setGrabed(bool grabed)
+{
+	this->grabed = grabed;
 }
 
 bool PlayerController::getKeyDown(const std::string& key)
@@ -214,10 +223,6 @@ bool PlayerController::getButtonUp(const std::string& button)
 	return controllerIndex < 4 && inputSystem->getButtonRelease(controllerIndex, button);
 }
 
-int PlayerController::getControllerIndex() const
-{
-	return controllerIndex;
-}
 bool PlayerController::getButton(const std::string& button)
 {
 	return controllerIndex < 4 && inputSystem->isButtonPressed(controllerIndex, button);

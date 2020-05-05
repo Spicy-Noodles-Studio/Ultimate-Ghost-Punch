@@ -1,6 +1,17 @@
 {
-    "SceneName": "MainScene",
+    "SceneName": "Game",
     "SceneObjects": [
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Game",
+            "Tag": "game",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Game"
+                }
+            ]
+        },
         {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "PauseMenu",
@@ -9,20 +20,6 @@
             [
                 {
                     "ComponentName" : "PauseMenu"
-                }
-            ]
-        },
-		{
-            "ObjectType": "GAMEOBJECT",
-            "ObjectName": "Countdown",
-            "Tag": "countdown",
-            "Components": 
-            [
-                {
-                    "ComponentName" : "Countdown",
-					"ComponentProperties": [
-                        ["time" , "10"]
-                    ]
                 }
             ]
         },
@@ -47,7 +44,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "fight.layout"],
+                        ["layout" , "Game.layout"],
                         ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick |OptionsButton pauseOptionsButtonClick"]
                     ]
                 },
@@ -73,28 +70,11 @@
                             "ComponentName": "UILayout",
                             "ComponentProperties": 
                             [
-                                ["layout" , "options.layout"],
+                                ["layout" , "OptionsMenu.layout"],
                                 ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backToMenuButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
                             ]
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "ObjectType": "BLUEPRINT",
-            "ObjectName": "DeathZone",
-            "Tag": "death",
-            "BlueprintPath": "DeathZone"
-        },
-        {
-            "ObjectType": "GAMEOBJECT",
-            "ObjectName": "FightManager",
-            "Tag": "fightManager",
-            "Components": 
-            [
-                {
-                    "ComponentName" : "FightManager"
                 }
             ]
         },
@@ -120,6 +100,26 @@
                     ]
                 }
             ]
+        },
+		{
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Countdown",
+            "Tag": "countdown",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Countdown",
+					"ComponentProperties": [
+                        ["time" , "3"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "DeathZone",
+            "Tag": "death",
+            "BlueprintPath": "DeathZone"
         },
         {
             "ObjectType": "GAMEOBJECT",

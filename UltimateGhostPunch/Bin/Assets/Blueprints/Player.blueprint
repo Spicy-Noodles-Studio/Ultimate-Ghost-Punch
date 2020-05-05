@@ -56,12 +56,6 @@
                [ "collisionGroup", "IgnoreRaycast"]
             ]
         },
-        {
-            "ComponentName": "Movement",
-            "ComponentProperties": [
-                ["speed", "75"]
-            ]
-        },
         {  
             "ComponentName": "PlayerController",
             "ComponentProperties":[ 
@@ -75,11 +69,33 @@
             ]
         },
         {
+            "ComponentName": "Movement",
+            "ComponentProperties": [
+                ["speed", "75"]
+            ]
+        },
+        {
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
                 ["maxSpeed", "5"]
             ]
         },
+        {
+            "ComponentName": "Health",
+            "ComponentProperties": [
+                ["health", "4"],
+                ["invDamTime", "2"]
+            ]
+        },
+		{
+		    "ComponentName": "Dodge",
+             "ComponentProperties": [
+                ["force", "100"],
+                ["cooldown", "2"],
+                ["duration", "0.15"],
+                ["atenuation", "0.3"]
+            ]
+		},
         {
             "ComponentName": "Respawn",
             "ComponentProperties":[ 
@@ -95,20 +111,6 @@
             ]
         },
         {
-            "ComponentName": "Health",
-            "ComponentProperties": [
-                ["health", "4"],
-                ["invDamTime", "2"]
-            ]
-        },
-		{
-		    "ComponentName": "Dodge",
-             "ComponentProperties": [
-                ["force", "40"],
-                ["cooldown", "2"]
-            ]
-		},
-        {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostTime", "10"],
@@ -120,6 +122,9 @@
         },
         {
             "ComponentName": "PlayerUI"
+        },
+        {
+            "ComponentName": "PlayerState"
         }
     ],
     "Children": [
@@ -133,7 +138,7 @@
                 {
                     "ComponentName": "Transform",
                     "ComponentProperties":[
-                       [ "position", "1 0 3.65"],
+                       [ "position", "0 0 3.65"],
                        [ "scale", "1 1 4"]
                     ]
                 }
@@ -150,8 +155,10 @@
                         ["attackDuration", "0.2"],
                         ["quickCharge", "0.25"],
                         ["strongCharge", "0.6"],
-                        ["quickAttackScale", "1.0"],
-                        ["strongAttackScale", "1.375"]
+                        ["quickAttackScale", "1.0 1.0 1.0"],
+                        ["strongAttackScale", "1.0 5.0 1.375"],
+                        ["quickAttackOffset", "0.0 0.0 3.65"],
+                        ["strongAttackOffset", "0.0 2.2 5.15"]
                     ]
                 }
             ]

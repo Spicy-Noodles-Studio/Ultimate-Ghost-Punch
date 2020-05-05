@@ -4,13 +4,15 @@
 #include <sstream>
 
 REGISTER_FACTORY(PlayerIndex);
-PlayerIndex::PlayerIndex(GameObject* gameObject) :UserComponent(gameObject)
+
+PlayerIndex::PlayerIndex(GameObject* gameObject) :UserComponent(gameObject), index(0)
 {
-	index = 0;
+
 }
 
 PlayerIndex::~PlayerIndex()
 {
+
 }
 
 void PlayerIndex::handleData(ComponentData* data)

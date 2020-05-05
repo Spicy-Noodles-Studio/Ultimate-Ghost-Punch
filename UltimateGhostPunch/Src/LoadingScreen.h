@@ -14,20 +14,19 @@ class LoadingScreen : public UserComponent
 {
 private:
 	std::string sceneToLoad;
+	std::vector<std::string> tipsVector;
+
 	float loadDelay;
 	float currentDelay;
 
-	std::vector<std::string> tipsVector;
-
-private:
 	std::string getRandomTip();
-public:
-	virtual void start();
-	virtual void update(float deltaTime);
 
+public:
 	LoadingScreen(GameObject* gameObject);
 	virtual ~LoadingScreen();
 
+	virtual void start();
+	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 };
 

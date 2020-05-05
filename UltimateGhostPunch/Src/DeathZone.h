@@ -11,10 +11,9 @@ private:
 
 public:
 	DeathZone(GameObject* gameObject);
-	~DeathZone();
+	virtual ~DeathZone();
 
 	virtual void handleData(ComponentData* data);
-
 	virtual void onObjectEnter(GameObject* other);
 };
 

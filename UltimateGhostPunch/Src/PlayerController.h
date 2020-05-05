@@ -3,6 +3,7 @@
 #define PLAYER_CONTROLLER_H
 
 #include <UserComponent.h>
+#include <Vector3.h>
 
 class InputSystem;
 class PlayerIndex;
@@ -10,38 +11,35 @@ class Movement;
 class Attack;
 class Dodge;
 class Jump;
+class Grab;
+class Block;
 class Health;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
-
-class Vector3;
-class Grab;
-class Block;
 class PlayerAnimController;
-
 
 class PlayerController : public UserComponent
 {
 private:
-	PlayerIndex *playerIndex;
-	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
-
 	Vector3 direction;
+	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
+	bool grabed; // Cambiar de sitio
 
 	// Components
+	PlayerIndex* playerIndex;
 	Movement* movement;
 	Attack* attack;
+	Dodge* dodge;
 	Jump* jump;
+	Grab* grab;
+	Block* block;
 	Health* health;
 
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
 	PlayerAnimController* animController;
-	Block* block;
-	Dodge* dodge;
-	Grab* grab;
 
 	// Input
 	InputSystem* inputSystem;
@@ -82,6 +80,9 @@ public:
 
 	int getControllerIndex()const;
 	void setControllerIndex(int index);
+
+	bool isGrabed();
+	void setGrabed(bool grabed);
 };
 
 #endif

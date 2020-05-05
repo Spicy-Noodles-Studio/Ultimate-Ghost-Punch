@@ -15,6 +15,7 @@ private:
 
 	bool singlePlayerButtonClick();
 	bool multiplayerButtonClick();
+
 	bool optionsButtonClick();
 	bool exitButtonClick();
 

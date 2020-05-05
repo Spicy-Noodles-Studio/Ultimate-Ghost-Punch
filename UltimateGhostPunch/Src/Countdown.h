@@ -12,13 +12,14 @@ class UILayout;
 class Countdown : public UserComponent
 {
 private:
-	
-	void pauseGame();
 	void startGame();
+	void pauseGame();
 
 	float time;
 
-	bool started, charged,paused;
+	bool started;
+	bool charged;
+	bool paused;
 
 	std::chrono::steady_clock::time_point last;
 
@@ -27,6 +28,7 @@ private:
 public:
 	Countdown(GameObject* gameObject);
 	virtual ~Countdown();
+
 	virtual void start();
 	virtual void preUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);

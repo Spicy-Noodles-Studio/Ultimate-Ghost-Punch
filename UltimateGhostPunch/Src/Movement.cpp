@@ -4,6 +4,8 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(Movement);
 
 Movement::Movement(GameObject* gameObject) : UserComponent(gameObject)
@@ -14,20 +16,6 @@ Movement::Movement(GameObject* gameObject) : UserComponent(gameObject)
 Movement::~Movement()
 {
 
-}
-
-void Movement::move(Vector3 dir)
-{
-	if(rigidBody != nullptr) rigidBody->addForce(dir * speed);
-}
-
-void Movement::stop()
-{
-	if (rigidBody != nullptr)
-	{
-		rigidBody->setLinearVelocity({0,0,0});
-		rigidBody->clearForces();
-	}
 }
 
 void Movement::start()
@@ -50,9 +38,31 @@ void Movement::handleData(ComponentData* data)
 	}
 }
 
-void Movement::setSpeed(float spd)
+void Movement::move(Vector3 dir)
 {
-	speed = spd;
+	PlayerState* aux = gameObject->getComponent<PlayerState>();
+	if (aux != nullptr && aux->canMove()) {
+		if (rigidBody != nullptr)
+			rigidBody->addForce(dir * speed);
+
+		//Character rotation
+		if (dir.x != 0)
+			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+	}
+}
+
+void Movement::stop()
+{
+	if (rigidBody != nullptr)
+	{
+		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->clearForces();
+	}
+}
+
+void Movement::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 float Movement::getSpeed() const

@@ -13,7 +13,7 @@ private:
 	float maxSpeed;
 
 public:
-	GhostMovement(GameObject* g);
+	GhostMovement(GameObject* gameObject);
 	virtual ~GhostMovement();
 
 	virtual void start();

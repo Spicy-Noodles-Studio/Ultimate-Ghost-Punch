@@ -11,22 +11,28 @@ class Transform;
 class MeshRenderer;
 class RigidBody;
 class PlayerUI;
-class FightManager;
+class Game;
 class PlayerAnimController;
 class PlayerController;
 
 class GhostManager : public UserComponent
 {
 private:
+	bool ghost;
+	bool used;
+	bool deathPosChanged;
+	bool ended;
+	
 	enum GhostMode
 	{
 		ALIVE, GHOST, DYING
 	};
 
-	bool ghost, used, deathPosChanged, ended;
+	float ghostTime;
+	float playerGravity;
 
-	float ghostTime, playerGravity;
-	int ghostDamage, resurrectionHealth;
+	int ghostDamage;
+	int resurrectionHealth;
 
 	Movement* movement;
 	GhostMovement* ghostMovement;
@@ -35,16 +41,16 @@ private:
 	MeshRenderer* meshRenderer;
 	RigidBody* rigidBody;
 	PlayerUI* playerUI;
-	FightManager* fightManager;
+	Game* game;
 	PlayerAnimController* anim;
 	PlayerController* control;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
 	Vector3 ghostSpawnOffset;
-
 	Vector3 deathPosition;
 
+	Vector3 playerColour;
 	GhostMode mode;
 
 public:
@@ -57,13 +63,14 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost();
+	bool ghostEnded();
 	float getGhostTime();
 
 	void activateGhost();
 	void deactivateGhost();
 
 	void setDeathPosition(const Vector3& dPos);
-	bool ghostEnded();
+	void setPlayerColour(const Vector3& colour);
 
 	void deactivatePlayer();
 	void handlePlayerDeath();
