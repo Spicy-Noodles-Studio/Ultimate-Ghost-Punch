@@ -194,5 +194,14 @@
             <Property name="Text" value="[colour='FF00FFFF']P4" />
             <Property name="Font" value="Sans" />
         </Window>
+		# COUNTDOWN
+        <Window type="TaharezLook/StaticText" name="Countdown" >
+                <Property name="Area" value="{{0.45,0},{0.25,0},{1000,0},{1000,0}}" />
+                <Property name="MaxSize" value="{{5000,0},{0.5,0}}" />
+				<Property name="Size" value="{{5000,0},{0.5,0}}" />
+                <Property name="Text" value="" />
+                <Property name="Font" value="Sans72" />
+				<Property name="HorzFormatting" value="WordWrapCentred" />
+        </Window>
     </Window>
 </GUILayout>
