@@ -597,7 +597,7 @@ void PlayerAnimController::updateNotLoopingState()
 
 	if (anim->getCurrentAnimation() == "Die" && anim->hasEnded())
 	{
-		enterMode(GHOST);
+		ghostManag->handlePlayerDeath();//enterMode(GHOST);
 		return;
 	}
 
@@ -615,8 +615,7 @@ void PlayerAnimController::updateNotLoopingState()
 	// GHOST DISAPPEARING -> DEACTIVATE PLAYER 
 	if (currentMode == GHOST && anim->getCurrentAnimation() == "Disappear")
 	{
-		mesh->setVisible(false);
-		gameObject->setActive(false);
+		ghostManag->deactivatePlayer();
 
 		return;
 	}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="loadingScreenRoot" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        #Loading Text
+        <Window type="TaharezLook/StaticText" name="Loading" >
+                    <Property name="Area" value="{{0.45,0},{0.4,0},{0.8,0},{0.8,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Cargando..." />
+                    <Property name="Font" value="Sans" />
+					<Property name="HorzFormatting" value="HorzCentred" />
+                    <Property name="Visible" value="True" />
+		</Window>
+		#Tips Text
+        <Window type="TaharezLook/StaticText" name="Tips" >
+                    <Property name="Area" value="{{0.1,0},{0.7,0},{0.9,0},{1,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="NO VA" />
+                    <Property name="Font" value="Sans" />
+					<Property name="HorzFormatting" value="WordWrapCentred" />
+                    <Property name="Visible" value="True" />
+		</Window>
+        # Game Logo
+		<Window type="TaharezLook/StaticImage" name="GameLogo" >
+            <Property name="Area" value="{{0.2,0},{0.2,0},{0.8,0},{0.4,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="True" />
+		</Window>
+    </Window>
+</GUILayout>

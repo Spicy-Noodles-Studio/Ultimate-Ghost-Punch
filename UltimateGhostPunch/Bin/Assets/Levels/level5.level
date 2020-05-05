@@ -1,6 +1,6 @@
 {
-    "LevelBlueprint" : "Level5",
-    "LevelRenderBlueprint" : "Level5Render",
+    "RenderMesh" : "Level5Render.mesh",
+    "ColliderMesh" : "Level5.mesh",
     "PlayerTransforms":[
         ["-16 6 0", "0 90 0"],
         ["16 6 0", "0 -90 0"],
