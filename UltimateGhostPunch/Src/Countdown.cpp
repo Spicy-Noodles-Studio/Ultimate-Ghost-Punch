@@ -4,7 +4,7 @@
 #include <SceneManager.h>
 #include <WindowManager.h>
 #include <GameObject.h>
-
+#include "UILayout.h"
 #include "GameManager.h"
 
 #include <ComponentRegister.h>
@@ -16,7 +16,7 @@
 REGISTER_FACTORY(Countdown);
 
 
-Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject)
+Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), text(NULL)
 {
 
 }
@@ -32,6 +32,12 @@ void Countdown::start()
 	charged = false;
 	paused = false;
 	time = 5;
+
+	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+
+	if (cameraLayout != nullptr)
+		text = cameraLayout->getRoot().getChild("Countdown");
+
 }
 
 void Countdown::preUpdate(float deltaTime)
@@ -52,9 +58,12 @@ void Countdown::preUpdate(float deltaTime)
 
 		time -= deltaTime;
 
+		text.setText(std::to_string((int)time));
+
 		if (time <= 0) { 
 			startGame(); 
 			paused = false;
+			text.setText("");
 		}
 		
 	}

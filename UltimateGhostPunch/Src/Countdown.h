@@ -22,6 +22,8 @@ private:
 
 	std::chrono::steady_clock::time_point last;
 
+	UIElement text;
+
 public:
 	Countdown(GameObject* gameObject);
 	virtual ~Countdown();
