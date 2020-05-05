@@ -4,10 +4,12 @@
 #include <GameObject.h>
 #include <MathUtils.h>
 
-#include "GameManager.h"
-
 #include <Timer.h>
+
+#include "GameManager.h"
 #include "UltimateGhostPunch.h"
+#include "Health.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(CameraController);
 
@@ -93,14 +95,16 @@ void CameraController::handleState()
 
 float CameraController::getMaxDistBetweenPlayers()
 {
-	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
-	// number of players
-	int n = players.size();
+	// Vector with every player alive
+	std::vector<GameObject*> alive = getAlivePlayers();
+
+	// number of players alive
+	int n = alive.size();
 	float maxDist = -1;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			if (i != j) {
-				float d = (players[i]->transform->getPosition() - players[j]->transform->getPosition()).magnitude();
+				float d = (alive[i]->transform->getPosition() - alive[j]->transform->getPosition()).magnitude();
 				if (d > maxDist) maxDist = d;
 			}
 		}
@@ -111,15 +115,16 @@ float CameraController::getMaxDistBetweenPlayers()
 
 Vector3 CameraController::getMidPointBetweenPlayers()
 {
-	// Vector with every player
-	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
-	// number of players
-	int n = players.size();
+	// Vector with every player alive
+	std::vector<GameObject*> alive = getAlivePlayers();
+
+	// number of players alive
+	int n = alive.size();
 	float midX = 0.0f, midY = 0.0f;
 
-	for (auto p : players) {
-		midX += p->transform->getPosition().x / n;
-		midY += p->transform->getPosition().y / n;
+	for (auto a : alive) {
+		midX += a->transform->getPosition().x / n;
+		midY += a->transform->getPosition().y / n;
 	}
 
 	return Vector3(midX, midY, 0.0f);
@@ -174,6 +179,17 @@ GameObject* CameraController::someonePunching()
 	if (i < n) return players[i];
 	return nullptr;
 }
+
+std::vector<GameObject*> CameraController::getAlivePlayers()
+{
+	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
+	std::vector<GameObject*> alive;
+	for (auto p : players) {
+		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
+	}
+	return alive;
+}
+
 
 void CameraController::checkSlowMo()
 {

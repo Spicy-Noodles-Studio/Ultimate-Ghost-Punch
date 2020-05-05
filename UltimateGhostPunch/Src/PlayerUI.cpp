@@ -74,6 +74,8 @@ void PlayerUI::start()
 	//Initialize layout aspect
 	createHearts();
 	updateHealth();
+
+	isVisible = true;
 }
 
 void PlayerUI::createHearts()
@@ -129,6 +131,15 @@ void PlayerUI::updateHealth()
 		playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
 
 	updateHearts();
+}
+
+void PlayerUI::setVisible(bool visible)
+{
+	if (visible == isVisible) return;
+
+	isVisible = visible;
+	//playerHUD.setVisible(visible);
+	playerIndicator.setVisible(visible);
 }
 
 void PlayerUI::updateState()

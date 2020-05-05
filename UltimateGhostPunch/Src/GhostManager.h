@@ -13,10 +13,16 @@ class RigidBody;
 class PlayerUI;
 class FightManager;
 class PlayerAnimController;
+class PlayerController;
 
 class GhostManager : public UserComponent
 {
 private:
+	enum GhostMode
+	{
+		ALIVE, GHOST, DYING
+	};
+
 	bool ghost, used, deathPosChanged, ended;
 
 	float ghostTime, playerGravity;
@@ -31,12 +37,15 @@ private:
 	PlayerUI* playerUI;
 	FightManager* fightManager;
 	PlayerAnimController* anim;
+	PlayerController* control;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
 	Vector3 ghostSpawnOffset;
 
 	Vector3 deathPosition;
+
+	GhostMode mode;
 
 public:
 	GhostManager(GameObject* gameObject);
@@ -55,6 +64,9 @@ public:
 
 	void setDeathPosition(const Vector3& dPos);
 	bool ghostEnded();
+
+	void deactivatePlayer();
+	void handlePlayerDeath();
 };
 
 #endif

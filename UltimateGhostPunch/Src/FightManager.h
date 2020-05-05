@@ -49,6 +49,9 @@ private:
 	void createLights();
 	void playSong();
 
+	void configureLevelRender(const std::string& name);
+	void configureLevelCollider(const std::string& name);
+
 	void chooseWinner();
 
 public:

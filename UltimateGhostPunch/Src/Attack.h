@@ -38,8 +38,15 @@ private:
 
 	RigidBody* attackTrigger;
 
+	float quickAttackScale;
+	float strongAttackScale;
+	float offset;
+
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
+
+	void setUpTriggerAttack(float scale);
+
 	int id;
 	Score* score;
 
@@ -54,6 +61,8 @@ public:
 
 	bool quickAttack();
 	bool strongAttack();
+
+	bool isAttacking() const;
 };
 
 #endif

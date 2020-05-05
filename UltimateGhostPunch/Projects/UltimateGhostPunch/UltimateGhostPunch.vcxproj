@@ -44,9 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
+    <ClCompile Include="..\..\Src\Countdown.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
+    <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\CameraController.cpp" />
@@ -80,10 +82,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
+    <ClInclude Include="..\..\Src\Countdown.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
+    <ClInclude Include="..\..\Src\LoadingScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\CameraController.h" />
