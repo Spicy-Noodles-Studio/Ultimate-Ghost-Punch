@@ -28,6 +28,8 @@ bool PauseMenu::optionsButton()
 	optionsMenu.setVisible(true);
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
+	InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
 
 	return false;
 }

@@ -19,7 +19,7 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	root.setAlwaysOnTop(false);
 	root.setVisible(false);
 	root.setEnabled(false);
-
+	InterfaceSystem::GetInstance()->clearControllerMenuInput();
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
 	return false;
@@ -32,7 +32,6 @@ OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject):OptionsConfiguratio
 
 OptionsMenuScreen::~OptionsMenuScreen()
 {
-	OptionsConfiguration::~OptionsConfiguration();
 	interfaceSystem->unregisterEvent("backToMenuButtonClick");
 }
 
