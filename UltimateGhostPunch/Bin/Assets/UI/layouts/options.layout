@@ -4,176 +4,191 @@
     <Window type="DefaultWindow" name="optionsRoot" >
         <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property name="MaxSize" value="{{1,0},{1,0}}" />
-        # OPTIONS TEXT
-        <Window type="TaharezLook/StaticText" name="OptionsText" >
-            <Property name="Area" value="{{0.4,0},{0,0},{0.8,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
-            <Property name="Text" value="OPTIONS" />
-            <Property name="Font" value="Sans" />
-        </Window>
-        # RESOLUTION TEXT
-        <Window type="TaharezLook/StaticText" name="ResolutionText" >
-            <Property name="Area" value="{{0.2,0},{0.1,0},{0.5,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-            <Property name="Text" value="RESOLUTION" />
-            <Property name="Font" value="Sans" />
-        </Window>
-        # -RESOLUTION BUTTON
-        <Window type="TaharezLook/Button" name="-ResolutionButton" >
-                    <Property name="Area" value="{{0.4,0},{0.13,0},{0.45,0},{0.17,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="-" />
-					<Property name="UpButton" value="BackButton" />
-					<Property name="DownButton" value="FullscreenYesButton" />
-					<Property name="LeftButton" value="-ResolutionButton" />
-					<Property name="RightButton" value="+ResolutionButton" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-        # RESOLUTION
-        <Window type="TaharezLook/StaticText" name="Resolution" >
-                    <Property name="Area" value="{{0.475,0},{0.1,0},{0.9,0},{0.9,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                    <Property name="Text" value="1280x720" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-        # +RESOLUTION BUTTON
-        <Window type="TaharezLook/Button" name="+ResolutionButton" >
-                    <Property name="Area" value="{{0.6,0},{0.13,0},{0.65,0},{0.17,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-                    <Property name="Text" value="+" />
-					<Property name="UpButton" value="DefaultOptionsButton" />
-					<Property name="DownButton" value="FullscreenYesButton" />
-					<Property name="LeftButton" value="-ResolutionButton" />
-					<Property name="RightButton" value="ResolutionApplyButton" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-        # RESOLUTION APPLY BUTTON
-        <Window type="TaharezLook/Button" name="ResolutionApplyButton" >
-                    <Property name="Area" value="{{0.7,0},{0.13,0},{0.9,0},{0.17,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                    <Property name="Text" value="Apply changes" />
-					<Property name="Font" value="Batang8" />
-					<Property name="UpButton" value="DefaultOptionsButton" />
-					<Property name="DownButton" value="FullscreenYesButton" />
-					<Property name="LeftButton" value="+ResolutionButton" />
-					<Property name="RightButton" value="ResolutionApplyButton" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-
-        # FULLSCREEN TEXT
-        <Window type="TaharezLook/StaticText" name="FullscreenText" >
-            <Property name="Area" value="{{0.2,0},{0.2,0},{0.5,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-            <Property name="Text" value="FULLSCREEN" />
-            <Property name="Font" value="Sans" />
-        </Window>
-        # FULLSCREEN YES BUTTON
-        <Window type="TaharezLook/Checkbox" name="FullscreenYesButton" >
-                    <Property name="Area" value="{{0.4,0},{0.23,0},{0.42,0},{0.27,0}}" />
-                    <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
-					<Property name="UpButton" value="-ResolutionButton" />
-					<Property name="DownButton" value="GammaScroll" />
-					<Property name="LeftButton" value="FullscreenYesButton" />
-					<Property name="RightButton" value="FullscreenYesButton" />
-        </Window>
-        # GAMMA TEXT
-        <Window type="TaharezLook/StaticText" name="GammaText" >
-            <Property name="Area" value="{{0.2,0},{0.3,0},{0.5,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-            <Property name="Text" value="GAMMA" />
-            <Property name="Font" value="Sans" />
-        </Window>
-         # GAMMA SCROLL
-        <Window type="TaharezLook/HorizontalScrollbar" name="GammaScroll" >
-                    <Property name="Area" value="{{0.4,0},{0.33,0},{0.7,0},{0.36,0}}" />
-                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
-                    <Property name="ScrollPosition" value="100" />
-					<Property name="UpButton" value="FullscreenYesButton" />
-					<Property name="DownButton" value="MusicScroll" />
-					<Property name="LeftButton" value="GammaScroll" />
-					<Property name="RightButton" value="GammaScroll" />
-        </Window>
-        # GAMMA
-        <Window type="TaharezLook/StaticText" name="Gamma" >
-                    <Property name="Area" value="{{0.75,0},{0.3,0},{0.9,0},{0.9,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                    <Property name="Text" value="100" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-        # MUSIC VOLUME TEXT
-        <Window type="TaharezLook/StaticText" name="MusicVolumeText" >
-            <Property name="Area" value="{{0.2,0},{0.4,0},{0.5,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-            <Property name="Text" value="MUSIC VOLUME" />
-            <Property name="Font" value="Sans" />
-        </Window>
-         # MUSIC SCROLL
-        <Window type="TaharezLook/HorizontalScrollbar" name="MusicScroll" >
-                    <Property name="Area" value="{{0.4,0},{0.43,0},{0.7,0},{0.46,0}}" />
-                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
-                    <Property name="ScrollPosition" value="100" />
-					<Property name="UpButton" value="GammaScroll" />
-					<Property name="DownButton" value="SoundScroll" />
-					<Property name="LeftButton" value="MusicScroll" />
-					<Property name="RightButton" value="MusicScroll" />
-        </Window>
-        # MUSIC VOLUME
-        <Window type="TaharezLook/StaticText" name="MusicVolume" >
-                    <Property name="Area" value="{{0.75,0},{0.4,0},{0.9,0},{0.9,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                    <Property name="Text" value="100" />
-                    <Property name="Font" value="Sans" />
-                    
-        </Window>
-
-        # SOUND VOLUME TEXT
-        <Window type="TaharezLook/StaticText" name="SoundVolumeText" >
-            <Property name="Area" value="{{0.2,0},{0.5,0},{0.5,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-            <Property name="Text" value="SOUND VOLUME" />
-            <Property name="Font" value="Sans" />
-        </Window>
-         # SOUND SCROLL
-        <Window type="TaharezLook/HorizontalScrollbar" name="SoundScroll" >
-                    <Property name="Area" value="{{0.4,0},{0.53,0},{0.7,0},{0.56,0}}" />
-                    <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
-                    <Property name="ScrollPosition" value="100" />
-					<Property name="UpButton" value="MusicScroll" />
-					<Property name="DownButton" value="BackButton" />
-					<Property name="LeftButton" value="SoundScroll" />
-					<Property name="RightButton" value="SoundScroll" />
-        </Window>
-        # SOUND VOLUME
-        <Window type="TaharezLook/StaticText" name="SoundVolume" >
-                    <Property name="Area" value="{{0.75,0},{0.5,0},{0.9,0},{0.9,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                    <Property name="Text" value="100" />
-                    <Property name="Font" value="Sans" />
-        </Window>
-       
-        # DEFAULT OPTIONS BUTTON
-        <Window type="TaharezLook/Button" name="DefaultOptionsButton" >
-            <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
+         <Window type="TaharezLook/StaticImage" name="OptionsBackground" >
+            <Property name="Area" value="{{0.05,0},{0.1,0},{0.95,0},{0.9,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="DEFAULT OPTIONS" />
-			<Property name="Font" value="Sans" />
-			<Property name="UpButton" value="SoundScroll" />
-			<Property name="DownButton" value="+ResolutionButton" />
-			<Property name="LeftButton" value="BackButton" />
-			<Property name="RightButton" value="DefaultOptionsButton" />
-            <Property name="Font" value="Sans" />
-        </Window>
-        # BACK BUTTON
-        <Window type="TaharezLook/Button" name="BackButton" >
-            <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="BACK" />
-			<Property name="Font" value="Sans" />
-			<Property name="UpButton" value="SoundScroll" />
-			<Property name="DownButton" value="-ResolutionButton" />
-			<Property name="LeftButton" value="BackButton" />
-			<Property name="RightButton" value="DefaultOptionsButton" />
-            <Property name="Font" value="Sans" />
+            <Property name="Visible" value="false"/>
+            # OPTIONS TEXT
+            <Window type="TaharezLook/StaticText" name="OptionsText" >
+                <Property name="Area" value="{{0.4,0},{0,0},{0.8,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                <Property name="Text" value="OPTIONS" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # RESOLUTION TEXT
+            <Window type="TaharezLook/StaticText" name="ResolutionText" >
+                <Property name="Area" value="{{0.2,0},{0.1,0},{0.5,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                <Property name="Text" value="RESOLUTION" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # -RESOLUTION BUTTON
+            <Window type="TaharezLook/Button" name="-ResolutionButton" >
+                        <Property name="Area" value="{{0.4,0},{0.15,0},{0.45,0},{0.19,0}}" />
+                        <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+                        <Property name="Text" value="-" />
+		    			<Property name="UpButton" value="BackButton" />
+		    			<Property name="DownButton" value="FullscreenYesButton" />
+		    			<Property name="LeftButton" value="-ResolutionButton" />
+		    			<Property name="RightButton" value="+ResolutionButton" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+            # RESOLUTION
+            <Window type="TaharezLook/StaticText" name="Resolution" >
+                        <Property name="Area" value="{{0.475,0},{0.1,0},{0.9,0},{0.9,0}}" />
+                        <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                        <Property name="Text" value="1280x720" />
+                        <Property name="Disabled" value="true" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+            # +RESOLUTION BUTTON
+            <Window type="TaharezLook/Button" name="+ResolutionButton" >
+                        <Property name="Area" value="{{0.6,0},{0.15,0},{0.65,0},{0.19,0}}" />
+                        <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+                        <Property name="Text" value="+" />
+		    			<Property name="UpButton" value="DefaultOptionsButton" />
+		    			<Property name="DownButton" value="FullscreenYesButton" />
+		    			<Property name="LeftButton" value="-ResolutionButton" />
+		    			<Property name="RightButton" value="ResolutionApplyButton" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+            # RESOLUTION APPLY BUTTON
+            <Window type="TaharezLook/Button" name="ResolutionApplyButton" >
+                        <Property name="Area" value="{{0.7,0},{0.15,0},{0.9,0},{0.19,0}}" />
+                        <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                        <Property name="Text" value="Apply changes" />
+		    			<Property name="Font" value="Batang8" />
+		    			<Property name="UpButton" value="DefaultOptionsButton" />
+		    			<Property name="DownButton" value="FullscreenYesButton" />
+		    			<Property name="LeftButton" value="+ResolutionButton" />
+		    			<Property name="RightButton" value="ResolutionApplyButton" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+
+            # FULLSCREEN TEXT
+            <Window type="TaharezLook/StaticText" name="FullscreenText" >
+                <Property name="Area" value="{{0.2,0},{0.2,0},{0.5,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                <Property name="Text" value="FULLSCREEN" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # FULLSCREEN YES BUTTON
+            <Window type="TaharezLook/Checkbox" name="FullscreenYesButton" >
+                        <Property name="Area" value="{{0.4,0},{0.25,0},{0.42,0},{0.29,0}}" />
+                        <Property name="MaxSize" value="{{0.1,0},{0.1,0}}" />
+		    			<Property name="UpButton" value="-ResolutionButton" />
+		    			<Property name="DownButton" value="GammaScroll" />
+		    			<Property name="LeftButton" value="FullscreenYesButton" />
+		    			<Property name="RightButton" value="FullscreenYesButton" />
+            </Window>
+            # GAMMA TEXT
+            <Window type="TaharezLook/StaticText" name="GammaText" >
+                <Property name="Area" value="{{0.2,0},{0.3,0},{0.5,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                <Property name="Text" value="GAMMA" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+             # GAMMA SCROLL
+            <Window type="TaharezLook/HorizontalScrollbar" name="GammaScroll" >
+                        <Property name="Area" value="{{0.4,0},{0.35,0},{0.7,0},{0.38,0}}" />
+                        <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                        <Property name="ScrollPosition" value="100" />
+		    			<Property name="UpButton" value="FullscreenYesButton" />
+		    			<Property name="DownButton" value="MusicScroll" />
+		    			<Property name="LeftButton" value="GammaScroll" />
+		    			<Property name="RightButton" value="GammaScroll" />
+            </Window>
+            # GAMMA
+            <Window type="TaharezLook/StaticText" name="Gamma" >
+                        <Property name="Area" value="{{0.75,0},{0.3,0},{0.9,0},{0.9,0}}" />
+                        <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                        <Property name="Text" value="100" />
+                        <Property name="Disabled" value="true" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+            # MUSIC VOLUME TEXT
+            <Window type="TaharezLook/StaticText" name="MusicVolumeText" >
+                <Property name="Area" value="{{0.2,0},{0.4,0},{0.5,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                <Property name="Text" value="MUSIC VOLUME" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+             # MUSIC SCROLL
+            <Window type="TaharezLook/HorizontalScrollbar" name="MusicScroll" >
+                        <Property name="Area" value="{{0.4,0},{0.45,0},{0.7,0},{0.48,0}}" />
+                        <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                        <Property name="ScrollPosition" value="100" />
+		    			<Property name="UpButton" value="GammaScroll" />
+		    			<Property name="DownButton" value="SoundScroll" />
+		    			<Property name="LeftButton" value="MusicScroll" />
+		    			<Property name="RightButton" value="MusicScroll" />
+            </Window>
+            # MUSIC VOLUME
+            <Window type="TaharezLook/StaticText" name="MusicVolume" >
+                        <Property name="Area" value="{{0.75,0},{0.4,0},{0.9,0},{0.9,0}}" />
+                        <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                        <Property name="Text" value="100" />
+                        <Property name="Disabled" value="true" />
+                        <Property name="Font" value="Sans" />
+
+            </Window>
+
+            # SOUND VOLUME TEXT
+            <Window type="TaharezLook/StaticText" name="SoundVolumeText" >
+                <Property name="Area" value="{{0.2,0},{0.5,0},{0.5,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                <Property name="Text" value="SOUND VOLUME" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+            </Window>
+             # SOUND SCROLL
+            <Window type="TaharezLook/HorizontalScrollbar" name="SoundScroll" >
+                        <Property name="Area" value="{{0.4,0},{0.55,0},{0.7,0},{0.58,0}}" />
+                        <Property name="MaxSize" value="{{1.0,0},{0.1,0}}" />
+                        <Property name="ScrollPosition" value="100" />
+		    			<Property name="UpButton" value="MusicScroll" />
+		    			<Property name="DownButton" value="BackButton" />
+		    			<Property name="LeftButton" value="SoundScroll" />
+		    			<Property name="RightButton" value="SoundScroll" />
+            </Window>
+            # SOUND VOLUME
+            <Window type="TaharezLook/StaticText" name="SoundVolume" >
+                        <Property name="Area" value="{{0.75,0},{0.5,0},{0.9,0},{0.9,0}}" />
+                        <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
+                        <Property name="Text" value="100" />
+                        <Property name="Disabled" value="true" />
+                        <Property name="Font" value="Sans" />
+            </Window>
+
+            # DEFAULT OPTIONS BUTTON
+            <Window type="TaharezLook/Button" name="DefaultOptionsButton" >
+                <Property name="Area" value="{{0.5,0},{0.9,0},{0.8,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="DEFAULT OPTIONS" />
+		    	<Property name="Font" value="Sans" />
+		    	<Property name="UpButton" value="SoundScroll" />
+		    	<Property name="DownButton" value="+ResolutionButton" />
+		    	<Property name="LeftButton" value="BackButton" />
+		    	<Property name="RightButton" value="DefaultOptionsButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # BACK BUTTON
+            <Window type="TaharezLook/Button" name="BackButton" >
+                <Property name="Area" value="{{0.1,0},{0.9,0},{0.4,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="BACK" />
+			    <Property name="Font" value="Sans" />
+			    <Property name="UpButton" value="SoundScroll" />
+			    <Property name="DownButton" value="-ResolutionButton" />
+			    <Property name="LeftButton" value="BackButton" />
+			    <Property name="RightButton" value="DefaultOptionsButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
         </Window>
     </Window>
 </GUILayout>

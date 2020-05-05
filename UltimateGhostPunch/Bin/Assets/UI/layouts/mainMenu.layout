@@ -58,6 +58,7 @@
         <Window type="TaharezLook/StaticText" name="InfoText" >
             <Property name="Area" value="{{0.2,0},{0.95,0},{0.9,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Disabled" value="true" />
             <Property name="Text" value="Ultimate Ghost Punch v1.0 is powered by Gaia. All rights reserved. Spicy Noodles (C) 2020." />
             <Property name="Font" value="Sans" />
         </Window>

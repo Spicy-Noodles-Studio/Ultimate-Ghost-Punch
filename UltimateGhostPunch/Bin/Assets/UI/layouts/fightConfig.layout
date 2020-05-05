@@ -11,6 +11,7 @@
             <Window type="TaharezLook/StaticText" name="Slot1Text" >
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="PRESS X OR SPACE" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -21,12 +22,14 @@
                 <Window type="TaharezLook/StaticText" name="PlayerText" >
                     <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="P1" />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="IndexText" >
                     <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="Index: " />
                     <Property name="Font" value="Sans" />
                 </Window>
@@ -34,6 +37,7 @@
                     <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Keyboard" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
             </Window>
@@ -46,6 +50,7 @@
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="PRESS X OR SPACE" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticImage" name="Connected2" >
@@ -56,18 +61,21 @@
                     <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="P2" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="IndexText" >
                     <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Index: " />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="TypeText" >
                     <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Keyboard" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
             </Window>
@@ -79,6 +87,7 @@
             <Window type="TaharezLook/StaticText" name="Slot3Text" >
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="PRESS X OR SPACE" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -89,6 +98,7 @@
                 <Window type="TaharezLook/StaticText" name="PlayerText" >
                     <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="P3" />
                     <Property name="Font" value="Sans" />
                 </Window>
@@ -96,12 +106,14 @@
                     <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Index: " />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="TypeText" >
                     <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="Keyboard" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                 </Window>
             </Window>
@@ -113,6 +125,7 @@
             <Window type="TaharezLook/StaticText" name="Slot4Text" >
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="PRESS X OR SPACE" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -123,18 +136,21 @@
                 <Window type="TaharezLook/StaticText" name="PlayerText" >
                     <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="P4" />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="IndexText" >
                     <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="Index: " />
                     <Property name="Font" value="Sans" />
                 </Window>
                 <Window type="TaharezLook/StaticText" name="TypeText" >
                     <Property name="Area" value="{{0.1,0},{0.8,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="Keyboard" />
                     <Property name="Font" value="Sans" />
                 </Window>
@@ -144,6 +160,7 @@
         <Window type="TaharezLook/StaticText" name="LevelText" >
                     <Property name="Area" value="{{0.1,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Text" value="LEVEL" />
                     <Property name="Font" value="Sans" />
         </Window>
@@ -163,6 +180,7 @@
                     <Property name="Area" value="{{0.5,0},{0.3,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="level 1" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # +LEVEL BUTTON
@@ -181,6 +199,7 @@
                     <Property name="Area" value="{{0.1,0},{0.4,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="TIME" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # -TIME BUTTON
@@ -199,6 +218,7 @@
                     <Property name="Area" value="{{0.5,0},{0.4,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="60" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # +TIME BUTTON
@@ -217,6 +237,7 @@
                     <Property name="Area" value="{{0.1,0},{0.5,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="SONG" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # -SONG BUTTON
@@ -235,6 +256,7 @@
                     <Property name="Area" value="{{0.5,0},{0.5,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="despacito" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # +SONG BUTTON
@@ -253,6 +275,7 @@
                     <Property name="Area" value="{{0.1,0},{0.6,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="HEALTH" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # -HEALTH BUTTON
@@ -271,6 +294,7 @@
                     <Property name="Area" value="{{0.5,0},{0.6,0},{0.9,0},{0.9,0}}" />
                     <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
                     <Property name="Text" value="4" />
+                    <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
         </Window>
         # +HEALTH BUTTON

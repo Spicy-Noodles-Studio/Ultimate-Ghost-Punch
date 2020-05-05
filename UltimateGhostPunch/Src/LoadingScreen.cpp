@@ -24,8 +24,11 @@ LoadingScreen::~LoadingScreen()
 std::string LoadingScreen::getRandomTip()
 {
 	srand(time(NULL));
-
-	int i = (rand() % tipsVector.size()) - 1;
+	if (tipsVector.empty())
+	{
+		return "No tips for you";
+	}
+	int i = rand() % (tipsVector.size() - 1);
 
 	return tipsVector[i];
 }

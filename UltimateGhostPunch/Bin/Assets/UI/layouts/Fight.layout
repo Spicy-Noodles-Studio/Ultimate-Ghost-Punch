@@ -9,6 +9,7 @@
                 <Property name="Area" value="{{0.5,0},{0.1,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="0" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
         </Window>
         ## WINNER PANEL
@@ -20,6 +21,7 @@
                 <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Winner: " />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -71,18 +73,21 @@
             <Window type="TaharezLook/StaticText" name="Player1Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="[colour='FFFF0000']P1" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player1HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="Health: 10" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player1StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="State: Alive" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -92,6 +97,7 @@
             <Property name="Area" value="{{0.4,0},{0.7,0},{1,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
+            <Property name="Disabled" value="true" />
             <Property name="Text" value="[colour='FFFF0000']P1" />
             <Property name="Font" value="Sans" />
         </Window>
@@ -105,18 +111,21 @@
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FF0000FF']P2" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player2HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player2StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -126,6 +135,7 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FF0000FF']P2" />
+            <Property name="Disabled" value="true" />
             <Property name="Font" value="Sans" />
         </Window>
         ## PLAYER 3 INFO
@@ -138,18 +148,21 @@
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
                 <Property name="Text" value="[colour='FFFF0000']P3" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player3HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Health: 10" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player3StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="State: Alive" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -159,6 +172,7 @@
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
             <Property name="Text" value="[colour='FFFF0000']P3" />
+            <Property name="Disabled" value="true" />
             <Property name="Font" value="Sans" />
         </Window>
         ## PLAYER 4 INFO
@@ -170,18 +184,21 @@
             <Window type="TaharezLook/StaticText" name="Player4Text" >
                 <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="[colour='FF00FFFF']P4" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player4HealthText" >
             <Property name="Area" value="{{0.1,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="Health: 10" />
                 <Property name="Font" value="Sans" />
             </Window>
             <Window type="TaharezLook/StaticText" name="Player4StateText" >
             <Property name="Area" value="{{0.1,0},{0.4,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
                 <Property name="Text" value="State: Alive" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -191,6 +208,7 @@
             <Property name="Area" value="{{0.8,0},{0.7,0},{1,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
+            <Property name="Disabled" value="true" />
             <Property name="Text" value="[colour='FF00FFFF']P4" />
             <Property name="Font" value="Sans" />
         </Window>
@@ -200,6 +218,7 @@
                 <Property name="MaxSize" value="{{5000,0},{0.5,0}}" />
 				<Property name="Size" value="{{5000,0},{0.5,0}}" />
                 <Property name="Text" value="" />
+                <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans72" />
 				<Property name="HorzFormatting" value="WordWrapCentred" />
         </Window>
