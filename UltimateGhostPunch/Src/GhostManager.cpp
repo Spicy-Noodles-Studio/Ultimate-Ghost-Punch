@@ -21,9 +21,8 @@ REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
 													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
-												     deathPosition(Vector3()), ghostSpawnOffset(Vector3()), anim(nullptr)
+												     deathPosition(Vector3()), ghostSpawnOffset(Vector3()), anim(nullptr), control(nullptr), mode(ALIVE)
 {
-
 }
 
 GhostManager::~GhostManager()
@@ -40,6 +39,8 @@ void GhostManager::start()
 	meshRenderer = gameObject->getComponent<MeshRenderer>();
 	rigidBody = gameObject->getComponent<RigidBody>();
 	anim = gameObject->getComponent<PlayerAnimController>();
+	playerUI = gameObject->getComponent<PlayerUI>();
+	control = gameObject->getComponent<PlayerController>();
 
 	GameObject* aux = findGameObjectWithName("FightManager");
 	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
@@ -51,20 +52,12 @@ void GhostManager::start()
 
 void GhostManager::update(float deltaTime)
 {
-	if (health != nullptr && !health->isAlive())
+	if (health != nullptr && !health->isAlive() && !ghost && mode == ALIVE)
 	{
-		if (!used && !ghost)
-		{
-			if (anim != nullptr) anim->notLoopAnimation("Die");
-			ghost = true;
-			// Deactivate controller while player dies
-			auto control = gameObject->getComponent<PlayerController>();
-			if (control != nullptr) control->setActive(false);
-		}
-		else if (used && !ghost && fightManager != nullptr) {
-			fightManager->playerDie();
-			gameObject->setActive(false);
-		}
+		if (anim != nullptr) anim->notLoopAnimation("Die");
+		mode = DYING;
+		// Deactivate controller while player dies
+		if (control != nullptr) control->setActive(false);
 	}
 
 	if (ghost)
@@ -72,8 +65,8 @@ void GhostManager::update(float deltaTime)
 		if (ghostTime > 0)
 			ghostTime -= deltaTime;
 		else if (!ended && fightManager != nullptr) {
-			fightManager->playerDie();
 			ended = true;
+			ghost = false;
 			if (anim != nullptr) anim->notLoopAnimation("Disappear");
 			// Deactivate controller
 			auto control = gameObject->getComponent<PlayerController>();
@@ -160,6 +153,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			
+			ghost = false;
 		}
 	}
 }
@@ -200,6 +194,7 @@ void GhostManager::activateGhost()
 	// Reactivate controller
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr) control->setActive(true);
+	mode = GHOST;
 }
 
 void GhostManager::deactivateGhost()
@@ -215,8 +210,8 @@ void GhostManager::deactivateGhost()
 		rigidBody->setGravity({ 0, playerGravity, 0 });
 	}
 
-	auto controll = gameObject->getComponent<PlayerController>();
-	if (controll != nullptr) controll->setActive(true);
+	auto control = gameObject->getComponent<PlayerController>();
+	if (control != nullptr) control->setActive(true);
 
 	// Change scale
 	if(transform!= nullptr) transform->setScale(aliveScale);
@@ -230,6 +225,8 @@ void GhostManager::deactivateGhost()
 	//Respawn the player
 	Respawn* respawn = gameObject->getComponent<Respawn>();
 	if (respawn != nullptr) respawn->spawn(deathPosition);
+
+	mode = ALIVE;
 }
 
 void GhostManager::setDeathPosition(const Vector3& dPos)
@@ -241,4 +238,26 @@ void GhostManager::setDeathPosition(const Vector3& dPos)
 bool GhostManager::ghostEnded()
 {
 	return ended;
+}
+
+void GhostManager::deactivatePlayer()
+{
+	if (movement != nullptr) movement->stop();
+	if (meshRenderer != nullptr) meshRenderer->setVisible(false);
+	if (playerUI != nullptr) playerUI->setVisible(false);
+	fightManager->playerDie();
+	gameObject->setActive(false);
+}
+
+void GhostManager::handlePlayerDeath()
+{
+	if (!used)
+	{
+		ghost = true;
+		if (anim != nullptr) anim->enterMode(PlayerAnimController::GHOST);
+	}
+	else
+	{
+		deactivatePlayer();
+	}
 }
