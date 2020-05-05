@@ -33,7 +33,8 @@ std::string LoadingScreen::getRandomTip()
 void LoadingScreen::start()
 {
 	sceneToLoad = "NO SCENE";
-	loadDelay = 0;
+	loadDelay = 1.0f;
+	currentDelay = 0;
 
 	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
 	UIElement tipsText = root.getChild("Tips");
@@ -44,9 +45,9 @@ void LoadingScreen::start()
 
 void LoadingScreen::update(float deltaTime)
 {
-	if(sceneToLoad == "NO SCENE") loadDelay += deltaTime;
+	if(sceneToLoad == "NO SCENE") currentDelay += deltaTime;
 
-	if (loadDelay > 1.0f) {
+	if (currentDelay > loadDelay) {
 		sceneToLoad = SceneManager::GetInstance()->getSceneToLoad();
 		if (sceneToLoad != "NO SCENE") SceneManager::GetInstance()->changeScene(sceneToLoad);
 	}

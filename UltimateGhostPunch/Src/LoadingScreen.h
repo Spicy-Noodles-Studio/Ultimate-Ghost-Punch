@@ -15,6 +15,7 @@ class LoadingScreen : public UserComponent
 private:
 	std::string sceneToLoad;
 	float loadDelay;
+	float currentDelay;
 
 	std::vector<std::string> tipsVector;
 
