@@ -47,6 +47,7 @@
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
+    <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\CameraController.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
+    <ClInclude Include="..\..\Src\LoadingScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\CameraController.h" />
