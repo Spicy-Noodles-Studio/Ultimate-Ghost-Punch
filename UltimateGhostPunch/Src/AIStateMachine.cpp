@@ -14,12 +14,14 @@
 #include "GhostManager.h"
 #include "GhostMovement.h"
 #include "UltimateGhostPunch.h"
+#include "Attack.h"
+#include "FightingState.h"
 
 REGISTER_FACTORY(AIStateMachine);
 
 AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
 															ghostMovement(nullptr), ghostPunch(nullptr), platformGraph(nullptr), platformNavigation(nullptr),
-															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr)
+															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr), attack(nullptr)
 {
 
 }
@@ -48,6 +50,10 @@ void AIStateMachine::start()
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 
+	aux = gameObject->findChildrenWithTag("attackSensor");
+	if (aux.size() > 0)
+		attack = aux[0]->getComponent<Attack>();
+
 	// Create states here
 	/* PLATFORM NAVIGATION STATE */
 	createPlatformNavigation();
@@ -57,6 +63,9 @@ void AIStateMachine::start()
 
 	/* GHOST NAVIGATION STATE */
 	createGhostNavigation();
+
+	/*CREATE COMBAT STATE*/
+	createFightingState();
 
 	// Initialize auxiliar variables
 	timeTargetChange = 3.0f; // 5 seconds
@@ -100,6 +109,11 @@ void AIStateMachine::startGhostNavigation()
 	currentState = ghostNavigation;
 }
 
+void AIStateMachine::startFightingState()
+{
+	currentState = fightingState;
+}
+
 void AIStateMachine::processActionInput()
 {
 	dir = Vector3::ZERO;
@@ -137,6 +151,13 @@ void AIStateMachine::processActionInput()
 				}
 			break;
 			/* ATTACK */
+		case ActionInput::QUICK_ATTACK:
+			if (attack != nullptr) attack->quickAttack();
+			break;
+		case ActionInput::STRONG_ATTACK:
+			if (attack != nullptr) attack->strongAttack();
+			break;
+
 		default:
 			LOG("ActionInput no procesado");
 			break;
@@ -171,6 +192,12 @@ void AIStateMachine::createGhostNavigation()
 	addStateAction(ghostNavigation);
 
 	ghostNavigation->setCharacter(gameObject);
+}
+
+void AIStateMachine::createFightingState()
+{
+	fightingState = new FightingState(this);
+	addStateAction(fightingState);
 }
 
 void AIStateMachine::changeTarget()

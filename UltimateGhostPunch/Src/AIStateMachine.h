@@ -14,9 +14,11 @@ class PlatformNavigation;
 class PlatformMovement;
 class GhostNavigation;
 class GhostManager;
+class Attack;
+class FightingState;
 
 enum class ActionInput {
-	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH
+	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK
 };
 
 class AIStateMachine :	public StateMachine
@@ -37,11 +39,13 @@ private:
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
 	GhostManager* ghostManager;
+	Attack* attack;
 
 	/* States */
 	PlatformNavigation* platformNavigation;
 	PlatformMovement* platformMovement;
 	GhostNavigation* ghostNavigation;
+	FightingState* fightingState;
 
 	/* Auxiliar variables */
 	Vector3 dir;
@@ -59,6 +63,7 @@ public:
 	void startPlatformNavigation();
 	void startPlatformMovement();
 	void startGhostNavigation();
+	void startFightingState();
 
 private:
 	virtual void processActionInput();
@@ -67,6 +72,7 @@ private:
 	void createPlatformNavigation();
 	void createPlatformMovement();
 	void createGhostNavigation();
+	void createFightingState();
 
 	/* Funcs */
 	void changeTarget();
