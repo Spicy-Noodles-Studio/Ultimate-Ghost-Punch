@@ -1,12 +1,14 @@
 #pragma once
 #ifndef PLAYER_INDEX_H
 #define PLAYER_INDEX_H
+
 #include <UserComponent.h>
-class PlayerIndex :
-	public UserComponent
+
+class PlayerIndex : public UserComponent
 {
 private:
 	int index;
+
 public:
 	PlayerIndex(GameObject* gameObject);
 	virtual ~PlayerIndex();

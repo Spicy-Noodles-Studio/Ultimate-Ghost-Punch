@@ -1,13 +1,15 @@
 #include "GhostMovement.h"
 #include <ComponentRegister.h>
-#include <GameObject.h>
 #include <InputSystem.h>
+#include <GameObject.h>
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(GhostMovement);
 
-GhostMovement::GhostMovement(GameObject* g) :UserComponent(g), rigidBody(nullptr), maxSpeed(2.0f)
+GhostMovement::GhostMovement(GameObject* gameObject) :UserComponent(gameObject), rigidBody(nullptr), maxSpeed(2.0f)
 {
 
 }
@@ -29,8 +31,7 @@ void GhostMovement::handleData(ComponentData* data)
 
 		if (prop.first == "maxSpeed")
 		{
-			if (!(ss >> maxSpeed))
-				LOG("GHOST MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(maxSpeed);
 		}
 		else
 			LOG("GHOST MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
@@ -39,8 +40,16 @@ void GhostMovement::handleData(ComponentData* data)
 
 void GhostMovement::move(Vector3 dir)
 {
-	dir *= maxSpeed;
-	if (rigidBody != nullptr) rigidBody->setLinearVelocity(dir);
+	PlayerState* aux = gameObject->getComponent<PlayerState>();
+	if (aux != nullptr && aux->canGhostMove()) {
+		//Character rotation
+		if (dir.x != 0)
+			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+
+		dir *= maxSpeed;
+		if (rigidBody != nullptr)
+			rigidBody->setLinearVelocity(dir);
+	}
 }
 
 void GhostMovement::setSpeed(float speed)

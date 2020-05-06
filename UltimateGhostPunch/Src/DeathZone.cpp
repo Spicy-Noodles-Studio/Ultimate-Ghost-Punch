@@ -1,23 +1,24 @@
 #include "DeathZone.h"
-
 #include <ComponentRegister.h>
-#include<GameObject.h>
-#include<sstream>
+#include <GameObject.h>
+#include <sstream>
 
+#include "PlayerIndex.h"
 #include "Respawn.h"
 #include "Health.h"
-#include "GameManager.h"
 #include "Score.h"
-#include "PlayerIndex.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(DeathZone);
 
 DeathZone::DeathZone(GameObject* gameObject) : UserComponent(gameObject), fallDamage(2)
 {
+
 }
 
 DeathZone::~DeathZone()
 {
+
 }
 
 void DeathZone::handleData(ComponentData* data)
@@ -28,8 +29,7 @@ void DeathZone::handleData(ComponentData* data)
 
 		if (prop.first == "fallDamage")
 		{
-			if (!(ss >> fallDamage))
-				LOG("DEATH ZONE: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(fallDamage);
 		}
 		else
 			LOG("DEATH ZONE: Invalid property name \"%s\"", prop.first.c_str());
@@ -39,21 +39,28 @@ void DeathZone::handleData(ComponentData* data)
 void DeathZone::onObjectEnter(GameObject* other)
 {
 	//If a player gets inside it recives damage and respawns
-	if (other->getTag() == "Player") {
+	if (other->getTag() == "Player")
+	{
 		Health* health = other->getComponent<Health>();
-		if (health != nullptr) {
+
+		if (health != nullptr)
+		{
 			Score* score = GameManager::GetInstance()->getScore();
 			int id = other->getComponent<PlayerIndex>()->getIndex();
 			int h = health->getHealth();
+
 			health->receiveDamage(fallDamage);
-			if (h != health->getHealth()&&score!=nullptr)
+
+			if (h != health->getHealth() && score != nullptr)
 				score->fall(id);
 
 			if (!health->isAlive() && score != nullptr)
 				score->deathByEnviromentHazard(id);
 
 			Respawn* respawn = other->getComponent<Respawn>();
-			if (respawn != nullptr); respawn->respawn();
+
+			if (respawn != nullptr)
+				respawn->respawn();
 		}
 	}
 }

@@ -1,32 +1,38 @@
 #include "PlayerAnimController.h"
-
-#include <queue>
-#include <sstream>
 #include <ComponentRegister.h>
-#include <GameObject.h>
-
 #include <InputSystem.h>
-#include "Animator.h"
-#include "MeshRenderer.h"
+#include <GameObject.h>
+#include <Animator.h>
+#include <MeshRenderer.h>
+#include <RigidBody.h>
+#include <sstream>
 
+
+#include "PlayerController.h"
+#include "PlayerFX.h"
 #include "Attack.h"
 #include "Jump.h"
 #include "Health.h"
-#include "GhostManager.h"
 #include "Dodge.h"
-#include "UltimateGhostPunch.h"
 #include "Grab.h"
 #include "Block.h"
-#include "GameManager.h"
-#include "RigidBody.h"
-#include "PlayerController.h"
 #include "GhostManager.h"
-#include "PlayerFX.h"
+#include "UltimateGhostPunch.h"
+#include "GhostManager.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PlayerAnimController);
 
-PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), mesh(nullptr), inputSystem(nullptr), body(nullptr), anim(nullptr), jump(nullptr), grab(nullptr), block(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(), thrownDelay(0.35f), currentMode(ALIVE), aliveMeshId(""), aliveMeshName(""), ghostMeshId(""), ghostMeshName(""), ghostManag(nullptr)
+PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), mesh(nullptr), body(nullptr), anim(nullptr), jump(nullptr),
+grab(nullptr), block(nullptr), playerFX(nullptr), ghostManag(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(),
+thrownDelay(0.35f), currentMode(ALIVE), aliveMeshId(""), aliveMeshName(""), ghostMeshId(""), ghostMeshName("")
 {
+
+}
+
+PlayerAnimController::~PlayerAnimController()
+{
+
 }
 
 void PlayerAnimController::start()
@@ -44,8 +50,10 @@ void PlayerAnimController::start()
 		jump = aux[0]->getComponent<Jump>();
 		block = aux[0]->getComponent<Block>();
 	}
+
 	aux = gameObject->findChildrenWithTag("grabSensor");
-	if (aux.size() > 0) grab = aux[0]->getComponent<Grab>();
+	if (aux.size() > 0)
+		grab = aux[0]->getComponent<Grab>();
 
 	if (anim == nullptr)
 		LOG("ERROR: Animator component not found in player.\n");
@@ -57,7 +65,6 @@ void PlayerAnimController::start()
 	else
 	{
 		mesh->printAllBones();
-
 		aliveMeshId = mesh->getMeshId();
 		aliveMeshName = mesh->getMeshName();
 	}
@@ -85,6 +92,32 @@ void PlayerAnimController::update(float deltaTime)
 	updateDelayedAnimations(deltaTime);
 }
 
+void PlayerAnimController::handleData(ComponentData* data)
+{
+	for (auto prop : data->getProperties())
+	{
+		std::stringstream ss(prop.second);
+
+		if (prop.first == "runThreshold")
+		{
+			setFloat(runThreshold);
+		}
+		else if (prop.first == "strongCooldown")
+		{
+			setFloat(fallThreshold);
+		}
+		else if (prop.first == "thrownDelay")
+		{
+			setFloat(thrownDelay);
+		}
+		else if (prop.first == "ghostMesh")
+		{
+			if (!(ss >> ghostMeshId >> ghostMeshName))
+				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+		}
+	}
+}
+
 /******************************
 	ANIMATION METHODS
 *******************************/
@@ -107,17 +140,60 @@ void PlayerAnimController::jumpAnimation() //  JUMP ANIMATION //
 	}
 }
 
+void PlayerAnimController::dashAnimation() // DASH ANIMATION //
+{
+	if (state != GRABBING)
+		notLoopAnimation("DashFront");
+	else
+	{
+		anim->playAnimation("DashFrontGrabbing");
+		anim->setLoop(false);
+	}
+}
+
+void PlayerAnimController::tauntAnimation() // TAUNT ANIMATION //
+{
+	if (state != IDLE) return;
+
+	notLoopAnimation("Taunt");
+}
+
 void PlayerAnimController::hurtAnimation() //  HURT ANIMATION //
 {
-	//notLoopAnimation("Hurt");
 	anim->playAnimation("Hurt");
 	anim->setLoop(false);
+
 	if (jump->isGrounded())
 		state = NOT_LOOPING_STATE;
 	else
 		state = FALL;
 
 	playerFX->activateHurt();
+}
+
+void PlayerAnimController::stunnedAnimation() // STUNNED ANIMATION //
+{
+	if (anim->getCurrentAnimation() == "StunnedStart" || anim->getCurrentAnimation() == "StunnedHold")
+		return;
+
+	anim->playAnimationSequence({ "StunnedStart", "StunnedHold" }, true);
+	anim->setLoop(false);
+	state = STUNNED;
+}
+
+void PlayerAnimController::resurrectAnimation() // RESURRECT ANIMATION //
+{
+	notLoopAnimation("Resurrect");
+}
+
+void PlayerAnimController::quickAttackAnimation() //  QUICK ATTACK ANIMATION //
+{
+	attackAnimation(0);
+}
+
+void PlayerAnimController::strongAttackAnimation() //  STRONG ATTACK ANIMATION //
+{
+	attackAnimation(1);
 }
 
 void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
@@ -134,22 +210,26 @@ void PlayerAnimController::grabAnimation() //  GRAB ANIMATION //
 	swordState = SHEATHED;
 }
 
-void PlayerAnimController::grabFailedAnimation()
+void PlayerAnimController::grabFailedAnimation() // GRAB FAILED ANIMATION //
 {
 	notLoopAnimation("GrabFail");
+
 	// Move Sword to back
 	gameObject->getComponent<MeshRenderer>()->moveEntityToBone("player", "Espalda", "sword");
 	swordState = SHEATHED;
 }
 
-void PlayerAnimController::quickAttackAnimation() //  QUICK ATTACK ANIMATION //
+void PlayerAnimController::grabbedByEnemyAnimation() // GRAB BY ENEMY ANIMATION //
 {
-	attackAnimation(0);
-}
+	if (anim->getCurrentAnimation() == "GrabbedStart" || anim->getCurrentAnimation() == "GrabbedHold")
+		return;
 
-void PlayerAnimController::strongAttackAnimation() //  STRONG ATTACK ANIMATION //
-{
-	attackAnimation(1);
+	anim->playAnimation("GrabbedStart");
+	anim->setLoop(false);
+	state = GRABBING;
+
+	mesh->moveEntityToBone("player", "Espalda", "sword");
+	swordState = SHEATHED;
 }
 
 void PlayerAnimController::blockAnimation() //  BLOCK ANIMATION //
@@ -161,84 +241,38 @@ void PlayerAnimController::blockAnimation() //  BLOCK ANIMATION //
 	anim->setLoop(false);
 	state = BLOCKING;
 
-
 	playerFX->activateShield();
 }
 
-void PlayerAnimController::blockedAttackAnimation()
+void PlayerAnimController::blockedAttackAnimation() // BLOCKED ATTACK ANIMATION //
 {
 	anim->playAnimation("BlockAttack");
 	anim->setLoop(false);
 	state = BLOCKING;
 }
 
-void PlayerAnimController::blockedEnemyGrabAnimation()
+void PlayerAnimController::blockedEnemyGrabAnimation() // BLOCKED ENEMY GRAB ANIMATION //
 {
 	notLoopAnimation("Knockback");
 }
 
-void PlayerAnimController::enemyBlockedMyGrabAnimation()
+void PlayerAnimController::enemyBlockedMyGrabAnimation() // ENEMY BLOCKED MY ATTACK ANIMATION //
 {
 	if (anim->getCurrentAnimation() != "GrabStart")
 		anim->playAnimation("GrabStart");
+
 	anim->setLoop(false);
 	state = STUNNED;
 }
 
-void PlayerAnimController::stunnedAnimation()
-{
-	if (anim->getCurrentAnimation() == "StunnedStart" || anim->getCurrentAnimation() == "StunnedHold")
-		return;
-
-	anim->playAnimationSequence({ "StunnedStart", "StunnedHold" }, true);
-	anim->setLoop(false);
-	state = STUNNED;
-}
-
-void PlayerAnimController::dashAnimation()
-{
-	if (state != GRABBING)
-		notLoopAnimation("DashFront");
-	else
-	{
-		anim->playAnimation("DashFrontGrabbing");
-		anim->setLoop(false);
-	}
-		
-}
-
-void PlayerAnimController::resurrectAnimation()
-{
-	notLoopAnimation("Resurrect");
-}
-
-void PlayerAnimController::tauntAnimation()
-{
-	if (state != IDLE) return;
-	notLoopAnimation("Taunt");
-}
-
-void PlayerAnimController::throwEnemyAnimation()
+void PlayerAnimController::throwEnemyAnimation() // THROW ENEMY ANIMATION //
 {
 	notLoopAnimation("Throw");
 }
 
-void PlayerAnimController::thrownAwayAnimation()
+void PlayerAnimController::thrownAwayAnimation() // THROWN AWAY ANIMATION //
 {
 	playAnimationWithDelay("Thrown", thrownDelay);
-}
-
-void PlayerAnimController::grabbedByEnemyAnimation()
-{
-	if (anim->getCurrentAnimation() == "GrabbedStart" || anim->getCurrentAnimation() == "GrabbedHold")
-		return;
-
-	anim->playAnimation("GrabbedStart");
-	anim->setLoop(false);
-	state = GRABBING;
-
-	mesh->moveEntityToBone("player", "Espalda", "sword");
-	swordState = SHEATHED;
 }
 
 void PlayerAnimController::notLoopAnimation(std::string name)
@@ -263,55 +297,16 @@ void PlayerAnimController::attackAnimation(int type) //  ATTACK ANIMATION //
 			anim->playAnimation("AttackB");
 		else
 			anim->playAnimation("AttackB");
-			//notLoopAnimation("AttackAAir");
 	}
 
 	anim->setLoop(false);
 	state = NOT_LOOPING_STATE;
 }
 
-/******************************
-	STATE CHANGES
-*******************************/
-
-void PlayerAnimController::updateState()
+void PlayerAnimController::playAnimationWithDelay(std::string name, float delay)
 {
-	switch (state)
-	{
-	case PlayerAnimController::IDLE:				// IDLE //
-		updateIdle();
-		break;
-	case PlayerAnimController::RUN:					// RUN //
-		updateRun();
-		break;
-	case PlayerAnimController::JUMP:				// JUMP //
-		updateJump();
-		break;
-	case PlayerAnimController::FALL:				// FALL //
-		updateFall();
-		break;
-	case PlayerAnimController::BLOCKING:			// BLOCKING // 
-		updateBlocking();
-		break;
-	case PlayerAnimController::GRABBING:			//  GRABBING //
-		updateGrabbing();
-		break;
-	case PlayerAnimController::GRABBED:				// GRABBED //
-		break;
-	case PlayerAnimController::STUNNED:				// STUNNED //
-		updateStunned();
-		break;
-	case PlayerAnimController::NOT_LOOPING_STATE:	// NOT_LOOPING_STATE //
-		updateNotLoopingState();
-		break;
-	case PlayerAnimController::UGP:					// UGP //
-		updateUGP();
-		break;
-	default:
-		break;
-	}
+	delayedAnimations.push({ name, delay });
 }
-
 
 void PlayerAnimController::enterMode(PlayerMode mode)
 {
@@ -369,6 +364,83 @@ bool PlayerAnimController::checkStartedFalling()
 	return abs(body->getLinearVelocity().y) <= fallThreshold;
 }
 
+/******************************
+	STATE CHANGES
+*******************************/
+
+void PlayerAnimController::updateState()
+{
+	switch (state)
+	{
+	case PlayerAnimController::IDLE:				// IDLE //
+		updateIdle();
+		break;
+	case PlayerAnimController::RUN:					// RUN //
+		updateRun();
+		break;
+	case PlayerAnimController::JUMP:				// JUMP //
+		updateJump();
+		break;
+	case PlayerAnimController::FALL:				// FALL //
+		updateFall();
+		break;
+	case PlayerAnimController::BLOCKING:			// BLOCKING // 
+		updateBlocking();
+		break;
+	case PlayerAnimController::GRABBING:			// GRABBING //
+		updateGrabbing();
+		break;
+	case PlayerAnimController::GRABBED:				// GRABBED //
+		break;
+	case PlayerAnimController::STUNNED:				// STUNNED //
+		updateStunned();
+		break;
+	case PlayerAnimController::NOT_LOOPING_STATE:	// NOT_LOOPING_STATE //
+		updateNotLoopingState();
+		break;
+	case PlayerAnimController::UGP:					// UGP //
+		break;
+	default:
+		break;
+	}
+}
+
+/******************************
+	STATE HANDLING
+*******************************/
+
+void PlayerAnimController::handleState()
+{
+	switch (state)
+	{
+	case PlayerAnimController::IDLE:				// IDLE //
+		if (anim->getCurrentAnimation() != "Idle")
+		{
+			anim->playAnimation("Idle");
+			anim->setLoop(true);
+		}
+		break;
+	case PlayerAnimController::RUN:					// RUN //
+		if (anim->getCurrentAnimation() != "Run" && anim->getCurrentAnimation() != "Move")
+		{
+			if (currentMode == ALIVE) anim->playAnimation("Run");
+			else anim->playAnimation("Move");
+
+			anim->setLoop(true);
+		}
+		break;
+	case PlayerAnimController::FALL:					// FALL //
+		if (anim->getCurrentAnimation() != "Fall" && anim->getCurrentAnimation() != "Hurt")
+		{
+			anim->playAnimation("Fall");
+			anim->setLoop(true);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 void PlayerAnimController::updateIdle()	//  IDLE //
 {
 	// TRANSITION TO FALL IF
@@ -379,13 +451,11 @@ void PlayerAnimController::updateIdle()	//  IDLE //
 	}
 
 	// TRANSITION TO RUN IF
-	if (abs(body->getLinearVelocity().x) >= runThreshold
-		|| (currentMode == GHOST && abs(body->getLinearVelocity().y) >= runThreshold))
+	if (abs(body->getLinearVelocity().x) >= runThreshold || (currentMode == GHOST && abs(body->getLinearVelocity().y) >= runThreshold))
 	{
 		state = RUN;
 		return;
 	}
-
 }
 
 void PlayerAnimController::updateRun() //  RUN //
@@ -439,11 +509,13 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 	{
 		if (anim->getCurrentAnimation() == "JumpStartGrabbing" || anim->getCurrentAnimation() == "JumpChangeGrabbing")
 		{
-			state = JUMP; updateJump();
+			state = JUMP;
+			updateJump();
 		}
 		else if (anim->getCurrentAnimation() == "FallGrabbing")
 		{
-			state = FALL; updateFall();
+			state = FALL;
+			updateFall();
 		}
 	}
 
@@ -495,10 +567,9 @@ void PlayerAnimController::updateGrabbing() //  GRABBING //
 		anim->playAnimation("GrabHold");
 		anim->setLoop(true);
 	}
-	
 
-	if (((anim->getCurrentAnimation() == "GrabHold" || anim->getCurrentAnimation() == "DashFrontGrabbing" || anim->getCurrentAnimation() == "RunGrabbing") && !grab->isGrabbing())
-		|| (anim->getCurrentAnimation() == "GrabFail" && anim->hasEnded()))
+	if (((anim->getCurrentAnimation() == "GrabHold" || anim->getCurrentAnimation() == "DashFrontGrabbing" || anim->getCurrentAnimation() == "RunGrabbing")
+		&& !grab->isGrabbing()) || (anim->getCurrentAnimation() == "GrabFail" && anim->hasEnded()))
 	{
 		state = IDLE;
 		updateIdle();
@@ -520,7 +591,7 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 {
 	if (currentMode == GHOST) return;
 
-	if (anim->getCurrentAnimation() == "BlockHold" && !block->blocking())
+	if (anim->getCurrentAnimation() == "BlockHold" && !block->isBlocking())
 	{
 		anim->playAnimation("BlockEnd");
 		anim->setLoop(false);
@@ -537,7 +608,7 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 		return;
 	}
 
-	if (anim->getCurrentAnimation() == "BlockAttack" && anim->hasEnded() && block->blocking())
+	if (anim->getCurrentAnimation() == "BlockAttack" && anim->hasEnded() && block->isBlocking())
 	{
 		anim->playAnimation("BlockHold");
 		anim->setLoop(true);
@@ -545,7 +616,7 @@ void PlayerAnimController::updateBlocking() //  BLOCKING //
 	}
 }
 
-void PlayerAnimController::updateStunned()
+void PlayerAnimController::updateStunned() // STUNNED //
 {
 	if (currentMode == GHOST) return;
 
@@ -559,7 +630,9 @@ void PlayerAnimController::updateStunned()
 	{
 		bool active = true;
 		PlayerController* controller = gameObject->getComponent<PlayerController>();
-		if (controller != nullptr) active = controller->isActive();
+		if (controller != nullptr)
+			active = controller->isActive();
+
 		if (!active) return;
 		anim->playAnimation("StunnedEnd");
 		anim->setLoop(false);
@@ -574,17 +647,6 @@ void PlayerAnimController::updateStunned()
 	}
 }
 
-void PlayerAnimController::updateUGP()
-{
-	// If it is not moving, UGP has finished
-	/*if (checkIdle())
-	{
-		notLoopAnimation("UGPFail");
-		return;
-	}*/
-		
-}
-
 void PlayerAnimController::updateNotLoopingState()
 {
 
@@ -597,7 +659,7 @@ void PlayerAnimController::updateNotLoopingState()
 
 	if (anim->getCurrentAnimation() == "Die" && anim->hasEnded())
 	{
-		enterMode(GHOST);
+		ghostManag->handlePlayerDeath();//enterMode(GHOST);
 		return;
 	}
 
@@ -615,12 +677,10 @@ void PlayerAnimController::updateNotLoopingState()
 	// GHOST DISAPPEARING -> DEACTIVATE PLAYER 
 	if (currentMode == GHOST && anim->getCurrentAnimation() == "Disappear")
 	{
-		mesh->setVisible(false);
-		gameObject->setActive(false);
+		ghostManag->deactivatePlayer();
 
 		return;
 	}
-
 
 	// TRANSITION TO IDLE IF
 	if (checkIdle())
@@ -645,85 +705,12 @@ void PlayerAnimController::updateDelayedAnimations(float deltaTime)
 		DelayedAnimation dAnim = delayedAnimations.front(); delayedAnimations.pop();
 		dAnim.delayTime -= deltaTime;
 
-		if (dAnim.delayTime <= 0)	notLoopAnimation(dAnim.name);	// If the time has come, play the animation
-		else updated.push_back(dAnim);	//else, place it again in delayed animations
+		if (dAnim.delayTime <= 0)
+			notLoopAnimation(dAnim.name); // If the time has come, play the animation
+		else
+			updated.push_back(dAnim); //else, place it again in delayed animations
 	}
 
 	for (auto u : updated)
 		delayedAnimations.push(u);
 }
-
-void PlayerAnimController::playAnimationWithDelay(std::string name, float delay)
-{
-	delayedAnimations.push({ name, delay });
-}
-
-/******************************
-	STATE HANDLING
-*******************************/
-
-void PlayerAnimController::handleState()
-{
-	switch (state)
-	{
-	case PlayerAnimController::IDLE:				// IDLE //
-		if (anim->getCurrentAnimation() != "Idle")
-		{
-			anim->playAnimation("Idle");
-			anim->setLoop(true);
-		}
-		break;
-	case PlayerAnimController::RUN:					// RUN //
-		if (anim->getCurrentAnimation() != "Run" && anim->getCurrentAnimation() != "Move")
-		{
-			if (currentMode == ALIVE) anim->playAnimation("Run");
-			else anim->playAnimation("Move");
-
-			anim->setLoop(true);
-		}
-		break;
-	case PlayerAnimController::FALL:					// FALL //
-		if (anim->getCurrentAnimation() != "Fall" && anim->getCurrentAnimation() != "Hurt")
-		{
-			anim->playAnimation("Fall");
-			anim->setLoop(true);
-		}
-		break;
-	default:
-		break;
-	}
-}
-
-
-/*				
-********************************
-	HANDLE DATA
-********************************
-*/				
-void PlayerAnimController::handleData(ComponentData* data)
-{
-	for (auto prop : data->getProperties())
-	{
-		std::stringstream ss(prop.second);
-
-		if (prop.first == "runThreshold") {
-			if (!(ss >> runThreshold))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "strongCooldown") {
-			if (!(ss >> fallThreshold))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "thrownDelay") {
-			if (!(ss >> thrownDelay))
-				LOG("PLAYER_ANIM_CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "ghostMesh")
-		{
-			if (!(ss >> ghostMeshId >> ghostMeshName))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-	}
-}
-
-

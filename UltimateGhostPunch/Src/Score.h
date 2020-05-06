@@ -2,7 +2,6 @@
 #ifndef SCORE_H
 #define SCORE_H
 
-
 #include <vector>
 #include <string>
 
@@ -28,6 +27,7 @@ class Score
 		int numOfKills;
 		std::vector<int> indexesFromEnemiesKilled;
 	};
+
 private:
 	int numPlayers;
 	std::vector<int> playerIndexes;
@@ -38,6 +38,7 @@ private:
 public:
 	Score();
 	~Score();
+
 	void initScore(int numOfPlayers, std::vector<int> playerIndexes);
 	void attackDone(int playerIndex,bool groundAttack);
 	void receiveHitFrom(int playerIndex, int fromIndex);
@@ -61,9 +62,6 @@ public:
 	int getNumberOfKills(int playerIndex);
 	int getEnviromentDeaths(int playerIndex);
 	std::vector<int> getIndexOfPlayersKilled(int playerIndex);
-
-
 };
-
 
 #endif

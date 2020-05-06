@@ -2,8 +2,8 @@
 #ifndef PLAYER_UI_H
 #define PLAYER_UI_H
 
-#include "UserComponent.h"
-#include "UIElement.h"
+#include <UserComponent.h>
+#include <UIElement.h>
 
 class Camera;
 class Health;
@@ -21,6 +21,7 @@ public:
 	void changeState(const std::string state);
 	void updateHealth();
 
+	void setVisible(bool visible);
 private:
 	void createHearts();
 
@@ -36,6 +37,8 @@ private:
 	std::string name;
 	UIElement playerHUD;
 	UIElement playerIndicator;
+
+	bool isVisible;
 };
 
 #endif

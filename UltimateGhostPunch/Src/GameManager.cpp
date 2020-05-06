@@ -33,10 +33,34 @@ GameManager* GameManager::GetInstance()
 
 void GameManager::start()
 {
-	level = "";
-	song = "";
+	/*level = "";
+	song = "";*/
+	playerColours = { {1,1,1}, {0,0,1}, {0,1,0}, {0,1,1} };
 
 	dontDestroyOnLoad(gameObject);
+}
+
+void GameManager::reset()
+{
+	Timer::GetInstance()->setTimeScale(1.0f);
+	paused = false;
+}
+
+void GameManager::pauseGame(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	if (paused)
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	else
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+}
+
+bool GameManager::gameIsPaused()
+{
+	return paused;
 }
 
 void GameManager::setNumPlayers(int nPlayers)
@@ -65,6 +89,11 @@ std::vector<GameObject*>& GameManager::getKnights()
 	return knights;
 }
 
+std::vector<Vector3>& GameManager::getPlayerColours()
+{
+	return playerColours;
+}
+
 void GameManager::setLevel(std::string level)
 {
 	this->level = level;
@@ -84,8 +113,8 @@ std::string GameManager::getLastLevel()
 
 void GameManager::setSong(std::string song)
 {
-	this->lastSong = song;
 	this->song = song;
+	this->lastSong = song;
 }
 
 std::string GameManager::getSong()
@@ -127,27 +156,4 @@ int GameManager::getInitialTime()
 Score* GameManager::getScore()
 {
 	return &scores;
-}
-
-void GameManager::reset()
-{
-	Timer::GetInstance()->setTimeScale(1.0f);
-	paused = false;
-}
-
-void GameManager::pauseGame(bool setPaused)
-{
-	if (paused == setPaused) return;
-
-	paused = setPaused;
-
-	if (paused)
-		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	else
-		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
-}
-
-bool GameManager::gameIsPaused()
-{
-	return paused;
 }

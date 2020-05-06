@@ -10,7 +10,7 @@ private:
 	// Damage dealt to the player that collides with this obstacle
 	int damage;
 
-	// Strength of the impulse to the player that collides
+	// Strength of the impulse for player that collides
 	float pushStrength;
 
 	// Offset for respawn used if the player dies from the obstacle's damage

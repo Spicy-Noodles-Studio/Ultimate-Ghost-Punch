@@ -1,6 +1,6 @@
 {
-    "LevelBlueprint" : "Level5",
-    "LevelRenderBlueprint" : "Level5Render",
+    "RenderMesh" : "Level5Render.mesh",
+    "ColliderMesh" : "Level5.mesh",
     "PlayerTransforms":[
         ["-15 2.5 0", "0 90 0"],
         ["15 2.5 0", "0 -90 0"],
@@ -8,6 +8,11 @@
         ["7.5 2.5 0", "0 -90 0"]
     ],
     "SpikesTransforms":[
-        ["0 8 0", "0 0 180"]
+        ["-1.9 9 0", "0 0 135"],
+        ["2.1 9 0", "0 0 -135"]
+    ],
+    "Lights":[
+        ["Directional", "0 0 0", "1", "1 0 0", "0 1 0"],
+        ["Point", "-20 4 0", "1", "1 0 0", "0 0 0"]
     ]
 }

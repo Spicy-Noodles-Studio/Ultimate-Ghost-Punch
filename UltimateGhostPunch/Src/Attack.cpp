@@ -4,18 +4,20 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerIndex.h"
+#include "PlayerState.h"
 #include "Health.h"
 #include "Block.h"
-#include "ComponentRegister.h"
-#include "GameManager.h"
 #include "Score.h"
-#include "PlayerIndex.h"
+#include "GameManager.h"
+#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(Attack);
 
-Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr),currentAttack(NONE),state(NOT_ATTACKING),activeTime(0.0f), attackDuration(0.5f),
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), score(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
-										 quickAttackCooldown(0.5f),cooldown(0.0f)
+										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr)
 {
 
 }
@@ -27,9 +29,12 @@ Attack::~Attack()
 
 void Attack::start()
 {
+	parent = gameObject->getParent();
+	if(parent!= nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+
 	attackTrigger = gameObject->getComponent<RigidBody>();
-	id = gameObject->getParent()->getComponent<PlayerIndex>()->getIndex();
 	score = GameManager::GetInstance()->getScore();
+
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);
 }
@@ -65,45 +70,59 @@ void Attack::handleData(ComponentData* data)
 	{
 		std::stringstream ss(prop.second);
 
-		if (prop.first == "quickCooldown") {
-			if (!(ss >> quickAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		if (prop.first == "quickCooldown")
+		{
+			setFloat(quickAttackCooldown);
 		}
-		else if (prop.first == "strongCooldown") {
-			if (!(ss >> strongAttackCooldown))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "strongCooldown")
+		{
+			setFloat(strongAttackCooldown);
 		}
-		else if (prop.first == "quickDamage") {
-			if (!(ss >> quickAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "quickDamage")
+		{
+			setInt(quickAttackDamage);
 		}
-		else if (prop.first == "strongDamage") {
-			if (!(ss >> strongAttackDamage))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "strongDamage")
+		{
+			setInt(strongAttackDamage);
 		}
-		else if (prop.first == "attackDuration") {
-			if (!(ss >> attackDuration))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "attackDuration")
+		{
+			setFloat(attackDuration);
 		}
-		else if (prop.first == "quickCharge") {
-			if (!(ss >> quickChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "quickCharge")
+		{
+			setFloat(quickChargeTime);
 		}
-		else if (prop.first == "strongCharge") {
-			if (!(ss >> strongChargeTime))
-				LOG("ATTACK: Invalid property with name \"%s\"", prop.first.c_str());
+		else if (prop.first == "strongCharge")
+		{
+			setFloat(strongChargeTime);
+		}
+		else if (prop.first == "quickAttackScale")
+		{
+			setVector3(quickAttackScale);
+		}
+		else if (prop.first == "strongAttackScale")
+		{
+			setVector3(strongAttackScale);
+		}
+		else if (prop.first == "quickAttackOffset")
+		{
+			setVector3(quickAttackOffset);
+		}
+		else if (prop.first == "strongAttackOffset")
+		{
+			setVector3(strongAttackOffset);
 		}
 		else
 			LOG("ATTACK: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 
-
 void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "Player" && other != gameObject->getParent() && state == ATTACKING)//If it hits a player different than myself
+	if (other->getTag() == "Player" && parent != nullptr && other != parent && state == ATTACKING) // If it hits a player different than myself
 	{
-		
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
 
@@ -118,21 +137,22 @@ void Attack::onObjectStay(GameObject* other)
 		}
 
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
-		Block* enemyBlock = nullptr;
 		PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-		if (aux.size() > 0) enemyBlock = aux[0]->getComponent<Block>();
-		if (enemyBlock != nullptr) {
-			
-			if(!enemyBlock->blockAttack(damage, gameObject->getParent()->transform->getPosition()));
+		Block* enemyBlock = nullptr;
+
+		if (aux.size() > 0)
+			enemyBlock = aux[0]->getComponent<Block>();
+
+		if (enemyBlock != nullptr && parent != nullptr)
+		{
+			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()));
 			{
-				
 				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
+
 				if (!enemyHealth->isAlive())
-				{
 					score->killedBy(otherIndex->getIndex(), id);
-				}
 			}
 			
 			// Deactivate the trigger until the next attack is used
@@ -140,19 +160,6 @@ void Attack::onObjectStay(GameObject* other)
 
 			// Reset the current attack state
 			state = NOT_ATTACKING;
-
-		}
-		else {
-			Health* enemyHealth = other->getComponent<Health>();
-			int health = enemyHealth->getHealth();
-			if (enemyHealth != nullptr) enemyHealth->receiveDamage(damage);
-			score->receiveHitFrom(otherIndex->getIndex(),id);
-			if(health!= enemyHealth->getHealth())
-				score->damageRecivedFrom(otherIndex->getIndex(), id, damage);
-			if (!enemyHealth->isAlive())
-			{
-				score->killedBy(otherIndex->getIndex(),id);
-			}
 		}
 	}
 }
@@ -174,29 +181,58 @@ void Attack::attack()
 	LOG("Attack!\n");
 }
 
-
-bool Attack::quickAttack()
+void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
-	if (cooldown <= 0.0f)
-	{
-		currentAttack = QUICK;
-		charge(quickAttackCooldown, quickChargeTime);
-		return true;
-	}
-	else
-		LOG("Attack on CD...\n");
-	return false;
+	Transform* attackTransform = attackTrigger->gameObject->transform;
+
+	// Scale trigger
+	Vector3 scaleRatio = scale;
+	Vector3 currentScale = attackTransform->getScale();
+	attackTrigger->multiplyScale(scaleRatio);
+	scaleRatio *= currentScale;
+
+	// Move an offset
+	attackTransform->setPosition(offset);
 }
 
-bool Attack::strongAttack()
+void Attack::quickAttack()
 {
-	if (cooldown <= 0.0f)
+	if (parent == nullptr) return;
+	
+	PlayerState* aux = parent->getComponent<PlayerState>();
+	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-		currentAttack = STRONG;
-		charge(strongAttackCooldown, strongChargeTime);
-		return true;
+		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+		if (anim != nullptr) anim->quickAttackAnimation();
+
+		currentAttack = QUICK;
+		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
+		charge(quickAttackCooldown, quickChargeTime);
 	}
 	else
 		LOG("Attack on CD...\n");
-	return false;
+}
+
+void Attack::strongAttack()
+{
+	if (parent == nullptr) return;
+
+	PlayerState* aux = parent->getComponent<PlayerState>();
+	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
+	{
+
+		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+		if (anim != nullptr) anim->strongAttackAnimation();
+
+		currentAttack = STRONG;
+		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
+		charge(strongAttackCooldown, strongChargeTime);
+	}
+	else
+		LOG("Attack on CD...\n");
+}
+
+bool Attack::isAttacking() const
+{
+	return state == ATTACKING || state == CHARGING;
 }

@@ -1,0 +1,166 @@
+{
+    "SceneName": "Game",
+    "SceneObjects": [
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Game",
+            "Tag": "game",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Game"
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "PauseMenu",
+            "Tag": "pauseMenu",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "PauseMenu"
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "OptionsMenu",
+            "Tag": "optionsMenu",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "OptionsMenuScreen"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "MainCamera",
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera",
+            "Components":
+            [
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": [
+                        ["layout" , "Game.layout"],
+                        ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick |OptionsButton pauseOptionsButtonClick"]
+                    ]
+                },
+                {
+                    "ComponentName": "CameraController",
+                    "ComponentProperties": [
+                        ["minZ" , "20"],
+                        ["maxZ" , "50"],
+                        ["zoomFactor" , "2.0f"],
+                        ["smoothFactor" , "0.125f"]
+                    ]
+                }
+            ],
+            "Children": 
+            [
+                {
+                    "ObjectType": "GAMEOBJECT",
+                    "ObjectName": "OptionsMenuScreen",
+                    "Tag": "optionsMenuScreen",
+                    "Components":
+                    [
+                        {
+                            "ComponentName": "UILayout",
+                            "ComponentProperties": 
+                            [
+                                ["layout" , "OptionsMenu.layout"],
+                                ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backToMenuButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "AmbientLight",
+            "Tag": "ambientLight",
+            "BlueprintPath": "Light",
+            "ComponentModifications": 
+            [
+                {
+                    "ComponentName" : "Light",
+                    "ComponentProperties": [
+                        ["type" , "Directional"],
+                        ["intensity" , "3"],
+                        ["colour" , "1 1 1"]
+                    ]
+                },
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties":[
+                       ["direction" , "0 -1 0"]
+                    ]
+                }
+            ]
+        },
+		{
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Countdown",
+            "Tag": "countdown",
+            "Components": 
+            [
+                {
+                    "ComponentName" : "Countdown",
+					"ComponentProperties": [
+                        ["time" , "3"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "DeathZone",
+            "Tag": "death",
+            "BlueprintPath": "DeathZone"
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LevelRender",
+            "Tag": "levelRender",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": [
+                        ["position", "0 0 0"],
+                        ["scale", "1 1 1"],
+                        ["rotation", "0 90 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "MeshRenderer"
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LevelCollider",
+            "Tag": "suelo",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties": [
+                        ["position", "0 0 0"],
+                        ["scale", "1 1 1"],
+                        ["rotation", "0 90 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "MeshRenderer"
+                },
+                {
+                    "ComponentName": "Strider"
+                }
+            ]
+        }
+    ]
+}

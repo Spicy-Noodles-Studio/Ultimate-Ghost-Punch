@@ -1,40 +1,40 @@
 #include "MainMenu.h"
+#include <ComponentRegister.h>
 #include <InterfaceSystem.h>
 #include <RenderSystem.h>
 #include <SceneManager.h>
+#include <WindowManager.h>
 #include <GameObject.h>
 
 #include "GameManager.h"
-
-#include <ComponentRegister.h>
 
 REGISTER_FACTORY(MainMenu);
 
 bool MainMenu::singlePlayerButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("mainScene");
+	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	return false;
 }
 
 bool MainMenu::multiplayerButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("fightConfig");
+	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("options");
+	SceneManager::GetInstance()->changeScene("OptionsMenu");
 	return false;
 }
 
 bool MainMenu::exitButtonClick()
 {
-	RenderSystem::GetInstance()->closeWindow();
+	WindowManager::GetInstance()->closeWindow();
 	return false;
 }
 
-MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject)
+MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef FIGHT_CONFIGURATION_H
-#define FIGHT_CONFIGURATION_H
+#ifndef CONFIGURATION_MENU_H
+#define CONFIGURATION_MENU_H
 
 #include <UserComponent.h>
 #include <UIElement.h>
@@ -22,7 +22,7 @@ const int MAX_PLAYERS = 4;
 class InputSystem;
 class UILayout;
 
-class FightConfiguration : public UserComponent
+class ConfigurationMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
@@ -35,7 +35,7 @@ private:
 	int health;
 	int time;
 
-	std::vector<std::string> levelNames = { "Level5", "Level1", "Level2", "Level4"};
+	std::vector<std::string> levelNames = {"level3", "level5", "cave"};
 	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
 
 	int levelIndex;
@@ -50,7 +50,6 @@ private:
 
 	int isIndexConnected(int index);
 
-	// events
 	bool changeHealth(int value);
 	bool changeTime(int value);
 	bool changeSong(int value);
@@ -60,8 +59,8 @@ private:
 	bool backButtonClick();
 
 public:
-	FightConfiguration(GameObject* gameObject);
-	virtual ~FightConfiguration();
+	ConfigurationMenu(GameObject* gameObject);
+	virtual ~ConfigurationMenu();
 
 	virtual void start();
 	virtual void update(float deltaTime);

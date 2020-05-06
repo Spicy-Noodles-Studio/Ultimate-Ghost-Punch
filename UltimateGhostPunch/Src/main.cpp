@@ -1,8 +1,5 @@
 #include "GaiaCore.h"
 
-#include "InterfaceSystem.h"
-#include "SceneManager.h"
-
 #ifdef _DEBUG
 int main()
 #else

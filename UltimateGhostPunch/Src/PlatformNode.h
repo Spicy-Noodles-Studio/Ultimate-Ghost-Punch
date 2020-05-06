@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef PLATFORM_NODE_H
 #define PLATFORM_NODE_H
 
@@ -10,10 +9,11 @@ enum class Action { MoveRight, MoveLeft, Jump, CancelJump, Dash, None };
 
 class GaiaData;
 
-class State {
+class State
+{
 private:
 	std::vector<Action> actions;
-	int frame;//The frame of the trajectory were we´re at
+	int frame;//The frame of the trajectory were weï¿½re at
 	float time;//Time that has passed since the begining of the recording
 	Vector3 pos;
 
@@ -32,7 +32,8 @@ public:
 	void loadState(const GaiaData& data);
 };
 
-class NavigationLink {
+class NavigationLink
+{
 private:
 	std::vector<State> linkStates;
 	Vector3 iniPos, endPos, startVelocity, startForce;
@@ -60,7 +61,9 @@ public:
 class PlatformNode
 {
 private:
-	Vector3 iniPos, endPos, midPos;
+	Vector3 iniPos;
+	Vector3 endPos;
+	Vector3 midPos;
 	int index;
 	std::vector<NavigationLink> edges;
 

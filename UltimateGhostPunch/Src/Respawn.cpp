@@ -1,24 +1,24 @@
 #include "Respawn.h"
-
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
 
 #include "PlayerController.h"
 #include "PlayerAnimController.h"
+#include "PlayerFX.h"
 #include "Movement.h"
 #include "Health.h"
 
-#include "PlayerFX.h"
-
 REGISTER_FACTORY(Respawn);
 
-Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), initialPos(Vector3()), respawnTime(1.0f), respawning(false), time(0.0f), playerController(nullptr)
+Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerController(nullptr), initialPos(Vector3::ZERO), respawning(false), respawnTime(1.0f), time(0.0f)
 {
+
 }
 
 Respawn::~Respawn()
 {
+
 }
 
 void Respawn::start()
@@ -33,7 +33,8 @@ void Respawn::update(float deltaTime)
 {
 	if (time > 0)
 		time -= deltaTime;
-	else if (playerController != nullptr && respawning) {
+	else if (playerController != nullptr && respawning)
+	{
 		playerController->setActive(true);
 		respawning = false;
 	}
@@ -47,8 +48,7 @@ void Respawn::handleData(ComponentData* data)
 
 		if (prop.first == "respawnTime")
 		{
-			if (!(ss >> respawnTime))
-				LOG("RESPAWN: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(respawnTime);
 		}
 		else
 			LOG("RESPAWN: Invalid property name \"%s\"", prop.first.c_str());
@@ -71,12 +71,17 @@ void Respawn::spawn(const Vector3& spawnPos)
 	Health* health = gameObject->getComponent<Health>();
 	PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
 
-	if (movement != nullptr) movement->stop();
-	if (health != nullptr) {
+	if (movement != nullptr)
+		movement->stop();
+
+	if (health != nullptr)
+	{
 		health->setInvencible(true);
 		health->setTime(respawnTime);
 	}
-	if (playerController != nullptr) playerController->setActive(false);
+
+	if (playerController != nullptr)
+		playerController->setActive(false);
 
 	gameObject->getComponent<PlayerFX>()->activateInvencible();
 
@@ -84,7 +89,8 @@ void Respawn::spawn(const Vector3& spawnPos)
 	time = respawnTime;
 	respawning = true;
 
-	if (anim != nullptr) anim->resurrectAnimation();
+	if (anim != nullptr)
+		anim->resurrectAnimation();
 }
 
 bool Respawn::isRespawning()

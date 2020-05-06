@@ -2,18 +2,21 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <sstream>
+
 #include "PlayerAnimController.h"
+#include "Block.h"
+#include "Grab.h"
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject),maxHealth(4),health(4),time(0.0f), alive(true), invencible(false), invencibleDamageTime(0.5f)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false)
 {
 
 }
 
 Health::~Health()
 {
-	
+
 }
 
 void Health::start()
@@ -40,13 +43,11 @@ void Health::handleData(ComponentData* data)
 
 		if (prop.first == "health")
 		{
-			if (!(ss >> health))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(health);
 		}
 		else if (prop.first == "invDamTime")
 		{
-			if (!(ss >> invencibleDamageTime))
-				LOG("HEALTH: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(invencibleDamageTime);
 		}
 		else
 			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
@@ -72,8 +73,32 @@ void Health::receiveDamage(int damage)
 {
 	if (alive && !invencible)
 	{
+		std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
+		Block* block = nullptr;
+
+		if (aux.size() > 0)
+		{
+			block = aux[0]->getComponent<Block>();
+
+			if (block != nullptr && block->isBlocking())
+				block->unblock();
+		}
+
+		aux = gameObject->findChildrenWithTag("grabSensor");
+		Grab* grab = nullptr;
+
+		if (aux.size() > 0)
+		{
+			grab = aux[0]->getComponent<Grab>();
+
+			if (grab != nullptr && grab->isGrabbing())
+				grab->drop();
+		}
+
 		health -= damage;
-		if (health < 0) health = 0;
+
+		if (health < 0)
+			health = 0;
 
 		if (health == 0)
 			alive = false;

@@ -3,27 +3,27 @@
 #include <GameObject.h>
 #include <sstream>
 
-#include "Respawn.h"
 #include "Movement.h"
 #include "GhostMovement.h"
 #include "Health.h"
 #include "MeshRenderer.h"
 #include "RigidBody.h"
-#include "PlayerUI.h"
-#include "FightManager.h"
-#include "GameManager.h"
+#include "Respawn.h"
 #include "Score.h"
 #include "PlayerController.h"
 #include "PlayerAnimController.h"
-#include "UltimateGhostPunch.h"
 #include "PlayerIndex.h"
+#include "PlayerUI.h"
+#include "UltimateGhostPunch.h"
+#include "Game.h"
+#include "GameManager.h"
+
 REGISTER_FACTORY(GhostManager);
 
-GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject),deathPosChanged(false), ghost(false), used(false), movement(nullptr), ghostMovement(nullptr), health(nullptr),
-													 transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), fightManager(nullptr), resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3()), ghostScale(Vector3()), 
-												     deathPosition(Vector3()), ghostSpawnOffset(Vector3()), anim(nullptr)
+GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), deathPosChanged(false), ended(false), ghost(false), used(false),
+													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), game(nullptr), anim(nullptr),
+													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO)
 {
-
 }
 
 GhostManager::~GhostManager()
@@ -40,45 +40,45 @@ void GhostManager::start()
 	meshRenderer = gameObject->getComponent<MeshRenderer>();
 	rigidBody = gameObject->getComponent<RigidBody>();
 	anim = gameObject->getComponent<PlayerAnimController>();
+	playerUI = gameObject->getComponent<PlayerUI>();
+	control = gameObject->getComponent<PlayerController>();
 
 	GameObject* aux = findGameObjectWithName("FightManager");
-	if (aux != nullptr) fightManager = aux->getComponent<FightManager>();
+	if (aux != nullptr) game = aux->getComponent<Game>();
 
 	// Store some data for player resurrection
-	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity().y;
-	if (transform != nullptr) aliveScale = transform->getScale();
+	if (rigidBody != nullptr)
+		playerGravity = rigidBody->getGravity().y;
+
+	if (transform != nullptr)
+		aliveScale = transform->getScale();
 }
 
 void GhostManager::update(float deltaTime)
 {
-	if (health != nullptr && !health->isAlive())
+	if (health != nullptr && !health->isAlive() && !ghost && mode == ALIVE)
 	{
-		if (!used && !ghost)
-		{
-			if (anim != nullptr) anim->notLoopAnimation("Die");
-			ghost = true;
-			// Deactivate controller while player dies
-			auto control = gameObject->getComponent<PlayerController>();
-			if (control != nullptr) control->setActive(false);
-		}
-		else if (used && !ghost && fightManager != nullptr) {
-			fightManager->playerDie();
-			gameObject->setActive(false);
-		}
+		if (anim != nullptr) anim->notLoopAnimation("Die");
+		mode = DYING;
+		// Deactivate controller while player dies
+		if (control != nullptr) control->setActive(false);
 	}
 
 	if (ghost)
 	{
 		if (ghostTime > 0)
 			ghostTime -= deltaTime;
-		else if (!ended && fightManager != nullptr) {
-			fightManager->playerDie();
+		else if (!ended && game != nullptr) {
 			ended = true;
+			ghost = false;
 			if (anim != nullptr) anim->notLoopAnimation("Disappear");
 			// Deactivate controller
 			auto control = gameObject->getComponent<PlayerController>();
-			if (control != nullptr) control->setActive(false);
-			if (movement != nullptr) movement->stop();
+			if (control != nullptr)
+				control->setActive(false);
+
+			if (movement != nullptr)
+				movement->stop();
 		}
 	}
 }
@@ -91,33 +91,27 @@ void GhostManager::handleData(ComponentData* data)
 
 		if (prop.first == "ghostTime")
 		{
-			if (!(ss >> ghostTime))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(ghostTime);
 		}
 		else if (prop.first == "ghostDamage")
 		{
-			if (!(ss >> ghostDamage))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(ghostDamage);
 		}
 		else if (prop.first == "resurrectionHealth")
 		{
-			if (!(ss >> resurrectionHealth))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setInt(resurrectionHealth);
 		}
 		else if (prop.first == "ghostScale")
 		{
-			if (!(ss >> ghostScale.x >> ghostScale.y >> ghostScale.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(ghostScale);
 		}
 		else if (prop.first == "spawnOffset")
 		{
-			if (!(ss >> ghostSpawnOffset.x >> ghostSpawnOffset.y >> ghostSpawnOffset.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(ghostSpawnOffset);
 		}
 		else if (prop.first == "deathPosition")
 		{
-			if (!(ss >> deathPosition.x >> deathPosition.y >> deathPosition.z))
-				LOG("GHOST MANAGER: Invalid property with name \"%s\"", prop.first.c_str());
+			setVector3(deathPosition);
 		}
 		else
 			LOG("GHOST MANAGER: Invalid property name \"%s\"", prop.first.c_str());
@@ -137,18 +131,20 @@ void GhostManager::onObjectEnter(GameObject* other)
 		{
 			int health = aux->getHealth();
 			aux->receiveDamage(ghostDamage);
+
 			auto otherAnim = other->getComponent<PlayerAnimController>();
 			if (otherAnim != nullptr)
 				otherAnim->hurtAnimation();
 
 			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
+
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
-			
+
 			if (anim != nullptr)
 			{
 				auto punch = gameObject->getComponent<UltimateGhostPunch>();
-				if (punch != nullptr && punch->isPunching())	//GHOST PUNCH SUCCESS
+				if (punch != nullptr && punch->isPunching()) //GHOST PUNCH SUCCESS
 				{
 					anim->punchSuccessAnimation();
 					punch->punchSucceeded();
@@ -158,14 +154,17 @@ void GhostManager::onObjectEnter(GameObject* other)
 			}
 
 			auto controll = gameObject->getComponent<PlayerController>();
-			if (controll != nullptr) controll->setActive(false);
+			if (controll != nullptr)
+				controll->setActive(false);
 
 			movement->stop();
-			
+
 			score->lifeStolenBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
+
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			
+			ghost = false;
 		}
 	}
 }
@@ -173,6 +172,11 @@ void GhostManager::onObjectEnter(GameObject* other)
 bool GhostManager::isGhost()
 {
 	return ghost;
+}
+
+bool GhostManager::ghostEnded()
+{
+	return ended;
 }
 
 float GhostManager::getGhostTime()
@@ -185,17 +189,23 @@ void GhostManager::activateGhost()
 	ghost = true;
 	used = true;
 
-	if (movement != nullptr) movement->setActive(false);
-	if (ghostMovement != nullptr) ghostMovement->setActive(true);
+	if (movement != nullptr)
+		movement->setActive(false);
 
-	if (rigidBody != nullptr){
+	if (ghostMovement != nullptr)
+		ghostMovement->setActive(true);
+
+	if (rigidBody != nullptr)
+	{
 		rigidBody->setTrigger(true);
 		rigidBody->setGravity({ 0,0,0 });
 	}
 
-	if (transform != nullptr) {
-		if (!deathPosChanged) deathPosition = transform->getPosition();
-		
+	if (transform != nullptr)
+	{
+		if (!deathPosChanged)
+			deathPosition = transform->getPosition();
+
 		// Change scale
 		transform->setScale(ghostScale);
 
@@ -203,17 +213,25 @@ void GhostManager::activateGhost()
 		transform->setPosition(transform->getPosition() + ghostSpawnOffset);
 	}
 
+	// Set player colour
+	if (meshRenderer != nullptr)
+		meshRenderer->setDiffuse(0, playerColour, 1);
+
 	// Reactivate controller
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr) control->setActive(true);
+	mode = GHOST;
 }
 
 void GhostManager::deactivateGhost()
 {
 	ghost = false;
 
-	if (movement != nullptr) movement->setActive(true);
-	if (ghostMovement != nullptr) ghostMovement->setActive(false);
+	if (movement != nullptr)
+		movement->setActive(true);
+
+	if (ghostMovement != nullptr)
+		ghostMovement->setActive(false);
 
 	if (rigidBody != nullptr)
 	{
@@ -221,14 +239,16 @@ void GhostManager::deactivateGhost()
 		rigidBody->setGravity({ 0, playerGravity, 0 });
 	}
 
-	auto controll = gameObject->getComponent<PlayerController>();
-	if (controll != nullptr) controll->setActive(true);
+	auto control = gameObject->getComponent<PlayerController>();
+	if (control != nullptr) control->setActive(true);
 
 	// Change scale
-	if(transform!= nullptr) transform->setScale(aliveScale);
+	if (transform != nullptr)
+		transform->setScale(aliveScale);
 
 	//Set the player alive
-	if (health != nullptr) {
+	if (health != nullptr)
+	{
 		health->setAlive(true);
 		health->setHealth(resurrectionHealth);
 	}
@@ -236,6 +256,8 @@ void GhostManager::deactivateGhost()
 	//Respawn the player
 	Respawn* respawn = gameObject->getComponent<Respawn>();
 	if (respawn != nullptr) respawn->spawn(deathPosition);
+
+	mode = ALIVE;
 }
 
 void GhostManager::setDeathPosition(const Vector3& dPos)
@@ -244,7 +266,29 @@ void GhostManager::setDeathPosition(const Vector3& dPos)
 	deathPosition = dPos;
 }
 
-bool GhostManager::ghostEnded()
+void GhostManager::setPlayerColour(const Vector3& colour)
 {
-	return ended;
+	playerColour = colour;
+}
+
+void GhostManager::deactivatePlayer()
+{
+	if (movement != nullptr) movement->stop();
+	if (meshRenderer != nullptr) meshRenderer->setVisible(false);
+	if (playerUI != nullptr) playerUI->setVisible(false);
+	game->playerDie();
+	gameObject->setActive(false);
+}
+
+void GhostManager::handlePlayerDeath()
+{
+	if (!used)
+	{
+		ghost = true;
+		if (anim != nullptr) anim->enterMode(PlayerAnimController::GHOST);
+	}
+	else
+	{
+		deactivatePlayer();
+	}
 }

@@ -5,6 +5,8 @@
 #include <sstream>
 #include <MathUtils.h>
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(Movement);
 
 Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), maxVelocity(10.0f), speed(75.0f)
@@ -15,28 +17,6 @@ Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), maxVeloc
 Movement::~Movement()
 {
 
-}
-
-void Movement::move(Vector3 dir)
-{
-	if (rigidBody != nullptr) {
-		if (std::abs(rigidBody->getLinearVelocity().x) < maxVelocity)
-			rigidBody->addForce(dir * speed);
-		else
-			rigidBody->setLinearVelocity({ maxVelocity * dir.x, rigidBody->getLinearVelocity().y, 0 });
-	}
-	//Character rotation
-	if (dir.x != 0)
-		gameObject->transform->setRotation({ 0,90 * dir.x,0 });
-}
-
-void Movement::stop()
-{
-	if (rigidBody != nullptr)
-	{
-		rigidBody->setLinearVelocity({ 0,rigidBody->getLinearVelocity().y,0 });
-		rigidBody->clearForces();
-	}
 }
 
 void Movement::start()
@@ -52,22 +32,38 @@ void Movement::handleData(ComponentData* data)
 
 		if (prop.first == "speed")
 		{
-			if (!(ss >> speed))
-				LOG("MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
-		}
-		else if (prop.first == "maxVelocity")
-		{
-			if (!(ss >> maxVelocity))
-				LOG("MOVEMENT: Invalid property with name \"%s\"", prop.first.c_str());
+			setFloat(speed);
 		}
 		else
 			LOG("MOVEMENT: Invalid property name \"%s\"", prop.first.c_str());
 	}
 }
 
-void Movement::setSpeed(float spd)
+void Movement::move(Vector3 dir)
 {
-	speed = spd;
+	PlayerState* aux = gameObject->getComponent<PlayerState>();
+	if (aux != nullptr && aux->canMove()) {
+		if (rigidBody != nullptr)
+			rigidBody->addForce(dir * speed);
+
+		//Character rotation
+		if (dir.x != 0)
+			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+	}
+}
+
+void Movement::stop()
+{
+	if (rigidBody != nullptr)
+	{
+		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->clearForces();
+	}
+}
+
+void Movement::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 float Movement::getSpeed() const

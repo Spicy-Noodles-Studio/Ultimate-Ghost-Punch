@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef PLATFORM_GRAPH_H
 #define PLATFORM_GRAPH_H
 
@@ -16,16 +15,20 @@ class PlatformGraph : public UserComponent
 {
 private:
 	PhysicsSystem* physicsSystem;
-	Vector3 levelStart, levelEnd, currentPos;
+	Vector3 levelStart;
+	Vector3 levelEnd;
+	Vector3 currentPos;
 
 	std::vector<PlatformNode> platforms;
-
 	std::map<float, int> lastPlatforms;
 
 	int currentPlatformIndex;
-	Vector3 fallOffset, playerCollisionSize;
+	Vector3 fallOffset;
+	Vector3 playerCollisionSize;
 
-	std::string saveFilename, loadFilename, fileRoute;
+	std::string saveFilename;
+	std::string loadFilename;
+	std::string fileRoute;
 
 	void drawLinks();
 
@@ -35,7 +38,6 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
-
 	virtual void handleData(ComponentData* data);
 
 	void createNodes();
@@ -46,6 +48,7 @@ public:
 
 	void clearAllConnections();
 	void clearConnections(int platform);
+
 	void addLinkToPlatform(int platform, const NavigationLink& navLink);
 	void removeLastLink(int platform);
 
@@ -55,4 +58,3 @@ public:
 };
 
 #endif
-

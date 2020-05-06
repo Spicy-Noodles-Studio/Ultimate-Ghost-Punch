@@ -1,12 +1,23 @@
 #include "Score.h"
 
+Score::Score()
+{
+	numPlayers = 0;
+}
+
+Score::~Score()
+{
+	for (auto score:playerScores)
+		delete score;
+
+	playerScores.clear();
+}
+
 void Score::initScorePlayer(ScorePlayer* player)
 {
 	player->amountOfDamageDealt = 0;
 	player->AmountOfDamageTakenFromSpikes = 0;
 	player->livesStolenAsGhost = 0;
-	//player->numOfAirAttacks = 0;
-	//player->numOfGroundAttacks = 0;
 	player->deathByEnviroment = 0;
 	player->numOfHits = 0;
 	player->numOfKills = 0;
@@ -17,26 +28,12 @@ void Score::initScorePlayer(ScorePlayer* player)
 	player->TotalDamgeTaken = 0;
 }
 
-Score::Score()
-{
-	numPlayers = 0;
-}
-
-Score::~Score()
-{
-	for (auto score:playerScores)
-	{
-
-		delete score;
-	}
-	playerScores.clear();
-}
-
 void Score::initScore(int numOfPlayers, std::vector<int> playerIndexes)
 {
 	playerScores.clear();
 	this->playerIndexes = playerIndexes;
 	this->numPlayers = numOfPlayers;
+
 	for (int i = 0; i < numOfPlayers; i++)
 	{
 		ScorePlayer* score = new ScorePlayer();
@@ -48,11 +45,6 @@ void Score::initScore(int numOfPlayers, std::vector<int> playerIndexes)
 
 void Score::attackDone(int playerIndex, bool groundAttack)
 {
-	
-	/*if(groundAttack)
-	playerScores.at(PlayerIndex)->numOfGroundAttacks++;
-	else
-		playerScores.at(PlayerIndex)->numOfAirAttacks++;*/
 	playerScores.at(playerIndex - 1)->numOfTotalAttacks++;
 }
 
@@ -162,5 +154,3 @@ std::vector<int> Score::getIndexOfPlayersKilled(int playerIndex)
 {
 	return playerScores.at(playerIndex - 1)->indexesFromEnemiesKilled;
 }
-
-

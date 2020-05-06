@@ -13,7 +13,8 @@ private:
 	PlayerController* playerController;
 	Vector3 initialPos;
 
-	float respawnTime, time;
+	float respawnTime;
+	float time;
 	bool respawning;
 
 public:

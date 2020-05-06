@@ -1,48 +1,63 @@
 #include "Block.h"
+#include <ComponentRegister.h>
+#include <GameObject.h>
+#include <RigidBody.h>
 #include <sstream>
 
-#include "Health.h"
+#include "PlayerController.h"
 #include "PlayerAnimController.h"
-
-#include "ComponentRegister.h"
+#include "PlayerState.h"
+#include "PlayerFX.h"
+#include "Health.h"
 
 REGISTER_FACTORY(Block);
 
-Block::Block(GameObject* gameObject) : UserComponent(gameObject), isGrounded(false), isBlocking(false),blockRegenTime(1.5f), timeElapsed(0.0f), maxBlockTime(0.5f), blockTime(0.5f), 
+Block::Block(GameObject* gameObject) : UserComponent(gameObject), grounded(false), blocking(false), blockRegenTime(1.5f), timeElapsed(0.0f), maxBlockTime(0.5f), blockTime(0.5f),
 									   blockGrabMargin(0.25f), blockDirection(0)
 {
+
 }
 
+Block::~Block()
+{
 
+}
 
 void Block::start()
 {
+	parent = gameObject->getParent();
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
 }
 
 void Block::update(float deltaTime)
 {
-	if (!isGrounded && isBlocking) {
-		isBlocking = false;
+	if (!grounded && blocking)
+	{
+		blocking = false;
 		return;
 	}
 
 	//Recharge block
-	if (!isBlocking && blockTime != maxBlockTime) {
+	if (!blocking && blockTime != maxBlockTime)
+	{
 		timeElapsed += deltaTime;
-		if (timeElapsed > blockRegenTime) {
+		if (timeElapsed > blockRegenTime)
+		{
 			blockTime = maxBlockTime;
 			timeElapsed = 0;
 			LOG("BLOCK RECHARGED\n");
 		}
 	}
+
 	//Blocking
-	else if (isBlocking && blockTime > 0 && isGrounded) {
+	else if (blocking && blockTime > 0 && grounded)
+	{
 		blockTime -= deltaTime;
-		if (blockTime <= 0) {
+		if (blockTime <= 0)
+		{
 			blockTime = 0;
-			isBlocking = false;
+			blocking = false;
 			LOG("BLOCK ENDED\n");
 		}
 	}
@@ -56,84 +71,103 @@ void Block::handleData(ComponentData* data)
 
 		if (prop.first == "maxBlockTime")
 		{
-			if (!(ss >> maxBlockTime))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+			setFloat(maxBlockTime);
 		}
-		else if (prop.first == "blockRegenTime") {
-			if(!(ss >> blockRegenTime))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
+		else if (prop.first == "blockRegenTime")
+		{
+			setFloat(blockRegenTime);
 		}
-		else if (prop.first == "blockGrabMargin") {
-			if(!(ss >> blockGrabMargin))
-				LOG("BLOCK: Invalid value for property %s", prop.first.c_str());
-
+		else if (prop.first == "blockGrabMargin")
+		{
+			setFloat(blockGrabMargin);
 		}
 		else
 			LOG("BLOCK: Invalid property name %s", prop.first.c_str());
-
 	}
+}
+
+void Block::onObjectEnter(GameObject* other)
+{
+	if (other->getTag() == "suelo")
+		grounded = true;
+}
+
+void Block::onObjectExit(GameObject* other)
+{
+	if (other->getTag() == "suelo")
+		grounded = false;
 }
 
 void Block::block()
 {
-	if (!isBlocking && blockTime > 0 && isGrounded) {
-		isBlocking = true;
+	if (parent == nullptr) return;
+	PlayerState* aux = parent->getComponent<PlayerState>();
+
+	if (!blocking && blockTime > 0 && grounded && aux->canBlock())
+	{
+		blocking = true;
 		timeElapsed = 0;
-		blockDirection = gameObject->getParent()->transform->getRotation().y;
-		auto anim = gameObject->getParent()->getComponent<PlayerAnimController>();
-		if(anim != nullptr) anim->blockAnimation();
+		blockDirection = parent->transform->getRotation().y;
+
+		auto anim = parent->getComponent<PlayerAnimController>();
+
+		if(anim != nullptr)
+			anim->blockAnimation();
+
 		LOG("BLOCKING\n");
 	}
 }
 
 void Block::unblock()
 {
-	isBlocking = false;
+	blocking = false;
+
+	if (parent == nullptr) return;
+
+	auto playerFX = parent->getComponent<PlayerFX>();
+
+	if (playerFX != nullptr)
+		playerFX->deactivateShield();
 }
 
 bool Block::blockAttack(float damage, Vector3 otherPosition)
 {
-	if (isBlocking && ((blockDirection > 0 && otherPosition.x > gameObject->getParent()->transform->getPosition().x) ||
-		(blockDirection < 0 && otherPosition.x < gameObject->getParent()->transform->getPosition().x))) {
+	if (parent == nullptr) return false;
+
+	if (blocking && ((blockDirection > 0 && otherPosition.x > parent->transform->getPosition().x) ||
+	   (blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))
+	{
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
+
 		if (blockTime <= 0) 
-			isBlocking = false;
+			blocking = false;
 
 		// Attack blocked animation
-		PlayerAnimController* anim = gameObject->getParent()->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->blockedAttackAnimation();
+		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+
+		if (anim != nullptr)
+			anim->blockedAttackAnimation();
 
 		return true;
 	}
-	else {
-		Health* health = gameObject->getParent()->getComponent<Health>();
-		if (health != nullptr) health->receiveDamage(damage);
+	else
+	{
+		Health* health = parent->getComponent<Health>();
+
+		if (health != nullptr)
+			health->receiveDamage(damage);
 	}
+
 	return false;
 }
 
-void Block::onObjectEnter(GameObject* other)
+bool Block::wasGrabBlocked() const
 {
-	if (other->getTag() == "suelo") {
-		isGrounded = true;
-	}
+	return blocking && blockTime > maxBlockTime - blockGrabMargin;
 }
 
-void Block::onObjectExit(GameObject* other)
+bool Block::isBlocking() const
 {
-	if (other->getTag() == "suelo") {
-		isGrounded = false;
-	}
-}
-
-bool Block::getGrabBlock() const
-{
-	if (isBlocking && blockTime > maxBlockTime - blockGrabMargin) return true;
-	else return false;
-}
-
-bool Block::blocking() const
-{
-	return isBlocking;
+	return blocking;
 }

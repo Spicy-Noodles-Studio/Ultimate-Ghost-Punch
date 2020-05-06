@@ -22,7 +22,7 @@ public:
 	void move(Vector3 dir);
 	void stop(); // Stops the object's physic body's movement and clear its forces
 
-	void setSpeed(float spd);
+	void setSpeed(float speed);
 	float getSpeed() const;
 };
 
