@@ -7,7 +7,8 @@
 
 REGISTER_FACTORY(ParticleManager);
 
-ParticleManager::ParticleManager(GameObject* gameObject) : UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), bloodSplash(nullptr)
+ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), bloodSplash(nullptr),
+															blockSparks(nullptr), spectre(nullptr)
 {
 
 }
@@ -36,6 +37,8 @@ void ParticleManager::start()
 		bloodSplash = children[2]->getComponent<ParticleEmitter>();
 	if (size > 3)
 		blockSparks = children[3]->getComponent<ParticleEmitter>();
+	if (size > 4)
+		spectre = children[4]->getComponent<ParticleEmitter>();
 }
 
 void ParticleManager::update(float deltaTime)
@@ -51,21 +54,24 @@ void ParticleManager::update(float deltaTime)
 
 	/* BLOCK SPARKS */
 	manageBlockSparks();
+
+	/* SPECTRE */
+	manageSpectre();
 }
 
-void ParticleManager::generateFloorDust()
+void ParticleManager::createFloorDust()
 {
 	
 }
 
-void ParticleManager::generateJumpDust()
+void ParticleManager::createJumpDust()
 {
 	
 }
 
 void ParticleManager::manageFloorDust()
 {
-	if (playerState->isGrounded() && playerState->isMoving())
+	if (playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
 		floorDust->start();
 	else
 		floorDust->stop();
@@ -99,4 +105,14 @@ void ParticleManager::manageBlockSparks()
 		blockSparks->start();
 	else
 		blockSparks->stop();
+}
+
+void ParticleManager::manageSpectre()
+{
+	if (spectre == nullptr) return;
+
+	if (playerState->canGhostMove())
+		spectre->start();
+	else
+		spectre->stop();
 }

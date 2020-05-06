@@ -16,6 +16,7 @@ private:
 	ParticleEmitter* jumpDust;
 	ParticleEmitter* bloodSplash;
 	ParticleEmitter* blockSparks;
+	ParticleEmitter* spectre;
 
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
@@ -28,16 +29,17 @@ public:
 	virtual void update(float deltaTime);
 private:
 	/* CREATE CHILDREN */
-	void generateFloorDust();
-	void generateJumpDust();
-	//void generateBloodSplash();
-	//void generateBlockSparks();
+	void createFloorDust();
+	void createJumpDust();
+	//void createBloodSplash();
+	//void createBlockSparks();
 
 	/* MANAGE PARTICLES */
 	void manageFloorDust();
 	void manageJumpDust();
 	void manageBloodSplash();
 	void manageBlockSparks();
+	void manageSpectre();
 };
 
 #endif

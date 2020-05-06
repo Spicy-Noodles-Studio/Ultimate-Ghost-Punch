@@ -326,6 +326,23 @@
                     ]
                 }
             ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Spectre",
+            "Tag": "particles",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform"
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties" : [
+                        ["emitter", "Spectre"]
+                    ]
+                }
+            ]
         }
     ]
 }
