@@ -34,6 +34,8 @@ void ParticleManager::start()
 		jumpDust = children[1]->getComponent<ParticleEmitter>();
 	if (size > 2)
 		bloodSplash = children[2]->getComponent<ParticleEmitter>();
+	if (size > 3)
+		blockSparks = children[3]->getComponent<ParticleEmitter>();
 }
 
 void ParticleManager::update(float deltaTime)
@@ -46,6 +48,9 @@ void ParticleManager::update(float deltaTime)
 
 	/* BLOOD SPLASH */
 	manageBloodSplash();
+
+	/* BLOCK SPARKS */
+	manageBlockSparks();
 }
 
 void ParticleManager::generateFloorDust()
@@ -68,6 +73,8 @@ void ParticleManager::manageFloorDust()
 
 void ParticleManager::manageJumpDust()
 {
+	if (jumpDust == nullptr) return;
+
 	if (playerState->isGrounded() && playerState->isJumping())
 		jumpDust->start();
 	else
@@ -76,8 +83,20 @@ void ParticleManager::manageJumpDust()
 
 void ParticleManager::manageBloodSplash()
 {
+	if (bloodSplash == nullptr) return;
+
 	if (playerState->isHurt())
 		bloodSplash->start();
 	else
 		bloodSplash->stop();
+}
+
+void ParticleManager::manageBlockSparks()
+{
+	if (blockSparks == nullptr) return;
+
+	if (playerState->isBlocking() && playerState->hasBlocked())
+		blockSparks->start();
+	else
+		blockSparks->stop();
 }

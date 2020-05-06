@@ -15,7 +15,7 @@ private:
 	ParticleEmitter* floorDust;
 	ParticleEmitter* jumpDust;
 	ParticleEmitter* bloodSplash;
-	//ParticleEmitter* blockSparks;
+	ParticleEmitter* blockSparks;
 
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
@@ -37,7 +37,7 @@ private:
 	void manageFloorDust();
 	void manageJumpDust();
 	void manageBloodSplash();
-	//void manageBlockSparks();
+	void manageBlockSparks();
 };
 
 #endif

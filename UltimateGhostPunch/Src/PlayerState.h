@@ -45,6 +45,8 @@ public:
 	bool isJumping() const;
 	bool isGrounded() const;
 	bool isHurt() const;
+	bool isBlocking() const;
+	bool hasBlocked() const;
 };
 
 #endif

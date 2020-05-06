@@ -309,6 +309,23 @@
                     ]
                 }
             ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "BlockSparks",
+            "Tag": "particles",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform"
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties" : [
+                        ["emitter", "BlockSparks"]
+                    ]
+                }
+            ]
         }
     ]
 }

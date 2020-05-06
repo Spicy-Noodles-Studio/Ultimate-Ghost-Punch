@@ -101,3 +101,13 @@ bool PlayerState::isHurt() const
 {
 	return health != nullptr && health->isHurt();
 }
+
+bool PlayerState::isBlocking() const
+{
+	return block != nullptr && block->isBlocking();
+}
+
+bool PlayerState::hasBlocked() const
+{
+	return block->hasBlocked();
+}
