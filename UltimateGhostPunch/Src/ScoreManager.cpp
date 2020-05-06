@@ -25,14 +25,14 @@ bool ScoreManager::resetButtonClick()
 	buttonClick("button4");
 
 	// change scene
-	SceneManager::GetInstance()->changeScene("mainScene");
+	SceneManager::GetInstance()->changeScene("Game");
 	return false;
 }
 
 bool ScoreManager::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("mainMenu");
+	SceneManager::GetInstance()->changeScene("MainMenu");
 	buttonClick("button4");
 	return false;
 }
