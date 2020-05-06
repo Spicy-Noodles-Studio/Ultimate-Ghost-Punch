@@ -268,6 +268,7 @@ void Game::createKnights()
 	for (int i = 0; i < nPlayers; i++)
 	{
 		GameObject* knight = instantiate("Player", playerTransforms[i].first);
+		if (knight == nullptr) break;
 		knight->transform->setRotation(playerTransforms[i].second);
 
 		knight->getComponent<Health>()->setHealth(gameManager->getHealth());

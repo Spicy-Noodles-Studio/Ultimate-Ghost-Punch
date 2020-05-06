@@ -38,6 +38,9 @@
             "ComponentName": "PlayerFX"
         },
         {
+            "ComponentName": "ParticleManager"
+        },
+        {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
                [ "shape", "Box"],
@@ -62,7 +65,7 @@
                 ["controllerIndex", "0"]
             ]
         },
-         {  
+        {  
             "ComponentName": "PlayerIndex",
             "ComponentProperties":[ 
                 ["index", "0"]
@@ -246,6 +249,46 @@
                     "ComponentProperties": [
                         [ "mesh", "shield Sphere.mesh"],
                         [ "material", "shield Shield"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "FloorDust",
+            "Tag": "particles",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties" : [
+                       [ "position", "0 -2.5 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties" : [
+                        ["emitter", "FloorDust"]
+                    ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "JumpDust",
+            "Tag": "particles",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform",
+                    "ComponentProperties" : [
+                       [ "position", "0 -2.5 0"]
+                    ]
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties" : [
+                        ["emitter", "JumpDust"]
                     ]
                 }
             ]

@@ -1,0 +1,46 @@
+particle_system JumpDust
+{ 
+    renderer billboard
+    billboard_type point
+    billboard_rotation_type texcoord
+    material Smoke
+    particle_width 0.1
+    particle_height 0.1
+    quota 20
+
+    emitter Box
+    { 
+      width 2
+      height 1
+      depth 2
+      direction 0 1 0
+      angle 50
+      emission_rate 10000
+      time_to_live 0.4
+      velocity_min 4
+      velocity_max 6
+    }
+
+    affector LinearForce
+    { 
+      force_vector 0 -20 0
+    }
+
+    affector ColourImage
+    { 
+      image smokecolors.png
+    }
+
+    affector Rotator
+    { 
+      rotation_range_start 0
+      rotation_range_end 360
+      rotation_speed_range_start -60
+      rotation_speed_range_end 200
+    }
+
+    affector Scaler
+    { 
+      rate 0.2
+    }
+}

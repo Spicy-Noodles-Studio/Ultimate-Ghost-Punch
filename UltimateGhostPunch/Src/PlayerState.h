@@ -9,6 +9,7 @@ class Block;
 class Dodge;
 class Grab;
 class Movement;
+class Jump;
 class GhostManager;
 class UltimateGhostPunch;
 
@@ -20,6 +21,7 @@ private:
 	Dodge* dodge;
 	Grab* grab;
 	Movement* movement;
+	Jump* jump;
 	GhostManager* ghostManager;
 	UltimateGhostPunch* ghostPunch;
 
@@ -36,6 +38,10 @@ public:
 	bool canMove() const;
 	bool canJump() const;
 	bool canGhostMove() const;
+
+	bool isMoving() const;
+	bool isJumping() const;
+	bool isGrounded() const;
 };
 
 #endif

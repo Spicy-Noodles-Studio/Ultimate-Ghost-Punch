@@ -7,6 +7,7 @@
 #include "Dodge.h"
 #include "Grab.h"
 #include "Movement.h"
+#include "Jump.h"
 #include "UltimateGhostPunch.h"
 #include "GhostManager.h"
 
@@ -29,8 +30,10 @@ void PlayerState::start()
 		attack = aux[0]->getComponent<Attack>();
 
 	aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0) {
 		block = aux[0]->getComponent<Block>();
+		jump = aux[0]->getComponent<Jump>();
+	}
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
 	if (aux.size() > 0)
@@ -75,4 +78,19 @@ bool PlayerState::canJump() const
 bool PlayerState::canGhostMove() const
 {
 	return  (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch == nullptr || !ghostPunch->isPunching());
+}
+
+bool PlayerState::isMoving() const
+{
+	return movement != nullptr && movement->isMoving();
+}
+
+bool PlayerState::isJumping() const
+{
+	return jump != nullptr && jump->isJumping();
+}
+
+bool PlayerState::isGrounded() const
+{
+	return jump != nullptr && jump->isGrounded();
 }
