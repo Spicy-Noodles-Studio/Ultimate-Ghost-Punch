@@ -43,7 +43,7 @@ void GhostManager::start()
 	playerUI = gameObject->getComponent<PlayerUI>();
 	control = gameObject->getComponent<PlayerController>();
 
-	GameObject* aux = findGameObjectWithName("FightManager");
+	GameObject* aux = findGameObjectWithName("Game");
 	if (aux != nullptr) game = aux->getComponent<Game>();
 
 	// Store some data for player resurrection
