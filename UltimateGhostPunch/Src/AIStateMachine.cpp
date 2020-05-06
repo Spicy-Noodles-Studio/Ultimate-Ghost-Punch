@@ -35,7 +35,7 @@ void AIStateMachine::start()
 	knights = &GameManager::GetInstance()->getKnights();
 
 	/* GET GRAPH INFO */
-	GameObject* level = findGameObjectWithName(GameManager::GetInstance()->getLastLevel());
+	GameObject* level = findGameObjectWithName("LevelCollider");
 	if (level != nullptr) {
 		platformGraph = level->getComponent<PlatformGraph>();
 	}

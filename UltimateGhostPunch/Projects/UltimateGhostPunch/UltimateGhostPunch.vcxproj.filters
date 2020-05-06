@@ -173,6 +173,9 @@
     <ClCompile Include="..\..\Src\OptionsMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\FightingState.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h">
@@ -316,5 +319,14 @@
     <ClInclude Include="..\..\Src\OptionsMenu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\FightingState.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UltimateGhostPunch.rc" />
   </ItemGroup>
 </Project>

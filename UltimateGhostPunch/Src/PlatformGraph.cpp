@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "PlatformNode.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PlatformGraph);
 
@@ -41,6 +42,9 @@ PlatformGraph::~PlatformGraph()
 void PlatformGraph::start()
 {
 	physicsSystem = PhysicsSystem::GetInstance();
+
+	setLoadFileName(GameManager::GetInstance()->getLevel() + ".graph");
+	setSaveFileName(GameManager::GetInstance()->getLevel() + ".graph");
 
 	//If the graph was not loaded we create an empty one
 	if (!loadGraph())
@@ -197,6 +201,16 @@ void PlatformGraph::removeLastLink(int platform)
 {
 	if (platform < platforms.size() && platform >= 0)
 		platforms[platform].removeLastEdge();
+}
+
+void PlatformGraph::setSaveFileName(std::string name)
+{
+	saveFilename = name;
+}
+
+void PlatformGraph::setLoadFileName(std::string name)
+{
+	 loadFilename = name;
 }
 
 int PlatformGraph::getIndex(const Vector3& pos)

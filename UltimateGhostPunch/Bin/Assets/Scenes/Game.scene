@@ -159,6 +159,13 @@
                 },
                 {
                     "ComponentName": "Strider"
+                },
+                {
+                    "ComponentName": "PlatformGraph",
+                    "ComponentProperties": [
+                        ["levelStart", "-32.5 23 0"],
+                        ["levelEnd", "32.5 -5 0"]
+                    ]
                 }
             ]
         }

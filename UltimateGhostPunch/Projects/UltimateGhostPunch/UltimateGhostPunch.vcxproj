@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
+    <ClCompile Include="..\..\Src\FightingState.cpp" />
     <ClCompile Include="..\..\Src\GhostNavigation.cpp" />
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
     <ClCompile Include="..\..\Src\Countdown.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\Src\Countdown.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
+    <ClInclude Include="..\..\Src\FightingState.h" />
     <ClInclude Include="..\..\Src\GhostNavigation.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
@@ -127,9 +129,13 @@
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
     <ClInclude Include="..\..\Src\Jump.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Health.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UltimateGhostPunch.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

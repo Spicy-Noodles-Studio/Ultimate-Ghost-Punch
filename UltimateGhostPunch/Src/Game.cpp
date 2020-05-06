@@ -16,6 +16,7 @@
 #include "Score.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
+#include "PlatformGraph.h"
 
 REGISTER_FACTORY(Game);
 
@@ -28,6 +29,10 @@ fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
 Game::~Game()
 {
 
+}
+
+void Game::awake()
+{
 }
 
 void Game::start()
@@ -262,6 +267,12 @@ void Game::configureLevelCollider(const std::string& name)
 	meshRenderer->setVisible(false);
 	strider->stride("levelCollider");
 	strider->setFriction(0.5f);
+	PlatformGraph* graph = gameObject->getComponent<PlatformGraph>();
+	if (graph != nullptr)
+	{
+		graph->setLoadFileName(GameManager::GetInstance()->getLevel() + ".graph");
+		graph->setSaveFileName(GameManager::GetInstance()->getLevel() + ".graph");
+	}
 }
 
 void Game::createKnights()

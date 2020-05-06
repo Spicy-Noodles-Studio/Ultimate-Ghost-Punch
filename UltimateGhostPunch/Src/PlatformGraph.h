@@ -52,6 +52,9 @@ public:
 	void addLinkToPlatform(int platform, const NavigationLink& navLink);
 	void removeLastLink(int platform);
 
+	void setSaveFileName(std::string name);
+	void setLoadFileName(std::string name);
+
 	int getIndex(const Vector3& pos);
 
 	std::vector<PlatformNode>& getPlatforms();

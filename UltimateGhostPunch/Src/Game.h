@@ -63,6 +63,7 @@ public:
 	Game(GameObject* gameObject);
 	virtual ~Game();
 
+	virtual void awake();
 	virtual void start();
 	virtual void update(float deltaTime);
 

@@ -37,7 +37,7 @@ void PathRecorder::start()
 	frame = 0;
 	time = 0.0f;
 
-	GameObject* aux = findGameObjectWithName(GameManager::GetInstance()->getLastLevel());
+	GameObject* aux = findGameObjectWithName("LevelCollider");
 	if (aux != nullptr) graph = aux->getComponent<PlatformGraph>();
 
 	inputSystem = InputSystem::GetInstance();
