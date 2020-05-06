@@ -23,14 +23,14 @@ bool ScoreManager::resetButtonClick()
 	manager->setSong(manager->getLastSong());
 
 	// change scene
-	SceneManager::GetInstance()->changeScene("mainScene");
+	SceneManager::GetInstance()->changeScene("Game");
 	return false;
 }
 
 bool ScoreManager::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("mainMenu");
+	SceneManager::GetInstance()->changeScene("MainMenu");
 	return false;
 }
 

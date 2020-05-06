@@ -11,6 +11,7 @@
 #include "PlayerState.h"
 #include "Score.h"
 #include "Block.h"
+#include "Health.h"
 #include "GhostManager.h"
 #include "GameManager.h"
 
@@ -161,7 +162,7 @@ void Grab::grab()
 
 	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
 	{
-		if (enemy != nullptr && !enemy->getComponent<PlayerController>()->isGrabed())
+		if (enemy != nullptr && !enemy->getComponent<PlayerController>()->isGrabed() && !enemy->getComponent<Health>()->isInvencible())
 			grabEnemy();
 		else
 			grabMissed();
