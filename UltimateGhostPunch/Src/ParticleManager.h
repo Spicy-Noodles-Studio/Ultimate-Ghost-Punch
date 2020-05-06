@@ -14,8 +14,8 @@ private:
 	/* PARTICLE SYSTEMS */
 	ParticleEmitter* floorDust;
 	ParticleEmitter* jumpDust;
-	//ParticleEmmiter* blood;
-	//ParticleEmmiter* blockSparks;
+	ParticleEmitter* bloodSplash;
+	//ParticleEmitter* blockSparks;
 
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
@@ -30,13 +30,13 @@ private:
 	/* CREATE CHILDREN */
 	void generateFloorDust();
 	void generateJumpDust();
-	//void generateBlood();
+	//void generateBloodSplash();
 	//void generateBlockSparks();
 
 	/* MANAGE PARTICLES */
 	void manageFloorDust();
 	void manageJumpDust();
-	//void manageBlood();
+	void manageBloodSplash();
 	//void manageBlockSparks();
 };
 

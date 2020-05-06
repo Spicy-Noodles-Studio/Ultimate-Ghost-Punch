@@ -292,6 +292,23 @@
                     ]
                 }
             ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "BloodSplash",
+            "Tag": "particles",
+            "Components": 
+            [
+                {
+                    "ComponentName": "Transform"
+                },
+                {
+                    "ComponentName": "ParticleEmitter",
+                    "ComponentProperties" : [
+                        ["emitter", "BloodSplash"]
+                    ]
+                }
+            ]
         }
     ]
 }

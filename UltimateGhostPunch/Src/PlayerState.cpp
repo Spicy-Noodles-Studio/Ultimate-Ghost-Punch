@@ -8,12 +8,13 @@
 #include "Grab.h"
 #include "Movement.h"
 #include "Jump.h"
+#include "Health.h"
 #include "UltimateGhostPunch.h"
 #include "GhostManager.h"
 
 REGISTER_FACTORY(PlayerState);
 
-PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), ghostManager(nullptr), ghostPunch(nullptr)
+PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr), health(nullptr), ghostManager(nullptr), ghostPunch(nullptr)
 {
 
 }
@@ -41,6 +42,7 @@ void PlayerState::start()
 
 	dodge = gameObject->getComponent<Dodge>();
 	movement = gameObject->getComponent<Movement>();
+	health = gameObject->getComponent<Health>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 }
@@ -93,4 +95,9 @@ bool PlayerState::isJumping() const
 bool PlayerState::isGrounded() const
 {
 	return jump != nullptr && jump->isGrounded();
+}
+
+bool PlayerState::isHurt() const
+{
+	return health != nullptr && health->isHurt();
 }

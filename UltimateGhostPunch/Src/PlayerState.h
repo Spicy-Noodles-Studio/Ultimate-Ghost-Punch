@@ -10,6 +10,7 @@ class Dodge;
 class Grab;
 class Movement;
 class Jump;
+class Health;
 class GhostManager;
 class UltimateGhostPunch;
 
@@ -22,6 +23,7 @@ private:
 	Grab* grab;
 	Movement* movement;
 	Jump* jump;
+	Health* health;
 	GhostManager* ghostManager;
 	UltimateGhostPunch* ghostPunch;
 
@@ -42,6 +44,7 @@ public:
 	bool isMoving() const;
 	bool isJumping() const;
 	bool isGrounded() const;
+	bool isHurt() const;
 };
 
 #endif

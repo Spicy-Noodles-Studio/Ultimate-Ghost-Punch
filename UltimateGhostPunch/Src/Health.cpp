@@ -9,7 +9,7 @@
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false), hurt(false)
 {
 
 }
@@ -33,6 +33,11 @@ void Health::update(float deltaTime)
 		else
 			invencible = false;
 	}
+}
+
+void Health::postUpdate(float deltaTime)
+{
+	hurt = false;
 }
 
 void Health::handleData(ComponentData* data)
@@ -108,6 +113,7 @@ void Health::receiveDamage(int damage)
 			time = invencibleDamageTime;
 		}
 
+		hurt = true;
 		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
 }
@@ -145,4 +151,9 @@ bool Health::isInvencible()
 void Health::setInvencible(bool invencible)
 {
 	this->invencible = invencible;
+}
+
+bool Health::isHurt() const
+{
+	return hurt;
 }

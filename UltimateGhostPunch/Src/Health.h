@@ -12,6 +12,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	int getMaxHealth();
@@ -31,6 +32,8 @@ public:
 	bool isInvencible();
 	void setInvencible(bool invencible);
 
+	bool isHurt() const;
+
 private:
 	int maxHealth;
 	int health; // 1 life = 2 health points
@@ -40,6 +43,8 @@ private:
 
 	bool alive;
 	bool invencible;
+
+	bool hurt; // So we can know if it is being damaged
 };
 
 #endif

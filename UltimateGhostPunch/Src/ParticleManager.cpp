@@ -7,7 +7,7 @@
 
 REGISTER_FACTORY(ParticleManager);
 
-ParticleManager::ParticleManager(GameObject* gameObject) : UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr)
+ParticleManager::ParticleManager(GameObject* gameObject) : UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), bloodSplash(nullptr)
 {
 
 }
@@ -27,10 +27,13 @@ void ParticleManager::start()
 	std::vector<GameObject*> children = gameObject->findChildrenWithTag("particles");
 	int size = children.size();
 	if (!size) return;
+	// TODO: instanciar los hijos por codigo para no depender del archivo
 	if(size > 0)
 		floorDust = children[0]->getComponent<ParticleEmitter>();
 	if (size > 1)
 		jumpDust = children[1]->getComponent<ParticleEmitter>();
+	if (size > 2)
+		bloodSplash = children[2]->getComponent<ParticleEmitter>();
 }
 
 void ParticleManager::update(float deltaTime)
@@ -40,6 +43,9 @@ void ParticleManager::update(float deltaTime)
 
 	/* JUMP DUST */
 	manageJumpDust();
+
+	/* BLOOD SPLASH */
+	manageBloodSplash();
 }
 
 void ParticleManager::generateFloorDust()
@@ -66,4 +72,12 @@ void ParticleManager::manageJumpDust()
 		jumpDust->start();
 	else
 		jumpDust->stop();
+}
+
+void ParticleManager::manageBloodSplash()
+{
+	if (playerState->isHurt())
+		bloodSplash->start();
+	else
+		bloodSplash->stop();
 }
