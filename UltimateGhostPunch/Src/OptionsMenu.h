@@ -15,6 +15,7 @@ class InterfaceSystem;
 class RenderSystem;
 class SoundSystem;
 class WindowManager;
+class SoundEmitter;
 
 class OptionsMenu : public UserComponent
 {
@@ -23,6 +24,7 @@ protected:
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
+	SoundEmitter* soundEmitter;
 
 	UIElement resolutionButton;
 	UIElement volumeScroll;
@@ -60,6 +62,8 @@ protected:
 	bool changeGamma();
 
 	bool backButtonClick();
+
+	void buttonClick(const std::string& sound);
 
 public:
 	OptionsMenu(GameObject* gameObject);

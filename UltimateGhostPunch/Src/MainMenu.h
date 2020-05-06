@@ -7,11 +7,13 @@
 
 class InputSystem;
 class UILayout;
+class SoundEmitter;
 
 class MainMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
+	SoundEmitter* soundEmitter;
 
 	bool singlePlayerButtonClick();
 	bool multiplayerButtonClick();
@@ -19,9 +21,13 @@ private:
 	bool optionsButtonClick();
 	bool exitButtonClick();
 
+	void buttonClick(const std::string& sound);
+
 public:
 	MainMenu(GameObject* gameObject);
 	virtual ~MainMenu();
+
+	virtual void start();
 };
 
 #endif

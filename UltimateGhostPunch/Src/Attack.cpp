@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerIndex.h"
@@ -30,7 +31,10 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if(parent!= nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+	if (parent != nullptr) {
+		id = parent->getComponent<PlayerIndex>()->getIndex();
+		soundEmitter = parent->getComponent<SoundEmitter>();
+	}
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
@@ -145,7 +149,7 @@ void Attack::onObjectStay(GameObject* other)
 
 		if (enemyBlock != nullptr && parent != nullptr)
 		{
-			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()));
+			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()))
 			{
 				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
@@ -153,6 +157,11 @@ void Attack::onObjectStay(GameObject* other)
 
 				if (!enemyHealth->isAlive())
 					score->killedBy(otherIndex->getIndex(), id);
+
+				if (soundEmitter != nullptr) soundEmitter->playSound("hit2");
+			}
+			else {
+				if (soundEmitter != nullptr) soundEmitter->playSound("block");
 			}
 			
 			// Deactivate the trigger until the next attack is used
@@ -205,6 +214,8 @@ void Attack::quickAttack()
 		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->quickAttackAnimation();
 
+		if (soundEmitter != nullptr) soundEmitter->playSound("swipe");
+
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
 		charge(quickAttackCooldown, quickChargeTime);
@@ -223,6 +234,8 @@ void Attack::strongAttack()
 
 		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->strongAttackAnimation();
+
+		if (soundEmitter != nullptr) soundEmitter->playSound("heavyAttack");
 
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);

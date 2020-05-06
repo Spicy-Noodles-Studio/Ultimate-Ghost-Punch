@@ -6,6 +6,7 @@
 
 class RigidBody;
 class Score;
+class SoundEmitter;
 
 class Attack : public UserComponent
 {
@@ -41,6 +42,7 @@ private:
 
 	RigidBody* attackTrigger;
 	Score* score;
+	SoundEmitter* soundEmitter;
 
 	Vector3 quickAttackScale;
 	Vector3 strongAttackScale;

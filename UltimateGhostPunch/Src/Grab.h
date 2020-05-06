@@ -9,6 +9,7 @@ class RigidBody;
 class Score;
 class PlayerController;
 class PlayerAnimController;
+class SoundEmitter;
 
 class Grab : public UserComponent
 {
@@ -34,6 +35,7 @@ private:
 	GameObject* parent;
 	PlayerController* controller;
 	PlayerAnimController* myAnim;
+	SoundEmitter* soundEmitter;
 
 	GameObject* enemy;
 	PlayerController* enemyController;

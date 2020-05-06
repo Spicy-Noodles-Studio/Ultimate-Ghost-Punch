@@ -10,6 +10,7 @@
 #include <UIElement.h>
 #include <Window.h>
 #include <Camera.h>
+#include <SoundEmitter.h>
 
 REGISTER_FACTORY(OptionsMenuScreen);
 
@@ -24,7 +25,14 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
 
+	buttonClick("back");
+
 	return false;
+}
+
+void OptionsMenuScreen::buttonClick(const std::string& sound)
+{
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject) : OptionsMenu(gameObject), screen(nullptr), pauseMenu(NULL), optionsMenu(NULL)
@@ -39,7 +47,11 @@ OptionsMenuScreen::~OptionsMenuScreen()
 
 void OptionsMenuScreen::start()
 {
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	screen = findGameObjectWithName("OptionsMenuScreen");
+	if (mainCamera == nullptr || screen == nullptr) return;
+
+	
 	root = screen->getComponent<UILayout>()->getRoot();
 
 	optionsMenu = root.getChild("OptionsBackground");
@@ -48,7 +60,9 @@ void OptionsMenuScreen::start()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+
+	soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 
 	if (cameraLayout != nullptr)
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");

@@ -7,6 +7,7 @@
 class RigidBody;
 class GhostMovement;
 class PlayerAnimController;
+class SoundEmitter;
 
 class UltimateGhostPunch : public UserComponent
 {
@@ -17,6 +18,7 @@ private:
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
 	PlayerAnimController* anim;
+	SoundEmitter* soundEmitter;
 
 	Vector3 direction;
 	State state;

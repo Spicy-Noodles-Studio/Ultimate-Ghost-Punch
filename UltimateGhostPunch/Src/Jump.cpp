@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerAnimController.h"
@@ -22,7 +23,10 @@ Jump::~Jump()
 void Jump::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr) rigidBody = parent->getComponent<RigidBody>();
+	if (parent != nullptr) {
+		rigidBody = parent->getComponent<RigidBody>();
+		soundEmitter = parent->getComponent<SoundEmitter>();
+	}
 }
 
 void Jump::update(float deltaTime)
@@ -39,9 +43,10 @@ void Jump::onObjectEnter(GameObject* other)
 
 	if (isFloor || isPlayer)
 	{
-		if (isFloor)
+		if (isFloor) {
 			grounded = true;
-
+			if (soundEmitter != nullptr) soundEmitter->playSound("land");
+		}
 		coyoteTimer = 0.0f;
 		jumping = false; // Cannot be jumping if is on floor
 
@@ -104,6 +109,8 @@ void Jump::jump()
 
 	auto animController = parent->getComponent<PlayerAnimController>();
 	if (animController != nullptr) animController->jumpAnimation();
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("jump");
 }
 
 void Jump::cancelJump()

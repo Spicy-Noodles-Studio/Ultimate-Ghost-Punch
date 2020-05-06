@@ -125,6 +125,9 @@
         },
         {
             "ComponentName": "PlayerState"
+        },
+        {
+            "ComponentName": "SoundEmitter"
         }
     ],
     "Children": [

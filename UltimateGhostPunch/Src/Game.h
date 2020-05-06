@@ -12,6 +12,7 @@
 class InputSystem;
 class GameManager;
 class UILayout;
+class SoundEmitter;
 
 class Game : public UserComponent
 {
@@ -28,6 +29,7 @@ private:
 
 	GameManager* gameManager;
 	UILayout* fightLayout;
+	SoundEmitter* soundEmitter;
 
 	UIElement timeText;
 	UIElement winnerPanel;

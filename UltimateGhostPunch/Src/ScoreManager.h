@@ -8,17 +8,21 @@
 #include <string>
 
 class GameManager;
+class SoundEmitter;
 
 class ScoreManager : public UserComponent
 {
 private:
 	GameManager* manager;
+	SoundEmitter* soundEmitter;
 	std::vector<UIElement> texts;
 	std::vector<UIElement> panels;
 
 	// events
 	bool resetButtonClick();
 	bool backButtonClick();
+
+	void buttonClick(const std::string& sound);
 
 	void initStatistics(int numOfPlayers);
 	void reposition(int numOfPlayers);

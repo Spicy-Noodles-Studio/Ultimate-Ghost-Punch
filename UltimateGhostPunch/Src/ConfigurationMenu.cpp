@@ -6,12 +6,16 @@
 #include <GameObject.h>
 #include <UILayout.h>
 #include <UIElement.h>
+#include <SoundEmitter.h>
 
 #include "GameManager.h"
 
 REGISTER_FACTORY(ConfigurationMenu);
 
 // EVENTS----
+void ConfigurationMenu::buttonClick(const std::string& sound) {
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
+}
 
 bool ConfigurationMenu::changeHealth(int value)
 {
@@ -21,6 +25,8 @@ bool ConfigurationMenu::changeHealth(int value)
 	if (health > MAX_HEALTH) health = MAX_HEALTH;
 
 	configLayout->getRoot().getChild("Health").setText(std::to_string(health));
+
+	buttonClick(buttonSound);
 
 	return false;
 }
@@ -37,6 +43,8 @@ bool ConfigurationMenu::changeTime(int value)
 	else
 		configLayout->getRoot().getChild("Time").setText(std::to_string(time));
 
+	buttonClick(buttonSound);
+
 	return false;
 }
 
@@ -52,6 +60,8 @@ bool ConfigurationMenu::changeSong(int value)
 
 	configLayout->getRoot().getChild("Song").setText(songNames[songIndex]);
 
+	buttonClick(buttonSound);
+
 	return false;
 }
 
@@ -66,6 +76,8 @@ bool ConfigurationMenu::changeLevel(int value)
 		levelIndex = levelNames.size() - 1;
 
 	configLayout->getRoot().getChild("Level").setText(levelNames[levelIndex]);
+
+	buttonClick(buttonSound);
 
 	return false;
 }
@@ -92,12 +104,16 @@ bool ConfigurationMenu::fightButtonClick()
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("Game", true);
+
+	buttonClick(fightSound);
+
 	return false;
 }
 
 bool ConfigurationMenu::backButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("MainMenu");
+	buttonClick(backSound);
 	return false;
 }
 
@@ -147,8 +163,10 @@ void ConfigurationMenu::start()
 	inputSystem = InputSystem::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr)
+	if (mainCamera != nullptr) {
 		configLayout = mainCamera->getComponent<UILayout>();
+		soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	}
 
 	if (configLayout != nullptr)
 		fightButton = configLayout->getRoot().getChild("FightButton");

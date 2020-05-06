@@ -20,6 +20,7 @@ const int MIN_PLAYERS = 1;
 
 class InputSystem;
 class UILayout;
+class SoundEmitter;
 
 class ConfigurationMenu : public UserComponent
 {
@@ -28,6 +29,7 @@ private:
 
 	std::vector<std::pair<int, UIElement>> slots;
 	UILayout* configLayout;
+	SoundEmitter* soundEmitter;
 	UIElement fightButton;
 
 	int numPlayers;
@@ -36,6 +38,10 @@ private:
 
 	std::vector<std::string> levelNames = {"level3", "level5", "cave"};
 	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
+
+	std::string buttonSound = "button4";
+	std::string fightSound = "fight";
+	std::string backSound = "back";
 
 	int levelIndex;
 	int songIndex;
@@ -48,6 +54,8 @@ private:
 	void reorderSlots(int index);
 
 	int isIndexConnected(int index);
+
+	void buttonClick(const std::string& sound);
 
 	bool changeHealth(int value);
 	bool changeTime(int value);

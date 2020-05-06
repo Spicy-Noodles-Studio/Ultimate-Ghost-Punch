@@ -1,6 +1,7 @@
 #include "Health.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerAnimController.h"
@@ -109,6 +110,9 @@ void Health::receiveDamage(int damage)
 		}
 
 		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
+
+		SoundEmitter* soundEmitter = gameObject->getComponent<SoundEmitter>();
+		if (soundEmitter != nullptr) soundEmitter->playSound("hurt2");
 	}
 }
 

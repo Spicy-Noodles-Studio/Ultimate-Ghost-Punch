@@ -5,11 +5,13 @@
 #include <UserComponent.h>
 
 class RigidBody;
+class SoundEmitter;
 
 class Jump : public UserComponent
 {
 private:
 	RigidBody* rigidBody;
+	SoundEmitter* soundEmitter;
 	GameObject* parent;
 
 	float jumpForce;	// Force used to add impulse

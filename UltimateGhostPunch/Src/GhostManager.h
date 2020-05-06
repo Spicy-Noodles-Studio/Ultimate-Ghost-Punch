@@ -14,6 +14,7 @@ class PlayerUI;
 class Game;
 class PlayerAnimController;
 class PlayerController;
+class SoundEmitter;
 
 class GhostManager : public UserComponent
 {
@@ -44,6 +45,7 @@ private:
 	Game* game;
 	PlayerAnimController* anim;
 	PlayerController* control;
+	SoundEmitter* soundEmitter;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;

@@ -3,6 +3,7 @@
 #include <GameObject.h>
 #include <MeshRenderer.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerController.h"
@@ -36,7 +37,8 @@ void Grab::start()
 	{
 		id = parent->getComponent<PlayerIndex>()->getIndex();
 		controller = parent->getComponent<PlayerController>();
-		myAnim = parent->getComponent<PlayerAnimController>();
+		myAnim = parent->getComponent<PlayerAnimController>();		 
+		soundEmitter = parent->getComponent<SoundEmitter>();
 	}
 
 	score = GameManager::GetInstance()->getScore();
@@ -191,6 +193,8 @@ void Grab::drop()
 	enemy = nullptr;
 	state = IDLE;
 	grabTimer = cooldown;
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("throw1");
 }
 
 void Grab::grabMissed()
@@ -198,6 +202,8 @@ void Grab::grabMissed()
 	if (myAnim != nullptr)
 		myAnim->grabFailedAnimation();
 	state = IDLE;
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("swipe");
 }
 
 bool Grab::isGrabbing() const
@@ -275,6 +281,9 @@ void Grab::grabEnemy()
 			if (myAnim != nullptr)
 				myAnim->enemyBlockedMyGrabAnimation();
 
+			SoundEmitter* enemySoundEmitter = enemy->getComponent<SoundEmitter>();
+			if (enemySoundEmitter != nullptr) enemySoundEmitter->playSound("swordOnShield");
+			if (soundEmitter != nullptr) soundEmitter->playSound("stun");
 			return;
 		}
 	}
@@ -311,4 +320,6 @@ void Grab::grabEnemy()
 
 	if (enemyAnim != nullptr)
 		enemyAnim->grabbedByEnemyAnimation();
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("grab");
 }

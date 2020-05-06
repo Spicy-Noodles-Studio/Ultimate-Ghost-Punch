@@ -6,6 +6,7 @@
 #include <WindowManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
+#include <SoundEmitter.h>
 #include <ctime>
 
 #include "GameManager.h"
@@ -25,10 +26,14 @@ Countdown::~Countdown()
 
 void Countdown::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera != nullptr) {
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		if (cameraLayout != nullptr)
+			text = cameraLayout->getRoot().getChild("Countdown");
 
-	if (cameraLayout != nullptr)
-		text = cameraLayout->getRoot().getChild("Countdown");
+		soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	}
 }
 
 void Countdown::preUpdate(float deltaTime)
@@ -39,6 +44,9 @@ void Countdown::preUpdate(float deltaTime)
 		started = true;
 		paused = true;
 		last = std::chrono::steady_clock::now();
+
+		if (soundEmitter != nullptr) 
+			soundEmitter->playSound("countdown");
 	}
 
 	if (paused)

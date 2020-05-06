@@ -8,6 +8,7 @@
 #include <Light.h>
 #include <Strider.h>
 #include <GaiaData.h>
+#include <SoundEmitter.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
@@ -35,8 +36,10 @@ void Game::start()
 	gameManager = GameManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr)
+	if (mainCamera != nullptr) {
 		fightLayout = mainCamera->getComponent<UILayout>();
+		soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	}
 
 	if (fightLayout != nullptr)
 	{
@@ -348,4 +351,6 @@ void Game::chooseWinner()
 		winner = majorIndex;
 		winnerText.setText("Winner: P" + std::to_string(winner + 1));
 	}
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("victory4");
 }

@@ -5,6 +5,7 @@
 #include <Scene.h>
 #include <Camera.h>
 #include <MathUtils.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "Health.h"
@@ -29,6 +30,7 @@ void UltimateGhostPunch::start()
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	anim = gameObject->getComponent<PlayerAnimController>();
+	soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	if (ghostMovement != nullptr)
 		ghostSpeed = ghostMovement->getSpeed();
@@ -81,13 +83,15 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 
 void UltimateGhostPunch::charge()
 {
-	if(state == State::AVAILABLE)
-	state = State::CHARGING;
+	if (state == State::AVAILABLE)
+		state = State::CHARGING;
 	if (ghostMovement != nullptr)
 		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
 
-	if (anim != nullptr) 
+	if (anim != nullptr)
 		anim->chargingGhostAnimation();
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("ghostSee1");
 }
 
 void UltimateGhostPunch::aim(double x, double y)
@@ -119,6 +123,8 @@ void UltimateGhostPunch::ghostPunch()
 
 	state = State::PUNCHING;
 	if (anim != nullptr) anim->punchingGhostAnimation();
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("ugp2");
 }
 
 const UltimateGhostPunch::State& UltimateGhostPunch::getState()

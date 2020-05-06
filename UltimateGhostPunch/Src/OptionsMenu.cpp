@@ -9,6 +9,7 @@
 #include <UILayout.h>
 #include <Camera.h>
 #include <Window.h>
+#include <SoundEmitter.h>
 
 #include "GameManager.h"
 
@@ -36,6 +37,8 @@ bool OptionsMenu::resolutionButtonClick()
 		}
 	}
 
+	buttonClick("button4");
+
 	return false;
 }
 
@@ -56,6 +59,8 @@ bool OptionsMenu::resetConfigButtonClick()
 	checkbox.setCheckBoxState(false);
 	changeFullscreen(false);
 
+	buttonClick("button4");
+
 	return false;
 }
 
@@ -71,6 +76,8 @@ bool OptionsMenu::changeResolution(int value)
 
 	resolutionText.setText(resolutionNames[resolution]);
 
+	buttonClick("button4");
+
 	return false;
 }
 
@@ -78,6 +85,8 @@ bool OptionsMenu::changeFullscreen(bool value)
 {
 	fullscreen = value;
 	windowManager->setFullscreen(fullscreen);
+
+	buttonClick("button4");
 
 	return false;
 }
@@ -87,6 +96,8 @@ bool OptionsMenu::changeSoundVolume()
 	volumeText.setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setSoundEffectsVolume(volumeScroll.getScrollPositionScrollBar());
 
+	buttonClick("button4");
+
 	return false;
 }
 
@@ -94,6 +105,8 @@ bool OptionsMenu::changeMusicVolume()
 {
 	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
 	soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
+
+	buttonClick("button4");
 
 	return false;
 }
@@ -104,13 +117,23 @@ bool OptionsMenu::changeGamma()
 	renderSystem->changeParamOfShader("LuminancePS", "brigh", gammaScroll.getScrollPositionScrollBar());
 	windowManager->setBrightness(gammaScroll.getScrollPositionScrollBar());
 
+	buttonClick("button4");
+
 	return false;
 }
 
 bool OptionsMenu::backButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("MainMenu");
+
+	buttonClick("back");
+
 	return false;
+}
+
+void OptionsMenu::buttonClick(const std::string& sound)
+{
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 // -----
@@ -160,7 +183,12 @@ OptionsMenu::~OptionsMenu()
 
 void OptionsMenu::start()
 {
-	root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera == nullptr) return;
+
+	soundEmitter = mainCamera->getComponent<SoundEmitter>();
+
+	root = mainCamera->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
 	root.setVisible(true);
 
 	resolutionButton = root.getChild("ResolutionApplyButton");

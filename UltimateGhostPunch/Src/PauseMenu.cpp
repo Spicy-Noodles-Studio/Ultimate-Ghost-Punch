@@ -5,6 +5,7 @@
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
+#include <SoundEmitter.h>
 
 #include "GameManager.h"
 
@@ -14,6 +15,8 @@ bool PauseMenu::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
 	SceneManager::GetInstance()->changeScene("MainMenu");
+
+	buttonClick("back");
 
 	return false;
 }
@@ -30,12 +33,26 @@ bool PauseMenu::optionsButton()
 	InterfaceSystem::GetInstance()->clearControllerMenuInput();
 	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
 
+	buttonClick("button4");
+
 	return false;
+}
+
+bool PauseMenu::resumeButton()
+{
+	setPaused(false);
+	buttonClick("button4");
+	return false;
+}
+
+void PauseMenu::buttonClick(const std::string& sound)
+{
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
 {
-	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
+	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {; return resumeButton(); }));
 	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
 }
@@ -49,11 +66,16 @@ PauseMenu::~PauseMenu()
 
 void PauseMenu::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	optionsMenu = findGameObjectWithName("OptionsMenuScreen")->getComponent<UILayout>()->getRoot();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
+	if (mainCamera != nullptr) {
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		if (cameraLayout != nullptr)
+			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 
-	if (cameraLayout != nullptr)
-		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+		soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	}
+	if(options!=nullptr) optionsMenu = options->getComponent<UILayout>()->getRoot();
 
 	inputSystem = InputSystem::GetInstance();
 }

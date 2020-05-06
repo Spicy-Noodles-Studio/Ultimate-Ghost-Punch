@@ -1,6 +1,7 @@
 #include "GhostManager.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "Movement.h"
@@ -42,8 +43,9 @@ void GhostManager::start()
 	anim = gameObject->getComponent<PlayerAnimController>();
 	playerUI = gameObject->getComponent<PlayerUI>();
 	control = gameObject->getComponent<PlayerController>();
+	soundEmitter = gameObject->getComponent<SoundEmitter>();
 
-	GameObject* aux = findGameObjectWithName("FightManager");
+	GameObject* aux = findGameObjectWithName("Game");
 	if (aux != nullptr) game = aux->getComponent<Game>();
 
 	// Store some data for player resurrection
@@ -79,6 +81,8 @@ void GhostManager::update(float deltaTime)
 
 			if (movement != nullptr)
 				movement->stop();
+
+			if (soundEmitter != nullptr) soundEmitter->playSound("noo");
 		}
 	}
 }
@@ -164,6 +168,8 @@ void GhostManager::onObjectEnter(GameObject* other)
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			
+			if (soundEmitter != nullptr) soundEmitter->playSound("ghostLaugh");
+
 			ghost = false;
 		}
 	}
@@ -221,6 +227,8 @@ void GhostManager::activateGhost()
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr) control->setActive(true);
 	mode = GHOST;
+
+	if (soundEmitter != nullptr) soundEmitter->playSound("ghostSee1");
 }
 
 void GhostManager::deactivateGhost()

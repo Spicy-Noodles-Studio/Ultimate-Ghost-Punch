@@ -5,6 +5,7 @@
 #include <UserComponent.h>
 #include <UIElement.h>
 
+class SoundEmitter;
 class InputSystem;
 
 class PauseMenu : public UserComponent
@@ -13,9 +14,12 @@ private:
 	InputSystem* inputSystem;
 	UIElement pauseMenu;
 	UIElement optionsMenu;
+	SoundEmitter* soundEmitter;
 
 	bool backButtonClick();
 	bool optionsButton();
+	bool resumeButton();
+	void buttonClick(const std::string& sound);
 	
 public:
 	PauseMenu(GameObject* gameObject);

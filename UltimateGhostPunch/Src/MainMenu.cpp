@@ -5,6 +5,7 @@
 #include <SceneManager.h>
 #include <WindowManager.h>
 #include <GameObject.h>
+#include <SoundEmitter.h>
 
 #include "GameManager.h"
 
@@ -13,25 +14,34 @@ REGISTER_FACTORY(MainMenu);
 bool MainMenu::singlePlayerButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
+	buttonClick("button4");
 	return false;
 }
 
 bool MainMenu::multiplayerButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
+	buttonClick("button4");
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("OptionsMenu");
+	buttonClick("button4");
 	return false;
 }
 
 bool MainMenu::exitButtonClick()
 {
 	WindowManager::GetInstance()->closeWindow();
+	buttonClick("back");
 	return false;
+}
+
+void MainMenu::buttonClick(const std::string& sound)
+{
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr)
@@ -52,4 +62,11 @@ MainMenu::~MainMenu()
 	interfaceSystem->unregisterEvent("multiplayerButtonClick");
 	interfaceSystem->unregisterEvent("optionsButtonClick");
 	interfaceSystem->unregisterEvent("exitButtonClick");
+}
+
+void MainMenu::start()
+{
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera != nullptr)
+		soundEmitter = mainCamera->getComponent<SoundEmitter>();
 }

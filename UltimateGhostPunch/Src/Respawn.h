@@ -6,11 +6,13 @@
 
 class Movement;
 class PlayerController;
+class SoundEmitter;
 
 class Respawn : public UserComponent
 {
 private:
 	PlayerController* playerController;
+	SoundEmitter* soundEmitter;
 	Vector3 initialPos;
 
 	float respawnTime;

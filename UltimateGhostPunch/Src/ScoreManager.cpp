@@ -8,6 +8,7 @@
 #include <UILayout.h>
 #include <UIElement.h>
 #include <Camera.h>
+#include <SoundEmitter.h>
 
 #include "Score.h"
 #include "GameManager.h"
@@ -21,6 +22,7 @@ bool ScoreManager::resetButtonClick()
 	manager->setTime(manager->getInitialTime());
 	manager->setLevel(manager->getLastLevel());
 	manager->setSong(manager->getLastSong());
+	buttonClick("button4");
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("mainScene");
@@ -31,7 +33,13 @@ bool ScoreManager::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
 	SceneManager::GetInstance()->changeScene("mainMenu");
+	buttonClick("button4");
 	return false;
+}
+
+void ScoreManager::buttonClick(const std::string& sound)
+{
+	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject)
@@ -50,7 +58,11 @@ ScoreManager::~ScoreManager()
 
 void ScoreManager::start()
 {
-	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera == nullptr)  return;
+
+	UIElement root = mainCamera->getComponent<UILayout>()->getRoot();
+	soundEmitter = mainCamera->getComponent<SoundEmitter>();
 	for (int i = 0; i < 4; i++)
 	{
 		std::string name = "P" + std::to_string(i + 1);
