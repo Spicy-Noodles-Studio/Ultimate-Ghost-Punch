@@ -10,7 +10,7 @@
 
 REGISTER_FACTORY(Jump);
 
-Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f), playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr)
+Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f), playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr)
 {
 
 }
@@ -137,7 +137,7 @@ void Jump::setCoyoteTime(float time)
 
 bool Jump::isGrounded()
 {
-	return grounded || playersBelow;
+	return grounded;
 }
 
 bool Jump::isJumping()
@@ -147,5 +147,5 @@ bool Jump::isJumping()
 
 bool Jump::canJump()
 {
-	return isGrounded() || coyoteTimer > 0.0f;
+	return grounded || playersBelow || coyoteTimer > 0.0f;
 }
