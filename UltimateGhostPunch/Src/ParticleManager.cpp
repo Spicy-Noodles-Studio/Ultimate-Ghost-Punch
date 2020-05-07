@@ -8,7 +8,7 @@
 REGISTER_FACTORY(ParticleManager);
 
 ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), bloodSplash(nullptr),
-															blockSparks(nullptr), spectre(nullptr)
+															blockSparks(nullptr), spectre(nullptr), playerState(nullptr)
 {
 
 }
