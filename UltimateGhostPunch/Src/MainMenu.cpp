@@ -10,13 +10,7 @@
 
 REGISTER_FACTORY(MainMenu);
 
-bool MainMenu::singlePlayerButtonClick()
-{
-	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
-	return false;
-}
-
-bool MainMenu::multiplayerButtonClick()
+bool MainMenu::playButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	return false;
@@ -38,8 +32,7 @@ MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSys
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 
-	interfaceSystem->registerEvent("singlePlayerButtonClick", UIEvent("ButtonClicked", [this]() {return singlePlayerButtonClick(); }));
-	interfaceSystem->registerEvent("multiplayerButtonClick", UIEvent("ButtonClicked", [this]() {return multiplayerButtonClick(); }));
+	interfaceSystem->registerEvent("playButtonClick", UIEvent("ButtonClicked", [this]() {return playButtonClick(); }));
 	interfaceSystem->registerEvent("optionsButtonClick", UIEvent("ButtonClicked", [this]() {return optionsButtonClick(); }));
 	interfaceSystem->registerEvent("exitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
 }
@@ -48,8 +41,7 @@ MainMenu::~MainMenu()
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 
-	interfaceSystem->unregisterEvent("singlePlayerButtonClick");
-	interfaceSystem->unregisterEvent("multiplayerButtonClick");
+	interfaceSystem->unregisterEvent("playButtonClick");
 	interfaceSystem->unregisterEvent("optionsButtonClick");
 	interfaceSystem->unregisterEvent("exitButtonClick");
 }

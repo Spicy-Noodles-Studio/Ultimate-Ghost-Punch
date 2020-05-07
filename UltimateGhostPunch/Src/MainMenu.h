@@ -13,9 +13,7 @@ class MainMenu : public UserComponent
 private:
 	InputSystem* inputSystem;
 
-	bool singlePlayerButtonClick();
-	bool multiplayerButtonClick();
-
+	bool playButtonClick();
 	bool optionsButtonClick();
 	bool exitButtonClick();
 
