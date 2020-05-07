@@ -2,7 +2,8 @@
 #ifndef OPTIONS_MENU_H
 #define OPTIONS_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 
 #include <vector>
@@ -15,16 +16,14 @@ class InterfaceSystem;
 class RenderSystem;
 class SoundSystem;
 class WindowManager;
-class SoundEmitter;
 
-class OptionsMenu : public UserComponent
+class OptionsMenu : public Menu
 {
 protected:
 	InterfaceSystem* interfaceSystem;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
-	SoundEmitter* soundEmitter;
 
 	UIElement resolutionButton;
 	UIElement volumeScroll;
@@ -60,10 +59,6 @@ protected:
 	bool changeSoundVolume();
 	bool changeMusicVolume();
 	bool changeGamma();
-
-	bool backButtonClick();
-
-	void buttonClick(const std::string& sound);
 
 public:
 	OptionsMenu(GameObject* gameObject);

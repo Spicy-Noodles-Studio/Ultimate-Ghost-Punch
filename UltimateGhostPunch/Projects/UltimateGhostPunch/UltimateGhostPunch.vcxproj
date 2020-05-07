@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
+    <ClCompile Include="..\..\Src\Menu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\CameraController.cpp" />
     <ClCompile Include="..\..\Src\ConfigurationMenu.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\LoadingScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
+    <ClInclude Include="..\..\Src\Menu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\CameraController.h" />
     <ClInclude Include="..\..\Src\ConfigurationMenu.h" />

@@ -14,37 +14,32 @@ REGISTER_FACTORY(MainMenu);
 bool MainMenu::singlePlayerButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
-	buttonClick("button4");
+	buttonClick(buttonSound);
 	return false;
 }
 
 bool MainMenu::multiplayerButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
-	buttonClick("button4");
+	buttonClick(buttonSound);
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("OptionsMenu");
-	buttonClick("button4");
+	buttonClick(buttonSound);
 	return false;
 }
 
 bool MainMenu::exitButtonClick()
 {
 	WindowManager::GetInstance()->closeWindow();
-	buttonClick("back");
+	buttonClick(backSound);
 	return false;
 }
 
-void MainMenu::buttonClick(const std::string& sound)
-{
-	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
-}
-
-MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr)
+MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullptr)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 
@@ -66,6 +61,8 @@ MainMenu::~MainMenu()
 
 void MainMenu::start()
 {
+	Menu::start();
+
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	if (mainCamera != nullptr)
 		soundEmitter = mainCamera->getComponent<SoundEmitter>();

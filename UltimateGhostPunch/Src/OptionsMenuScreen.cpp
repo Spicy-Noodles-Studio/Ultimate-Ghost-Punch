@@ -25,14 +25,9 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
 
-	buttonClick("back");
+	buttonClick(backSound);
 
 	return false;
-}
-
-void OptionsMenuScreen::buttonClick(const std::string& sound)
-{
-	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
 }
 
 OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject) : OptionsMenu(gameObject), screen(nullptr), pauseMenu(NULL), optionsMenu(NULL)
@@ -47,7 +42,8 @@ OptionsMenuScreen::~OptionsMenuScreen()
 
 void OptionsMenuScreen::start()
 {
-	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	Menu::start();
+
 	screen = findGameObjectWithName("OptionsMenuScreen");
 	if (mainCamera == nullptr || screen == nullptr) return;
 

@@ -14,11 +14,7 @@ REGISTER_FACTORY(PauseMenu);
 bool PauseMenu::backButtonClick()
 {
 	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("MainMenu");
-
-	buttonClick("back");
-
-	return false;
+	return Menu::backButtonClick();
 }
 
 bool PauseMenu::optionsButton()
@@ -33,7 +29,7 @@ bool PauseMenu::optionsButton()
 	InterfaceSystem::GetInstance()->clearControllerMenuInput();
 	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
 
-	buttonClick("button4");
+	buttonClick(buttonSound);
 
 	return false;
 }
@@ -41,16 +37,11 @@ bool PauseMenu::optionsButton()
 bool PauseMenu::resumeButton()
 {
 	setPaused(false);
-	buttonClick("button4");
+	buttonClick(buttonSound);
 	return false;
 }
 
-void PauseMenu::buttonClick(const std::string& sound)
-{
-	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
-}
-
-PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
+PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
 {
 	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {; return resumeButton(); }));
 	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
@@ -66,15 +57,15 @@ PauseMenu::~PauseMenu()
 
 void PauseMenu::start()
 {
-	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
+	Menu::start();
+
 	if (mainCamera != nullptr) {
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 		if (cameraLayout != nullptr)
 			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
-
-		soundEmitter = mainCamera->getComponent<SoundEmitter>();
 	}
+
+	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
 	if(options!=nullptr) optionsMenu = options->getComponent<UILayout>()->getRoot();
 
 	inputSystem = InputSystem::GetInstance();

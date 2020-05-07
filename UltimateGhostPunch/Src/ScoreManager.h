@@ -2,7 +2,8 @@
 #ifndef SCORE_MANAGER_H
 #define SCORE_MANAGER_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 #include <vector>
 #include <string>
@@ -10,7 +11,7 @@
 class GameManager;
 class SoundEmitter;
 
-class ScoreManager : public UserComponent
+class ScoreManager : public Menu
 {
 private:
 	GameManager* manager;
@@ -20,9 +21,6 @@ private:
 
 	// events
 	bool resetButtonClick();
-	bool backButtonClick();
-
-	void buttonClick(const std::string& sound);
 
 	void initStatistics(int numOfPlayers);
 	void reposition(int numOfPlayers);

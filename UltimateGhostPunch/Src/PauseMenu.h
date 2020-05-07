@@ -2,24 +2,22 @@
 #ifndef PAUSE_MENU_H
 #define PAUSE_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 
-class SoundEmitter;
 class InputSystem;
 
-class PauseMenu : public UserComponent
+class PauseMenu : public Menu
 {
 private:
 	InputSystem* inputSystem;
 	UIElement pauseMenu;
 	UIElement optionsMenu;
-	SoundEmitter* soundEmitter;
 
-	bool backButtonClick();
 	bool optionsButton();
 	bool resumeButton();
-	void buttonClick(const std::string& sound);
+	bool backButtonClick();
 	
 public:
 	PauseMenu(GameObject* gameObject);

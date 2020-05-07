@@ -11,13 +11,11 @@ class OptionsMenuScreen : public OptionsMenu
 {
 private:
 	GameObject* screen;
-	SoundEmitter* soundEmitter;
 
 	UIElement pauseMenu;
 	UIElement optionsMenu;
 
 	bool backToMenuButtonClick();
-	void buttonClick(const std::string& sound);
 
 public:
 	OptionsMenuScreen(GameObject* gameObject);

@@ -22,27 +22,14 @@ bool ScoreManager::resetButtonClick()
 	manager->setTime(manager->getInitialTime());
 	manager->setLevel(manager->getLastLevel());
 	manager->setSong(manager->getLastSong());
-	buttonClick("button4");
+	buttonClick(buttonSound);
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("Game");
 	return false;
 }
 
-bool ScoreManager::backButtonClick()
-{
-	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("MainMenu");
-	buttonClick("button4");
-	return false;
-}
-
-void ScoreManager::buttonClick(const std::string& sound)
-{
-	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
-}
-
-ScoreManager::ScoreManager(GameObject* gameObject) : UserComponent(gameObject)
+ScoreManager::ScoreManager(GameObject* gameObject) : Menu(gameObject)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("resetButtonClick", UIEvent("ButtonClicked", [this]() {return resetButtonClick(); }));
@@ -58,11 +45,11 @@ ScoreManager::~ScoreManager()
 
 void ScoreManager::start()
 {
-	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	Menu::start();
+
 	if (mainCamera == nullptr)  return;
 
 	UIElement root = mainCamera->getComponent<UILayout>()->getRoot();
-	soundEmitter = mainCamera->getComponent<SoundEmitter>();
 	for (int i = 0; i < 4; i++)
 	{
 		std::string name = "P" + std::to_string(i + 1);
