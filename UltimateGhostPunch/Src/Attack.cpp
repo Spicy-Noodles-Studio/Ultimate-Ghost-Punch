@@ -195,6 +195,11 @@ void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 	attackTransform->setPosition(offset);
 }
 
+bool Attack::atttackOnCD()
+{
+	return (cooldown > 0);
+}
+
 void Attack::quickAttack()
 {
 	if (parent == nullptr) return;

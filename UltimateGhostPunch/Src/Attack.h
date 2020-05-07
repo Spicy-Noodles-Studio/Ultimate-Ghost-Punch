@@ -54,6 +54,8 @@ private:
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
 
+	
+
 public:
 	Attack(GameObject* gameObject);
 	virtual ~Attack();
@@ -66,6 +68,8 @@ public:
 	void quickAttack();
 	void strongAttack();
 	bool isAttacking() const;
+
+	bool atttackOnCD();
 };
 
 #endif

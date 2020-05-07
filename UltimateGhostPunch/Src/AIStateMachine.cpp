@@ -152,10 +152,10 @@ void AIStateMachine::processActionInput()
 			break;
 			/* ATTACK */
 		case ActionInput::QUICK_ATTACK:
-			if (attack != nullptr) attack->quickAttack();
+			if (attack != nullptr && !attack->atttackOnCD() && !attack->isAttacking()) attack->quickAttack();
 			break;
 		case ActionInput::STRONG_ATTACK:
-			if (attack != nullptr) attack->strongAttack();
+			if (attack != nullptr && !attack->atttackOnCD() && !attack->isAttacking()) attack->strongAttack();
 			break;
 
 		default:
