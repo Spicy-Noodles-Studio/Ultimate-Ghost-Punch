@@ -14,8 +14,10 @@ private:
 	/* PARTICLE SYSTEMS */
 	ParticleEmitter* floorDust;
 	ParticleEmitter* jumpDust;
+	ParticleEmitter* landDust;
 	ParticleEmitter* bloodSplash;
 	ParticleEmitter* blockSparks;
+	ParticleEmitter* stunSparks;
 	ParticleEmitter* spectre;
 
 	/* COMPONENTS TO GET INFO */
@@ -27,18 +29,18 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+
 private:
 	/* CREATE CHILDREN */
-	void createFloorDust();
-	void createJumpDust();
-	//void createBloodSplash();
-	//void createBlockSparks();
+	void createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position = Vector3::ZERO);
 
 	/* MANAGE PARTICLES */
 	void manageFloorDust();
 	void manageJumpDust();
+	void manageLandDust();
 	void manageBloodSplash();
 	void manageBlockSparks();
+	void manageStunSparks();
 	void manageSpectre();
 };
 

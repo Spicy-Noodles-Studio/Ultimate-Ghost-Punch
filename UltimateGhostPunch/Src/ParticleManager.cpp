@@ -7,8 +7,9 @@
 
 REGISTER_FACTORY(ParticleManager);
 
-ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), bloodSplash(nullptr),
-															blockSparks(nullptr), spectre(nullptr), playerState(nullptr)
+ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
+															bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
+															spectre(nullptr), playerState(nullptr)
 {
 
 }
@@ -25,20 +26,27 @@ void ParticleManager::start()
 	if (playerState == nullptr)
 		LOG_ERROR("PARTICLE MANAGER", "PlayerState component not found");
 
-	std::vector<GameObject*> children = gameObject->findChildrenWithTag("particles");
-	int size = children.size();
-	if (!size) return;
-	// TODO: instanciar los hijos por codigo para no depender del archivo
-	if(size > 0)
-		floorDust = children[0]->getComponent<ParticleEmitter>();
-	if (size > 1)
-		jumpDust = children[1]->getComponent<ParticleEmitter>();
-	if (size > 2)
-		bloodSplash = children[2]->getComponent<ParticleEmitter>();
-	if (size > 3)
-		blockSparks = children[3]->getComponent<ParticleEmitter>();
-	if (size > 4)
-		spectre = children[4]->getComponent<ParticleEmitter>();
+	/* FLOOR DUST */
+	createParticle(&floorDust, "FloorDust", Vector3::NEGATIVE_UP * 2.5f);
+
+	/* JUMP DUST */
+	createParticle(&jumpDust, "JumpDust", Vector3::NEGATIVE_UP * 2.5f);
+
+	/* LAND DUST */
+	createParticle(&landDust, "LandDust", Vector3::NEGATIVE_UP * 2.5f);
+
+	/* BLOOD SPLASH */
+	createParticle(&bloodSplash, "BloodSplash");
+
+	/* BLOCK SPARKS */
+	createParticle(&blockSparks, "BlockSparks");
+
+	/* BLOCK SPARKS */
+	createParticle(&stunSparks, "StunSparks", Vector3::UP * 2.5f);
+
+	/* SPECTRE */
+	createParticle(&spectre, "Spectre");
+
 }
 
 void ParticleManager::update(float deltaTime)
@@ -49,28 +57,45 @@ void ParticleManager::update(float deltaTime)
 	/* JUMP DUST */
 	manageJumpDust();
 
+	/* LAND DUST */
+	manageLandDust();
+
 	/* BLOOD SPLASH */
 	manageBloodSplash();
 
 	/* BLOCK SPARKS */
 	manageBlockSparks();
 
+	/* STUN SPARKS */
+	manageStunSparks();
+
 	/* SPECTRE */
 	manageSpectre();
 }
 
-void ParticleManager::createFloorDust()
+void ParticleManager::createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position)
 {
+	if (*emitter != nullptr) return;
 	
-}
+	GameObject* particlesObject = instantiate("ParticleEmitter");
+	if (particlesObject == nullptr)
+		return;
 
-void ParticleManager::createJumpDust()
-{
-	
+	// Add child
+	gameObject->addChild(particlesObject);
+
+	*emitter = particlesObject->getComponent<ParticleEmitter>();
+	if (*emitter == nullptr)
+		return;
+
+	particlesObject->transform->setPosition(position);
+	(*emitter)->newEmitter(particleName);
 }
 
 void ParticleManager::manageFloorDust()
 {
+	if (floorDust == nullptr) return;
+
 	if (playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
 		floorDust->start();
 	else
@@ -85,6 +110,16 @@ void ParticleManager::manageJumpDust()
 		jumpDust->start();
 	else
 		jumpDust->stop();
+}
+
+void ParticleManager::manageLandDust()
+{
+	if (landDust == nullptr) return;
+
+	if (playerState->hasLanded() && playerState->canMove())
+		landDust->start();
+	else
+		landDust->stop();
 }
 
 void ParticleManager::manageBloodSplash()
@@ -105,6 +140,16 @@ void ParticleManager::manageBlockSparks()
 		blockSparks->start();
 	else
 		blockSparks->stop();
+}
+
+void ParticleManager::manageStunSparks()
+{
+	if (stunSparks == nullptr) return;
+
+	if (playerState->isStunned())
+		stunSparks->start();
+	else
+		stunSparks->stop();
 }
 
 void ParticleManager::manageSpectre()

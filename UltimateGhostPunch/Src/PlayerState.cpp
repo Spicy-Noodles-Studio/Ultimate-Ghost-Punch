@@ -107,7 +107,17 @@ bool PlayerState::isBlocking() const
 	return block != nullptr && block->isBlocking();
 }
 
+bool PlayerState::isStunned() const
+{
+	return grab->isStunned();
+}
+
 bool PlayerState::hasBlocked() const
 {
 	return block->hasBlocked();
+}
+
+bool PlayerState::hasLanded() const
+{
+	return jump != nullptr && jump->hasLanded();
 }
