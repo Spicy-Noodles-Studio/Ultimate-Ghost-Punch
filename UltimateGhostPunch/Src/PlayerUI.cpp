@@ -4,14 +4,14 @@
 #include <Camera.h>
 #include <UILayout.h>
 
-#include "Health.h"
-#include "PlayerController.h"
 #include "PlayerIndex.h"
 #include "GhostManager.h"
+#include "Health.h"
 
 REGISTER_FACTORY(PlayerUI);
 
-PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr), health(nullptr), mainCamera(nullptr), ghostManager(nullptr), name("")
+PlayerUI::PlayerUI(GameObject* gameObject) : UserComponent(gameObject), playerHUD(nullptr), playerIndicator(nullptr),
+health(nullptr), ghostManager(nullptr), mainCamera(nullptr), name(""), isVisible(false)
 {
 
 }
@@ -24,30 +24,28 @@ PlayerUI::~PlayerUI()
 void PlayerUI::start()
 {
 	// Initialize name to search through layout
-	PlayerController* playerController = gameObject->getComponent<PlayerController>();
-	
-	if (playerController == nullptr)
-		LOG("PlayerController not found");
-
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
-	if(playerIndex!=nullptr)
+
+	if (playerIndex != nullptr)
 		name = "Player" + std::to_string(playerIndex->getIndex());
 	else
 		LOG("PlayerIndex not found. Cannot get player index");
 
-
 	// Get health component to update stats
 	health = gameObject->getComponent<Health>();
+
 	if (health == nullptr)
 		LOG("Health component not found");
 
 	//Get ghostManager component to update status
 	ghostManager = gameObject->getComponent<GhostManager>();
+
 	if (ghostManager == nullptr)
 		LOG("Ghost Manager component not found");
 
 	// Get camera
 	GameObject* cameraObject = findGameObjectWithName("MainCamera");
+
 	if (cameraObject != nullptr)
 		mainCamera = cameraObject->getComponent<Camera>();
 
@@ -56,6 +54,7 @@ void PlayerUI::start()
 
 	// Get player layout
 	UILayout* cameraLayout = nullptr;
+
 	if (cameraObject != nullptr)
 		cameraLayout = cameraObject->getComponent<UILayout>();
 
@@ -69,22 +68,18 @@ void PlayerUI::start()
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
 
-	//TODO: esto esta feo aqui (o eso creo)
-	for (int i = 0; i < playerHUD.getChildCount(); i++)
-		playerHUD.getChildAtIndex(i).setInheritsAlpha(false);
-
 	//Initialize layout aspect
 	createHearts();
-	updateHealth();
+	createGhost();
 
 	isVisible = true;
 }
 
 void PlayerUI::update(float deltaTime)
 {
+	updateHearts();
+	updateGhost();
 	updateIndicator();
-	updateHealth();
-	updateState();
 }
 
 void PlayerUI::createHearts()
@@ -92,36 +87,27 @@ void PlayerUI::createHearts()
 	if (health == nullptr)
 		return;
 
-	std::string heartName = name + "Heart";
-	float posX = 0.3f;
-	float posY = 0.1f;
-	float xOffset = 0.03f;
-	float heartOffset = 0.02f;
+	float posX = 0.05f;
+	float posY = 0.65f;
+	float heartOffset = 0.15f;
 
 	for (int i = 1; i <= health->getHealth(); i++)
 	{
 		// Create heart
-		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage", heartName + std::to_string(i));
+		UIElement heart = playerHUD.createChild("TaharezLook/StaticImage", name + "Heart" + std::to_string(i));
+		heart.setProperty("Disabled", "true");
+		heart.setProperty("Image", "heart");
+		heart.setProperty("FrameEnabled", "false");
+		heart.setProperty("BackgroundEnabled", "false");
 
 		// Set position
 		heart.setPosition(posX, posY);
-		heart.setSize(0.05f, 0.2f);
+		heart.setSize(0.15f, 0.25f);
 
 		if (i % 2 != 0)
 			heart.flipHorizontal();
 		else
-			posX += xOffset;
-
-		posX += heartOffset;
-	}
-}
-
-void PlayerUI::updateState()
-{
-	if (health != nullptr && ghostManager != nullptr)
-	{
-		std::string state = health->isAlive() ? (health->isInvencible() ? "Invencible" : "Alive") : (ghostManager->isGhost() ? "Ghost" : "Dead");
-		changeState(state);
+			posX += heartOffset;
 	}
 }
 
@@ -132,33 +118,43 @@ void PlayerUI::updateHearts()
 			playerHUD.getChild(name + "Heart" + std::to_string(i)).setVisible(i <= health->getHealth());
 }
 
+void PlayerUI::createGhost()
+{
+	if (ghostManager == nullptr)
+		return;
+
+	// Create ghost
+	UIElement ghost = playerHUD.createChild("TaharezLook/StaticImage", name + "Ghost");
+	ghost.setProperty("Disabled", "true");
+	ghost.setProperty("Image", "ghost");
+	ghost.setProperty("FrameEnabled", "false");
+	ghost.setProperty("BackgroundEnabled", "false");
+
+	// Set position
+	ghost.setPosition(0.45f, 0.05f);
+	ghost.setSize(0.2f, 0.5f);
+}
+
+void PlayerUI::updateGhost()
+{
+	if (ghostManager != nullptr && ghostManager->ghostUsed() && playerHUD.getChild(name + "Ghost").isVisible())
+		playerHUD.getChild(name + "Ghost").setVisible(false);
+}
+
 void PlayerUI::updateIndicator()
 {
 	if (mainCamera == nullptr)
 		return;
 
 	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.005f, (float)pos.y - 0.24f);
-}
-
-void PlayerUI::changeState(const std::string state)
-{
-	playerHUD.getChild(name + "StateText").setText("State: " + state);
-}
-
-void PlayerUI::updateHealth()
-{
-	if (health != nullptr)
-		playerHUD.getChild(name + "HealthText").setText("Health: " + std::to_string(health->getHealth()));
-
-	updateHearts();
+	playerIndicator.setPosition((float)pos.x - 0.025f, (float)pos.y - 0.15f);
 }
 
 void PlayerUI::setVisible(bool visible)
 {
-	if (visible == isVisible) return;
+	if (visible == isVisible)
+		return;
 
 	isVisible = visible;
-	//playerHUD.setVisible(visible);
 	playerIndicator.setVisible(visible);
 }

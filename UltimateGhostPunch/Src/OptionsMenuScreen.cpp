@@ -74,9 +74,10 @@ void OptionsMenuScreen::start()
 	soundScroll.setScrollPositionScrollBar(soundVolume);
 	musicScroll.setScrollPositionScrollBar(musicVolume);
 
-	fullscreen = false;
-	resolution = windowManager->getActualResolutionId(); // Esto esta mal
+	fullscreen = windowManager->getFullscreen();
+	resolution = windowManager->getActualResolutionId();
 	currentResolution = resolution;
 
-	changeResolution(resolution);
+	changeFullscreen(fullscreen);
+	changeResolution(0);
 }

@@ -198,57 +198,6 @@ void Game::createLevel()
 	}
 }
 
-void Game::playSong()
-{
-	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
-}
-
-void Game::configureLevelRender(const std::string& name)
-{
-	GameObject* levelRender = findGameObjectWithName("LevelRender");
-	if (levelRender == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene");
-		return;
-	}
-
-	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
-	}
-
-	meshRenderer->setMesh("levelRender", name);
-	meshRenderer->attachEntityToNode("levelRender");
-}
-
-void Game::configureLevelCollider(const std::string& name)
-{
-	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
-	if (levelCollider == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return;
-	}
-
-	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
-	}
-
-	Strider* strider = levelCollider->getComponent<Strider>();
-	if (strider == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "Strider not found"); return;
-	}
-
-	meshRenderer->setMesh("levelCollider", name);
-	meshRenderer->attachEntityToNode("levelCollider");
-	meshRenderer->setVisible(false);
-	strider->stride("levelCollider");
-	strider->setFriction(0.5f);
-}
-
 void Game::createKnights()
 {
 	int nPlayers = gameManager->getNumPlayers();
@@ -298,6 +247,57 @@ void Game::createLights()
 		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 		light->transform->setDirection(lights[i].direction);
 	}
+}
+
+void Game::playSong()
+{
+	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
+}
+
+void Game::configureLevelRender(const std::string& name)
+{
+	GameObject* levelRender = findGameObjectWithName("LevelRender");
+	if (levelRender == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene");
+		return;
+	}
+
+	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+	}
+
+	meshRenderer->setMesh("levelRender", name);
+	meshRenderer->attachEntityToNode("levelRender");
+}
+
+void Game::configureLevelCollider(const std::string& name)
+{
+	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
+	if (levelCollider == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return;
+	}
+
+	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+	}
+
+	Strider* strider = levelCollider->getComponent<Strider>();
+	if (strider == nullptr)
+	{
+		LOG_ERROR("FIGHT MANAGER", "Strider not found"); return;
+	}
+
+	meshRenderer->setMesh("levelCollider", name);
+	meshRenderer->attachEntityToNode("levelCollider");
+	meshRenderer->setVisible(false);
+	strider->stride("levelCollider");
+	strider->setFriction(0.5f);
 }
 
 void Game::chooseWinner()

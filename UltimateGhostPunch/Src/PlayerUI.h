@@ -18,25 +18,26 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void changeState(const std::string state);
-	void updateHealth();
-
 	void setVisible(bool visible);
+
 private:
 	void createHearts();
-
-	void updateState();
 	void updateHearts();
+
+	void createGhost();
+	void updateGhost();
+
 	void updateIndicator();
 
 private:
-	Camera* mainCamera;
 	Health* health;
 	GhostManager* ghostManager;
+	Camera* mainCamera;
 
-	std::string name;
 	UIElement playerHUD;
 	UIElement playerIndicator;
+
+	std::string name;
 
 	bool isVisible;
 };
