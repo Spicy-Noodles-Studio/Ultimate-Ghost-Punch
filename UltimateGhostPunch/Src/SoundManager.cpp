@@ -7,7 +7,8 @@
 
 REGISTER_FACTORY(SoundManager);
 
-SoundManager::SoundManager(GameObject* gameObject) :	UserComponent(gameObject), soundEmitter(nullptr)
+SoundManager::SoundManager(GameObject* gameObject) : UserComponent(gameObject), soundEmitter(nullptr), playerState(nullptr), attackStarted(false), ghostStarted(false), blockGrabStarted(false),
+													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false)
 {
 
 }
@@ -29,128 +30,216 @@ void SoundManager::start()
 
 void SoundManager::update(float deltaTime)
 {
-	playJumpSound();
-	playGhostMoveSound();
-	playHurtSound();
-	playAttackBlockedSound();
+	manageSounds();
 }
 
-void SoundManager::playJumpSound()
+void SoundManager::manageJumpSound()
 {
-	if (playerState == nullptr && playerState->isGrounded() && playerState->isJumping())
+	if (playerState != nullptr && playerState->isGrounded() && playerState->isJumping())
 		playSound("jump");
 }
 
-void SoundManager::playLandSound()
+void SoundManager::manageLandSound()
 {
-	playSound("land");
+	if (playerState != nullptr && playerState->hasLanded() && playerState->canMove())
+		playSound("land");
 }
 
-void SoundManager::playWalkSound()
+void SoundManager::manageWalkSound()
 {
-	//if ( playerState == nullptr && playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
-	//	playSound("");
+	if (playerState != nullptr && playerState->isGrounded() && playerState->isMoving() && playerState->canMove()) 
+		playSound("run2");
+	else
+		stopSound("run2");
 }
 
-void SoundManager::playGhostMoveSound()
+void SoundManager::manageGhostMoveSound()
 {
 	if (playerState != nullptr && playerState->canGhostMove())
-		playSound("heartBeat");
+		playSound("heartBeat2");
+	else
+		stopSound("heartBeat2");		
 }
 
-void SoundManager::playHurtSound()
+void SoundManager::manageHurtSound()
 {
-	if (playerState == nullptr && playerState->isHurt())
+	if (playerState != nullptr && playerState->isHurt())
 		playSound("hurt2");
 }
 
-void SoundManager::playBlockSound()
+void SoundManager::manageBlockSound()
 {
-
+	if (playerState != nullptr && playerState->isBlocking())
+		playSound("shield");
+	else
+		stopSound("shield");
 }
 
-void SoundManager::playQuickAttackSound()
+void SoundManager::manageQuickAttackSound()
 {
+	if (playerState != nullptr && playerState->isQuickAttacking() && !attackStarted) {
+		playSound("swipe2");
+		attackStarted = true;
+	}
+	else if (playerState != nullptr && !playerState->isQuickAttacking())
+		attackStarted = false;
 }
 
-void SoundManager::playAttackHitSound()
+void SoundManager::manageAttackHitSound()
 {
+	if(playerState!= nullptr && playerState->hasHit())
+		playSound("hit2");
 }
 
-void SoundManager::playAttackBlockedSound()
+void SoundManager::manageAttackBlockedSound()
 {
-	if (playerState == nullptr && playerState->isBlocking() && playerState->hasBlocked())
+	if (playerState != nullptr && playerState->isBlocking() && playerState->hasBlocked())
 		playSound("block");
 }
 
-void SoundManager::playGrabMissSound()
+void SoundManager::manageGrabMissSound()
 {
+	if(playerState != nullptr && playerState->hasMissedGrab())
+		playSound("swipe");
 }
 
-void SoundManager::playGrabSound()
+void SoundManager::manageGrabSound()
 {
+	if (playerState != nullptr && playerState->isGrabbing() && !grabStarted) {
+		playSound("grab");
+		grabStarted = true;
+	}
+	else if (playerState == nullptr || !playerState->isGrabbing())
+		grabStarted = false;
 }
 
-void SoundManager::playThrowSound()
+void SoundManager::manageThrowSound()
 {
+	if(playerState != nullptr && playerState->hasDroppedGrab())
+		playSound("throw1");
 }
 
-void SoundManager::playGrabBlockedSound()
+void SoundManager::manageGrabBlockedSound()
 {
+	if (playerState != nullptr && playerState->hasBlockedGrab() && !blockGrabStarted) {
+		playSound("swordOnShield");
+		blockGrabStarted = true;
+	}
+	else if (playerState != nullptr && !playerState->hasBlockedGrab())
+		blockGrabStarted = false; 
 }
 
-void SoundManager::playBlockEndSound()
+void SoundManager::manageDodgeSound()
 {
+	if (playerState != nullptr && playerState->isDodging() && !dodgeStarted) {
+		playSound("dash2");
+		dodgeStarted = true;
+	}
+	else if (playerState != nullptr && !playerState->isDodging())
+		dodgeStarted = false;
 }
 
-void SoundManager::playDodgeSound()
+void SoundManager::manageStunSound()
 {
-	if (playerState == nullptr && playerState->isBlocking() && playerState->hasBlocked())
-		playSound("block");
+	if (playerState != nullptr && playerState->isStunned())
+		playSound("stun");
+	else
+		stopSound("stun");
 }
 
-void SoundManager::playHitSound()
+void SoundManager::manageHeavyAttackSound()
 {
+	if (playerState != nullptr && playerState->isHeavyAttacking())
+		playSound("heavyAttack");
+	else 
+		stopSound("heavyAttack");
 }
 
-void SoundManager::playStunSound()
+void SoundManager::manageUGPAimSound()
 {
+	if (playerState != nullptr && playerState->isAiming() && !aimStarted) {
+		playSound("ghost");
+		aimStarted = true;
+	}
+	else if (playerState == nullptr || !playerState->isAiming())
+		aimStarted = false;
 }
 
-void SoundManager::playHeavyAttackSound()
+void SoundManager::manageUGPSound()
 {
+	if (playerState != nullptr && playerState->isPunching() && !punchStarted) {
+		playSound("ugp2");
+		punchStarted = true;
+	}
+	else
+		punchStarted = false;
 }
 
-void SoundManager::playUGPAimSound()
+void SoundManager::manageGhostDieSound()
 {
+	if(playerState!= nullptr && playerState->hasGhostDied())
+		playSound("noo");
 }
 
-void SoundManager::playUGPSound()
+void SoundManager::manageGhostSuccessSound()
 {
+	if (playerState != nullptr && playerState->hasGhostSucceeded())
+		playSound("ghostLaugh");
 }
 
-void SoundManager::playUGPSuccesSound()
+void SoundManager::manageGhostSound()
 {
+	if (playerState != nullptr && playerState->isGhost() && !ghostStarted) {
+		playSound("ghostSee1");
+		ghostStarted = true;
+	}
+	else if (playerState == nullptr || !playerState->isGhost()) 
+		ghostStarted = false;
 }
 
-void SoundManager::playGhostDieSound()
+void SoundManager::manageRespawnSound()
 {
-}
-
-void SoundManager::playGhostSuccesSound()
-{
-}
-
-void SoundManager::playGhostSound()
-{
-}
-
-void SoundManager::playRespawnSound()
-{
+	if (playerState != nullptr && playerState->isRespawning() && !respawnStarted) {
+		playSound("respawn");
+		respawnStarted = true;
+	}
+	else if(playerState != nullptr && !playerState->isRespawning())
+		respawnStarted = false;
 }
 
 void SoundManager::playSound(const std::string& sound)
 {
 	if (soundEmitter != nullptr && !soundEmitter->isPlaying(sound)) soundEmitter->playSound(sound);
+}
+
+void SoundManager::stopSound(const std::string& sound)
+{
+	if (soundEmitter != nullptr && soundEmitter->isPlaying(sound)) soundEmitter->stop(sound);
+}
+
+void SoundManager::manageSounds()
+{
+	manageJumpSound();
+	manageLandSound();
+	manageWalkSound();
+	manageGhostMoveSound();
+	manageHurtSound();
+	manageBlockSound();
+	manageDodgeSound();
+	manageStunSound();
+	manageHeavyAttackSound();
+	manageQuickAttackSound();
+	manageAttackHitSound();
+	manageAttackBlockedSound();
+	manageGrabMissSound();
+	manageGrabSound();
+	manageThrowSound();
+	manageGrabBlockedSound();
+	manageUGPAimSound();
+	manageUGPSound();
+	manageGhostDieSound();
+	manageGhostSuccessSound();
+	manageGhostSound();
+	manageRespawnSound();
 }
 

@@ -25,7 +25,6 @@ Respawn::~Respawn()
 void Respawn::start()
 {
 	playerController = gameObject->getComponent<PlayerController>();
-	soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	initialPos = gameObject->transform->getPosition();
 	time = 0.0f;
@@ -93,8 +92,6 @@ void Respawn::spawn(const Vector3& spawnPos)
 
 	if (anim != nullptr)
 		anim->resurrectAnimation();
-
-	if (soundEmitter != nullptr) soundEmitter->playSound("respawn");
 }
 
 bool Respawn::isRespawning()

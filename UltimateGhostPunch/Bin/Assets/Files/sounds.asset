@@ -10,6 +10,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Button2.wav button2 2D false
 .//Assets//Sounds//Button3.wav button3 2D false
 .//Assets//Sounds//Button4.wav button4 2D false
+.//Assets//Sounds//Button5.mp3 button5 2D false
 .//Assets//Sounds//CountDown.wav countdown 2D false
 .//Assets//Sounds//CountDown2.wav countdown2 2D false
 .//Assets//Sounds//BlockHit.wav block1 3D false
@@ -51,12 +52,11 @@ SOUND EFFECTS
 .//Assets//Sounds//melee.wav melee 3D false
 .//Assets//Sounds//meleeEnemyHit.wav meleeEnemyHit 3D false
 .//Assets//Sounds//Noo1.mp3 noo 3D false
-.//Assets//Sounds//Noo2.wav noo2 3D false
-.//Assets//Sounds//Noo3.wav noo3 3D false
-.//Assets//Sounds//Noo4.wav noo4 3D false
-.//Assets//Sounds//Noo5.mp3 noo5 3D false
 .//Assets//Sounds//Respawn.wav respawn 3D false
+.//Assets//Sounds//Run.mp3 run 3D false
+.//Assets//Sounds//Run2.mp3 run2 3D false
 .//Assets//Sounds//Slash.wav slash 3D false
+.//Assets//Sounds//Shield.mp3 shield 3D false
 .//Assets//Sounds//Stun.mp3 stun 3D false
 .//Assets//Sounds//Swipe.mp3 swipe 3D false
 .//Assets//Sounds//Swipe2.mp3 swipe2 3D false

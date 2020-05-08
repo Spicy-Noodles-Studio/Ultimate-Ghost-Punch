@@ -17,6 +17,8 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
+	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted;
+
 public:
 	SoundManager(GameObject* gameObject);
 	virtual ~SoundManager();
@@ -24,33 +26,34 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 	
-	void playJumpSound();
-	void playLandSound();
-	void playWalkSound();
-	void playGhostMoveSound();
-	void playHurtSound();
-	void playBlockSound();
-	void playBlockEndSound();
-	void playDodgeSound();
-	void playHitSound();
-	void playStunSound();
-	void playHeavyAttackSound();
-	void playQuickAttackSound();
-	void playAttackHitSound();
-	void playAttackBlockedSound();
-	void playGrabMissSound();
-	void playGrabSound();
-	void playThrowSound();
-	void playGrabBlockedSound();
-	void playUGPAimSound();
-	void playUGPSound();
-	void playUGPSuccesSound();
-	void playGhostDieSound();
-	void playGhostSuccesSound();
-	void playGhostSound();
-	void playRespawnSound();
 private:
 	void playSound(const std::string& sound);
+	void stopSound(const std::string& sound);
+
+	void manageSounds();
+
+	void manageJumpSound();
+	void manageLandSound();
+	void manageWalkSound();
+	void manageGhostMoveSound();
+	void manageHurtSound();
+	void manageBlockSound();
+	void manageDodgeSound();
+	void manageStunSound();
+	void manageHeavyAttackSound();
+	void manageQuickAttackSound();
+	void manageAttackHitSound();
+	void manageAttackBlockedSound();
+	void manageGrabMissSound();
+	void manageGrabSound();
+	void manageThrowSound();
+	void manageGrabBlockedSound();
+	void manageUGPAimSound();
+	void manageUGPSound();
+	void manageGhostDieSound();
+	void manageGhostSuccessSound();
+	void manageGhostSound();
+	void manageRespawnSound();
 };
 
 #endif

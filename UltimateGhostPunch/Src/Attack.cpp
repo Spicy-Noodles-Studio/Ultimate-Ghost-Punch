@@ -2,7 +2,6 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerIndex.h"
@@ -18,7 +17,7 @@ REGISTER_FACTORY(Attack);
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), score(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
 										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr)
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), hit(false)
 {
 
 }
@@ -31,10 +30,8 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr) {
+	if (parent != nullptr) 
 		id = parent->getComponent<PlayerIndex>()->getIndex();
-		soundEmitter = parent->getComponent<SoundEmitter>();
-	}
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
@@ -66,6 +63,11 @@ void Attack::update(float deltaTime)
 		// Reset the current attack state
 		state = NOT_ATTACKING;
 	}
+}
+
+void Attack::postUpdate(float deltaTime)
+{
+	hit = false;
 }
 
 void Attack::handleData(ComponentData* data)
@@ -157,8 +159,6 @@ void Attack::onObjectStay(GameObject* other)
 
 				if (!enemyHealth->isAlive())
 					score->killedBy(otherIndex->getIndex(), id);
-
-				if (soundEmitter != nullptr) soundEmitter->playSound("hit2");
 			}
 			
 			// Deactivate the trigger until the next attack is used
@@ -166,6 +166,7 @@ void Attack::onObjectStay(GameObject* other)
 
 			// Reset the current attack state
 			state = NOT_ATTACKING;
+			hit = true;
 		}
 	}
 }
@@ -211,8 +212,6 @@ void Attack::quickAttack()
 		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->quickAttackAnimation();
 
-		if (soundEmitter != nullptr) soundEmitter->playSound("swipe");
-
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
 		charge(quickAttackCooldown, quickChargeTime);
@@ -232,8 +231,6 @@ void Attack::strongAttack()
 		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->strongAttackAnimation();
 
-		if (soundEmitter != nullptr) soundEmitter->playSound("heavyAttack");
-
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
 		charge(strongAttackCooldown, strongChargeTime);
@@ -245,4 +242,19 @@ void Attack::strongAttack()
 bool Attack::isAttacking() const
 {
 	return state == ATTACKING || state == CHARGING;
+}
+
+bool Attack::isHeavyAttacking() const
+{
+	return isAttacking() && currentAttack == STRONG;
+}
+
+bool Attack::isQuickAttacking() const
+{
+	return isAttacking() && currentAttack == QUICK;
+}
+
+bool Attack::hasHit() const
+{
+	return hit;
 }

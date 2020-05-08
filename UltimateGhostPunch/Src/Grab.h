@@ -9,7 +9,6 @@ class RigidBody;
 class Score;
 class PlayerController;
 class PlayerAnimController;
-class SoundEmitter;
 
 class Grab : public UserComponent
 {
@@ -30,12 +29,13 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
+	bool dropped, missed;
+
 	State state;
 
 	GameObject* parent;
 	PlayerController* controller;
 	PlayerAnimController* myAnim;
-	SoundEmitter* soundEmitter;
 
 	GameObject* enemy;
 	PlayerController* enemyController;
@@ -71,6 +71,8 @@ public:
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
+	bool hasMissed() const;
+	bool hasDropped() const;
 };
 
 #endif

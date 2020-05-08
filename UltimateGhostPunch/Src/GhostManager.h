@@ -14,7 +14,6 @@ class PlayerUI;
 class Game;
 class PlayerAnimController;
 class PlayerController;
-class SoundEmitter;
 
 class GhostManager : public UserComponent
 {
@@ -23,6 +22,8 @@ private:
 	bool used;
 	bool deathPosChanged;
 	bool ended;
+	bool success;
+	bool ghostDead;
 	
 	enum GhostMode
 	{
@@ -45,7 +46,6 @@ private:
 	Game* game;
 	PlayerAnimController* anim;
 	PlayerController* control;
-	SoundEmitter* soundEmitter;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
@@ -76,6 +76,9 @@ public:
 
 	void deactivatePlayer();
 	void handlePlayerDeath();
+
+	bool ghostSuccess() const;
+	bool ghostDeath() const;
 };
 
 #endif

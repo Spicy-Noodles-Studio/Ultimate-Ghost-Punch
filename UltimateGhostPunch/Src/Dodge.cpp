@@ -98,10 +98,6 @@ void Dodge::dodge()
 		//Animation
 		PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->dashAnimation();
-
-		//Sound
-		SoundEmitter* soundEmitter = gameObject->getComponent<SoundEmitter>();
-		if (soundEmitter != nullptr) soundEmitter->playSound("dash2");
 	}
 }
 

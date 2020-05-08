@@ -5,7 +5,6 @@
 #include <Scene.h>
 #include <Camera.h>
 #include <MathUtils.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "Health.h"
@@ -30,7 +29,6 @@ void UltimateGhostPunch::start()
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	anim = gameObject->getComponent<PlayerAnimController>();
-	soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	if (ghostMovement != nullptr)
 		ghostSpeed = ghostMovement->getSpeed();
@@ -90,8 +88,6 @@ void UltimateGhostPunch::charge()
 
 	if (anim != nullptr)
 		anim->chargingGhostAnimation();
-
-	if (soundEmitter != nullptr) soundEmitter->playSound("ghost");
 }
 
 void UltimateGhostPunch::aim(double x, double y)
@@ -123,8 +119,6 @@ void UltimateGhostPunch::ghostPunch()
 
 	state = State::PUNCHING;
 	if (anim != nullptr) anim->punchingGhostAnimation();
-
-	if (soundEmitter != nullptr) soundEmitter->playSound("ugp2");
 }
 
 const UltimateGhostPunch::State& UltimateGhostPunch::getState()
@@ -137,9 +131,18 @@ const Vector3& UltimateGhostPunch::getDirection()
 	return direction;
 }
 
-bool UltimateGhostPunch::isPunching()
+bool UltimateGhostPunch::isPunching() const
 {
 	return state == State::PUNCHING;
+}
+
+bool UltimateGhostPunch::isAiming() const
+{
+	return state == State::CHARGING;
+}
+bool UltimateGhostPunch::punchSuccess() const
+{
+	return state == State::SUCCESS;
 }
 
 void UltimateGhostPunch::punchSucceeded()

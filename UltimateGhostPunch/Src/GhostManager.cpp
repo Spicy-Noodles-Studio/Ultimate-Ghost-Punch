@@ -1,7 +1,6 @@
 #include "GhostManager.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "Movement.h"
@@ -23,7 +22,8 @@ REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), deathPosChanged(false), ended(false), ghost(false), used(false),
 													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), game(nullptr), anim(nullptr),
-													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO)
+													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO),
+													 ghostSpawnOffset(Vector3::ZERO), success(false), ghostDead(false)
 {
 }
 
@@ -43,7 +43,6 @@ void GhostManager::start()
 	anim = gameObject->getComponent<PlayerAnimController>();
 	playerUI = gameObject->getComponent<PlayerUI>();
 	control = gameObject->getComponent<PlayerController>();
-	soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	GameObject* aux = findGameObjectWithName("Game");
 	if (aux != nullptr) game = aux->getComponent<Game>();
@@ -73,6 +72,7 @@ void GhostManager::update(float deltaTime)
 		else if (!ended && game != nullptr) {
 			ended = true;
 			ghost = false;
+			ghostDead = true;
 			if (anim != nullptr) anim->notLoopAnimation("Disappear");
 			// Deactivate controller
 			auto control = gameObject->getComponent<PlayerController>();
@@ -81,8 +81,6 @@ void GhostManager::update(float deltaTime)
 
 			if (movement != nullptr)
 				movement->stop();
-
-			if (soundEmitter != nullptr) soundEmitter->playSound("noo");
 		}
 	}
 }
@@ -168,9 +166,8 @@ void GhostManager::onObjectEnter(GameObject* other)
 			if (!aux->isAlive())
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			
-			if (soundEmitter != nullptr) soundEmitter->playSound("ghostLaugh");
-
 			ghost = false;
+			success = true;
 		}
 	}
 }
@@ -227,8 +224,6 @@ void GhostManager::activateGhost()
 	auto control = gameObject->getComponent<PlayerController>();
 	if (control != nullptr) control->setActive(true);
 	mode = GHOST;
-
-	if (soundEmitter != nullptr) soundEmitter->playSound("ghostSee1");
 }
 
 void GhostManager::deactivateGhost()
@@ -299,4 +294,14 @@ void GhostManager::handlePlayerDeath()
 	{
 		deactivatePlayer();
 	}
+}
+
+bool GhostManager::ghostSuccess() const
+{
+	return success;
+}
+
+bool GhostManager::ghostDeath() const
+{
+	return ghostDead;
 }
