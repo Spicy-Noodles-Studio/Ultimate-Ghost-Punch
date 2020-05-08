@@ -16,6 +16,7 @@
 #include "UltimateGhostPunch.h"
 #include "Attack.h"
 #include "FightingState.h"
+#include "Block.h"
 
 REGISTER_FACTORY(AIStateMachine);
 
@@ -44,7 +45,11 @@ void AIStateMachine::start()
 	/* GET COMPONENTS */
 	movement = gameObject->getComponent<Movement>();
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0) jump = aux[0]->getComponent<Jump>();
+	if (aux.size() > 0)
+	{
+		jump = aux[0]->getComponent<Jump>();
+		block = aux[0]->getComponent<Block>();
+	}
 	dodge = gameObject->getComponent<Dodge>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
@@ -53,7 +58,6 @@ void AIStateMachine::start()
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
-
 	// Create states here
 	/* PLATFORM NAVIGATION STATE */
 	createPlatformNavigation();
@@ -112,6 +116,7 @@ void AIStateMachine::startGhostNavigation()
 void AIStateMachine::startFightingState()
 {
 	currentState = fightingState;
+	fightingState->setFighting(true);
 }
 
 void AIStateMachine::processActionInput()
@@ -156,6 +161,10 @@ void AIStateMachine::processActionInput()
 			break;
 		case ActionInput::STRONG_ATTACK:
 			if (attack != nullptr && !attack->attackOnCD() && !attack->isAttacking()) attack->strongAttack();
+			break;
+		case ActionInput::BLOCK:
+			if (block != nullptr) 
+				block->block();
 			break;
 
 		default:
@@ -204,6 +213,11 @@ void AIStateMachine::createFightingState()
 
 void AIStateMachine::changeTarget()
 {
+	if (fightingState->isFighting()) // Do not change target while fighting
+	{
+		return;
+	}
+
 	// TODO: de momento es random, cambiar si se quiere
 	int size = knights->size();
 

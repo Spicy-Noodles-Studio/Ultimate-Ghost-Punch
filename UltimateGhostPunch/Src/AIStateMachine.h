@@ -15,10 +15,11 @@ class PlatformMovement;
 class GhostNavigation;
 class GhostManager;
 class Attack;
+class Block;
 class FightingState;
 
 enum class ActionInput {
-	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK
+	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK, BLOCK
 };
 
 class AIStateMachine :	public StateMachine
@@ -40,6 +41,7 @@ private:
 	UltimateGhostPunch* ghostPunch;
 	GhostManager* ghostManager;
 	Attack* attack;
+	Block* block;
 
 	/* States */
 	PlatformNavigation* platformNavigation;
@@ -65,6 +67,8 @@ public:
 	void startGhostNavigation();
 	void startFightingState();
 
+	void changeTarget();
+
 private:
 	virtual void processActionInput();
 
@@ -75,7 +79,6 @@ private:
 	void createFightingState();
 
 	/* Funcs */
-	void changeTarget();
 	void updateState();
 };
 
