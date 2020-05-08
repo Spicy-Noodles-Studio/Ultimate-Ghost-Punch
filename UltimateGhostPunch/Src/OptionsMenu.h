@@ -8,8 +8,7 @@
 #include <vector>
 #include <string>
 
-const int MAX_VOLUME = 100;
-const int MAX_GAMMA = 100;
+const int MAX_VALUE = 100;
 
 class InterfaceSystem;
 class RenderSystem;
@@ -24,42 +23,44 @@ protected:
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
 
-	UIElement resolutionButton;
-	UIElement volumeScroll;
+	UIElement applyButton;
+	UIElement restoreButton;
+
+	UIElement brightnessScroll;
+	UIElement soundScroll;
 	UIElement musicScroll;
-	UIElement gammaScroll;
 
 	UIElement resolutionText;
-	UIElement volumeText;
+	UIElement fullscreenText;
+	UIElement brightnessText;
+	UIElement soundText;
 	UIElement musicText;
-	UIElement gammaText;
-	UIElement checkbox;
 
 	UIElement root;
 
+	float brightness;
+	float soundVolume;
 	float musicVolume;
-	float soundsVolume;
-	float gamma;
 
 	bool fullscreen;
 	int resolution;
-	int currResolution;
+	int currentResolution;
 
 	std::vector<std::string> resolutionNames;
+	std::vector<std::string> screenNames;
 	std::vector<std::pair<int, int>> resolutions;
 
 protected:
-	bool resolutionButtonClick();
-	bool resetConfigButtonClick();
+	bool backButtonClick();
+	bool applyButtonClick();
+	bool restoreButtonClick();
 
 	bool changeResolution(int value);
-	bool changeFullscreen(bool value);
+	bool changeFullscreen(int value);
 
+	bool changeBrightness();
 	bool changeSoundVolume();
 	bool changeMusicVolume();
-	bool changeGamma();
-
-	bool backButtonClick();
 
 public:
 	OptionsMenu(GameObject* gameObject);

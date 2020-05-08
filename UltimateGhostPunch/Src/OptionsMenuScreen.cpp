@@ -53,23 +53,23 @@ void OptionsMenuScreen::start()
 	if (cameraLayout != nullptr)
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 
-	resolutionButton = optionsMenu.getChild("ResolutionApplyButton");
+	applyButton = optionsMenu.getChild("ResolutionApplyButton");
 
-	volumeScroll = optionsMenu.getChild("SoundScroll");
+	soundScroll = optionsMenu.getChild("SoundScroll");
 	musicScroll = optionsMenu.getChild("MusicScroll");
-	gammaScroll = optionsMenu.getChild("GammaScroll");
+	brightnessScroll = optionsMenu.getChild("GammaScroll");
 
 	resolutionText = optionsMenu.getChild("Resolution");
 
-	volumeText = optionsMenu.getChild("SoundVolume");
+	soundText = optionsMenu.getChild("SoundVolume");
 	musicText = optionsMenu.getChild("MusicVolume");
-	gammaText = optionsMenu.getChild("Gamma");
+	brightnessText = optionsMenu.getChild("Gamma");
 
-	checkbox = optionsMenu.getChild("FullscreenYesButton");
+	//checkbox = optionsMenu.getChild("FullscreenYesButton");
 
 	musicVolume = soundSystem->getMusicVolume();
-	soundsVolume = soundSystem->getSoundVolume();
-	gamma = windowManager->getBrightness();
+	soundVolume = soundSystem->getSoundVolume();
+	brightness = windowManager->getBrightness();
 
 	resolution = windowManager->getActualResolutionId();
 	if (resolution == 0)
@@ -78,8 +78,8 @@ void OptionsMenuScreen::start()
 	changeResolution(0);
 
 	musicScroll.setScrollPositionScrollBar(musicVolume);
-	volumeScroll.setScrollPositionScrollBar(soundsVolume);
-	gammaScroll.setScrollPositionScrollBar(gamma);
+	soundScroll.setScrollPositionScrollBar(soundVolume);
+	brightnessScroll.setScrollPositionScrollBar(brightness);
 
-	checkbox.setCheckBoxState(windowManager->getFullscreen());
+	//checkbox.setCheckBoxState(windowManager->getFullscreen());
 }
