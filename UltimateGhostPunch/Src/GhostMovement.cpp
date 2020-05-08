@@ -50,9 +50,6 @@ void GhostMovement::move(Vector3 dir)
 		dir *= maxSpeed;
 		if (rigidBody != nullptr)
 			rigidBody->setLinearVelocity(dir);
-
-		//SoundEmitter* soundEmitter = gameObject->getComponent<SoundEmitter>();
-		//if (soundEmitter != nullptr) soundEmitter->playSound("heartBeat");
 	}
 }
 

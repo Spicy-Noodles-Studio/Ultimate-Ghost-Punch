@@ -91,7 +91,7 @@ void UltimateGhostPunch::charge()
 	if (anim != nullptr)
 		anim->chargingGhostAnimation();
 
-	if (soundEmitter != nullptr) soundEmitter->playSound("ghostSee1");
+	if (soundEmitter != nullptr) soundEmitter->playSound("ghost");
 }
 
 void UltimateGhostPunch::aim(double x, double y)

@@ -161,6 +161,9 @@
     <ClCompile Include="..\..\Src\Menu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\SoundManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h">
@@ -291,6 +294,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Menu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\SoundManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

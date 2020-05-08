@@ -81,6 +81,8 @@ bool ConfigurationMenu::changeLevel(int value)
 
 bool ConfigurationMenu::fightButtonClick()
 {
+	buttonClick(fightSound);
+	
 	// set data
 	GameManager* gameManager = GameManager::GetInstance();
 	gameManager->setLevel(levelNames[levelIndex]);
@@ -101,8 +103,6 @@ bool ConfigurationMenu::fightButtonClick()
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("Game", true);
-
-	buttonClick(fightSound);
 
 	return false;
 }

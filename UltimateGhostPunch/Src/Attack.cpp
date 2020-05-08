@@ -160,9 +160,6 @@ void Attack::onObjectStay(GameObject* other)
 
 				if (soundEmitter != nullptr) soundEmitter->playSound("hit2");
 			}
-			else {
-				if (soundEmitter != nullptr) soundEmitter->playSound("block");
-			}
 			
 			// Deactivate the trigger until the next attack is used
 			attackTrigger->setActive(false);

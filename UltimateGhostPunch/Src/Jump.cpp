@@ -109,8 +109,6 @@ void Jump::jump()
 
 	auto animController = parent->getComponent<PlayerAnimController>();
 	if (animController != nullptr) animController->jumpAnimation();
-
-	if (soundEmitter != nullptr) soundEmitter->playSound("jump");
 }
 
 void Jump::cancelJump()
