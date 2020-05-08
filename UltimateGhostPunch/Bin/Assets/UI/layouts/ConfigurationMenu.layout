@@ -308,12 +308,12 @@
 					<Property name="RightButton" value="+HealthButton" />
                     <Property name="Font" value="Sans" />
         </Window>
-        # FIGHT BUTTON
-        <Window type="TaharezLook/Button" name="FightButton" >
+        # START BUTTON
+        <Window type="TaharezLook/Button" name="StartButton" >
             <Property name="Area" value="{{0.4,0},{0.8,0},{0.6,0},{0.85,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
-            <Property name="Text" value="FIGHT!" />
+            <Property name="Text" value="START!" />
 			<Property name="UpButton" value="+HealthButton" />
 			<Property name="DownButton" value="BackButton" />
 			<Property name="LeftButton" value="BackButton" />

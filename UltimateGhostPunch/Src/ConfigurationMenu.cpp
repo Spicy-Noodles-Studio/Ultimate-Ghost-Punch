@@ -70,7 +70,7 @@ bool ConfigurationMenu::changeLevel(int value)
 	return false;
 }
 
-bool ConfigurationMenu::fightButtonClick()
+bool ConfigurationMenu::startButtonClick()
 {
 	// set data
 	GameManager* gameManager = GameManager::GetInstance();
@@ -103,7 +103,7 @@ bool ConfigurationMenu::backButtonClick()
 
 // -----
 
-ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
+ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), startButton(NULL),
 numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
@@ -119,7 +119,7 @@ numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 	interfaceSystem->registerEvent("-levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(-1); }));
 	interfaceSystem->registerEvent("+levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(+1); }));
 
-	interfaceSystem->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
+	interfaceSystem->registerEvent("startButtonClick", UIEvent("ButtonClicked", [this]() {return startButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
@@ -138,7 +138,7 @@ ConfigurationMenu::~ConfigurationMenu()
 	interfaceSystem->unregisterEvent("-levelButtonClick");
 	interfaceSystem->unregisterEvent("+levelButtonClick");
 
-	interfaceSystem->unregisterEvent("fightButtonClick");
+	interfaceSystem->unregisterEvent("startButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
@@ -151,7 +151,7 @@ void ConfigurationMenu::start()
 		configLayout = mainCamera->getComponent<UILayout>();
 
 	if (configLayout != nullptr)
-		fightButton = configLayout->getRoot().getChild("FightButton");
+		startButton = configLayout->getRoot().getChild("StartButton");
 
 	levelIndex = 0;
 	songIndex = 0;
@@ -210,8 +210,8 @@ void ConfigurationMenu::fillSlot(int slotIndex, int deviceIndex)
 
 	numPlayers++;
 
-	if (!fightButton.isVisible() && numPlayers >= MIN_PLAYERS)
-		fightButton.setVisible(true);
+	if (!startButton.isVisible() && numPlayers >= MIN_PLAYERS)
+		startButton.setVisible(true);
 }
 
 void ConfigurationMenu::clearSlot(int index)
@@ -221,8 +221,8 @@ void ConfigurationMenu::clearSlot(int index)
 
 	numPlayers--;
 
-	if (fightButton.isVisible() && numPlayers < MIN_PLAYERS)
-		fightButton.setVisible(false);
+	if (startButton.isVisible() && numPlayers < MIN_PLAYERS)
+		startButton.setVisible(false);
 }
 
 void ConfigurationMenu::reorderSlots(int index)

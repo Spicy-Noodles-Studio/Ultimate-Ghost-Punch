@@ -33,8 +33,6 @@ GameManager* GameManager::GetInstance()
 
 void GameManager::start()
 {
-	/*level = "";
-	song = "";*/
 	playerColours = { {1,1,1}, {0,0,1}, {0,1,0}, {0,1,1} };
 
 	dontDestroyOnLoad(gameObject);

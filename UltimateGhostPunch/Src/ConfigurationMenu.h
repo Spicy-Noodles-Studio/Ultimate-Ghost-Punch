@@ -8,11 +8,11 @@
 #include <vector>
 #include <string>
 
-const int MIN_TIME = 20;
-const int MAX_TIME = 240;
-const int CHANGE_TIME = 20;
+const int MIN_TIME = 60;
+const int MAX_TIME = 300;
+const int CHANGE_TIME = 10;
 
-const int MIN_HEALTH = 1;
+const int MIN_HEALTH = 2;
 const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
@@ -28,7 +28,7 @@ private:
 
 	std::vector<std::pair<int, UIElement>> slots;
 	UILayout* configLayout;
-	UIElement fightButton;
+	UIElement startButton;
 
 	int numPlayers;
 	int health;
@@ -54,7 +54,7 @@ private:
 	bool changeSong(int value);
 	bool changeLevel(int value);
 
-	bool fightButtonClick();
+	bool startButtonClick();
 	bool backButtonClick();
 
 public:

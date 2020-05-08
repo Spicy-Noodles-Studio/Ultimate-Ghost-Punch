@@ -31,7 +31,7 @@
             <Window type="TaharezLook/StaticText" name="ScreenSettingsText" >
                 <Property name="Area" value="{{0.2,0},{0.15,0},{0.5,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                <Property name="Text" value="SCREEN SETTINGS" />
+                <Property name="Text" value="WINDOW SETTINGS" />
                 <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -126,7 +126,7 @@
             <Window type="TaharezLook/StaticText" name="SettingsText" >
                 <Property name="Area" value="{{0.2,0},{0.5,0},{0.5,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{0.1,0}}" />
-                <Property name="Text" value="OTHER SETTINGS" />
+                <Property name="Text" value="GRAPHICS AND AUDIO" />
                 <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
