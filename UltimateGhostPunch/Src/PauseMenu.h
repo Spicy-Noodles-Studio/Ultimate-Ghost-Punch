@@ -11,11 +11,14 @@ class PauseMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
+
 	UIElement pauseMenu;
+	UIElement pauseText;
+
 	UIElement optionsMenu;
 
-	bool backButtonClick();
-	bool optionsButton();
+	bool optionsButtonClick();
+	bool exitButtonClick();
 	
 public:
 	PauseMenu(GameObject* gameObject);

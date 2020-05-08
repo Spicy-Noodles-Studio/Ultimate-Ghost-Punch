@@ -10,15 +10,7 @@
 
 REGISTER_FACTORY(PauseMenu);
 
-bool PauseMenu::backButtonClick()
-{
-	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("MainMenu");
-
-	return false;
-}
-
-bool PauseMenu::optionsButton()
+bool PauseMenu::optionsButtonClick()
 {
 	pauseMenu.setVisible(false);
 	pauseMenu.setAlwaysOnTop(false);
@@ -33,18 +25,26 @@ bool PauseMenu::optionsButton()
 	return false;
 }
 
-PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
+bool PauseMenu::exitButtonClick()
+{
+	GameManager::GetInstance()->pauseGame(false);
+	SceneManager::GetInstance()->changeScene("MainMenu");
+
+	return false;
+}
+
+PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), pauseText(NULL), optionsMenu(NULL)
 {
 	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
+	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
+	InterfaceSystem::GetInstance()->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
 }
 
 PauseMenu::~PauseMenu()
 {
 	InterfaceSystem::GetInstance()->unregisterEvent("resumeButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseBackButtonClick");
 	InterfaceSystem::GetInstance()->unregisterEvent("pauseOptionsButtonClick");
+	InterfaceSystem::GetInstance()->unregisterEvent("pauseExitButtonClick");
 }
 
 void PauseMenu::start()
@@ -53,23 +53,30 @@ void PauseMenu::start()
 	optionsMenu = findGameObjectWithName("OptionsMenuScreen")->getComponent<UILayout>()->getRoot();
 
 	if (cameraLayout != nullptr)
+	{
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+		pauseText = cameraLayout->getRoot().getChild("PauseText");
+	}
 
 	inputSystem = InputSystem::GetInstance();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (inputSystem->getKeyPress("ESCAPE"))
+	if (inputSystem->getKeyPress("ESCAPE") && !optionsMenu.isVisible()) // Falta input del mando
 		setPaused(!GameManager::GetInstance()->gameIsPaused());
 }
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (paused == GameManager::GetInstance()->gameIsPaused()) return;
+	if (paused == GameManager::GetInstance()->gameIsPaused())
+		return;
 
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
+
+	pauseText.setVisible(paused);
+
 	GameManager::GetInstance()->pauseGame(paused);
 }
 

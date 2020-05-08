@@ -6,14 +6,15 @@
 #include <WindowManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
-#include <ctime>
 
+#include "PlayerController.h"
+#include "CameraController.h"
 #include "GameManager.h"
 #include "DebugUtils.h"
 
 REGISTER_FACTORY(Countdown);
 
-Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), text(NULL), time(0), started(false), charged(false), paused(false)
+Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), text(NULL), players(), cameraControl(nullptr), time(0), startCounting(false), countingDown(false)
 {
 
 }
@@ -29,45 +30,46 @@ void Countdown::start()
 
 	if (cameraLayout != nullptr)
 		text = cameraLayout->getRoot().getChild("Countdown");
+
+
+	cameraControl = findGameObjectWithName("MainCamera")->getComponent<CameraController>();
+	players = GameManager::GetInstance()->getKnights();
 }
 
-void Countdown::preUpdate(float deltaTime)
+void Countdown::update(float deltaTime)
 {
-	if (charged && !started)
+	if (!startCounting)
 	{
-		pauseGame();
-		started = true;
-		paused = true;
-		last = std::chrono::steady_clock::now();
+		for (int i = 0; i < players.size(); i++)
+			players[i]->getComponent<PlayerController>()->setActive(false);
+
+		cameraControl->setActive(false);
+
+		startCounting = true;
+		countingDown = true;
 	}
 
-	if (paused)
+	if (countingDown)
 	{
-		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
-		std::chrono::duration<float> elapsed = std::chrono::duration_cast<std::chrono::duration<float>>(current - last);
-
-		deltaTime = elapsed.count();
-		last = current;
 		time -= deltaTime;
 
 		if (time >= 1)
 			text.setText(std::to_string((int)time));
 		else
-		{ 
-			text.setPosition(0.3f, 0.25f);
-			text.setText("FIGHT!"); 
-		}
+			text.setText("FIGHT!");
 
 		if (time <= 0)
-		{ 
-			startGame(); 
-			paused = false;
+		{
 			text.setText("");
+
+			for (int i = 0; i < players.size(); i++)
+				players[i]->getComponent<PlayerController>()->setActive(true);
+
+			cameraControl->setActive(true);
+
+			countingDown = false;
 		}
 	}
-	
-	if (!charged)
-		charged = true;
 }
 
 void Countdown::handleData(ComponentData* data)
@@ -85,12 +87,7 @@ void Countdown::handleData(ComponentData* data)
 	}
 }
 
-void Countdown::startGame()
+bool Countdown::isCounting() const
 {
-	GameManager::GetInstance()->pauseGame(false);
-}
-
-void Countdown::pauseGame()
-{
-	GameManager::GetInstance()->pauseGame(true);
+	return countingDown;
 }

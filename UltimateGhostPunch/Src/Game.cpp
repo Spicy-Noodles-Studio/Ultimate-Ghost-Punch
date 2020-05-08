@@ -2,25 +2,26 @@
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
-#include <UILayout.h>
 #include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <Light.h>
 #include <Strider.h>
+#include <UILayout.h>
 #include <GaiaData.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
+#include "Score.h"
 #include "Health.h"
 #include "GhostManager.h"
-#include "Score.h"
+#include "Countdown.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
-fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), gameLayout(nullptr),  countdown(nullptr), timeText(NULL),
+nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
 {
 
 }
@@ -36,15 +37,12 @@ void Game::start()
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	if (mainCamera != nullptr)
-		fightLayout = mainCamera->getComponent<UILayout>();
+		gameLayout = mainCamera->getComponent<UILayout>();
 
-	if (fightLayout != nullptr)
-	{
-		timeText = fightLayout->getRoot().getChild("Time");
-		winnerPanel = fightLayout->getRoot().getChild("WinnerBackground");
-		winnerText = winnerPanel.getChild("Winner");
-	}
-	winnerPanel.setVisible(false);
+	if (gameLayout != nullptr)
+		timeText = gameLayout->getRoot().getChild("Time");
+
+	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 
 	playerIndexes = gameManager->getPlayerIndexes();
 	playerColours = gameManager->getPlayerColours();
@@ -54,38 +52,30 @@ void Game::start()
 	createSpikes();
 	createKnights();
 	createLights();
+
+	timer = gameManager->getTime();
 	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
-
-	fightTimer = gameManager->getTime();
-	finishTimer = 4.0f; // Hard Coded
-
 	gameManager->pauseGame(false);
+
 	playSong();
 }
 
 void Game::update(float deltaTime)
 {
-	if (fightTimer > 0)
+	if (!countdown->isCounting() && timer > 0)
 	{
-		fightTimer -= deltaTime;
-		if (fightTimer < 0.0f)
-			fightTimer = 0.0f;
+		timer -= deltaTime;
+		if (timer < 0.0f)
+			timer = 0.0f;
 
-		timeText.setText(std::to_string((int)fightTimer % 60));
+		timeText.setText(std::to_string((int)timer % 60));
 	}
-	else if (fightTimer == 0)
+	else if (timer == 0)
 	{
 		// If its negative it means match its not timed
 		// End game
 		if (winner == -1)
 			chooseWinner();
-
-		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f)
-		{
-			gameManager->getKnights().clear();
-			SceneManager::GetInstance()->changeScene("StatsMenu");
-		}
 	}
 }
 
@@ -312,7 +302,7 @@ void Game::createLights()
 
 void Game::chooseWinner()
 {
-	fightTimer = 0.0f;
+	timer = 0.0f;
 
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
@@ -336,16 +326,6 @@ void Game::chooseWinner()
 				tie = true;
 		}
 	}
-	winnerPanel.setVisible(true);
 
-	if (tie)
-	{
-		winner = -1;
-		winnerText.setText("TIE");
-	}
-	else
-	{
-		winner = majorIndex;
-		winnerText.setText("Winner: P" + std::to_string(winner + 1));
-	}
+	SceneManager::GetInstance()->changeScene("StatsMenu");
 }

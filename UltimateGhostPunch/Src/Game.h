@@ -12,6 +12,7 @@
 class InputSystem;
 class GameManager;
 class UILayout;
+class Countdown;
 
 class Game : public UserComponent
 {
@@ -27,17 +28,13 @@ private:
 	};
 
 	GameManager* gameManager;
-	UILayout* fightLayout;
+	UILayout* gameLayout;
+	Countdown* countdown;
 
 	UIElement timeText;
-	UIElement winnerPanel;
-	UIElement winnerText;
 
 	std::vector<int> playerIndexes;
 	std::vector<Vector3> playerColours;
-
-	float fightTimer; // If time is -1, then infinite
-	float finishTimer; // Time taken to send us back to MainMenu
 
 	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
@@ -46,6 +43,8 @@ private:
 	int nSpikes;
 	int nLights;
 	int winner;
+
+	float timer; // If time is -1, then infinite
 
 	void createLevel();
 	void createKnights();
