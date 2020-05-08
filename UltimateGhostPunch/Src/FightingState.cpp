@@ -34,6 +34,12 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
+	if (attack->isAttacking()) // Wait until attack ends
+	{
+		LOG("ATACANDO...\n");
+		return;
+	}
+
 	int rnd = rand() % 100;
 
 	// QUICK ATTACK RANGE
@@ -68,7 +74,7 @@ void FightingState::selectAction()
 		else if (rnd < seekProb_SAR)					// Action: Transition to seek
 		{
 			LOG("GETTING CLOSER...\n");
-			//transition();
+			((AIStateMachine*)stateMachine)->startPlatformNavigation();
 		}
 		else											// Action: Try to shield
 		{
@@ -80,7 +86,6 @@ void FightingState::selectAction()
 
 	// NOT IN RANGE OF ATTACK
 	LOG("GETTING CLOSER...\n");
-	//transition()
 	((AIStateMachine*)stateMachine)->startPlatformNavigation();
 
 }
