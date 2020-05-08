@@ -1,9 +1,13 @@
 #include "FightingState.h"
 #include <time.h>
 #include <MathUtils.h>
-#include "AIStateMachine.h"
 
-FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine)
+#include "GameObject.h"
+
+#include "AIStateMachine.h"
+#include "Attack.h"
+
+FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(30), shieldProb_QAR(20), strongAttackProb_SAR(60), seekProb_SAR(20), shieldProb_SAR(20)
 {
 }
 
@@ -11,34 +15,74 @@ FightingState::~FightingState()
 {
 }
 
-
 void FightingState::update(float deltaTime)
 {
 	selectAction();
+	//attack->objInQuickAttackSensor(target);
 }
 
 
 bool FightingState::enemyInQuickAttackRange()
 {
-	// FALTA COMPROBAR SI HAY ALGUIEN EN EL RANGO
-	return true;
+	return attack->objInQuickAttackSensor(target);
 }
 
 bool FightingState::enemyInStrongAttackRange()
 {
-	// FALTA COMPROBAR SI HAY ALGUIEN EN EL RANGO
-	return true;
+	return attack->objInStrongAttackSensor(target);
 }
 
 void FightingState::selectAction()
 {
-	srand(time(NULL));
+	int rnd = rand() % 100;
 
+	// QUICK ATTACK RANGE
+	if (enemyInQuickAttackRange())
+	{
+		if (rnd < quickAttackProb_QAR)								// Action: Quick Attack
+		{
+			LOG("QUICK ATTACK...\n");
+			quickAttack();
+		}
+		else if (rnd < quickAttackProb_QAR + strongAttackProb_QAR)	// Action: Strong Attack
+		{
+			LOG("STRONG ATTACK...\n");
+			strongAttack();
+		}
+		else														// Action: Try to shield
+		{
+			LOG("USING SHIELD...\n");
+			//shield();
+		}
+		return;
+	}
 
-	int i = rand() % 100;
+	// STRONG ATTACK RANGE
+	if (enemyInStrongAttackRange())
+	{
+		if (rnd < strongAttackProb_SAR)					// Action: Strong Attack
+		{
+			LOG("STRONG ATTACK (SAR)...\n");
+			strongAttack();
+		}
+		else if (rnd < seekProb_SAR)					// Action: Transition to seek
+		{
+			LOG("GETTING CLOSER...\n");
+			//transition();
+		}
+		else											// Action: Try to shield
+		{
+			LOG("USING SHIELD (SAR)...\n");
+			//shield();
+		}
+		return;
+	}
 
-	if (i < 30 && enemyInQuickAttackRange()) quickAttack();
-	else if (i < 60 && enemyInStrongAttackRange()) strongAttack();
+	// NOT IN RANGE OF ATTACK
+	LOG("GETTING CLOSER...\n");
+	//transition()
+	((AIStateMachine*)stateMachine)->startPlatformNavigation();
+
 }
 
 void FightingState::quickAttack()
@@ -54,4 +98,17 @@ void FightingState::strongAttack()
 }
 
 
+void FightingState::setTarget(GameObject* target)
+{
+	this->target = target;
+}
 
+void FightingState::setCharacter(GameObject* character)
+{
+	this->character = character;
+
+	auto aux = character->findChildrenWithTag("attackSensor");
+	if (aux.size() > 0)
+		attack = aux[0]->getComponent<Attack>();
+	
+}

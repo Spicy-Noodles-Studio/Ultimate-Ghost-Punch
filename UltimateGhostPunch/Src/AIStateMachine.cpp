@@ -152,10 +152,10 @@ void AIStateMachine::processActionInput()
 			break;
 			/* ATTACK */
 		case ActionInput::QUICK_ATTACK:
-			if (attack != nullptr && !attack->atttackOnCD() && !attack->isAttacking()) attack->quickAttack();
+			if (attack != nullptr && !attack->attackOnCD() && !attack->isAttacking()) attack->quickAttack();
 			break;
 		case ActionInput::STRONG_ATTACK:
-			if (attack != nullptr && !attack->atttackOnCD() && !attack->isAttacking()) attack->strongAttack();
+			if (attack != nullptr && !attack->attackOnCD() && !attack->isAttacking()) attack->strongAttack();
 			break;
 
 		default:
@@ -198,6 +198,8 @@ void AIStateMachine::createFightingState()
 {
 	fightingState = new FightingState(this);
 	addStateAction(fightingState);
+
+	fightingState->setCharacter(gameObject);
 }
 
 void AIStateMachine::changeTarget()
@@ -212,6 +214,7 @@ void AIStateMachine::changeTarget()
 	// TO STUFF
 	if(platformNavigation != nullptr) platformNavigation->setTarget(target);
 	if(ghostNavigation != nullptr) ghostNavigation->setTarget(target);
+	if (fightingState != nullptr) fightingState->setTarget(target);
 
 	// TODO: cambiar el cambio de estado
 	if (platformGraph != nullptr && platformMovement != nullptr) {
