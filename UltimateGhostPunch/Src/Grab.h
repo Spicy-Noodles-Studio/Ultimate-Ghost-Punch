@@ -70,6 +70,7 @@ public:
 
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
+	bool isStunned() const;
 };
 
 #endif

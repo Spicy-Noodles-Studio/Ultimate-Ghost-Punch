@@ -22,6 +22,7 @@ private:
 	int playersBelow;	// Used as a boolean, count number of players the sensor is colliding with
 	bool grounded;		// Only true when sensor detects collision with floor
 	bool jumping;
+	bool landed;
 
 public:
 	Jump(GameObject* gameObject);
@@ -29,6 +30,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 	virtual void handleData(ComponentData* data);
@@ -42,6 +44,8 @@ public:
 	bool isGrounded();
 	bool isJumping();
 	bool canJump();
+
+	bool hasLanded() const;
 };
 
 #endif

@@ -217,6 +217,11 @@ bool Grab::isOnCooldown() const
 	return cooldown > 0;
 }
 
+bool Grab::isStunned() const
+{
+	return state == BLOCKED;
+}
+
 void Grab::resetEnemy()
 {
 	grabTimer = cooldown;

@@ -1,14 +1,14 @@
-particle_system BloodSplash
+particle_system StunSparks
 { 
-  material BloodSplash
+  material StunSparks
   particle_width 0.5
   particle_height 0.5
   quota 20
 
   emitter Point
   { 
-    direction 0 1 0
-    angle 180
+    direction 0 1 1
+    angle 120
     emission_rate 10000
     time_to_live 0.4
     velocity_min 4
@@ -26,10 +26,5 @@ particle_system BloodSplash
     rotation_range_end 360
     rotation_speed_range_start -60
     rotation_speed_range_end 200
-  }
-
-  affector Scaler
-  { 
-    rate 0.75
   }
 }

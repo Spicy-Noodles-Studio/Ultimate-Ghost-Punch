@@ -1,6 +1,6 @@
-particle_system JumpDust
+particle_system LandDust
 { 
-    material JumpDust
+    material LandDust
     particle_width 0.5
     particle_height 0.5
     quota 20
@@ -13,7 +13,7 @@ particle_system JumpDust
       direction 0 1 0
       angle 50
       emission_rate 10000
-      time_to_live 0.5
+      time_to_live 0.3
       velocity_min 1
       velocity_max 4
       colour 0.75 0.75 0.75 0.75
@@ -21,10 +21,10 @@ particle_system JumpDust
     
     affector ColourFader
     { 
-      red 0.5
-      green 0.5
-      blue 0.5
-      alpha -1.5
+      red 0.75
+      green 0.75
+      blue 0.75
+      alpha -2.35
     }
 
     affector LinearForce
@@ -42,11 +42,11 @@ particle_system JumpDust
 
     affector Scaler
     { 
-      rate 2
+      rate 4
     }
 
     affector DirectionRandomiser
     { 
-      randomness 5
+      randomness 10
     }
 }

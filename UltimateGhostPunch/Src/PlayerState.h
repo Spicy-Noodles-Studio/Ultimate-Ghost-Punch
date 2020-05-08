@@ -46,7 +46,10 @@ public:
 	bool isGrounded() const;
 	bool isHurt() const;
 	bool isBlocking() const;
+	bool isStunned() const;
+
 	bool hasBlocked() const;
+	bool hasLanded() const;
 };
 
 #endif

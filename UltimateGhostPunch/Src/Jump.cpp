@@ -10,7 +10,8 @@
 
 REGISTER_FACTORY(Jump);
 
-Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f), playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr)
+Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f),
+									 playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr), landed(false)
 {
 
 }
@@ -23,10 +24,8 @@ Jump::~Jump()
 void Jump::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr) {
-		rigidBody = parent->getComponent<RigidBody>();
-		soundEmitter = parent->getComponent<SoundEmitter>();
-	}
+	if (parent != nullptr) rigidBody = parent->getComponent<RigidBody>();
+	landed = false;
 }
 
 void Jump::update(float deltaTime)
@@ -34,6 +33,11 @@ void Jump::update(float deltaTime)
 	// Manage coyote time so jumping is possible when not grounded for a certain time
 	if (coyoteTimer >= 0.0f)
 		coyoteTimer -= deltaTime;
+}
+
+void Jump::postUpdate(float deltaTime)
+{
+	landed = false;
 }
 
 void Jump::onObjectEnter(GameObject* other)
@@ -45,8 +49,9 @@ void Jump::onObjectEnter(GameObject* other)
 	{
 		if (isFloor) {
 			grounded = true;
-			if (soundEmitter != nullptr) soundEmitter->playSound("land");
+			landed = true;
 		}
+
 		coyoteTimer = 0.0f;
 		jumping = false; // Cannot be jumping if is on floor
 
@@ -146,4 +151,9 @@ bool Jump::isJumping()
 bool Jump::canJump()
 {
 	return grounded || playersBelow || coyoteTimer > 0.0f;
+}
+
+bool Jump::hasLanded() const
+{
+	return landed;
 }
