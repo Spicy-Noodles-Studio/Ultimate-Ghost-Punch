@@ -193,8 +193,6 @@ void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 
 	// Move an offset
 	attackTransform->setPosition(offset);
-	LOG("Scale = { %f, %f, %f }\n", scale.x * currentScale.x, scale.y * currentScale.y, scale.z * currentScale.z);
-	LOG("Position = { %f, %f, %f }\n", attackTransform->getPosition().x, attackTransform->getPosition().y, attackTransform->getPosition().z);
 }
 
 bool Attack::attackOnCD()

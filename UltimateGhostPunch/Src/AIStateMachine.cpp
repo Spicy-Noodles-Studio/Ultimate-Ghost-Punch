@@ -166,6 +166,10 @@ void AIStateMachine::processActionInput()
 			if (block != nullptr) 
 				block->block();
 			break;
+		case ActionInput::UNBLOCK:
+			if (block != nullptr)
+				block->unblock();
+			break;
 
 		default:
 			LOG("ActionInput no procesado");

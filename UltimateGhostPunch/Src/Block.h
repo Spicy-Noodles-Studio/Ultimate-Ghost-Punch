@@ -36,6 +36,7 @@ public:
 	bool blockAttack(float damage, Vector3 otherPosition);
 
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
+	float getMaxBlockTime() const;
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
 	bool wasGrabBlocked() const;

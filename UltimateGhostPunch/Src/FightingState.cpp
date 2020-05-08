@@ -7,8 +7,9 @@
 #include "AIStateMachine.h"
 #include "Attack.h"
 #include "Health.h"
+#include "Block.h"
 
-FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(30), blockProb_QAR(20), strongAttackProb_SAR(60), seekProb_SAR(20), blockProb_SAR(20)
+FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(45), blockProb_QAR(5), strongAttackProb_SAR(60), seekProb_SAR(38), blockProb_SAR(2), blockSpamTimeMAX(10)
 {
 }
 
@@ -18,6 +19,8 @@ FightingState::~FightingState()
 
 void FightingState::update(float deltaTime)
 {
+	if (blockSpamTime > 0) blockSpamTime -= deltaTime;
+	if (unblockTime > 0) unblockTime -= deltaTime;
 	selectAction();
 	//attack->objInQuickAttackSensor(target);
 }
@@ -35,7 +38,15 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
-	if (attack->isAttacking()) // Wait until attack ends
+	if (blockComp != nullptr && blockComp->isBlocking())
+	{
+		if (unblockTime <= 0)
+			unblock();
+		
+		return;
+	}
+
+	if (attack != nullptr && attack->isAttacking()) // Wait until attack ends
 	{
 		//LOG("ATACANDO...\n");
 		return;
@@ -43,7 +54,10 @@ void FightingState::selectAction()
 
 	Health* targetHealth = target->getComponent<Health>();
 	if (targetHealth != nullptr && !targetHealth->isAlive()) // Change target if target is dead
+	{
 		transitionToPlatformNav();
+		return;
+	}
 
 	int rnd = rand() % 100;
 
@@ -62,8 +76,9 @@ void FightingState::selectAction()
 		}
 		else														// Action: Try to shield
 		{
-			LOG("USING SHIELD...\n");
-			block();
+			//LOG("USING SHIELD...\n");
+			if(blockSpamTime <= 0)
+				block();
 		}
 		return;
 	}
@@ -76,14 +91,14 @@ void FightingState::selectAction()
 			//LOG("STRONG ATTACK (SAR)...\n");
 			strongAttack();
 		}
-		else if (rnd < seekProb_SAR)					// Action: Transition to seek
+		else if (rnd < strongAttackProb_SAR + seekProb_SAR)					// Action: Transition to seek
 		{
 			//LOG("GETTING CLOSER...\n");
 			transitionToPlatformNav();
 		}
 		else											// Action: Try to shield
 		{
-			LOG("USING SHIELD (SAR)...\n");
+			//LOG("USING SHIELD (SAR)...\n");
 			block();
 		}
 		return;
@@ -112,6 +127,16 @@ void FightingState::block()
 {
 	ActionInput action = ActionInput::BLOCK;
 	stateMachine->addActionInput(action);
+	
+	float minUnblockTime = blockComp->getMaxBlockTime() / 4;
+	unblockTime = minUnblockTime + (float) (rand()) / ((float) (RAND_MAX / (blockComp->getMaxBlockTime() - minUnblockTime)));
+	blockSpamTime = blockSpamTimeMAX;
+}
+
+void FightingState::unblock()
+{
+	ActionInput action = ActionInput::UNBLOCK;
+	stateMachine->addActionInput(action);
 }
 
 void FightingState::transitionToPlatformNav()
@@ -135,6 +160,12 @@ void FightingState::setCharacter(GameObject* character)
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
 	
+	std::vector<GameObject*> ground = character->findChildrenWithTag("groundSensor");
+	if (ground.size() > 0)
+	{
+		//jump = aux[0]->getComponent<Jump>();
+		blockComp = ground[0]->getComponent<Block>();
+	}
 }
 
 void FightingState::setFighting(bool fighting)

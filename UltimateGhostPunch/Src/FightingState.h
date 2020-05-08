@@ -3,7 +3,7 @@
 
 class GameObject;
 class Attack;
-class Shield;
+class Block;
 
 class FightingState :
 	public StateAction
@@ -12,6 +12,7 @@ private:
 	GameObject* target;
 	GameObject* character;	// Object being controlled
 	Attack* attack;
+	Block* blockComp;
 
 	// Probability of actions ( % )
 	// * IN QUICK ATTACK RANGE(QAR):
@@ -24,6 +25,10 @@ private:
 	int seekProb_SAR;
 	int blockProb_SAR;
 
+	float blockSpamTimeMAX; // Time until the AI can block again
+	float blockSpamTime;
+	float unblockTime; // Time until unblock
+
 	bool fighting;
 
 	bool enemyInQuickAttackRange();
@@ -33,6 +38,7 @@ private:
 	void quickAttack();
 	void strongAttack();
 	void block();
+	void unblock();
 	void transitionToPlatformNav();
 
 public:

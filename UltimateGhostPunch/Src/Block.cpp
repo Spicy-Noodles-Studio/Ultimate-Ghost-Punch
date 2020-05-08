@@ -162,6 +162,11 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 	return false;
 }
 
+float Block::getMaxBlockTime() const
+{
+	return maxBlockTime;
+}
+
 bool Block::wasGrabBlocked() const
 {
 	return blocking && blockTime > maxBlockTime - blockGrabMargin;
