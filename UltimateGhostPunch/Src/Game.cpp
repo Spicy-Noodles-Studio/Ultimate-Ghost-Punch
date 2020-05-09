@@ -7,6 +7,7 @@
 #include <RigidBody.h>
 #include <Light.h>
 #include <Strider.h>
+#include <ParticleEmitter.h>
 #include <GaiaData.h>
 
 #include "PlayerController.h"
@@ -206,6 +207,33 @@ void Game::createLevel()
 
 		lights.push_back({ type, { posX, posY, posZ }, intensity, { colX, colY, colZ }, { dirX, dirY, dirZ } });
 	}
+
+	// Read Particles
+	GaiaData particlesData = levelData.find("Particles");
+	GameObject* levelParticles = findGameObjectWithName("LevelParticles");
+	if (levelParticles == nullptr) {
+		LOG("LevelParticles not found");
+		return;
+	}
+	// Create Particles
+	for (int i = 0; i < particlesData.size(); i++) {
+		if (particlesData[i].size() < 2) continue;
+		// Get name and position
+		std::string name = particlesData[i][0].getValue();
+		std::stringstream ss(particlesData[i][1].getValue());
+		Vector3 position; ss >> position.x >> position.y >> position.z;
+		// Create Particle Emitter through blueprint
+		GameObject* particlesObject = instantiate("ParticleEmitter");
+		if (particlesObject == nullptr)
+			continue;
+		levelParticles->addChild(particlesObject);
+		particlesObject->transform->setPosition(position);
+		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
+		if (particleEmitter == nullptr)
+			continue;
+		particleEmitter->newEmitter(name);
+		particleEmitter->start();
+	}
 }
 
 void Game::playSong()
@@ -309,6 +337,11 @@ void Game::createLights()
 		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 		light->transform->setDirection(lights[i].direction);
 	}
+}
+
+void Game::createParticles()
+{
+
 }
 
 void Game::chooseWinner()

@@ -1,0 +1,38 @@
+particle_system WaterLeaks
+{ 
+  material WaterLeaks
+  particle_width 0.1
+  particle_height 0.175
+  quota 300
+
+  emitter Box
+  { 
+    width 200
+    height 50
+    depth 0.1
+    direction 0 -1 0
+    angle 0
+    emission_rate 10
+    time_to_live 10
+    velocity_min 5
+    velocity_max 5
+  }
+
+  emitter Box
+  { 
+    width 200
+    height 50
+    depth 0.1
+    direction 0 -1 0
+    angle 0
+    emission_rate 10
+    time_to_live 10
+    velocity_min 5
+    velocity_max 5
+  }
+
+  affector LinearForce
+  { 
+    force_vector 0 -20 0
+  }
+}
