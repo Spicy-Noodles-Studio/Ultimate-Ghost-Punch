@@ -27,6 +27,16 @@ void PlatformGraph::drawLinks()
 		}
 }
 
+float PlatformGraph::getDistance(const Vector3& pos, const PlatformNode& node)
+{
+	Vector3 aux = node.getMiddle();
+
+	float distance = sqrt(pow((aux.x - pos.x),2) + pow((aux.y - pos.y), 2) + pow((aux.z - pos.z), 2));
+
+
+	return distance;
+}
+
 PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3()), levelEnd(Vector3()), currentPos(Vector3()), currentPlatformIndex(0),
 													   fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(0.75f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
 													   loadFilename(saveFilename)
@@ -229,6 +239,26 @@ int PlatformGraph::getIndex(const Vector3& pos)
 		if (yDiff < minYDiff)
 		{
 			minYDiff = yDiff;
+			index = i;
+		}
+	}
+	return index;
+}
+
+int PlatformGraph::getFurthestIndex(const Vector3& pos)
+{
+	int index = -1;
+	
+	float max = -1;
+
+	for (int i = 0; i < platforms.size(); i++)
+	{
+		PlatformNode node = platforms[i];
+
+		float aux = getDistance(pos,node);
+
+		if (aux > max) {
+			max = aux;
 			index = i;
 		}
 	}

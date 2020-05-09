@@ -25,6 +25,7 @@ public:
 
 	void setTarget(const Vector3& position);
 	void setTarget(GameObject* target);
+	void setTarget(const PlatformNode& node);
 
 	/* Returns true if character is over target */
 	bool hasArrived() const;

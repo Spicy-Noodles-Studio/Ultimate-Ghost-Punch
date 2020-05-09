@@ -53,6 +53,11 @@ void PlatformNavigation::setTarget(GameObject* target)
 	setTarget(target->transform->getPosition());
 }
 
+void PlatformNavigation::setTarget(const PlatformNode& node)
+{
+	target = node;
+}
+
 bool PlatformNavigation::hasArrived() const
 {
 	if (character == nullptr || platformGraph == nullptr) return false;

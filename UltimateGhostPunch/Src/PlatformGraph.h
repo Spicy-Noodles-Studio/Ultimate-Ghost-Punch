@@ -32,6 +32,8 @@ private:
 
 	void drawLinks();
 
+	float getDistance(const Vector3& pos, const PlatformNode& node);
+
 public:
 	PlatformGraph(GameObject* gameObject);
 	virtual ~PlatformGraph();
@@ -56,6 +58,8 @@ public:
 	void setLoadFileName(std::string name);
 
 	int getIndex(const Vector3& pos);
+
+	int getFurthestIndex(const Vector3& pos);
 
 	std::vector<PlatformNode>& getPlatforms();
 };
