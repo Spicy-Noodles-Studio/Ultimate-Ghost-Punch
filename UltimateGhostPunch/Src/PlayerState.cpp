@@ -166,7 +166,7 @@ bool PlayerState::hasBlocked() const
 
 bool PlayerState::hasLanded() const
 {
-	return jump != nullptr && jump->hasLanded();
+	return (ghostManager == nullptr || !ghostManager->isGhost()) && jump != nullptr && jump->hasLanded();
 }
 
 bool PlayerState::hasHit() const

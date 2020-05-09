@@ -22,11 +22,13 @@ SOUND EFFECTS
 .//Assets//Sounds//Fall.wav fall 3D false
 .//Assets//Sounds//Fight.wav fight 2D false
 .//Assets//Sounds//Ghost.mp3 ghost 3D false
+.//Assets//Sounds//Ghost2.mp3 ghost2 3D false
 .//Assets//Sounds//GhostBreath.mp3 ghostBreath 3D false
 .//Assets//Sounds//GhostBreath2.wav ghostBreath2 3D false
 .//Assets//Sounds//GhostISeeYou.mp3 ghostSee1 3D false
 .//Assets//Sounds//GhostISeeYou2.wav ghostSee2 3D false
 .//Assets//Sounds//GhostLaugh.mp3 ghostLaugh 3D false
+.//Assets//Sounds//GhostLaugh2.mp3 ghostLaugh2 3D false
 .//Assets//Sounds//GhostMovement.wav ghostMovement 3D false
 .//Assets//Sounds//GhostMovement1.wav ghostMovement1 3D false
 .//Assets//Sounds//GhostMovement2.mp3 ghostMovement2 3D false

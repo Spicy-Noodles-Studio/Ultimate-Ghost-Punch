@@ -7,8 +7,30 @@
 
 REGISTER_FACTORY(SoundManager);
 
+#define playSoundInstant( sound, condition)\
+if (playerState != nullptr && playerState->condition())\
+playSound(sound);
+
+#define playSoundInstant2( sound, condition1, condition2)\
+if (playerState != nullptr && playerState->condition1() && playerState->condition2())\
+playSound(sound);
+
+#define playSoundOnce(sound, condition, boolean)\
+if (playerState != nullptr && playerState->condition() && !boolean) {\
+	playSound(sound);\
+	boolean = true;\
+}\
+else if (playerState != nullptr && !playerState->condition())\
+	boolean = false;
+
+#define playSoundRepeatedly(sound, condition)\
+if (playerState != nullptr && playerState->condition())\
+	playSound(sound);\
+else\
+	stopSound(sound);
+
 SoundManager::SoundManager(GameObject* gameObject) : UserComponent(gameObject), soundEmitter(nullptr), playerState(nullptr), attackStarted(false), ghostStarted(false), blockGrabStarted(false),
-													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false)
+													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false)
 {
 
 }
@@ -35,14 +57,12 @@ void SoundManager::update(float deltaTime)
 
 void SoundManager::manageJumpSound()
 {
-	if (playerState != nullptr && playerState->isGrounded() && playerState->isJumping())
-		playSound("jump");
+	playSoundInstant2("jump", isGrounded, isJumping);
 }
 
 void SoundManager::manageLandSound()
 {
-	if (playerState != nullptr && playerState->hasLanded() && playerState->canMove())
-		playSound("land");
+	playSoundInstant2("land", hasLanded, canMove);
 }
 
 void SoundManager::manageWalkSound()
@@ -55,156 +75,97 @@ void SoundManager::manageWalkSound()
 
 void SoundManager::manageGhostMoveSound()
 {
-	if (playerState != nullptr && playerState->canGhostMove())
-		playSound("heartBeat2");
-	else
-		stopSound("heartBeat2");		
+	playSoundRepeatedly("heartBeat2", canGhostMove)	
 }
 
 void SoundManager::manageHurtSound()
 {
-	if (playerState != nullptr && playerState->isHurt())
-		playSound("hurt2");
+	playSoundInstant("hurt2", isHurt)
 }
 
 void SoundManager::manageBlockSound()
 {
-	if (playerState != nullptr && playerState->isBlocking())
-		playSound("shield");
-	else
-		stopSound("shield");
+	playSoundRepeatedly("shield", isBlocking)
 }
 
 void SoundManager::manageQuickAttackSound()
 {
-	if (playerState != nullptr && playerState->isQuickAttacking() && !attackStarted) {
-		playSound("swipe2");
-		attackStarted = true;
-	}
-	else if (playerState != nullptr && !playerState->isQuickAttacking())
-		attackStarted = false;
+	playSoundOnce("swipe2", isQuickAttacking, attackStarted)
 }
 
 void SoundManager::manageAttackHitSound()
 {
-	if(playerState!= nullptr && playerState->hasHit())
-		playSound("hit2");
+	playSoundInstant("hit2", hasHit)
 }
 
 void SoundManager::manageAttackBlockedSound()
 {
-	if (playerState != nullptr && playerState->isBlocking() && playerState->hasBlocked())
-		playSound("block");
+	playSoundInstant2("block",isBlocking, hasBlocked)
 }
 
 void SoundManager::manageGrabMissSound()
 {
-	if(playerState != nullptr && playerState->hasMissedGrab())
-		playSound("swipe");
+	playSoundInstant("swipe", hasMissedGrab)
 }
 
 void SoundManager::manageGrabSound()
 {
-	if (playerState != nullptr && playerState->isGrabbing() && !grabStarted) {
-		playSound("grab");
-		grabStarted = true;
-	}
-	else if (playerState == nullptr || !playerState->isGrabbing())
-		grabStarted = false;
+	playSoundOnce("grab",isGrabbing, grabStarted)
 }
 
 void SoundManager::manageThrowSound()
 {
-	if(playerState != nullptr && playerState->hasDroppedGrab())
-		playSound("throw1");
+	playSoundInstant("throw1", hasDroppedGrab)
 }
 
 void SoundManager::manageGrabBlockedSound()
 {
-	if (playerState != nullptr && playerState->hasBlockedGrab() && !blockGrabStarted) {
-		playSound("swordOnShield");
-		blockGrabStarted = true;
-	}
-	else if (playerState != nullptr && !playerState->hasBlockedGrab())
-		blockGrabStarted = false; 
+	playSoundOnce("swordOnShield", hasBlockedGrab, blockGrabStarted)
 }
 
 void SoundManager::manageDodgeSound()
 {
-	if (playerState != nullptr && playerState->isDodging() && !dodgeStarted) {
-		playSound("dash2");
-		dodgeStarted = true;
-	}
-	else if (playerState != nullptr && !playerState->isDodging())
-		dodgeStarted = false;
+	playSoundOnce("dash2",isDodging,dodgeStarted)
 }
 
 void SoundManager::manageStunSound()
 {
-	if (playerState != nullptr && playerState->isStunned())
-		playSound("stun");
-	else
-		stopSound("stun");
+	playSoundRepeatedly("stun", isStunned)
 }
 
 void SoundManager::manageHeavyAttackSound()
 {
-	if (playerState != nullptr && playerState->isHeavyAttacking())
-		playSound("heavyAttack");
-	else 
-		stopSound("heavyAttack");
+	playSoundRepeatedly("heavyAttack", isHeavyAttacking)
 }
 
 void SoundManager::manageUGPAimSound()
 {
-	if (playerState != nullptr && playerState->isAiming() && !aimStarted) {
-		playSound("ghost");
-		aimStarted = true;
-	}
-	else if (playerState == nullptr || !playerState->isAiming())
-		aimStarted = false;
+	playSoundOnce("ghost2", isAiming, aimStarted)
 }
 
 void SoundManager::manageUGPSound()
 {
-	if (playerState != nullptr && playerState->isPunching() && !punchStarted) {
-		playSound("ugp2");
-		punchStarted = true;
-	}
-	else
-		punchStarted = false;
+	playSoundOnce("ugp2",isPunching, punchStarted)
 }
 
 void SoundManager::manageGhostDieSound()
 {
-	if(playerState!= nullptr && playerState->hasGhostDied())
-		playSound("noo");
+	playSoundInstant("noo",hasGhostDied)
 }
 
 void SoundManager::manageGhostSuccessSound()
 {
-	if (playerState != nullptr && playerState->hasGhostSucceeded())
-		playSound("ghostLaugh");
+	playSoundOnce("ghostLaugh2", hasGhostSucceeded, ghostSuccess)
 }
 
 void SoundManager::manageGhostSound()
 {
-	if (playerState != nullptr && playerState->isGhost() && !ghostStarted) {
-		playSound("ghostSee1");
-		ghostStarted = true;
-	}
-	else if (playerState == nullptr || !playerState->isGhost()) 
-		ghostStarted = false;
+	playSoundOnce("ghostSee1",isGhost,ghostStarted)
 }
 
 void SoundManager::manageRespawnSound()
 {
-	if (playerState != nullptr && playerState->isRespawning() && !respawnStarted) {
-		playSound("respawn");
-		respawnStarted = true;
-	}
-	else if(playerState != nullptr && !playerState->isRespawning())
-		respawnStarted = false;
+	playSoundOnce("respawn",isRespawning,respawnStarted)
 }
 
 void SoundManager::playSound(const std::string& sound)
