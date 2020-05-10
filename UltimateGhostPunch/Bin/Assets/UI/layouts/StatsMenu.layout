@@ -1,390 +1,282 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout version="4" >
-    <Window type="DefaultWindow" name="StatsMenu" >
-        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
-        <Property name="MaxSize" value="{{1,0},{1,0}}" />
-        #P1 Text
-        <Window type="TaharezLook/StaticText" name="P1" >
-                    <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+     <Window type="DefaultWindow" name="StatsMenu" >
+          <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+          <Property name="MaxSize" value="{{1,0},{1,0}}" />
+          # RESULT TEXT
+          <Window type="TaharezLook/StaticText" name="Result" >
+               <Property name="Area" value="{{0,0},{0,0},{1,0},{0.25,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Text" value="WINNER/TIE" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans32" />
+               <Property name="HorzFormatting" value="CentreAligned" />
+          </Window>
+          # BUTTON TEXT
+          <Window type="TaharezLook/StaticText" name="Button" >
+               <Property name="Area" value="{{0,0},{0.9,0},{1,0},{1,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Text" value="Press ESC or START" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans" />
+               <Property name="HorzFormatting" value="CentreAligned" />
+          </Window>
+          # P1 TEXT
+          <Window type="TaharezLook/StaticText" name="P1" >
+               <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Property name="Text" value="Player 1" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans" />
+          </Window>
+          # P1 PANEL
+          <Window type="TaharezLook/StaticImage" name="P1Background" >
+               <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Window type="TaharezLook/StaticText" name="P1Kills" >
+                    <Property name="Area" value="{{0.05,0},{0.05,0},{1,0},{0.15,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player 1" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                     <Property name="Visible" value="False" />
-                </Window>
-        ## P1 PANEL
-         <Window type="TaharezLook/StaticImage" name="P1Background" >
-            <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Visible" value="False" />
-            <Window type="TaharezLook/ScrollablePane" name="P1ScrollablePane" >
-                <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                 <Window type="TaharezLook/StaticText" name="P1Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player kills: " />
+                    <Property name="Text" value="Players killed: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P1DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
-                    <Property name="Text" value="Total damage dealt: " />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1DamageDealt" >
+                    <Property name="Area" value="{{0.05,0},{0.15,0},{1,0},{0.25,0}}" />
+                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Damage dealt: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P1TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1DamageReceived" >
+                    <Property name="Area" value="{{0.05,0},{0.25,0},{1,0},{0.35,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Total damage received: " />
-                </Window>
-                
-                 <Window type="TaharezLook/StaticText" name="P1TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Times has fallen: " />
+                    <Property name="Text" value="Damage received: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P1DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1AcuracyPercentage" >
+                    <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Enviroment hazards hit: " />
+                    <Property name="Text" value="Acuracy of hits: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P1DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1TimesFallen" >
+                    <Property name="Area" value="{{0.05,0},{0.45,0},{1,0},{0.55,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Enviroment hazards deaths: " />
-                </Window>
-                  <Window type="TaharezLook/StaticText" name="P1Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Attacks made: " />
+                    <Property name="Text" value="Times fallen: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P1PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1HitsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Succesfull attacks: " />
+                    <Property name="Text" value="Hits by enviroment: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P1SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P1DeathsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Successful grabs made: " />
+                    <Property name="Text" value="Deaths by enviroment: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P1LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+          </Window>
+          # P2 TEXT
+          <Window type="TaharezLook/StaticText" name="P2" >
+               <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Property name="Text" value="Player 2" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans" />
+          </Window>
+          # P2 PANEL
+          <Window type="TaharezLook/StaticImage" name="P2Background" >
+               <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Window type="TaharezLook/StaticText" name="P2Kills" >
+                    <Property name="Area" value="{{0.05,0},{0.05,0},{1,0},{0.15,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Lives stolen: " />
+                    <Property name="Text" value="Players killed: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-            </Window>
-        </Window>
-         #P2 Text
-        <Window type="TaharezLook/StaticText" name="P2" >
-                    <Property name="Area" value="{{0.35,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2DamageDealt" >
+                    <Property name="Area" value="{{0.05,0},{0.15,0},{1,0},{0.25,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player 2" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                     <Property name="Visible" value="False" />
-                </Window>
-        ## P2 PANEL
-        <Window type="TaharezLook/StaticImage" name="P2Background" >
-            <Property name="Area" value="{{0.3,0},{0.2,0},{0.5,0},{0.8,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Visible" value="False" />
-            <Window type="TaharezLook/ScrollablePane" name="P2ScrollablePane" >
-                <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                 <Window type="TaharezLook/StaticText" name="P2Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
+                    <Property name="Text" value="Damage dealt: " />
+                    <Property name="Disabled" value="true" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2DamageReceived" >
+                    <Property name="Area" value="{{0.05,0},{0.25,0},{1,0},{0.35,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player kills: " />
+                    <Property name="Text" value="Damage received: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P2DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Total damage dealt: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P2TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2AcuracyPercentage" >
+                    <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Total damage received: " />
-                </Window>
-                
-                 <Window type="TaharezLook/StaticText" name="P2TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
+                    <Property name="Text" value="Acuracy of hits: " />
+                    <Property name="Disabled" value="true" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2TimesFallen" >
+                    <Property name="Area" value="{{0.05,0},{0.45,0},{1,0},{0.55,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Times fallen: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Times has fallen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P2DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2HitsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Hits by enviroment: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Enviroment hazards hit: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P2DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P2DeathsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Deaths by enviroment: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                    <Property name="Text" value="Enviroment hazards deaths: " />
-                </Window>
-                  <Window type="TaharezLook/StaticText" name="P2Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+          </Window>
+          # P3 TEXT
+          <Window type="TaharezLook/StaticText" name="P3" >
+               <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Property name="Text" value="Player 3" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans" />
+          </Window>
+          # P3 PANEL
+          <Window type="TaharezLook/StaticImage" name="P3Background" >
+               <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Window type="TaharezLook/StaticText" name="P3Kills" >
+                    <Property name="Area" value="{{0.05,0},{0.05,0},{1,0},{0.15,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Players killed: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Attacks made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P2PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3DamageDealt" >
+                    <Property name="Area" value="{{0.05,0},{0.15,0},{1,0},{0.25,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Damage dealt: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Succesfull attacks: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P2SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3DamageReceived" >
+                    <Property name="Area" value="{{0.05,0},{0.25,0},{1,0},{0.35,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Damage received: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Successful grabs made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P2LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3AcuracyPercentage" >
+                    <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Acuracy of hits: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Lives stolen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-            </Window>
-        </Window>
-         #P3 Text
-        <Window type="TaharezLook/StaticText" name="P3" >
-                    <Property name="Area" value="{{0.55,0},{0.1,0},{1,0},{0.2,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3TimesFallen" >
+                    <Property name="Area" value="{{0.05,0},{0.45,0},{1,0},{0.55,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player 3" />
+                    <Property name="Text" value="Times fallen: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Visible" value="False" />
-                </Window>
-        ## P3 PANEL
-        <Window type="TaharezLook/StaticImage" name="P3Background" >
-            <Property name="Area" value="{{0.5,0},{0.2,0},{0.7,0},{0.8,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Visible" value="False" />
-                <Window type="TaharezLook/ScrollablePane" name="P3ScrollablePane" >
-                <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                 <Window type="TaharezLook/StaticText" name="P3Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3HitsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Hits by enviroment: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Player kills: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P3DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
-                    <Property name="Text" value="Total damage dealt: " />
-                    <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P3TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P3DeathsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Total damage received: " />
-                </Window>
-                
-                 <Window type="TaharezLook/StaticText" name="P3TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
+                    <Property name="Text" value="Deaths by enviroment: " />
+                    <Property name="Disabled" value="true" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+          </Window>
+          # P4 TEXT
+          <Window type="TaharezLook/StaticText" name="P4" >
+               <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Property name="Text" value="Player 1" />
+               <Property name="Disabled" value="true" />
+               <Property name="Font" value="Sans" />
+          </Window>
+          # P4 PANEL
+          <Window type="TaharezLook/StaticImage" name="P4Background" >
+               <Property name="Area" value="{{0.1,0},{0.2,0},{0.3,0},{0.8,0}}" />
+               <Property name="MaxSize" value="{{1,0},{1,0}}" />
+               <Property name="Visible" value="False" />
+               <Window type="TaharezLook/StaticText" name="P4Kills" >
+                    <Property name="Area" value="{{0.05,0},{0.05,0},{1,0},{0.15,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Players killed: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Times has fallen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P3DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4DamageDealt" >
+                    <Property name="Area" value="{{0.05,0},{0.15,0},{1,0},{0.25,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Damage dealt: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Enviroment hazards hit: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P3DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4DamageReceived" >
+                    <Property name="Area" value="{{0.05,0},{0.25,0},{1,0},{0.35,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Damage received: " />
                     <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                    <Property name="Text" value="Enviroment hazards deaths: " />
-                </Window>
-                  <Window type="TaharezLook/StaticText" name="P3Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4AcuracyPercentage" >
+                    <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Acuracy of hits: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Attacks made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P3PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4TimesFallen" >
+                    <Property name="Area" value="{{0.05,0},{0.45,0},{1,0},{0.55,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Times fallen: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Succesfull attacks: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P3SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4HitsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Hits by enviroment: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Successful grabs made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P3LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
+                    <Property name="Font" value="Sans" />
+               </Window>
+               <Window type="TaharezLook/StaticText" name="P4DeathsByEnviroment" >
+                    <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                    <Property name="Text" value="Deaths by enviroment: " />
                     <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Lives stolen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-            </Window>
-        </Window>
-         #P4 Text
-        <Window type="TaharezLook/StaticText" name="P4" >
-                    <Property name="Area" value="{{0.75,0},{0.1,0},{1,0},{0.2,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Player 4" />
-                    <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                     <Property name="Visible" value="False" />
-                </Window>
-        ## P4 PANEL
-        <Window type="TaharezLook/StaticImage" name="P4Background" >
-            <Property name="Area" value="{{0.7,0},{0.2,0},{0.9,0},{0.8,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Visible" value="False" />
-                <Window type="TaharezLook/ScrollablePane" name="P4ScrollablePane" >
-                <Property name="Area" value="{{0.0,0},{0,0},{1,0},{1,0}}" />
-                <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                 <Window type="TaharezLook/StaticText" name="P4Kills" >
-                    <Property name="Area" value="{{0.05,0},{0.0,0},{1,0},{0.1,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Player kills: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P4DamageDealt" >
-                   <Property name="Area" value="{{0.05,0},{0.1,0},{1,0},{0.2,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{0.2,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Total damage dealt: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                <Window type="TaharezLook/StaticText" name="P4TotalDamageTaken" >
-                    <Property name="Area" value="{{0.05,0},{0.2,0},{1.0,0},{0.3,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                    <Property name="Text" value="Total damage received: " />
-                </Window>
-                
-                 <Window type="TaharezLook/StaticText" name="P4TimesFallen" >
-                    <Property name="Area" value="{{0.05,0},{0.3,0},{1,0},{0.4,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Times has fallen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P4DamageTakenByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.4,0},{1,0},{0.5,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Enviroment hazards hit: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P4DeathsByEnviroment" >
-                    <Property name="Area" value="{{0.05,0},{0.5,0},{1,0},{0.6,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                     <Property name="Font" value="Sans" />
-                    <Property name="Text" value="Enviroment hazards deaths: " />
-                </Window>
-                  <Window type="TaharezLook/StaticText" name="P4Attacks" >
-                    <Property name="Area" value="{{0.05,0},{0.6,0},{1,0},{0.7,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Attacks made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P4PercentOfHits" >
-                    <Property name="Area" value="{{0.05,0},{0.7,0},{1,0},{0.8,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Succesfull attacks: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P4SuccesfullGrabs" >
-                    <Property name="Area" value="{{0.05,0},{0.8,0},{1,0},{0.9,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Successful grabs made: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-                 <Window type="TaharezLook/StaticText" name="P4LivesStolen" >
-                    <Property name="Area" value="{{0.05,0},{0.9,0},{1,0},{1.0,0}}" />
-                    <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Disabled" value="true" />
-                    <Property name="Text" value="Lives stolen: " />
-                     <Property name="Font" value="Sans" />
-                </Window>
-            </Window>
-        </Window>
-         # BACK BUTTON
-        <Window type="TaharezLook/Button" name="BackButton" >
-            <Property name="Area" value="{{0.2,0},{0.8,0},{0.4,0},{0.9,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="BACK" />
-            <Property name="Font" value="Sans" />
-			<Property name="UpButton" value="BackButton" />
-			<Property name="DownButton" value="BackButton" />
-			<Property name="LeftButton" value="BackButton" />
-			<Property name="RightButton" value="ResetButton" />
-        </Window>     
-           # RESET BUTTON
-        <Window type="TaharezLook/Button" name="ResetButton" >
-            <Property name="Area" value="{{0.6,0},{0.8,0},{0.8,0},{0.9,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="RESET" />
-            <Property name="Font" value="Sans" />
-			<Property name="UpButton" value="ResetButton" />
-			<Property name="DownButton" value="ResetButton" />
-			<Property name="LeftButton" value="BackButton" />
-			<Property name="RightButton" value="ResetButton" />
-        </Window>   
+                    <Property name="Font" value="Sans" />
+               </Window>
+          </Window>
     </Window>
 </GUILayout>

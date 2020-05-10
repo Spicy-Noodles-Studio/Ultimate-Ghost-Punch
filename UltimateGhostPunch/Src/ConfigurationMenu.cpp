@@ -76,7 +76,8 @@ bool ConfigurationMenu::startButtonClick()
 	GameManager* gameManager = GameManager::GetInstance();
 	gameManager->setLevel(levelNames[levelIndex]);
 	gameManager->setSong(songNames[songIndex]);
-	gameManager->setNumPlayers(numPlayers);
+	gameManager->setPlayersAlive(numPlayers);
+	gameManager->initPlayerRanking(numPlayers);
 	gameManager->setHealth(health);
 
 	std::vector<int> indexes;

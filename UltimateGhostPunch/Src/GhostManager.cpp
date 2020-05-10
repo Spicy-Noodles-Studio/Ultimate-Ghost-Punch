@@ -292,7 +292,13 @@ void GhostManager::deactivatePlayer()
 	if (playerUI != nullptr)
 		playerUI->setVisible(false);
 
-	game->playerDie();
+	PlayerIndex* aux = gameObject->getComponent<PlayerIndex>();
+	int index = 0;
+
+	if (aux != nullptr)
+		index = aux->getIndex();
+
+	game->playerDie(index);
 	gameObject->setActive(false);
 }
 

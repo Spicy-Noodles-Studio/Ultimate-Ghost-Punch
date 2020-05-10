@@ -27,7 +27,7 @@ bool PauseMenu::optionsButtonClick()
 
 bool PauseMenu::exitButtonClick()
 {
-	GameManager::GetInstance()->pauseGame(false);
+	GameManager::GetInstance()->setPaused(false);
 	SceneManager::GetInstance()->changeScene("MainMenu");
 
 	return false;
@@ -64,12 +64,12 @@ void PauseMenu::start()
 void PauseMenu::preUpdate(float deltaTime)
 {
 	if (inputSystem->getKeyPress("ESCAPE") && !optionsMenu.isVisible()) // Falta input del mando
-		setPaused(!GameManager::GetInstance()->gameIsPaused());
+		setPaused(!GameManager::GetInstance()->isPaused());
 }
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (paused == GameManager::GetInstance()->gameIsPaused())
+	if (paused == GameManager::GetInstance()->isPaused())
 		return;
 
 	pauseMenu.setVisible(paused);
@@ -77,7 +77,7 @@ void PauseMenu::setPaused(bool paused)
 
 	pauseText.setVisible(paused);
 
-	GameManager::GetInstance()->pauseGame(paused);
+	GameManager::GetInstance()->setPaused(paused);
 }
 
 bool PauseMenu::isVisible()

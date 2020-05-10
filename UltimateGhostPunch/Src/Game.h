@@ -64,8 +64,7 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void playerDie();
-
+	void playerDie(int index);
 };
 
 #endif

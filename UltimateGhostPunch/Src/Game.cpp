@@ -20,7 +20,7 @@
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), gameLayout(nullptr),  countdown(nullptr), timeText(NULL),
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), gameLayout(nullptr), countdown(nullptr), timeText(NULL),
 nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
 {
 
@@ -54,8 +54,8 @@ void Game::start()
 	createLights();
 
 	timer = gameManager->getTime();
-	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
-	gameManager->pauseGame(false);
+	gameManager->getScore()->initScore(gameManager->getPlayerIndexes().size(), gameManager->getPlayerIndexes());
+	gameManager->setPaused(false);
 
 	playSong();
 }
@@ -65,29 +65,26 @@ void Game::update(float deltaTime)
 	if (!countdown->isCounting() && timer > 0)
 	{
 		timer -= deltaTime;
-		if (timer < 0.0f)
-			timer = 0.0f;
+		if (timer < 0.)
+			timer = 0;
 
 		timeText.setText(std::to_string((int)timer % 60));
 	}
-	else if (timer == 0)
-	{
-		// If its negative it means match its not timed
-		// End game
-		if (winner == -1)
-			chooseWinner();
-	}
+	else if (timer == 0) // If its negative it means match its not timed
+		chooseWinner();
 }
 
-void Game::playerDie()
+void Game::playerDie(int index)
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getPlayersAlive();
+	gameManager->setPlayerRanking(index, nPlayers);
+
 	nPlayers--;
 
-	if (nPlayers == 1)
+	if (nPlayers <= 1)
 		chooseWinner();
 	else
-		gameManager->setNumPlayers(nPlayers);
+		gameManager->setPlayersAlive(nPlayers);
 }
 
 void Game::createLevel()
@@ -200,7 +197,7 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getPlayerIndexes().size();
 
 	gameManager->getKnights().clear();
 
@@ -302,18 +299,18 @@ void Game::configureLevelCollider(const std::string& name)
 
 void Game::chooseWinner()
 {
-	timer = 0.0f;
-
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	bool tie = false;
 	int majorHealth = 0;
 	int majorIndex = 0;
+	int tieIndex = 0;
 
 	for (int i = 0; i < knights.size(); i++)
 	{
 		Health* health = knights[i]->getComponent<Health>();
-		if (health == nullptr) continue;
+		if (health == nullptr)
+			continue;
 
 		if (health->isAlive())
 		{
@@ -321,10 +318,31 @@ void Game::chooseWinner()
 			{
 				majorHealth = health->getHealth();
 				majorIndex = i;
+				tie = false;
 			}
 			else if (health->getHealth() == majorHealth)
+			{
+				tieIndex = i;
 				tie = true;
+			}
 		}
+	}
+
+	if (tie)
+	{
+		for (int i = 0; i < knights.size(); i++)
+		{
+			if (i == majorIndex || i == tieIndex)
+				gameManager->setPlayerRanking(i + 1, 1);
+			else
+				gameManager->setPlayerRanking(i + 1, gameManager->getPlayerRanking(i + 1) - 1);
+		}
+		gameManager->setWinner(-1);
+	}
+	else
+	{
+		gameManager->setPlayerRanking(majorIndex + 1, 1);
+		gameManager->setWinner(majorIndex + 1);
 	}
 
 	SceneManager::GetInstance()->changeScene("StatsMenu");
