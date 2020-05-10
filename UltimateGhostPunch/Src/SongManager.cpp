@@ -40,7 +40,7 @@ void SongManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
-void SongManager::update(float deltaTime)
+void SongManager::preUpdate(float deltaTime)
 {
 	ghostSong();
 }

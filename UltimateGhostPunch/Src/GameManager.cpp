@@ -89,7 +89,6 @@ bool GameManager::gameIsPaused()
 void GameManager::setNumPlayers(int nPlayers)
 {
 	this->numPlayers = nPlayers;
-	
 }
 
 int GameManager::getNumPlayers()
@@ -115,6 +114,11 @@ std::vector<GameObject*>& GameManager::getKnights()
 std::vector<Vector3>& GameManager::getPlayerColours()
 {
 	return playerColours;
+}
+
+void GameManager::emptyKnights()
+{
+	knights.clear();
 }
 
 void GameManager::setLevel(std::string level)
@@ -185,9 +189,11 @@ bool GameManager::isAnyGhost() const
 {
 	bool anyGhost = false;
 	for (GameObject* knight : knights) {
-		GhostManager* ghostManager = knight->getComponent<GhostManager>();
-		if (ghostManager != nullptr)
-			anyGhost = ghostManager->isGhost() || anyGhost;
+		if (knight != nullptr) {
+			GhostManager* ghostManager = knight->getComponent<GhostManager>();
+			if (ghostManager != nullptr)
+				anyGhost = ghostManager->isGhost() || anyGhost;
+		}
 	}
 	return anyGhost;
 }

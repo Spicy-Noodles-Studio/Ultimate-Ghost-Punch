@@ -26,7 +26,7 @@ public:
 	static SongManager* GetInstance();
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
 	void playMenuSong();
 	void stopMenuSong();
 	void pauseMenuSong();

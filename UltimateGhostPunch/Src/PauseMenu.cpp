@@ -15,6 +15,8 @@ bool PauseMenu::backButtonClick()
 {
 	gameManager->pauseGame(false);
 	songManager->stopSong(gameManager->getSong());
+	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
 	return Menu::backButtonClick();
 }
@@ -87,6 +89,7 @@ void PauseMenu::setPaused(bool paused)
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
 	gameManager->pauseGame(paused);
+
 }
 
 bool PauseMenu::isVisible()

@@ -85,7 +85,9 @@ void Game::update(float deltaTime)
 		finishTimer -= deltaTime;
 		if (finishTimer <= 0.0f)
 		{
-			gameManager->getKnights().clear();
+			gameManager->emptyKnights();
+			gameManager->pauseAllSounds();
+			songManager->pauseSong(gameManager->getSong());
 			SceneManager::GetInstance()->changeScene("StatsMenu");
 		}
 	}
