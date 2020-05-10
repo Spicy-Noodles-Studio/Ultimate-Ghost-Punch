@@ -29,6 +29,8 @@ public:
 	virtual void update(float deltaTime);
 	void playMenuSong();
 	void stopMenuSong();
+	void pauseMenuSong();
+	void resumeMenuSong();
 	void playSong(const std::string& song);
 	void stopSong(const std::string& song);
 	void pauseSong(const std::string& song);

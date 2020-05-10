@@ -47,6 +47,8 @@ bool ConfigurationMenu::changeTime(int value)
 
 bool ConfigurationMenu::changeSong(int value)
 {
+	stopPreview();
+
 	auto it = songNames.find(currentSong);
 	if (it == songNames.end()) return false;
 
@@ -57,7 +59,6 @@ bool ConfigurationMenu::changeSong(int value)
 		it++;
 
 	currentSong = (*it).first;
-	LOG("JEJE");
 	configLayout->getRoot().getChild("Song").setText(currentSong);
 
 	buttonClick(buttonSound);
@@ -77,7 +78,6 @@ bool ConfigurationMenu::changeLevel(int value)
 		it++;
 
 	currentLevel = (*it).first;
-	LOG("NO");
 	configLayout->getRoot().getChild("Level").setText(currentLevel);
 
 	buttonClick(buttonSound);
@@ -85,9 +85,31 @@ bool ConfigurationMenu::changeLevel(int value)
 	return false;
 }
 
+bool ConfigurationMenu::previewSong()
+{
+	if (!songPreview) {
+		songManager->pauseMenuSong();
+		songManager->playSong(songNames[currentSong]);
+		songPreview = true;
+		timer = previewTime;
+	}
+	return false;
+}
+
+void ConfigurationMenu::stopPreview()
+{
+	if (songPreview) {
+		songManager->stopSong(songNames[currentSong]);
+		songManager->resumeMenuSong();
+		songPreview = false;
+	}
+}
+
 bool ConfigurationMenu::fightButtonClick()
 {
 	buttonClick(fightSound);
+
+	stopPreview();
 	songManager->stopMenuSong();
 
 	// set data
@@ -141,7 +163,7 @@ void ConfigurationMenu::initNames()
 // -----
 
 ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configLayout(nullptr), fightButton(NULL),
-numPlayers(0), health(0), time(0), currentLevel(""), currentSong("")
+numPlayers(0), health(0), time(0), currentLevel(""), currentSong(""), previewTime(50), songPreview(false), timer(0)
 {
 	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
 	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
@@ -157,6 +179,8 @@ numPlayers(0), health(0), time(0), currentLevel(""), currentSong("")
 
 	interfaceSystem->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+
+	interfaceSystem->registerEvent("previewSongButtonClick", UIEvent("ButtonClicked", [this]() {return previewSong(); }));
 }
 
 ConfigurationMenu::~ConfigurationMenu()
@@ -175,6 +199,8 @@ ConfigurationMenu::~ConfigurationMenu()
 
 	interfaceSystem->unregisterEvent("fightButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
+
+	interfaceSystem->unregisterEvent("previewSongClick");
 }
 
 void ConfigurationMenu::start()
@@ -189,6 +215,7 @@ void ConfigurationMenu::start()
 
 	initNames();
 
+	timer = 0;
 	time = 60;
 	health = 4;
 	numPlayers = 0;
@@ -205,6 +232,11 @@ void ConfigurationMenu::start()
 void ConfigurationMenu::update(float deltaTime)
 {
 	checkInput();
+
+	if (songPreview && timer > 0)
+		timer -= deltaTime;
+	else if (songPreview)
+		stopPreview();
 }
 
 void ConfigurationMenu::checkInput()

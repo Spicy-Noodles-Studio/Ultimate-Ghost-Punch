@@ -63,6 +63,16 @@ void SongManager::stopMenuSong()
 	}
 }
 
+void SongManager::pauseMenuSong()
+{
+	pauseSong(menuMusic);
+}
+
+void SongManager::resumeMenuSong()
+{
+	resumeSong(menuMusic);
+}
+
 void SongManager::playSong(const std::string& song)
 {
 	if (soundEmitter != nullptr) soundEmitter->playMusic(song);

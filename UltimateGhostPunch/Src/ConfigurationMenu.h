@@ -33,6 +33,11 @@ private:
 	int health;
 	int time;
 
+	float previewTime;
+	float timer;
+
+	bool songPreview;
+
 	std::map<std::string, std::string> levelNames;
 	std::map<std::string, std::string> songNames;
 
@@ -54,6 +59,9 @@ private:
 	bool changeTime(int value);
 	bool changeSong(int value);
 	bool changeLevel(int value);
+
+	bool previewSong();
+	void stopPreview();
 
 	bool fightButtonClick();
 	void initNames();

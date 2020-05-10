@@ -267,7 +267,18 @@
 					<Property name="UpButton" value="+TimeButton" />
 					<Property name="DownButton" value="+HealthButton" />
 					<Property name="LeftButton" value="-SongButton" />
-					<Property name="RightButton" value="+SongButton" />
+					<Property name="RightButton" value="PreviewSongButton" />
+                    <Property name="Font" value="Sans" />
+        </Window>
+        # SONG PREVIEW BUTTON
+        <Window type="TaharezLook/Button" name="PreviewSongButton" >
+                    <Property name="Area" value="{{0.7,0},{0.58,0},{0.75,0},{0.62,0}}" />
+                    <Property name="MaxSize" value="{{0.1,0},{0.2,0}}" />
+                    <Property name="Text" value="o)" />
+					<Property name="UpButton" value="+TimeButton" />
+					<Property name="DownButton" value="+HealthButton" />
+					<Property name="LeftButton" value="+SongButton" />
+					<Property name="RightButton" value="-SongButton" />
                     <Property name="Font" value="Sans" />
         </Window>
         # HEALTH TEXT
