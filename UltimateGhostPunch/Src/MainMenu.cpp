@@ -5,9 +5,8 @@
 #include <SceneManager.h>
 #include <WindowManager.h>
 #include <GameObject.h>
-#include <SoundEmitter.h>
 
-#include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(MainMenu);
 
@@ -39,10 +38,8 @@ bool MainMenu::exitButtonClick()
 	return false;
 }
 
-MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullptr)
+MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject)
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
-
 	interfaceSystem->registerEvent("singlePlayerButtonClick", UIEvent("ButtonClicked", [this]() {return singlePlayerButtonClick(); }));
 	interfaceSystem->registerEvent("multiplayerButtonClick", UIEvent("ButtonClicked", [this]() {return multiplayerButtonClick(); }));
 	interfaceSystem->registerEvent("optionsButtonClick", UIEvent("ButtonClicked", [this]() {return optionsButtonClick(); }));
@@ -51,8 +48,6 @@ MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullp
 
 MainMenu::~MainMenu()
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
-
 	interfaceSystem->unregisterEvent("singlePlayerButtonClick");
 	interfaceSystem->unregisterEvent("multiplayerButtonClick");
 	interfaceSystem->unregisterEvent("optionsButtonClick");
@@ -63,7 +58,5 @@ void MainMenu::start()
 {
 	Menu::start();
 
-	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr)
-		soundEmitter = mainCamera->getComponent<SoundEmitter>();
+	songManager->playMenuSong();
 }

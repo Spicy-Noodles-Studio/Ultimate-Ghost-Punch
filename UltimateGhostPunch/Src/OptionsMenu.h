@@ -20,7 +20,6 @@ class WindowManager;
 class OptionsMenu : public Menu
 {
 protected:
-	InterfaceSystem* interfaceSystem;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;

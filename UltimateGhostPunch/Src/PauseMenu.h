@@ -6,12 +6,9 @@
 
 #include <UIElement.h>
 
-class InputSystem;
-
 class PauseMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
 	UIElement pauseMenu;
 	UIElement optionsMenu;
 

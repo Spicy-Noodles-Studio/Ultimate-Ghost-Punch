@@ -35,6 +35,8 @@ private:
 
 	Score scores;
 
+	void pauseAllSounds();
+	void resumeAllSound();
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -73,6 +75,8 @@ public:
 	int getInitialTime();
 
 	Score* getScore();
+
+	bool isAnyGhost() const;
 };
 
 #endif

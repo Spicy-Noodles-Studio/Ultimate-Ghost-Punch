@@ -5,15 +5,17 @@
 #include <SceneManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
-#include <SoundEmitter.h>
 
 #include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(PauseMenu);
 
 bool PauseMenu::backButtonClick()
 {
-	GameManager::GetInstance()->pauseGame(false);
+	gameManager->pauseGame(false);
+	songManager->stopSong(gameManager->getSong());
+
 	return Menu::backButtonClick();
 }
 
@@ -26,8 +28,8 @@ bool PauseMenu::optionsButton()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
-	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
+	interfaceSystem->clearControllerMenuInput();
+	interfaceSystem->initControllerMenuInput(&optionsMenu);
 
 	buttonClick(buttonSound);
 
@@ -41,18 +43,18 @@ bool PauseMenu::resumeButton()
 	return false;
 }
 
-PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
+PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), pauseMenu(NULL), optionsMenu(NULL)
 {
-	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {; return resumeButton(); }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
+	interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {; return resumeButton(); }));
+	interfaceSystem->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+	interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
 }
 
 PauseMenu::~PauseMenu()
 {
-	InterfaceSystem::GetInstance()->unregisterEvent("resumeButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseBackButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseOptionsButtonClick");
+	interfaceSystem->unregisterEvent("resumeButtonClick");
+	interfaceSystem->unregisterEvent("pauseBackButtonClick");
+	interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
 }
 
 void PauseMenu::start()
@@ -67,23 +69,24 @@ void PauseMenu::start()
 
 	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
 	if(options!=nullptr) optionsMenu = options->getComponent<UILayout>()->getRoot();
-
-	inputSystem = InputSystem::GetInstance();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
 	if (inputSystem->getKeyPress("ESCAPE"))
-		setPaused(!GameManager::GetInstance()->gameIsPaused());
+		setPaused(!gameManager->gameIsPaused());
 }
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (paused == GameManager::GetInstance()->gameIsPaused()) return;
+	if (paused == gameManager->gameIsPaused()) return;
+
+	if (paused)	songManager->pauseSong(gameManager->getSong());
+	else songManager->resumeSong(gameManager->getSong());
 
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
-	GameManager::GetInstance()->pauseGame(paused);
+	gameManager->pauseGame(paused);
 }
 
 bool PauseMenu::isVisible()

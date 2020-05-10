@@ -4,9 +4,6 @@
 
 #include "OptionsMenu.h"
 
-class GameObject;
-class SoundEmitter;
-
 class OptionsMenuScreen : public OptionsMenu
 {
 private:

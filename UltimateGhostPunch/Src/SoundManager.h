@@ -1,6 +1,7 @@
 #pragma once
 #ifndef PARTICLE_MANAGER
 #define PARTICLE_MANAGER
+
 #include <UserComponent.h>
 
 class SoundEmitter;

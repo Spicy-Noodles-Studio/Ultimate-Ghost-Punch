@@ -25,8 +25,6 @@ class UILayout;
 class ConfigurationMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
-
 	std::vector<std::pair<int, UIElement>> slots;
 	UILayout* configLayout;
 	UIElement fightButton;
@@ -35,13 +33,13 @@ private:
 	int health;
 	int time;
 
-	std::vector<std::string> levelNames = {"level3", "level5", "cave"};
-	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
+	std::map<std::string, std::string> levelNames;
+	std::map<std::string, std::string> songNames;
 
 	std::string fightSound = "fight";
 
-	int levelIndex;
-	int songIndex;
+	std::string currentLevel;
+	std::string currentSong;
 
 private:
 	void checkInput();
@@ -58,7 +56,7 @@ private:
 	bool changeLevel(int value);
 
 	bool fightButtonClick();
-
+	void initNames();
 public:
 	ConfigurationMenu(GameObject* gameObject);
 	virtual ~ConfigurationMenu();

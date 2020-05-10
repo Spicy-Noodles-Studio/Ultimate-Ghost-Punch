@@ -6,9 +6,9 @@
 #include <GameObject.h>
 #include <UILayout.h>
 #include <UIElement.h>
-#include <SoundEmitter.h>
 
 #include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(ConfigurationMenu);
 
@@ -47,15 +47,18 @@ bool ConfigurationMenu::changeTime(int value)
 
 bool ConfigurationMenu::changeSong(int value)
 {
-	songIndex += value;
+	auto it = songNames.find(currentSong);
+	if (it == songNames.end()) return false;
 
-	if (songIndex < 0)
-		songIndex = 0;
+	if (value == -1 && it != songNames.begin())
+		it--;
 
-	if (songIndex > songNames.size() - 1)
-		songIndex = songNames.size() - 1;
+	if (value == 1 && it != prev(songNames.end()))
+		it++;
 
-	configLayout->getRoot().getChild("Song").setText(songNames[songIndex]);
+	currentSong = (*it).first;
+	LOG("JEJE");
+	configLayout->getRoot().getChild("Song").setText(currentSong);
 
 	buttonClick(buttonSound);
 
@@ -64,15 +67,18 @@ bool ConfigurationMenu::changeSong(int value)
 
 bool ConfigurationMenu::changeLevel(int value)
 {
-	levelIndex += value;
+	auto it = levelNames.find(currentLevel);
+	if (it == levelNames.end()) return false;
 
-	if (levelIndex < 0)
-		levelIndex = 0;
+	if (value == -1 && it != levelNames.begin())
+		it--;
 
-	if (levelIndex > levelNames.size() - 1)
-		levelIndex = levelNames.size() - 1;
+	if (value == 1 && it != prev(levelNames.end()))
+		it++;
 
-	configLayout->getRoot().getChild("Level").setText(levelNames[levelIndex]);
+	currentLevel = (*it).first;
+	LOG("NO");
+	configLayout->getRoot().getChild("Level").setText(currentLevel);
 
 	buttonClick(buttonSound);
 
@@ -82,11 +88,11 @@ bool ConfigurationMenu::changeLevel(int value)
 bool ConfigurationMenu::fightButtonClick()
 {
 	buttonClick(fightSound);
-	
+	songManager->stopMenuSong();
+
 	// set data
-	GameManager* gameManager = GameManager::GetInstance();
-	gameManager->setLevel(levelNames[levelIndex]);
-	gameManager->setSong(songNames[songIndex]);
+	gameManager->setLevel(levelNames[currentLevel]);
+	gameManager->setSong(songNames[currentSong]);
 	gameManager->setNumPlayers(numPlayers);
 	gameManager->setHealth(health);
 
@@ -103,16 +109,40 @@ bool ConfigurationMenu::fightButtonClick()
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("Game", true);
-
+	
 	return false;
+}
+
+void ConfigurationMenu::initNames()
+{
+	songNames["Bustin Loose"] = "bustinLoose";
+	songNames["Cycles"] = "cycles";
+	songNames["District Four"] = "districtFour";
+	songNames["Drama"] = "tvDrama";
+	songNames["Epic Battle"] = "epicBattle";
+	songNames["Fight"] = "fightScene";
+	songNames["Green Daze"] = "greenDaze";
+	songNames["Hip Hop"] = "hipHopInstrumental";
+	songNames["Hip Hop 2"] = "hipHopNoVocal";
+	songNames["Opus One"] = "opusOne";
+	songNames["Strength"] = "strengthOfTheTitans";
+	songNames["UGP"] = "ugpTrack1";
+	currentSong = "Bustin Loose";
+	configLayout->getRoot().getChild("Song").setText(currentSong);
+
+
+	levelNames["Coliseum"] = "level4";
+	levelNames["Sewers"] = "level3";
+	levelNames["Volcano"] = "level5";
+	currentLevel = "Coliseum";
+	configLayout->getRoot().getChild("Level").setText(currentLevel);
 }
 
 // -----
 
-ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
-numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
+ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configLayout(nullptr), fightButton(NULL),
+numPlayers(0), health(0), time(0), currentLevel(""), currentSong("")
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
 	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
 
@@ -131,7 +161,6 @@ numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 
 ConfigurationMenu::~ConfigurationMenu()
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("-healthButtonClick");
 	interfaceSystem->unregisterEvent("+healthButtonClick");
 
@@ -152,16 +181,14 @@ void ConfigurationMenu::start()
 {
 	Menu::start();
 
-	inputSystem = InputSystem::GetInstance();
-
 	if (mainCamera != nullptr)
 		configLayout = mainCamera->getComponent<UILayout>();
 
 	if (configLayout != nullptr)
 		fightButton = configLayout->getRoot().getChild("FightButton");
 
-	levelIndex = 0;
-	songIndex = 0;
+	initNames();
+
 	time = 60;
 	health = 4;
 	numPlayers = 0;

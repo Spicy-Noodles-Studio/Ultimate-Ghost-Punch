@@ -8,14 +8,9 @@
 #include <vector>
 #include <string>
 
-class GameManager;
-class SoundEmitter;
-
 class ScoreManager : public Menu
 {
 private:
-	GameManager* manager;
-	SoundEmitter* soundEmitter;
 	std::vector<UIElement> texts;
 	std::vector<UIElement> panels;
 

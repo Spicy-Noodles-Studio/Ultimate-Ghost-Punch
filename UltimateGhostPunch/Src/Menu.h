@@ -5,15 +5,22 @@
 
 #include <UserComponent.h>
 
-class SoundEmitter;
+class GameManager;
+class InputSystem;
+class InterfaceSystem;
+class SongManager;
 
 class Menu : public UserComponent
 {
 protected:
 	std::string backSound = "back";
 	std::string buttonSound = "button4";
-	SoundEmitter* soundEmitter;
+
 	GameObject* mainCamera;
+	GameManager* gameManager;
+	InputSystem* inputSystem;
+	InterfaceSystem* interfaceSystem;
+	SongManager* songManager;
 
 	virtual void buttonClick(const std::string& sound);
 	virtual bool backButtonClick();

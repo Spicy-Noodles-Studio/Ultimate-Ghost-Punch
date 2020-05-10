@@ -6,14 +6,11 @@
 
 #include <UIElement.h>
 
-class InputSystem;
 class UILayout;
 
 class MainMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
-
 	bool singlePlayerButtonClick();
 	bool multiplayerButtonClick();
 

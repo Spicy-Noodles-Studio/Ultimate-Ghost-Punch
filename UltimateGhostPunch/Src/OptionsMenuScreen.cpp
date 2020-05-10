@@ -10,7 +10,6 @@
 #include <UIElement.h>
 #include <Window.h>
 #include <Camera.h>
-#include <SoundEmitter.h>
 
 REGISTER_FACTORY(OptionsMenuScreen);
 
@@ -20,7 +19,7 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	interfaceSystem->clearControllerMenuInput();
 
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
@@ -56,8 +55,6 @@ void OptionsMenuScreen::start()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-
-	soundEmitter = mainCamera->getComponent<SoundEmitter>();
 	UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 
 	if (cameraLayout != nullptr)

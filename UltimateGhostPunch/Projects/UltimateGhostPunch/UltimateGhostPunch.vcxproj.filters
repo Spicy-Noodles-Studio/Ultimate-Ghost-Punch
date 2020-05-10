@@ -29,9 +29,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Attack.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -131,9 +128,6 @@
     <ClCompile Include="..\..\Src\PauseMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp">
-      <Filter>Archivos de origen\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Countdown.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -149,9 +143,6 @@
     <ClCompile Include="..\..\Src\ConfigurationMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OptionsMenu.cpp">
-      <Filter>Archivos de origen\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\ParticleManager.cpp">
       <Filter>Archivos de origen\Managers</Filter>
     </ClCompile>
@@ -161,7 +152,19 @@
     <ClCompile Include="..\..\Src\Menu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\OptionsMenu.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Src\SoundManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\SongManager.cpp">
       <Filter>Archivos de origen\Managers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -296,6 +299,9 @@
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\SoundManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\SongManager.h">
       <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
   </ItemGroup>

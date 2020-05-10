@@ -1,7 +1,19 @@
 USAGE: "file_name" "sound_name" "2D/3D" "true/false (loop)"
 EXAMPLE: ej.mp3 ej 2D true
 MUSIC
-.//Assets//Sounds//despacito.mp3 despacito 2D false
+.//Assets//Songs//BustinLoose.mp3 bustinLoose 2D true
+.//Assets//Songs//BustinLooseLead.mp3 bustinLooseLead 2D true
+.//Assets//Songs//Cycles.mp3 cycles 2D true
+.//Assets//Songs//DistrictFour.mp3 districtFour 2D true
+.//Assets//Songs//EpicBattle.mp3 epicBattle 2D true
+.//Assets//Songs//FightScene.mp3 fightScene 2D true
+.//Assets//Songs//GreenDaze.mp3 greenDaze 2D true
+.//Assets//Songs//HipHopInstrumental.mp3 hipHopInstrumental 2D true
+.//Assets//Songs//HipHopNoVocal.mp3 hipHopNoVocal 2D true
+.//Assets//Songs//OpusOne.mp3 opusOne 2D true
+.//Assets//Songs//StrengthOfTheTitans.mp3 strengthOfTheTitans 2D true
+.//Assets//Songs//TVDrama.mp3 tvDrama 2D true
+.//Assets//Songs//UGP_-_track1.mp3 ugpTrack1 2D true
 
 SOUND EFFECTS
 .//Assets//Sounds//BackButton1.wav back 2D false

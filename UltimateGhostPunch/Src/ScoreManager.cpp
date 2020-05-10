@@ -8,7 +8,6 @@
 #include <UILayout.h>
 #include <UIElement.h>
 #include <Camera.h>
-#include <SoundEmitter.h>
 
 #include "Score.h"
 #include "GameManager.h"
@@ -17,11 +16,11 @@ REGISTER_FACTORY(ScoreManager);
 
 bool ScoreManager::resetButtonClick()
 {
-	manager->setNumPlayers(manager->getPlayerIndexes().size());
+	gameManager->setNumPlayers(gameManager->getPlayerIndexes().size());
 
-	manager->setTime(manager->getInitialTime());
-	manager->setLevel(manager->getLastLevel());
-	manager->setSong(manager->getLastSong());
+	gameManager->setTime(gameManager->getInitialTime());
+	gameManager->setLevel(gameManager->getLastLevel());
+	gameManager->setSong(gameManager->getLastSong());
 	buttonClick(buttonSound);
 
 	// change scene
@@ -31,14 +30,12 @@ bool ScoreManager::resetButtonClick()
 
 ScoreManager::ScoreManager(GameObject* gameObject) : Menu(gameObject)
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("resetButtonClick", UIEvent("ButtonClicked", [this]() {return resetButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 }
 
 ScoreManager::~ScoreManager()
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("resetButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
@@ -57,10 +54,10 @@ void ScoreManager::start()
 		name = name + "Background";
 		panels.push_back(root.getChild(name));
 	}
-	manager = GameManager::GetInstance();
+	gameManager = GameManager::GetInstance();
 
-	reposition(manager->getPlayerIndexes().size());
-	initStatistics(manager->getPlayerIndexes().size());
+	reposition(gameManager->getPlayerIndexes().size());
+	initStatistics(gameManager->getPlayerIndexes().size());
 }
 
 void ScoreManager::initStatistics(int numOfPlayers)
@@ -101,7 +98,7 @@ void ScoreManager::reposition(int numOfPlayers)
 
 void ScoreManager::setIndexOfPlayersKilled(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "Kills";
 
@@ -121,7 +118,7 @@ void ScoreManager::setIndexOfPlayersKilled(int playerIndex)
 
 void ScoreManager::setPercentOfHits(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "PercentOfHits";
 
@@ -137,7 +134,7 @@ void ScoreManager::setPercentOfHits(int playerIndex)
 
 void ScoreManager::setSuccessfullGrabs(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "SuccesfullGrabs";
 
@@ -150,7 +147,7 @@ void ScoreManager::setSuccessfullGrabs(int playerIndex)
 
 void ScoreManager::setTotalAttacks(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "Attacks";
 
@@ -162,7 +159,7 @@ void ScoreManager::setTotalAttacks(int playerIndex)
 
 void ScoreManager::setAmountOfDamageDealt(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "DamageDealt";
 
@@ -174,7 +171,7 @@ void ScoreManager::setAmountOfDamageDealt(int playerIndex)
 
 void ScoreManager::setLifesAsGhost(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "LivesStolen";
 
@@ -186,7 +183,7 @@ void ScoreManager::setLifesAsGhost(int playerIndex)
 
 void ScoreManager::setTimesHittedBySpikes(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "DamageTakenByEnviroment";
 
@@ -198,7 +195,7 @@ void ScoreManager::setTimesHittedBySpikes(int playerIndex)
 
 void ScoreManager::setAmountOfFalls(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "TimesFallen";
 
@@ -210,7 +207,7 @@ void ScoreManager::setAmountOfFalls(int playerIndex)
 
 void ScoreManager::setTotalDamageSuffer(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "TotalDamageTaken";
 
@@ -222,7 +219,7 @@ void ScoreManager::setTotalDamageSuffer(int playerIndex)
 
 void ScoreManager::setEnviromentDeaths(int playerIndex)
 {
-	Score* score = manager->getScore();
+	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
 	name = name + "DeathsByEnviroment";
 

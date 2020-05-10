@@ -8,7 +8,6 @@
 #include <Light.h>
 #include <Strider.h>
 #include <GaiaData.h>
-#include <SoundEmitter.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
@@ -17,10 +16,11 @@
 #include "Score.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
 fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
 {
 
@@ -34,12 +34,11 @@ Game::~Game()
 void Game::start()
 {
 	gameManager = GameManager::GetInstance();
+	songManager = SongManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr) {
+	if (mainCamera != nullptr) 
 		fightLayout = mainCamera->getComponent<UILayout>();
-		soundEmitter = mainCamera->getComponent<SoundEmitter>();
-	}
 
 	if (fightLayout != nullptr)
 	{
@@ -213,7 +212,7 @@ void Game::createLevel()
 
 void Game::playSong()
 {
-	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
+	songManager->playSong(gameManager->getSong());
 }
 
 void Game::configureLevelRender(const std::string& name)
@@ -353,5 +352,5 @@ void Game::chooseWinner()
 		winnerText.setText("Winner: P" + std::to_string(winner + 1));
 	}
 
-	if (soundEmitter != nullptr) soundEmitter->playSound("victory4");
+	songManager->play2DSound("victory4");
 }
