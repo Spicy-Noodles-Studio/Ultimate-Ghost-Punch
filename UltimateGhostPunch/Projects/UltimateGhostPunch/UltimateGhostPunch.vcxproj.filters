@@ -156,7 +156,7 @@
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\ParticleManager.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,7 +284,7 @@
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ParticleManager.h">
-      <Filter>Archivos de encabezado</Filter>
+      <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

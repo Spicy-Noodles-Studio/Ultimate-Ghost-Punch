@@ -16,6 +16,7 @@
         ["Point", "-20 4 0", "1", "1 0 0", "0 0 0"]
     ],
     "Particles" : [
-        
+        ["MagmaRock", "0 1.5 0"],
+        ["SmokeColumn", "0 1.5 0"]
     ]
 }
