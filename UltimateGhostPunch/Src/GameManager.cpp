@@ -7,17 +7,19 @@ REGISTER_FACTORY(GameManager);
 
 GameManager* GameManager::instance = nullptr;
 
-GameManager::GameManager() : UserComponent(nullptr), paused(false)
+GameManager::GameManager() : UserComponent(nullptr)
 {
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(0), song(0), health(4), time(60), initialTime(time), timeMode(false), paused(false)
 {
 	if (instance == nullptr)
 		instance = this;
 	else
 		destroy(gameObject);
+
+	playerIndexes = std::vector<int>(4, -1);
 }
 
 GameManager::~GameManager()
@@ -69,6 +71,13 @@ Score* GameManager::getScore()
 void GameManager::setPlayerIndexes(std::vector<int>& playerIndexes)
 {
 	this->playerIndexes = playerIndexes;
+
+	initialPlayers = 0;
+	for (int i = 0; i < playerIndexes.size(); i++)
+	{
+		if (playerIndexes[i] != -1)
+			initialPlayers++;
+	}
 }
 
 std::vector<int>& GameManager::getPlayerIndexes()
@@ -95,6 +104,11 @@ int GameManager::getPlayerRanking(int index) const
 	return -1;
 }
 
+int GameManager::getInitialPlayers() const
+{
+	return initialPlayers;
+}
+
 std::vector<Vector3>& GameManager::getPlayerColours()
 {
 	return playerColours;
@@ -105,37 +119,44 @@ std::vector<GameObject*>& GameManager::getKnights()
 	return knights;
 }
 
-void GameManager::setLevel(std::string level)
+void GameManager::setLevel(int level)
 {
 	this->level = level;
-	this->lastLevel = level;
 }
 
-std::string GameManager::getLevel() const
+int GameManager::getLevel() const
 {
 	return level;
 }
 
-std::string GameManager::getLastLevel() const
+void GameManager::setLevelName(std::string name)
 {
-
-	return lastLevel;
+	levelName = name;
 }
 
-void GameManager::setSong(std::string song)
+std::string GameManager::getLevelName() const
+{
+	return levelName;
+}
+
+void GameManager::setSong(int song)
 {
 	this->song = song;
-	this->lastSong = song;
 }
 
-std::string GameManager::getSong() const
+int GameManager::getSong() const
 {
 	return song;
 }
 
-std::string GameManager::getLastSong() const
+void GameManager::setSongName(std::string name)
 {
-	return lastSong;
+	songName = name;
+}
+
+std::string GameManager::getSongName() const
+{
+	return songName;
 }
 
 void GameManager::setHealth(int health)
@@ -151,7 +172,7 @@ int GameManager::getHealth() const
 void GameManager::setTime(int time)
 {
 	this->time = time;
-	this->maxTime = time;
+	this->initialTime = time;
 }
 
 int GameManager::getTime() const
@@ -161,7 +182,17 @@ int GameManager::getTime() const
 
 int GameManager::getInitialTime() const
 {
-	return maxTime;
+	return initialTime;
+}
+
+void GameManager::setTimeMode(bool mode)
+{
+	timeMode = mode;
+}
+
+bool GameManager::getTimeMode() const
+{
+	return timeMode;
 }
 
 void GameManager::setPlayersAlive(int players)

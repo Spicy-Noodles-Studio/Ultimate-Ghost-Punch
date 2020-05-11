@@ -54,8 +54,8 @@ void StatsMenu::start()
 	else
 		root.getChild("Result").setText("TIE");
 
-	reposition(gameManager->getPlayerIndexes().size());
-	initStatistics(gameManager->getPlayerIndexes().size());
+	reposition(gameManager->getInitialPlayers());
+	initStatistics(gameManager->getInitialPlayers());
 }
 
 void StatsMenu::update(float deltaTime)

@@ -25,17 +25,22 @@ class ConfigurationMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
+	UILayout* configurationLayout;
 
-	std::vector<std::pair<int, UIElement>> slots;
-	UILayout* configLayout;
+	UIElement settingsPanel;
 	UIElement startButton;
 
-	int numPlayers;
-	int health;
-	int time;
+	std::vector<std::pair<int, UIElement>> slots;
 
-	std::vector<std::string> levelNames = {"level3", "level5", "cave"};
-	std::vector<std::string> songNames = {"despacito", "never gonna", "ya tu sabe"};
+	int nPlayers;
+	int health;
+
+	int time;
+	bool mode;
+
+	std::vector<std::string> timeModes;
+	std::vector<std::string> levelNames;
+	std::vector<std::string> songNames;
 
 	int levelIndex;
 	int songIndex;
@@ -50,11 +55,15 @@ private:
 	int isIndexConnected(int index);
 
 	bool changeHealth(int value);
+
+	bool changeTimeMode(int value);
 	bool changeTime(int value);
-	bool changeSong(int value);
+
 	bool changeLevel(int value);
+	bool changeSong(int value);
 
 	bool startButtonClick();
+	bool settingsButtonClick();
 	bool backButtonClick();
 
 public:

@@ -11,117 +11,32 @@
 
 REGISTER_FACTORY(ConfigurationMenu);
 
-// EVENTS----
-
-bool ConfigurationMenu::changeHealth(int value)
-{
-	health += value;
-
-	if (health < MIN_HEALTH) health = MIN_HEALTH;
-	if (health > MAX_HEALTH) health = MAX_HEALTH;
-
-	configLayout->getRoot().getChild("Health").setText(std::to_string(health));
-
-	return false;
-}
-
-bool ConfigurationMenu::changeTime(int value)
-{
-	time += value;
-
-	if (time < MIN_TIME) time = MIN_TIME;
-	if (time > MAX_TIME) time = MAX_TIME;
-
-	if (time == MAX_TIME)
-		configLayout->getRoot().getChild("Time").setText("INFINITE");
-	else
-		configLayout->getRoot().getChild("Time").setText(std::to_string(time));
-
-	return false;
-}
-
-bool ConfigurationMenu::changeSong(int value)
-{
-	songIndex += value;
-
-	if (songIndex < 0)
-		songIndex = 0;
-
-	if (songIndex > songNames.size() - 1)
-		songIndex = songNames.size() - 1;
-
-	configLayout->getRoot().getChild("Song").setText(songNames[songIndex]);
-
-	return false;
-}
-
-bool ConfigurationMenu::changeLevel(int value)
-{
-	levelIndex += value;
-
-	if (levelIndex < 0)
-		levelIndex = 0;
-
-	if (levelIndex > levelNames.size() - 1)
-		levelIndex = levelNames.size() - 1;
-
-	configLayout->getRoot().getChild("Level").setText(levelNames[levelIndex]);
-
-	return false;
-}
-
-bool ConfigurationMenu::startButtonClick()
-{
-	// set data
-	GameManager* gameManager = GameManager::GetInstance();
-	gameManager->setLevel(levelNames[levelIndex]);
-	gameManager->setSong(songNames[songIndex]);
-	gameManager->setPlayersAlive(numPlayers);
-	gameManager->initPlayerRanking(numPlayers);
-	gameManager->setHealth(health);
-
-	std::vector<int> indexes;
-	for (int i = 0; i < numPlayers; i++)
-		indexes.push_back(slots[i].first);
-
-	gameManager->setPlayerIndexes(indexes);
-
-	if (time != MAX_TIME)
-		gameManager->setTime(time);
-	else
-		gameManager->setTime(-1);
-
-	// change scene
-	SceneManager::GetInstance()->changeScene("Game", true);
-	return false;
-}
-
-bool ConfigurationMenu::backButtonClick()
-{
-	SceneManager::GetInstance()->changeScene("MainMenu");
-	return false;
-}
-
-// -----
-
-ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), startButton(NULL),
-numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
+ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configurationLayout(nullptr), startButton(NULL), settingsPanel(NULL),
+nPlayers(0), health(4), time(60), mode(false), levelIndex(0), songIndex(0)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
-	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
-	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
+	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-CHANGE_HEALTH); }));
+	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+CHANGE_HEALTH); }));
 
-	interfaceSystem->registerEvent("-timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(-20); }));
-	interfaceSystem->registerEvent("+timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(+20); }));
+	interfaceSystem->registerEvent("-timeModeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTimeMode(!mode); }));
+	interfaceSystem->registerEvent("+timeModeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTimeMode(!mode); }));
 
-	interfaceSystem->registerEvent("-songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(-1); }));
-	interfaceSystem->registerEvent("+songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(+1); }));
+	interfaceSystem->registerEvent("-timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(-CHANGE_TIME); }));
+	interfaceSystem->registerEvent("+timeButtonClick", UIEvent("ButtonClicked", [this]() {return changeTime(+CHANGE_TIME); }));
 
 	interfaceSystem->registerEvent("-levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(-1); }));
 	interfaceSystem->registerEvent("+levelButtonClick", UIEvent("ButtonClicked", [this]() {return changeLevel(+1); }));
 
+	interfaceSystem->registerEvent("-songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(-1); }));
+	interfaceSystem->registerEvent("+songButtonClick", UIEvent("ButtonClicked", [this]() {return changeSong(+1); }));
+
 	interfaceSystem->registerEvent("startButtonClick", UIEvent("ButtonClicked", [this]() {return startButtonClick(); }));
+	interfaceSystem->registerEvent("settingsButtonClick", UIEvent("ButtonClicked", [this]() {return settingsButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+
+	timeModes = { "Time", "Infinite" };
+	levelNames = { "level3", "level4", "level5" };
+	songNames = { "Canción 1", "Canción 2", "Canción 3" };
 }
 
 ConfigurationMenu::~ConfigurationMenu()
@@ -130,16 +45,20 @@ ConfigurationMenu::~ConfigurationMenu()
 	interfaceSystem->unregisterEvent("-healthButtonClick");
 	interfaceSystem->unregisterEvent("+healthButtonClick");
 
+	interfaceSystem->unregisterEvent("-timeModeButtonClick");
+	interfaceSystem->unregisterEvent("+timeModeButtonClick");
+
 	interfaceSystem->unregisterEvent("-timeButtonClick");
 	interfaceSystem->unregisterEvent("+timeButtonClick");
-
-	interfaceSystem->unregisterEvent("-songButtonClick");
-	interfaceSystem->unregisterEvent("+songButtonClick");
 
 	interfaceSystem->unregisterEvent("-levelButtonClick");
 	interfaceSystem->unregisterEvent("+levelButtonClick");
 
+	interfaceSystem->unregisterEvent("-songButtonClick");
+	interfaceSystem->unregisterEvent("+songButtonClick");
+
 	interfaceSystem->unregisterEvent("startButtonClick");
+	interfaceSystem->unregisterEvent("settingsButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
@@ -147,26 +66,47 @@ void ConfigurationMenu::start()
 {
 	inputSystem = InputSystem::GetInstance();
 
+	GameManager* gameManager = GameManager::GetInstance();
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+
 	if (mainCamera != nullptr)
-		configLayout = mainCamera->getComponent<UILayout>();
+		configurationLayout = mainCamera->getComponent<UILayout>();
 
-	if (configLayout != nullptr)
-		startButton = configLayout->getRoot().getChild("StartButton");
-
-	levelIndex = 0;
-	songIndex = 0;
-	time = 60;
-	health = 4;
-	numPlayers = 0;
-
-	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
-	for (int i = 0; i < 4; i++)
+	if (configurationLayout != nullptr)
 	{
-		if (configLayout != nullptr)
-			slots[i] = { -1 , configLayout->getRoot().getChild("Slot" + std::to_string(i + 1)).getChild("Connected" + std::to_string(i + 1)) };
+		settingsPanel = configurationLayout->getRoot().getChild("SettingsBackground");
+		startButton = configurationLayout->getRoot().getChild("StartButton");
 	}
 
+	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
+	std::vector<int> indexes = gameManager->getPlayerIndexes();
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (configurationLayout != nullptr)
+		{
+			slots[i] = { indexes[i] , configurationLayout->getRoot().getChild("Slot" + std::to_string(i + 1)) };
+
+			if (indexes[i] != -1)
+				slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
+		}
+	}
+
+	nPlayers = gameManager->getInitialPlayers();
+
+	health = gameManager->getHealth();
+	mode = gameManager->getTimeMode();
+	time = gameManager->getInitialTime();
+
+	changeHealth(0);
+	changeTimeMode(mode);
+	changeTime(0);
+
+	levelIndex = gameManager->getLevel();
+	songIndex = gameManager->getSong();
+
+	changeLevel(0);
+	changeSong(0);
 }
 
 void ConfigurationMenu::update(float deltaTime)
@@ -180,14 +120,11 @@ void ConfigurationMenu::checkInput()
 	{
 		int slotIndex = isIndexConnected(i);
 
-		bool enterButton = (i < 4 && inputSystem->getButtonPress(i, "A"))	// Controller
-			|| (i == 4 && inputSystem->getKeyPress("Space"));	// Keyboard
+		bool enterButton = isIndexConnected(i) == -1 && (i < 4 && inputSystem->getButtonPress(i, "X")) || (i == 4 && inputSystem->getKeyPress("SPACE"));
+		bool exitButton = isIndexConnected(i) != -1 && (i < 4 && (inputSystem->getButtonPress(i, "X") || !inputSystem->isControllerConnected(i))) || (i == 4 && inputSystem->getKeyPress("SPACE"));
 
-		bool exitButton = (i < 4 && (inputSystem->getButtonPress(i, "B") || !inputSystem->isControllerConnected(i)))	// Controller
-			|| (i == 4 && inputSystem->getKeyPress("ESCAPE"));												// Keyboard
-
-		if (numPlayers < 4 && slotIndex == -1 && enterButton)
-			fillSlot(numPlayers, i);
+		if (nPlayers < 4 && slotIndex == -1 && enterButton)
+			fillSlot(nPlayers, i);
 		else if (slotIndex != -1 && exitButton)
 		{
 			clearSlot(slotIndex);
@@ -199,36 +136,22 @@ void ConfigurationMenu::checkInput()
 void ConfigurationMenu::fillSlot(int slotIndex, int deviceIndex)
 {
 	slots[slotIndex].first = deviceIndex;
+	slots[slotIndex].second.getChild("Slot" + std::to_string(slotIndex + 1) + "Text").setText("Player " + std::to_string(slotIndex + 1));
 
-	slots[slotIndex].second.setVisible(true);
-	slots[slotIndex].second.getChild("PlayerText").setText("P" + std::to_string(slotIndex + 1));
-	slots[slotIndex].second.getChild("IndexText").setText("Index: " + std::to_string(slots[slotIndex].first));
-
-	if (deviceIndex == 4)
-		slots[slotIndex].second.getChild("TypeText").setText("Keyboard");
-	else
-		slots[slotIndex].second.getChild("TypeText").setText("Controller");
-
-	numPlayers++;
-
-	if (!startButton.isVisible() && numPlayers >= MIN_PLAYERS)
-		startButton.setVisible(true);
+	nPlayers++;
 }
 
 void ConfigurationMenu::clearSlot(int index)
 {
 	slots[index].first = -1;
-	slots[index].second.setVisible(false);
+	slots[index].second.getChild("Slot" + std::to_string(index + 1) + "Text").setText("Press SPACE or X");
 
-	numPlayers--;
-
-	if (startButton.isVisible() && numPlayers < MIN_PLAYERS)
-		startButton.setVisible(false);
+	nPlayers--;
 }
 
 void ConfigurationMenu::reorderSlots(int index)
 {
-	for (int i = index; i < numPlayers; i++)
+	for (int i = index; i < nPlayers; i++)
 	{
 		fillSlot(i, slots[i + 1].first);
 		clearSlot(i + 1);
@@ -238,11 +161,120 @@ void ConfigurationMenu::reorderSlots(int index)
 int ConfigurationMenu::isIndexConnected(int index)
 {
 	int i = 0;
-	while (i < numPlayers - 1 && slots[i].first != index)
-		i++;
+	while (i < nPlayers - 1 && slots[i].first != index) i++;
 
 	if (slots[i].first == index)
 		return i;
 
 	return -1;
+}
+
+bool ConfigurationMenu::changeHealth(int value)
+{
+	health += value;
+
+	if (health < MIN_HEALTH) health = MIN_HEALTH;
+	if (health > MAX_HEALTH) health = MAX_HEALTH;
+
+	settingsPanel.getChild("Health").setText(std::to_string(health));
+
+	return false;
+}
+
+bool ConfigurationMenu::changeTimeMode(int value)
+{
+	mode = value;
+	settingsPanel.getChild("TimeMode").setText(timeModes[mode]);
+
+	return false;
+}
+
+bool ConfigurationMenu::changeTime(int value)
+{
+	time += value;
+
+	if (time < MIN_TIME) time = MIN_TIME;
+	if (time > MAX_TIME) time = MAX_TIME;
+
+	settingsPanel.getChild("Time").setText(std::to_string(time));
+
+	return false;
+}
+
+bool ConfigurationMenu::changeLevel(int value)
+{
+	levelIndex += value;
+
+	int index = levelIndex % levelNames.size();
+	configurationLayout->getRoot().getChild("Level").setText(levelNames[index]);
+
+	GameManager::GetInstance()->setLevel(index);
+	GameManager::GetInstance()->setLevelName(levelNames[index]);
+
+	return false;
+}
+
+bool ConfigurationMenu::changeSong(int value)
+{
+	songIndex += value;
+
+	int index = songIndex % songNames.size();
+	configurationLayout->getRoot().getChild("Song").setText(songNames[index]);
+
+	GameManager::GetInstance()->setSong(index);
+	GameManager::GetInstance()->setSongName(songNames[index]);
+
+	return false;
+}
+
+bool ConfigurationMenu::startButtonClick()
+{
+	GameManager* gameManager = GameManager::GetInstance();
+
+	gameManager->setPlayersAlive(nPlayers);
+	gameManager->initPlayerRanking(nPlayers);
+
+	std::vector<int> indexes;
+	for (int i = 0; i < 4; i++)
+		indexes.push_back(slots[i].first);
+
+	gameManager->setPlayerIndexes(indexes);
+
+	gameManager->setHealth(health);
+	gameManager->setTimeMode(mode);
+
+	if (mode)
+		gameManager->setTime(-1);
+	else
+		gameManager->setTime(time);
+
+	if (nPlayers >= MIN_PLAYERS)
+		SceneManager::GetInstance()->changeScene("Game", true);
+
+	return false;
+}
+
+bool ConfigurationMenu::settingsButtonClick()
+{
+	if (!settingsPanel.isVisible())
+	{
+		settingsPanel.setVisible(true);
+		settingsPanel.setAlwaysOnTop(true);
+	}
+	else
+	{
+		settingsPanel.setVisible(false);
+		settingsPanel.setAlwaysOnTop(false);
+	}
+
+	InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	InterfaceSystem::GetInstance()->initControllerMenuInput(&settingsPanel);
+
+	return false;
+}
+
+bool ConfigurationMenu::backButtonClick()
+{
+	SceneManager::GetInstance()->changeScene("MainMenu");
+	return false;
 }

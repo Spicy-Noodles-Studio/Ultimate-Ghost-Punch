@@ -19,23 +19,28 @@ private:
 
 	std::vector<int> playerIndexes;
 	std::vector<int> playerRanking;
+
 	std::vector<Vector3> playerColours;
 	std::vector<GameObject*> knights;
 
-	std::string level;
-	std::string lastLevel;
+	std::string levelName;
+	std::string songName;
 
-	std::string song;
-	std::string lastSong;
-
-	int health;
-	int time;
-	int maxTime;
-
+	int initialPlayers;
 	int playersAlive;
 	int winner;
-	
+
 	bool paused;
+
+	// Remember Configuration Menu's information
+	int health;
+
+	int time;
+	int initialTime;
+	bool timeMode;
+
+	int level;
+	int song;
 
 public:
 	GameManager();
@@ -60,16 +65,21 @@ public:
 	void setPlayerRanking(int index, int rank);
 	int getPlayerRanking(int index) const;
 
+	int getInitialPlayers() const;
 	std::vector<Vector3>& getPlayerColours();
 	std::vector<GameObject*>& getKnights();
 
-	void setLevel(std::string level);
-	std::string getLevel() const;
-	std::string getLastLevel() const;
+	void setLevel(int level);
+	int getLevel() const;
 
-	void setSong(std::string song);
-	std::string getSong() const;
-	std::string getLastSong() const;
+	void setLevelName(std::string name);
+	std::string getLevelName() const;
+
+	void setSong(int song);
+	int getSong() const;
+
+	void setSongName(std::string name);
+	std::string getSongName() const;
 
 	void setHealth(int health);
 	int getHealth() const;
@@ -77,6 +87,9 @@ public:
 	void setTime(int time);
 	int getTime() const;
 	int getInitialTime() const;
+
+	void setTimeMode(bool mode);
+	bool getTimeMode() const;
 
 	void setPlayersAlive(int players);
 	int getPlayersAlive() const;

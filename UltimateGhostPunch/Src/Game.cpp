@@ -54,7 +54,7 @@ void Game::start()
 	createLights();
 
 	timer = gameManager->getTime();
-	gameManager->getScore()->initScore(gameManager->getPlayerIndexes().size(), gameManager->getPlayerIndexes());
+	gameManager->getScore()->initScore(gameManager->getInitialPlayers());
 	gameManager->setPaused(false);
 
 	playSong();
@@ -90,7 +90,7 @@ void Game::playerDie(int index)
 void Game::createLevel()
 {
 	GaiaData levelData;
-	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
+	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevelName() + ".level");
 
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
@@ -197,7 +197,7 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	int nPlayers = gameManager->getPlayerIndexes().size();
+	int nPlayers = gameManager->getInitialPlayers();
 
 	gameManager->getKnights().clear();
 
@@ -248,7 +248,7 @@ void Game::createLights()
 
 void Game::playSong()
 {
-	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
+	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSongName());
 }
 
 void Game::configureLevelRender(const std::string& name)
