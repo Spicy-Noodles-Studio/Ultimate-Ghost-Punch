@@ -246,6 +246,7 @@ bool ConfigurationMenu::changeLevel(int value)
 
 	int index = levelIndex % levelNames.size();
 	configurationLayout->getRoot().getChild("Level").setText(levelNames[index]);
+	configurationLayout->getRoot().getChild("LevelImage").setProperty("Image", levelNames[index]);
 
 	GameManager::GetInstance()->setLevel(index);
 	GameManager::GetInstance()->setLevelName(levelNames[index]);
