@@ -13,15 +13,6 @@
                <Property name="Font" value="Sans32" />
                <Property name="HorzFormatting" value="CentreAligned" />
           </Window>
-          # BUTTON TEXT
-          <Window type="TaharezLook/StaticText" name="Button" >
-               <Property name="Area" value="{{0,0},{0.9,0},{1,0},{1,0}}" />
-               <Property name="MaxSize" value="{{1,0},{1,0}}" />
-               <Property name="Text" value="Press ESC or START" />
-               <Property name="Disabled" value="true" />
-               <Property name="Font" value="Sans" />
-               <Property name="HorzFormatting" value="CentreAligned" />
-          </Window>
           # P1 TEXT
           <Window type="TaharezLook/StaticText" name="P1" >
                <Property name="Area" value="{{0.15,0},{0.1,0},{1,0},{0.2,0}}" />

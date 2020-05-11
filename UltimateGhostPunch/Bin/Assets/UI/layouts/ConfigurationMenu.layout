@@ -150,6 +150,7 @@
         <Window type="TaharezLook/Button" name="StartButton" >
             <Property name="Area" value="{{0.2,0},{0.55,0},{0.8,0},{0.65,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
             <Property name="Text" value="START!" />
 			<Property name="UpButton" value="StartButton" />
 			<Property name="DownButton" value="StartButton" />
@@ -236,7 +237,7 @@
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="PRESS X OR SPACE" />
+                <Property name="Text" value="Press SPACE or X" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -247,7 +248,7 @@
             <Window type="TaharezLook/StaticText" name="Slot2Text" >
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                <Property name="Text" value="PRESS X OR SPACE" />
+                <Property name="Text" value="Press SPACE or X" />
                 <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -260,7 +261,7 @@
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="PRESS X OR SPACE" />
+                <Property name="Text" value="Press SPACE or X" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -272,7 +273,7 @@
                 <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="PRESS X OR SPACE" />
+                <Property name="Text" value="Press SPACE or X" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>

@@ -60,8 +60,24 @@ void StatsMenu::start()
 
 void StatsMenu::update(float deltaTime)
 {
-	if (InputSystem::GetInstance()->getKeyPress("ESCAPE")) // Falta input del mando
+	if (InputSystem::GetInstance()->getKeyPress("ESCAPE") || checkControllersInput())
 		SceneManager::GetInstance()->changeScene("ConfigurationMenu");
+}
+
+bool StatsMenu::checkControllersInput()
+{
+	bool result = false;
+
+	int i = 0;
+	while (i < 4 && !result)
+	{
+		if (InputSystem::GetInstance()->getButtonPress(i, "B"))
+			result = true;
+
+		i++;
+	}
+
+	return result;
 }
 
 void StatsMenu::reposition(int numOfPlayers)

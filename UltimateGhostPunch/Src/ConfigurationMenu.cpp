@@ -15,6 +15,7 @@ ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gam
 nPlayers(0), health(4), time(60), mode(false), levelIndex(0), songIndex(0)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+
 	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-CHANGE_HEALTH); }));
 	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+CHANGE_HEALTH); }));
 
@@ -94,6 +95,9 @@ void ConfigurationMenu::start()
 
 	nPlayers = gameManager->getInitialPlayers();
 
+	if (!startButton.isVisible() && nPlayers >= MIN_PLAYERS)
+		startButton.setVisible(true);
+
 	health = gameManager->getHealth();
 	mode = gameManager->getTimeMode();
 	time = gameManager->getInitialTime();
@@ -116,10 +120,13 @@ void ConfigurationMenu::update(float deltaTime)
 
 void ConfigurationMenu::checkInput()
 {
-	for (int i = 0; i < 5; i++)
-	{
-		int slotIndex = isIndexConnected(i);
+	bool pressed = false;
 
+	int i = 0;
+	while(i < 5 && !pressed)
+	{
+		// Clear or reorder Slots
+		int slotIndex = isIndexConnected(i);
 		bool enterButton = isIndexConnected(i) == -1 && (i < 4 && inputSystem->getButtonPress(i, "X")) || (i == 4 && inputSystem->getKeyPress("SPACE"));
 		bool exitButton = isIndexConnected(i) != -1 && (i < 4 && (inputSystem->getButtonPress(i, "X") || !inputSystem->isControllerConnected(i))) || (i == 4 && inputSystem->getKeyPress("SPACE"));
 
@@ -130,6 +137,32 @@ void ConfigurationMenu::checkInput()
 			clearSlot(slotIndex);
 			reorderSlots(slotIndex);
 		}
+
+		// Close Settings Panel or back to Main Menu
+		bool escape = i == 4 && inputSystem->getKeyPress("ESCAPE");
+		bool b = i < 4 && inputSystem->getButtonPress(i, "B");
+
+		if (escape || b)
+		{
+			pressed = true;
+
+			if (settingsPanel.isVisible())
+				settingsButtonClick();
+			else
+				backButtonClick();
+		}
+
+		// Enter or Start to initiate the game
+		bool enter = i == 4 && inputSystem->getKeyPress("RETURN");
+		bool start = i < 4 && inputSystem->getButtonPress(i, "START");
+
+		if ((enter || start) && startButton.isVisible())
+		{
+			pressed = true;
+			startButtonClick();
+		}
+
+		i++;
 	}
 }
 
@@ -139,6 +172,9 @@ void ConfigurationMenu::fillSlot(int slotIndex, int deviceIndex)
 	slots[slotIndex].second.getChild("Slot" + std::to_string(slotIndex + 1) + "Text").setText("Player " + std::to_string(slotIndex + 1));
 
 	nPlayers++;
+
+	if (!startButton.isVisible() && nPlayers >= MIN_PLAYERS)
+		startButton.setVisible(true);
 }
 
 void ConfigurationMenu::clearSlot(int index)
@@ -147,6 +183,9 @@ void ConfigurationMenu::clearSlot(int index)
 	slots[index].second.getChild("Slot" + std::to_string(index + 1) + "Text").setText("Press SPACE or X");
 
 	nPlayers--;
+
+	if (startButton.isVisible() && nPlayers < MIN_PLAYERS)
+		startButton.setVisible(false);
 }
 
 void ConfigurationMenu::reorderSlots(int index)
@@ -248,9 +287,7 @@ bool ConfigurationMenu::startButtonClick()
 	else
 		gameManager->setTime(time);
 
-	if (nPlayers >= MIN_PLAYERS)
-		SceneManager::GetInstance()->changeScene("Game", true);
-
+	SceneManager::GetInstance()->changeScene("Game", true);
 	return false;
 }
 

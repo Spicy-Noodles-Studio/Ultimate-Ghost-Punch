@@ -30,6 +30,7 @@ private:
 	void setHitsByEnviroment(int playerIndex);
 	void setDeathsByEnviroment(int playerIndex);
 
+	bool checkControllersInput();
 
 public:
 	StatsMenu(GameObject* gameObject);

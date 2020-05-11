@@ -1,6 +1,7 @@
 #include "OptionsMenu.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
+#include <InputSystem.h>
 #include <RenderSystem.h>
 #include <SoundSystem.h>
 #include <WindowManager.h>
@@ -13,8 +14,6 @@
 #include "GameManager.h"
 
 REGISTER_FACTORY(OptionsMenu);
-
-// EVENTS----
 
 bool OptionsMenu::backButtonClick()
 {
@@ -46,11 +45,10 @@ bool OptionsMenu::restoreButtonClick()
 	musicVolume = 100;
 
 	fullscreen = false;
-	resolution = 0;
-	currentResolution = 0;
+	resolution = initialResolution;
 
 	changeResolution(0);
-	changeFullscreen(false);
+	changeFullscreen(fullscreen);
 
 	brightnessScroll.setScrollPositionScrollBar(brightness);
 	soundScroll.setScrollPositionScrollBar(soundVolume);
@@ -114,13 +112,12 @@ bool OptionsMenu::changeMusicVolume()
 	return false;
 }
 
-// -----
-
 OptionsMenu::OptionsMenu(GameObject* gameObject) : UserComponent(gameObject), applyButton(NULL), restoreButton(NULL), brightnessScroll(NULL), soundScroll(NULL), musicScroll(NULL),
-interfaceSystem(nullptr), renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr),
+interfaceSystem(nullptr), inputSystem(nullptr), renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr),
 resolutionText(NULL), fullscreenText(NULL), brightnessText(NULL), soundText(NULL), musicText(NULL), root(NULL)
 {
 	interfaceSystem = InterfaceSystem::GetInstance();
+	inputSystem = InputSystem::GetInstance();
 	renderSystem = RenderSystem::GetInstance();
 	soundSystem = SoundSystem::GetInstance();
 	windowManager = WindowManager::GetInstance();
@@ -190,7 +187,30 @@ void OptionsMenu::start()
 	fullscreen = windowManager->getFullscreen();
 	resolution = windowManager->getActualResolutionId();
 	currentResolution = resolution;
+	initialResolution = resolution;
 
 	changeFullscreen(fullscreen);
 	changeResolution(0);
+}
+
+void OptionsMenu::update(float deltaTime)
+{
+	if ((inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && SceneManager::GetInstance()->getCurrentScene()->getName() == "OptionsMenu")
+		backButtonClick();
+}
+
+bool OptionsMenu::checkControllersInput()
+{
+	bool result = false;
+
+	int i = 0;
+	while (i < 4 && !result)
+	{
+		if (inputSystem->getButtonPress(i, "B"))
+			result = true;
+
+		i++;
+	}
+
+	return result;
 }

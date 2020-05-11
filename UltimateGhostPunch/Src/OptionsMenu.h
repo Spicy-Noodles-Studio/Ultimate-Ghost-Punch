@@ -11,6 +11,7 @@
 const int MAX_VALUE = 100;
 
 class InterfaceSystem;
+class InputSystem;
 class RenderSystem;
 class SoundSystem;
 class WindowManager;
@@ -19,6 +20,7 @@ class OptionsMenu : public UserComponent
 {
 protected:
 	InterfaceSystem* interfaceSystem;
+	InputSystem* inputSystem;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
@@ -44,6 +46,7 @@ protected:
 
 	bool fullscreen;
 	int resolution;
+	int initialResolution;
 	int currentResolution;
 
 	std::vector<std::string> resolutionNames;
@@ -62,11 +65,14 @@ protected:
 	bool changeSoundVolume();
 	bool changeMusicVolume();
 
+	bool checkControllersInput();
+
 public:
 	OptionsMenu(GameObject* gameObject);
 	virtual ~OptionsMenu();
 
 	virtual void start();
+	virtual void update(float deltaTime);
 };
 
 #endif

@@ -1,6 +1,7 @@
 #include "OptionsMenuScreen.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
+#include <InputSystem.h>
 #include <RenderSystem.h>
 #include <SoundSystem.h>
 #include <WindowManager.h>
@@ -77,7 +78,14 @@ void OptionsMenuScreen::start()
 	fullscreen = windowManager->getFullscreen();
 	resolution = windowManager->getActualResolutionId();
 	currentResolution = resolution;
+	initialResolution = resolution;
 
 	changeFullscreen(fullscreen);
 	changeResolution(0);
+}
+
+void OptionsMenuScreen::preUpdate(float deltaTime)
+{
+	if ((inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && root.isVisible())
+		backToMenuButtonClick();
 }

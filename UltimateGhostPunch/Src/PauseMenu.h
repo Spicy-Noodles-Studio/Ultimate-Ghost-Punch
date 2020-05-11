@@ -19,6 +19,8 @@ private:
 
 	bool optionsButtonClick();
 	bool exitButtonClick();
+
+	bool checkControllersInput();
 	
 public:
 	PauseMenu(GameObject* gameObject);
