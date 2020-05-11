@@ -84,7 +84,9 @@ SOUND EFFECTS
 .//Assets//Sounds//Throw1.wav throw1 3D false
 .//Assets//Sounds//Throw2.wav throw2 3D false
 .//Assets//Sounds//Throw3.wav throw3 3D false
-.//Assets//Sounds//Taunt.mp3 taunt 3D false
+.//Assets//Sounds//Taunt1.mp3 taunt1 3D false
+.//Assets//Sounds//Taunt2.mp3 taunt2 3D false
+.//Assets//Sounds//Taunt3.mp3 taunt3 3D false
 .//Assets//Sounds//UGP.wav ugp 3D false
 .//Assets//Sounds//UGP2.wav ugp2 3D false
 .//Assets//Sounds//UGP3.wav ugp3 3D false

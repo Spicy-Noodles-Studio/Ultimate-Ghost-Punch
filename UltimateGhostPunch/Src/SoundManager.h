@@ -26,6 +26,8 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+
+	void playTaunt();
 	
 private:
 	void playSound(const std::string& sound);

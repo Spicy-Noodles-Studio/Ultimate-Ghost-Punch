@@ -56,6 +56,11 @@ void SoundManager::update(float deltaTime)
 	manageSounds();
 }
 
+void SoundManager::playTaunt()
+{
+	playSound("taunt1");
+}
+
 void SoundManager::manageJumpSound()
 {
 	playSoundInstant2("jump", isGrounded, isJumping);
