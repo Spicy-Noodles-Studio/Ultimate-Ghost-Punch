@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <SoundEmitter.h>
+#include <MathUtils.h>
 
 #include "PlayerState.h"
 
@@ -30,7 +31,7 @@ else\
 	stopSound(sound);
 
 SoundManager::SoundManager(GameObject* gameObject) : UserComponent(gameObject), soundEmitter(nullptr), playerState(nullptr), attackStarted(false), ghostStarted(false), blockGrabStarted(false),
-													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false)
+													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false), deathStarted(false)
 {
 
 }
@@ -75,12 +76,12 @@ void SoundManager::manageWalkSound()
 
 void SoundManager::manageGhostMoveSound()
 {
-	playSoundRepeatedly("heartBeat2", canGhostMove)	
+	playSoundRepeatedly("heartBeat2", isGhost)	
 }
 
 void SoundManager::manageHurtSound()
 {
-	playSoundInstant("hurt2", isHurt)
+	playSoundInstant("hurt4", isHurt)
 }
 
 void SoundManager::manageBlockSound()
@@ -110,7 +111,7 @@ void SoundManager::manageGrabMissSound()
 
 void SoundManager::manageGrabSound()
 {
-	playSoundOnce("grab",isGrabbing, grabStarted)
+	playSoundOnce("grab2",isGrabbing, grabStarted)
 }
 
 void SoundManager::manageThrowSound()
@@ -168,6 +169,11 @@ void SoundManager::manageRespawnSound()
 	playSoundOnce("respawn",isRespawning,respawnStarted)
 }
 
+void SoundManager::manageDeathSound()
+{
+	playSoundOnce("death", hasKnightDied, deathStarted);
+}
+
 void SoundManager::playSound(const std::string& sound)
 {
 	if (soundEmitter != nullptr && !soundEmitter->isPlaying(sound)) soundEmitter->playSound(sound);
@@ -202,5 +208,11 @@ void SoundManager::manageSounds()
 	manageGhostSuccessSound();
 	manageGhostSound();
 	manageRespawnSound();
+	manageDeathSound();
+}
+
+std::string SoundManager::getRandomSound(const std::vector<std::string>& sounds)
+{
+	return sounds[random(0, sounds.size())];
 }
 

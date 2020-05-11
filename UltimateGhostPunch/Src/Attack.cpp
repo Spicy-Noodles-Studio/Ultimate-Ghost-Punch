@@ -151,9 +151,11 @@ void Attack::onObjectStay(GameObject* other)
 
 		if (enemyBlock != nullptr && parent != nullptr)
 		{
+			Health* enemyHealth = other->getComponent<Health>();
+			if(!enemyHealth->isInvencible()) hit = true;
+
 			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()))
 			{
-				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
 
@@ -166,7 +168,7 @@ void Attack::onObjectStay(GameObject* other)
 
 			// Reset the current attack state
 			state = NOT_ATTACKING;
-			hit = true;
+
 		}
 	}
 }

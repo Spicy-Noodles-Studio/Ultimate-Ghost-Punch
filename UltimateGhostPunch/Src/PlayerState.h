@@ -67,6 +67,7 @@ public:
 	bool hasMissedGrab() const;
 	bool hasGhostSucceeded() const;
 	bool hasGhostDied() const;
+	bool hasKnightDied() const;
 };
 
 #endif

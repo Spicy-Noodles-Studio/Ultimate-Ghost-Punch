@@ -18,7 +18,7 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
-	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess;
+	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess, deathStarted;
 
 public:
 	SoundManager(GameObject* gameObject);
@@ -32,6 +32,8 @@ private:
 	void stopSound(const std::string& sound);
 
 	void manageSounds();
+
+	std::string getRandomSound(const std::vector<std::string>& sounds);
 
 	void manageJumpSound();
 	void manageLandSound();
@@ -55,6 +57,7 @@ private:
 	void manageGhostSuccessSound();
 	void manageGhostSound();
 	void manageRespawnSound();
+	void manageDeathSound();
 };
 
 #endif

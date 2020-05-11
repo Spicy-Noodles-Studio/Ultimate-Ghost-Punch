@@ -65,6 +65,8 @@ private:
 
 	bool fightButtonClick();
 	void initNames();
+
+	virtual bool backButtonClick();
 public:
 	ConfigurationMenu(GameObject* gameObject);
 	virtual ~ConfigurationMenu();

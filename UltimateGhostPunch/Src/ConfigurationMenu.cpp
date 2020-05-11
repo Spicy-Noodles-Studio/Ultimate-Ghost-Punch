@@ -160,6 +160,12 @@ void ConfigurationMenu::initNames()
 	configLayout->getRoot().getChild("Level").setText(currentLevel);
 }
 
+bool ConfigurationMenu::backButtonClick()
+{
+	stopPreview();
+	return Menu::backButtonClick();
+}
+
 // -----
 
 ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configLayout(nullptr), fightButton(NULL),

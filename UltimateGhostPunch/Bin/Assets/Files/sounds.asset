@@ -30,6 +30,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Dash.aiff dash 3D false
 .//Assets//Sounds//Dash1.wav dash1 3D false
 .//Assets//Sounds//Dash2.wav dash2 3D false
+.//Assets//Sounds//Death.wav death 3D false
 .//Assets//Sounds//EndFight.wav endFight 2D false
 .//Assets//Sounds//Fall.wav fall 3D false
 .//Assets//Sounds//Fight.wav fight 2D false
@@ -46,6 +47,8 @@ SOUND EFFECTS
 .//Assets//Sounds//GhostMovement2.mp3 ghostMovement2 3D false
 .//Assets//Sounds//GhostMovement3.wav ghostMovement3 3D false
 .//Assets//Sounds//Grab.ogg grab 3D false
+.//Assets//Sounds//Grab2.mp3 grab2 3D false
+.//Assets//Sounds//Grab3.mp3 grab3 3D false
 .//Assets//Sounds//HeartBeat1.mp3 heartBeat 3D false
 .//Assets//Sounds//HeartBeat2.mp3 heartBeat2 3D false
 .//Assets//Sounds//HeavyAttack.wav heavyAttack 3D false
@@ -58,7 +61,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Hurt1.wav hurt1 3D false
 .//Assets//Sounds//Hurt2.wav hurt2 3D false
 .//Assets//Sounds//Hurt3.wav hurt3 3D false
-.//Assets//Sounds//Jump.wav jump 3D false
+.//Assets//Sounds//Hurt4.wav hurt4 3D false
 .//Assets//Sounds//Jump1.wav jump1 3D false
 .//Assets//Sounds//Jump2.wav jump2 3D false
 .//Assets//Sounds//Jump3.wav jump3 3D false

@@ -198,3 +198,8 @@ bool PlayerState::hasGhostDied() const
 {
 	return ghostManager != nullptr && ghostManager->ghostDeath();
 }
+
+bool PlayerState::hasKnightDied() const
+{
+	return health!= nullptr && !health->isAlive();
+}
