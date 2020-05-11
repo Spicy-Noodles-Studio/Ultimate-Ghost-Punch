@@ -1,15 +1,15 @@
 particle_system StunSparks
 { 
   material StunSparks
-  particle_width 0.5
-  particle_height 0.5
+  particle_width 0.15
+  particle_height 0.15
   quota 20
 
   emitter Point
   { 
-    direction 0 1 1
-    angle 120
-    emission_rate 10000
+    direction 0 1 0
+    angle 20
+    emission_rate 4
     time_to_live 0.4
     velocity_min 4
     velocity_max 6
