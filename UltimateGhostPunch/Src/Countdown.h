@@ -8,7 +8,6 @@
 #include <chrono>
 
 class UILayout;
-class SoundEmitter;
 
 class Countdown : public UserComponent
 {
@@ -25,7 +24,6 @@ private:
 	std::chrono::steady_clock::time_point last;
 
 	UIElement text;
-	SoundEmitter* soundEmitter;
 
 public:
 	Countdown(GameObject* gameObject);
