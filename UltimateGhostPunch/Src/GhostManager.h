@@ -65,6 +65,7 @@ public:
 	bool isGhost();
 	bool ghostEnded();
 	float getGhostTime();
+	bool ghostUsed();
 
 	void activateGhost();
 	void deactivateGhost();

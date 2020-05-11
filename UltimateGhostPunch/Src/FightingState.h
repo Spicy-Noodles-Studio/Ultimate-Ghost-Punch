@@ -40,6 +40,7 @@ private:
 	void block();
 	void unblock();
 	void transitionToPlatformNav();
+	void transitionToFlee();
 
 public:
 	FightingState(StateMachine* stateMachine);

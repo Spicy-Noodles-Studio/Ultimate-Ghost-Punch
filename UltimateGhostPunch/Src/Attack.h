@@ -53,7 +53,7 @@ private:
 	void attack();
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
-	bool objInAttackSensor(GameObject* obj, const Vector3& scale);
+	bool isAttackOnRange(GameObject* obj, const Vector3& scale);
 	
 
 public:
@@ -68,8 +68,8 @@ public:
 	void quickAttack();
 	void strongAttack();
 	bool isAttacking() const;
-	bool objInQuickAttackSensor(GameObject* obj);
-	bool objInStrongAttackSensor(GameObject* obj);
+	bool isQuickAttackOnRange(GameObject* obj);
+	bool isStrongAttackOnRange(GameObject* obj);
 
 	bool attackOnCD();
 };

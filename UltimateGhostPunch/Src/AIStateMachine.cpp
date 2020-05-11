@@ -119,6 +119,17 @@ void AIStateMachine::startFightingState()
 	fightingState->setFighting(true);
 }
 
+void AIStateMachine::startFleeingState(GameObject* fleeTarget)
+{
+	if (fleeTarget == nullptr) fleeTarget = target;
+	if (fleeTarget == nullptr) return;
+	// Fleeing state uses platform Navigation to move to the farthest platform away from the target
+	currentState = platformNavigation;
+	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(target->transform->getPosition())];
+	platformNavigation->setTarget(node);
+	platformNavigation->setFleeing(true);
+}
+
 void AIStateMachine::processActionInput()
 {
 	dir = Vector3::ZERO;
@@ -217,7 +228,7 @@ void AIStateMachine::createFightingState()
 
 void AIStateMachine::changeTarget()
 {
-	if (fightingState->isFighting()) // Do not change target while fighting
+	if (fightingState->isFighting() || (currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
 	{
 		return;
 	}

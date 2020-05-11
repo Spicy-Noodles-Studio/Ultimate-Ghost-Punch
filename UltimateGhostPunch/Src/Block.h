@@ -31,6 +31,7 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
+	bool canBlock();
 	void block();
 	void unblock();
 	bool blockAttack(float damage, Vector3 otherPosition);

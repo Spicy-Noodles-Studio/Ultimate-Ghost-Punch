@@ -66,6 +66,7 @@ public:
 	void startPlatformMovement();
 	void startGhostNavigation();
 	void startFightingState();
+	void startFleeingState(GameObject* fleeTarget);
 
 	void changeTarget();
 

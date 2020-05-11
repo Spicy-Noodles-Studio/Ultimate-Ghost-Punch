@@ -184,6 +184,11 @@ float GhostManager::getGhostTime()
 	return ghostTime;
 }
 
+bool GhostManager::ghostUsed()
+{
+	return used;
+}
+
 void GhostManager::activateGhost()
 {
 	ghost = true;

@@ -30,6 +30,8 @@ public:
 	/* Returns true if character is over target */
 	bool hasArrived() const;
 
+	void setFleeing(bool fleeing);
+	bool isFleeing() const;
 private:
 
 	std::vector<PathNode> getShortestPath(); // Dijkstra
@@ -44,10 +46,12 @@ private:
 	/* GRAPH INFO */
 	PlatformGraph* platformGraph;
 	PlatformNode target;	// Target Platform
+	GameObject* targetObject;
 
 	GameObject* character;	// Source
 
 	bool movingThroughLink;
+	bool fleeing;
 	NavigationLink linkInUse;
 	double time;
 	int lastState;

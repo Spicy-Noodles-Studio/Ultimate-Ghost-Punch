@@ -8,7 +8,7 @@
 #include "Movement.h"
 
 PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), movingThroughLink(false),
-																	 linkInUse(NavigationLink()), time(0.0f), lastState(-1)
+linkInUse(NavigationLink()), time(0.0f), lastState(-1)
 {
 
 }
@@ -49,7 +49,7 @@ void PlatformNavigation::setTarget(const Vector3& position)
 void PlatformNavigation::setTarget(GameObject* target)
 {
 	if (target == nullptr) return;
-
+	targetObject = target;
 	setTarget(target->transform->getPosition());
 }
 
@@ -63,6 +63,16 @@ bool PlatformNavigation::hasArrived() const
 	if (character == nullptr || platformGraph == nullptr) return false;
 
 	return target.getIndex() == platformGraph->getIndex(character->transform->getWorldPosition());
+}
+
+void PlatformNavigation::setFleeing(bool fleeing)
+{
+	this->fleeing = fleeing;
+}
+
+bool PlatformNavigation::isFleeing() const
+{
+	return fleeing;
 }
 
 std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
@@ -138,7 +148,7 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 		lastState = 0;
 		linkInUse = node.platform.getEdge(node.index);
 		time = 0.0f;
-		
+
 		//Set rigidbody to link´s inicial state
 		if (character->getParent() != nullptr) {
 			character->getParent()->transform->setRotation({ 0, 90.0 * linkInUse.getDirection(),0 });
@@ -148,7 +158,7 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 				rb->clearForces();
 				rb->addForce(linkInUse.getStartForce());
 			}
-		}		
+		}
 		return;
 	}
 
@@ -163,7 +173,7 @@ void PlatformNavigation::moveToPlatform()
 		movingThroughLink = false;
 		time = 0.0f;
 		lastState = 0;
-		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex()) 
+		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
 			((AIStateMachine*)stateMachine)->startPlatformMovement();
 		return;
 	}
@@ -197,11 +207,18 @@ void PlatformNavigation::update(float deltaTime)
 		/* CALCULATIONS TO FOLLOW NODES CORRECTLY */
 		std::vector<PathNode> path = getShortestPath();
 		// Get next node
-		if (path.size() > 0) 
+		if (path.size() > 0)
 			// Go to next platform
 			moveToStartingPoint(path[0]);
 
-		else 
+		else if (fleeing)
+		{
+			fleeing = false;
+			((AIStateMachine*)stateMachine)->changeTarget();
+			((AIStateMachine*)stateMachine)->startPlatformNavigation();
+		}
+		else {
 			((AIStateMachine*)stateMachine)->startPlatformMovement();
+		}
 	}
 }

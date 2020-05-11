@@ -7,6 +7,7 @@
 #include "AIStateMachine.h"
 #include "Attack.h"
 #include "Health.h"
+#include "GhostManager.h"
 #include "Block.h"
 
 FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(45), blockProb_QAR(5), strongAttackProb_SAR(60), seekProb_SAR(38), blockProb_SAR(2), blockSpamTimeMAX(10)
@@ -28,12 +29,12 @@ void FightingState::update(float deltaTime)
 
 bool FightingState::enemyInQuickAttackRange()
 {
-	return attack->objInQuickAttackSensor(target);
+	return attack->isQuickAttackOnRange(target);
 }
 
 bool FightingState::enemyInStrongAttackRange()
 {
-	return attack->objInStrongAttackSensor(target);
+	return attack->isStrongAttackOnRange(target);
 }
 
 void FightingState::selectAction()
@@ -53,8 +54,18 @@ void FightingState::selectAction()
 	}
 
 	Health* targetHealth = target->getComponent<Health>();
+	GhostManager* targetGhostManager = target->getComponent<GhostManager>();
+
+	if (targetHealth != nullptr && targetGhostManager != nullptr && (!targetHealth->isAlive() && !targetGhostManager->ghostUsed()) || targetGhostManager->isGhost()) // Flee if target is entering ghost mode
+	{
+		//LOG("FLEEING FROM TARGET...\n");
+		transitionToFlee();
+		return;
+	}
+	
 	if (targetHealth != nullptr && !targetHealth->isAlive()) // Change target if target is dead
 	{
+		//LOG("QUICK ATTACK...\n");
 		transitionToPlatformNav();
 		return;
 	}
@@ -125,12 +136,21 @@ void FightingState::strongAttack()
 
 void FightingState::block()
 {
-	ActionInput action = ActionInput::BLOCK;
-	stateMachine->addActionInput(action);
+	if (blockComp->canBlock())
+	{
+		ActionInput action = ActionInput::BLOCK;
+		stateMachine->addActionInput(action);
+
+		float minUnblockTime = blockComp->getMaxBlockTime() / 4;
+		unblockTime = minUnblockTime + (float)(rand()) / ((float)(RAND_MAX / (blockComp->getMaxBlockTime() - minUnblockTime)));
+		blockSpamTime = blockSpamTimeMAX;
+	}
+	else
+	{
+		LOG("CANNOT BLOCK -> FLEEING INSTEAD\n");
+		transitionToFlee();
+	}
 	
-	float minUnblockTime = blockComp->getMaxBlockTime() / 4;
-	unblockTime = minUnblockTime + (float) (rand()) / ((float) (RAND_MAX / (blockComp->getMaxBlockTime() - minUnblockTime)));
-	blockSpamTime = blockSpamTimeMAX;
 }
 
 void FightingState::unblock()
@@ -141,9 +161,17 @@ void FightingState::unblock()
 
 void FightingState::transitionToPlatformNav()
 {
+	blockComp->unblock();
 	fighting = false;
 	((AIStateMachine*)stateMachine)->changeTarget();
 	((AIStateMachine*)stateMachine)->startPlatformNavigation();
+}
+
+void FightingState::transitionToFlee()
+{
+	blockComp->unblock();
+	fighting = false;
+	((AIStateMachine*)stateMachine)->startFleeingState(target);
 }
 
 

@@ -242,7 +242,7 @@ bool Attack::isAttacking() const
 	return state == ATTACKING || state == CHARGING;
 }
 
-bool Attack::objInAttackSensor(GameObject* obj, const Vector3& scale)
+bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale)
 {
 	Transform* target = obj->transform, * attacker = parent->transform;
 	// Target is in the direction of attack?
@@ -264,12 +264,12 @@ bool Attack::objInAttackSensor(GameObject* obj, const Vector3& scale)
 	return inside;
 }
 
-bool Attack::objInQuickAttackSensor(GameObject* obj)
+bool Attack::isQuickAttackOnRange(GameObject* obj)
 {	
-	return objInAttackSensor(obj, quickAttackScale);
+	return isAttackOnRange(obj, quickAttackScale);
 }
 
-bool Attack::objInStrongAttackSensor(GameObject* obj)
+bool Attack::isStrongAttackOnRange(GameObject* obj)
 {
-	return objInAttackSensor(obj, strongAttackScale);
+	return isAttackOnRange(obj, strongAttackScale);
 }
