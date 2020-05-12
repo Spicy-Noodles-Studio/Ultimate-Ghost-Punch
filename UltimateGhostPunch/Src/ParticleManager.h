@@ -19,6 +19,7 @@ private:
 	ParticleEmitter* blockSparks;
 	ParticleEmitter* stunSparks;
 	ParticleEmitter* spectre;
+	ParticleEmitter* spectreSplash;
 
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
@@ -46,6 +47,7 @@ private:
 	void manageBlockSparks();
 	void manageStunSparks(float deltaTime);
 	void manageSpectre();
+	void manageSpectreSplash();
 };
 
 #endif

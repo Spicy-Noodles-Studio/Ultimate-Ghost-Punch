@@ -121,3 +121,8 @@ bool PlayerState::hasLanded() const
 {
 	return jump != nullptr && jump->hasLanded();
 }
+
+bool PlayerState::punchHasSucceeded() const
+{
+	return ghostManager->hasPunchSuccess();
+}

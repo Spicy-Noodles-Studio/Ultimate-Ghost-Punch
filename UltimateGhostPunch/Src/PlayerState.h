@@ -50,6 +50,8 @@ public:
 
 	bool hasBlocked() const;
 	bool hasLanded() const;
+
+	bool punchHasSucceeded() const;
 };
 
 #endif

@@ -10,7 +10,7 @@ class CameraController : public UserComponent
 private:
 	enum CameraState
 	{
-		MIDPOINT, SLOWMO
+		MIDPOINT
 	};
 
 	CameraState state;
@@ -24,10 +24,6 @@ private:
 	Vector3 target;
 
 	float time;
-	float slowMoTime;
-	float slowMoDistance;
-	float slowMoTimeScale;
-	float slowMoZ;
 
 	GameObject* playerPunching;
 
@@ -51,15 +47,6 @@ private:
 
 	// Set the target position specified by the players' mid-point and distance
 	void setTargetToMidPointPlayers();
-
-	// Set the target position to the player punching position and slowMoZ
-	void setTargetToSlowMo();
-
-	// If there is someone punching activates the slowMo effect
-	void checkSlowMo();
-
-	void activateSlowMo();
-	void deactivateSlowMo();
 
 	// Returns the first player punching
 	GameObject* someonePunching();
