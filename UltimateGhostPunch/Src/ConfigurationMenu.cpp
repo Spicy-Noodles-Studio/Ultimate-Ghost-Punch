@@ -138,7 +138,6 @@ bool ConfigurationMenu::fightButtonClick()
 void ConfigurationMenu::initNames()
 {
 	songNames["Bustin Loose"] = "bustinLoose";
-	songNames["Cycles"] = "cycles";
 	songNames["District Four"] = "districtFour";
 	songNames["Drama"] = "tvDrama";
 	songNames["Epic Battle"] = "epicBattle";

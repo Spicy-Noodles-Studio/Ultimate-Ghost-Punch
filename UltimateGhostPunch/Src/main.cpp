@@ -20,7 +20,7 @@ WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, LPSTR lpCmdLine, int nCmdSh
 
 #endif	
 	GaiaCore* g = new GaiaCore();
-	g->init();
+	g->init("Ultimate Ghost Punch");
 	g->run();
 	g->close();
 	
