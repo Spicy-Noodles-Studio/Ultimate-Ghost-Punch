@@ -22,6 +22,8 @@ private:
 	bool used;
 	bool deathPosChanged;
 	bool ended;
+	bool success;
+	bool ghostDead;
 	bool punchSuccess;
 	
 	enum GhostMode
@@ -77,6 +79,8 @@ public:
 	void deactivatePlayer();
 	void handlePlayerDeath();
 
+	bool ghostSuccess() const;
+	bool ghostDeath() const;
 	bool hasPunchSuccess() const;
 };
 

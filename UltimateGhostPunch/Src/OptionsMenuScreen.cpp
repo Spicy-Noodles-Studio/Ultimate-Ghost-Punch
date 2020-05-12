@@ -19,10 +19,12 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	interfaceSystem->clearControllerMenuInput();
 
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
+
+	buttonClick(backSound);
 
 	return false;
 }
@@ -39,7 +41,12 @@ OptionsMenuScreen::~OptionsMenuScreen()
 
 void OptionsMenuScreen::start()
 {
+	Menu::start();
+
 	screen = findGameObjectWithName("OptionsMenuScreen");
+	if (mainCamera == nullptr || screen == nullptr) return;
+
+	
 	root = screen->getComponent<UILayout>()->getRoot();
 
 	optionsMenu = root.getChild("OptionsBackground");
@@ -48,7 +55,7 @@ void OptionsMenuScreen::start()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 
 	if (cameraLayout != nullptr)
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");

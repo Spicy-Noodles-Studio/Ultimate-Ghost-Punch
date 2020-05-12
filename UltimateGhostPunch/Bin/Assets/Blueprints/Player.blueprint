@@ -128,6 +128,12 @@
         },
         {
             "ComponentName": "PlayerState"
+        },
+        {
+            "ComponentName": "SoundEmitter"
+        },
+        {
+            "ComponentName": "SoundManager"
         }
     ],
     "Children": [

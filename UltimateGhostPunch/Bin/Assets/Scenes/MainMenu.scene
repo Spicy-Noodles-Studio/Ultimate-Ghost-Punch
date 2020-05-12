@@ -24,6 +24,23 @@
             ]
         },
         {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "SongManager",
+            "Tag": "songManager",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform"
+                },
+                {
+                    "ComponentName": "SoundEmitter"
+                },
+                {
+                    "ComponentName": "SongManager"
+                }
+            ]
+        },
+        {
             "ObjectType": "BLUEPRINT",
             "ObjectName": "MainCamera",
             "Tag": "mainCamera",

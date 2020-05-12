@@ -2,23 +2,20 @@
 #ifndef SCORE_MANAGER_H
 #define SCORE_MANAGER_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 #include <vector>
 #include <string>
 
-class GameManager;
-
-class ScoreManager : public UserComponent
+class ScoreManager : public Menu
 {
 private:
-	GameManager* manager;
 	std::vector<UIElement> texts;
 	std::vector<UIElement> panels;
 
 	// events
 	bool resetButtonClick();
-	bool backButtonClick();
 
 	void initStatistics(int numOfPlayers);
 	void reposition(int numOfPlayers);

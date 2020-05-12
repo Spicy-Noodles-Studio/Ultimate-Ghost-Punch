@@ -40,7 +40,7 @@ public:
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
-	bool wasGrabBlocked() const;
+	bool canBlockGrab() const;
 	bool isBlocking() const;
 	// Return if it has just blocked an attack (only true during current frame)
 	bool hasBlocked() const;

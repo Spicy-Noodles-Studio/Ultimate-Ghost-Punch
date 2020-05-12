@@ -3,6 +3,7 @@
 #include <InputSystem.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerState.h"

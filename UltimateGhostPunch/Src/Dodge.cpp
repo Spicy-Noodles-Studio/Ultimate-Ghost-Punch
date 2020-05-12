@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerState.h"
@@ -94,6 +95,7 @@ void Dodge::dodge()
 		state = State::DODGING;
 		time = duration;
 
+		//Animation
 		PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->dashAnimation();
 	}

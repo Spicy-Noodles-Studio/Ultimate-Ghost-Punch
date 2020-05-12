@@ -7,15 +7,18 @@
 #include <UILayout.h>
 
 #include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(PauseMenu);
 
 bool PauseMenu::backButtonClick()
 {
-	GameManager::GetInstance()->pauseGame(false);
-	SceneManager::GetInstance()->changeScene("MainMenu");
+	gameManager->pauseGame(false);
+	songManager->stopSong(gameManager->getSong());
+	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
-	return false;
+	return Menu::backButtonClick();
 }
 
 bool PauseMenu::optionsButton()
@@ -27,50 +30,66 @@ bool PauseMenu::optionsButton()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
-	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
+	interfaceSystem->clearControllerMenuInput();
+	interfaceSystem->initControllerMenuInput(&optionsMenu);
+
+	buttonClick(buttonSound);
 
 	return false;
 }
 
-PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), optionsMenu(NULL)
+bool PauseMenu::resumeButton()
 {
-	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
+	setPaused(false);
+	buttonClick(buttonSound);
+	return false;
+}
+
+PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), pauseMenu(NULL), optionsMenu(NULL)
+{
+	interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {; return resumeButton(); }));
+	interfaceSystem->registerEvent("pauseBackButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+	interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButton(); return false; }));
 }
 
 PauseMenu::~PauseMenu()
 {
-	InterfaceSystem::GetInstance()->unregisterEvent("resumeButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseBackButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseOptionsButtonClick");
+	interfaceSystem->unregisterEvent("resumeButtonClick");
+	interfaceSystem->unregisterEvent("pauseBackButtonClick");
+	interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
 }
 
 void PauseMenu::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	optionsMenu = findGameObjectWithName("OptionsMenuScreen")->getComponent<UILayout>()->getRoot();
+	Menu::start();
 
-	if (cameraLayout != nullptr)
-		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+	if (mainCamera != nullptr) {
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		if (cameraLayout != nullptr)
+			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+	}
 
-	inputSystem = InputSystem::GetInstance();
+	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
+	if(options!=nullptr) optionsMenu = options->getComponent<UILayout>()->getRoot();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
 	if (inputSystem->getKeyPress("ESCAPE"))
-		setPaused(!GameManager::GetInstance()->gameIsPaused());
+		setPaused(!gameManager->gameIsPaused());
 }
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (paused == GameManager::GetInstance()->gameIsPaused()) return;
+	if (paused == gameManager->gameIsPaused()) return;
+
+	if (paused)	songManager->pauseSong(gameManager->getSong());
+	else songManager->resumeSong(gameManager->getSong());
 
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
-	GameManager::GetInstance()->pauseGame(paused);
+	gameManager->pauseGame(paused);
+
 }
 
 bool PauseMenu::isVisible()

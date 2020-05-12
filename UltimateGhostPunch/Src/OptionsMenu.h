@@ -2,7 +2,8 @@
 #ifndef OPTIONS_MENU_H
 #define OPTIONS_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 
 #include <vector>
@@ -16,10 +17,9 @@ class RenderSystem;
 class SoundSystem;
 class WindowManager;
 
-class OptionsMenu : public UserComponent
+class OptionsMenu : public Menu
 {
 protected:
-	InterfaceSystem* interfaceSystem;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
@@ -58,8 +58,6 @@ protected:
 	bool changeSoundVolume();
 	bool changeMusicVolume();
 	bool changeGamma();
-
-	bool backButtonClick();
 
 public:
 	OptionsMenu(GameObject* gameObject);

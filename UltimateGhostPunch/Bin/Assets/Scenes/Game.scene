@@ -110,7 +110,7 @@
                 {
                     "ComponentName" : "Countdown",
 					"ComponentProperties": [
-                        ["time" , "3"]
+                        ["time" , "4"]
                     ]
                 }
             ]

@@ -1,11 +1,30 @@
 #include "GameManager.h"
 #include <ComponentRegister.h>
+#include <SoundEmitter.h>
+#include <GameObject.h>
 
 #include "Timer.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(GameManager);
 
 GameManager* GameManager::instance = nullptr;
+
+void GameManager::pauseAllSounds()
+{
+	for (GameObject* knight : knights) {
+		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+		if (emitter != nullptr) emitter->pauseAll();
+	}
+}
+
+void GameManager::resumeAllSound()
+{
+	for (GameObject* knight : knights) {
+		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+		if (emitter != nullptr) emitter->resumeAll();
+	}
+}
 
 GameManager::GameManager() : UserComponent(nullptr), paused(false)
 {
@@ -52,10 +71,14 @@ void GameManager::pauseGame(bool setPaused)
 
 	paused = setPaused;
 
-	if (paused)
+	if (paused) {
+		pauseAllSounds();
 		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	else
+	}
+	else {
+		resumeAllSound();
 		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+	}
 }
 
 bool GameManager::gameIsPaused()
@@ -66,7 +89,6 @@ bool GameManager::gameIsPaused()
 void GameManager::setNumPlayers(int nPlayers)
 {
 	this->numPlayers = nPlayers;
-	
 }
 
 int GameManager::getNumPlayers()
@@ -92,6 +114,11 @@ std::vector<GameObject*>& GameManager::getKnights()
 std::vector<Vector3>& GameManager::getPlayerColours()
 {
 	return playerColours;
+}
+
+void GameManager::emptyKnights()
+{
+	knights.clear();
 }
 
 void GameManager::setLevel(std::string level)
@@ -156,4 +183,17 @@ int GameManager::getInitialTime()
 Score* GameManager::getScore()
 {
 	return &scores;
+}
+
+bool GameManager::isAnyGhost() const
+{
+	bool anyGhost = false;
+	for (GameObject* knight : knights) {
+		if (knight != nullptr) {
+			GhostManager* ghostManager = knight->getComponent<GhostManager>();
+			if (ghostManager != nullptr)
+				anyGhost = ghostManager->isGhost() || anyGhost;
+		}
+	}
+	return anyGhost;
 }

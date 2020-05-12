@@ -35,6 +35,7 @@ private:
 
 	Score scores;
 
+
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -57,6 +58,8 @@ public:
 	std::vector<GameObject*>& getKnights();
 	std::vector<Vector3>& getPlayerColours();
 
+	void emptyKnights();
+
 	void setLevel(std::string level);
 	std::string getLevel();
 	std::string getLastLevel();
@@ -73,6 +76,11 @@ public:
 	int getInitialTime();
 
 	Score* getScore();
+
+	bool isAnyGhost() const;
+
+	void pauseAllSounds();
+	void resumeAllSound();
 };
 
 #endif

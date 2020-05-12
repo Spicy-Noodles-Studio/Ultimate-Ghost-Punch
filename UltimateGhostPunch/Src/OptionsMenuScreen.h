@@ -4,8 +4,6 @@
 
 #include "OptionsMenu.h"
 
-class GameObject;
-
 class OptionsMenuScreen : public OptionsMenu
 {
 private:

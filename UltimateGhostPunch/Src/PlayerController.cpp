@@ -17,6 +17,7 @@
 #include "Health.h"
 #include "GhostManager.h"
 #include "GhostMovement.h"
+#include "SoundManager.h"
 #include "UltimateGhostPunch.h"
 #include "PlayerAnimController.h"
 #include "GameManager.h"
@@ -144,8 +145,10 @@ void PlayerController::checkInput()
 		}
 
 		//Taunt
-		if (getKeyDown("T") || getButtonDown("BACK"))
-			if(animController!= nullptr) animController->tauntAnimation();
+		if (getKeyDown("T") || getButtonDown("BACK")) {
+			if (animController != nullptr) animController->tauntAnimation();
+			gameObject->getComponent<SoundManager>()->playTaunt();
+		}
 	}
 
 	//Actions if the player is in ghost mode

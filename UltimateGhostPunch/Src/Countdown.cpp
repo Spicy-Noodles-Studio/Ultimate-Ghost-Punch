@@ -10,6 +10,7 @@
 
 #include "GameManager.h"
 #include "DebugUtils.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(Countdown);
 
@@ -25,10 +26,12 @@ Countdown::~Countdown()
 
 void Countdown::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-
-	if (cameraLayout != nullptr)
-		text = cameraLayout->getRoot().getChild("Countdown");
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera != nullptr) {
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		if (cameraLayout != nullptr)
+			text = cameraLayout->getRoot().getChild("Countdown");
+	}
 }
 
 void Countdown::preUpdate(float deltaTime)
@@ -39,6 +42,8 @@ void Countdown::preUpdate(float deltaTime)
 		started = true;
 		paused = true;
 		last = std::chrono::steady_clock::now();
+
+		SongManager::GetInstance()->play2DSound("countdown");
 	}
 
 	if (paused)

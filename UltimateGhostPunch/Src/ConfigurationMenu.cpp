@@ -8,6 +8,7 @@
 #include <UIElement.h>
 
 #include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(ConfigurationMenu);
 
@@ -21,6 +22,8 @@ bool ConfigurationMenu::changeHealth(int value)
 	if (health > MAX_HEALTH) health = MAX_HEALTH;
 
 	configLayout->getRoot().getChild("Health").setText(std::to_string(health));
+
+	buttonClick(buttonSound);
 
 	return false;
 }
@@ -37,45 +40,81 @@ bool ConfigurationMenu::changeTime(int value)
 	else
 		configLayout->getRoot().getChild("Time").setText(std::to_string(time));
 
+	buttonClick(buttonSound);
+
 	return false;
 }
 
 bool ConfigurationMenu::changeSong(int value)
 {
-	songIndex += value;
+	stopPreview();
 
-	if (songIndex < 0)
-		songIndex = 0;
+	auto it = songNames.find(currentSong);
+	if (it == songNames.end()) return false;
 
-	if (songIndex > songNames.size() - 1)
-		songIndex = songNames.size() - 1;
+	if (value == -1 && it != songNames.begin())
+		it--;
 
-	configLayout->getRoot().getChild("Song").setText(songNames[songIndex]);
+	if (value == 1 && it != prev(songNames.end()))
+		it++;
+
+	currentSong = (*it).first;
+	configLayout->getRoot().getChild("Song").setText(currentSong);
+
+	buttonClick(buttonSound);
 
 	return false;
 }
 
 bool ConfigurationMenu::changeLevel(int value)
 {
-	levelIndex += value;
+	auto it = levelNames.find(currentLevel);
+	if (it == levelNames.end()) return false;
 
-	if (levelIndex < 0)
-		levelIndex = 0;
+	if (value == -1 && it != levelNames.begin())
+		it--;
 
-	if (levelIndex > levelNames.size() - 1)
-		levelIndex = levelNames.size() - 1;
+	if (value == 1 && it != prev(levelNames.end()))
+		it++;
 
-	configLayout->getRoot().getChild("Level").setText(levelNames[levelIndex]);
+	currentLevel = (*it).first;
+	configLayout->getRoot().getChild("Level").setText(currentLevel);
+
+	buttonClick(buttonSound);
 
 	return false;
 }
 
+bool ConfigurationMenu::previewSong()
+{
+	if (!songPreview) {
+		songManager->pauseMenuSong();
+		songManager->playSong(songNames[currentSong]);
+		songPreview = true;
+		timer = previewTime;
+	}
+	return false;
+}
+
+void ConfigurationMenu::stopPreview()
+{
+	if (songPreview) {
+		songManager->stopSong(songNames[currentSong]);
+		songManager->resumeMenuSong();
+		songPreview = false;
+	}
+}
+
 bool ConfigurationMenu::fightButtonClick()
 {
+	buttonClick(fightSound);
+
+	stopPreview();
+	songManager->stopMenuSong();
+
 	// set data
-	GameManager* gameManager = GameManager::GetInstance();
-	gameManager->setLevel(levelNames[levelIndex]);
-	gameManager->setSong(songNames[songIndex]);
+	gameManager->setLevel(levelNames[currentLevel]);
+	gameManager->setSong(songNames[currentSong]);
 	gameManager->setNumPlayers(numPlayers);
 	gameManager->setHealth(health);
 
@@ -92,21 +131,43 @@ bool ConfigurationMenu::fightButtonClick()
 
 	// change scene
 	SceneManager::GetInstance()->changeScene("Game", true);
+	
 	return false;
+}
+
+void ConfigurationMenu::initNames()
+{
+	songNames["Bustin Loose"] = "bustinLoose";
+	songNames["District Four"] = "districtFour";
+	songNames["Drama"] = "tvDrama";
+	songNames["Epic Battle"] = "epicBattle";
+	songNames["Fight"] = "fightScene";
+	songNames["Green Daze"] = "greenDaze";
+	songNames["Opus One"] = "opusOne";
+	songNames["Strength"] = "strengthOfTheTitans";
+	songNames["UGP"] = "ugpTrack1";
+	currentSong = "Bustin Loose";
+	configLayout->getRoot().getChild("Song").setText(currentSong);
+
+
+	levelNames["Coliseum"] = "level4";
+	levelNames["Sewers"] = "level3";
+	levelNames["Volcano"] = "level5";
+	currentLevel = "Coliseum";
+	configLayout->getRoot().getChild("Level").setText(currentLevel);
 }
 
 bool ConfigurationMenu::backButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("MainMenu");
-	return false;
+	stopPreview();
+	return Menu::backButtonClick();
 }
 
 // -----
 
-ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), configLayout(nullptr), fightButton(NULL),
-numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
+ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configLayout(nullptr), fightButton(NULL),
+numPlayers(0), health(0), time(0), currentLevel(""), currentSong(""), previewTime(50), songPreview(false), timer(0)
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-1); }));
 	interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+1); }));
 
@@ -121,11 +182,12 @@ numPlayers(0), health(0), time(0), levelIndex(0), songIndex(0)
 
 	interfaceSystem->registerEvent("fightButtonClick", UIEvent("ButtonClicked", [this]() {return fightButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
+
+	interfaceSystem->registerEvent("previewSongButtonClick", UIEvent("ButtonClicked", [this]() {return previewSong(); }));
 }
 
 ConfigurationMenu::~ConfigurationMenu()
 {
-	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 	interfaceSystem->unregisterEvent("-healthButtonClick");
 	interfaceSystem->unregisterEvent("+healthButtonClick");
 
@@ -140,21 +202,23 @@ ConfigurationMenu::~ConfigurationMenu()
 
 	interfaceSystem->unregisterEvent("fightButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
+
+	interfaceSystem->unregisterEvent("previewSongClick");
 }
 
 void ConfigurationMenu::start()
 {
-	inputSystem = InputSystem::GetInstance();
+	Menu::start();
 
-	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	if (mainCamera != nullptr)
 		configLayout = mainCamera->getComponent<UILayout>();
 
 	if (configLayout != nullptr)
 		fightButton = configLayout->getRoot().getChild("FightButton");
 
-	levelIndex = 0;
-	songIndex = 0;
+	initNames();
+
+	timer = 0;
 	time = 60;
 	health = 4;
 	numPlayers = 0;
@@ -171,6 +235,11 @@ void ConfigurationMenu::start()
 void ConfigurationMenu::update(float deltaTime)
 {
 	checkInput();
+
+	if (songPreview && timer > 0)
+		timer -= deltaTime;
+	else if (songPreview)
+		stopPreview();
 }
 
 void ConfigurationMenu::checkInput()

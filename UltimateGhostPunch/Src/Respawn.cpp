@@ -1,6 +1,7 @@
 #include "Respawn.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerController.h"

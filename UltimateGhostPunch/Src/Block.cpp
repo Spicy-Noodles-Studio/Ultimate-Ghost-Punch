@@ -168,7 +168,7 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 	return false;
 }
 
-bool Block::wasGrabBlocked() const
+bool Block::canBlockGrab() const
 {
 	return blocking && blockTime > maxBlockTime - blockGrabMargin;
 }

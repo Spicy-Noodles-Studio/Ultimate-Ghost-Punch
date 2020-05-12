@@ -22,8 +22,8 @@ REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), deathPosChanged(false), ended(false), ghost(false), used(false),
 													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), game(nullptr), anim(nullptr),
-													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO),
-													 punchSuccess(false)
+													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO),
+													 ghostSpawnOffset(Vector3::ZERO), success(false), ghostDead(false), punchSuccess(false)
 {
 }
 
@@ -72,6 +72,7 @@ void GhostManager::update(float deltaTime)
 		else if (!ended && game != nullptr) {
 			ended = true;
 			ghost = false;
+			ghostDead = true;
 			if (anim != nullptr) anim->notLoopAnimation("Disappear");
 			// Deactivate controller
 			auto control = gameObject->getComponent<PlayerController>();
@@ -172,6 +173,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 				score->killedBy(other->getComponent<PlayerIndex>()->getIndex(), gameObject->getComponent<PlayerIndex>()->getIndex());
 			
 			ghost = false;
+			success = true;
 		}
 	}
 }
@@ -300,6 +302,15 @@ void GhostManager::handlePlayerDeath()
 	}
 }
 
+bool GhostManager::ghostSuccess() const
+{
+	return success;
+}
+
+bool GhostManager::ghostDeath() const
+{
+	return ghostDead;
+}
 bool GhostManager::hasPunchSuccess() const
 {
 	return punchSuccess;
