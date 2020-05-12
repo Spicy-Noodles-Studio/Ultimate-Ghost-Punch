@@ -54,7 +54,7 @@ void ParticleManager::start()
 
 }
 
-void ParticleManager::update(float deltaTime)
+void ParticleManager::preUpdate(float deltaTime)
 {
 	/* FLOOR DUST */
 	manageFloorDust();

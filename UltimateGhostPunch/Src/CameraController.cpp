@@ -13,7 +13,7 @@
 REGISTER_FACTORY(CameraController);
 
 CameraController::CameraController(GameObject* gameObject) : UserComponent(gameObject), minZ(20), maxZ(100), smoothFactor(0.125f), zoomFactor(1.0f),
-															 time(0.0f), state(MIDPOINT), playerPunching(nullptr)
+time(0.0f), slowMoTime(0.3f), slowMoDistance(5.0f), slowMoTimeScale(0.3f), slowMoZ(15.0f), state(MIDPOINT), playerPunching(nullptr)
 {
 
 }
@@ -28,11 +28,16 @@ void CameraController::preUpdate(float deltaTime)
 	// Update SLOWMO timer
 	if (time > 0.0f)
 		time -= deltaTime;
+	else if (state == SLOWMO)
+		deactivateSlowMo();
 }
 
 void CameraController::update(float deltaTime)
 {
 	handleState();
+
+	if (state != SLOWMO)
+		checkSlowMo();
 
 	smoothMove();
 }
@@ -59,6 +64,22 @@ void CameraController::handleData(ComponentData* data)
 		{
 			setFloat(zoomFactor);
 		}
+		else if (prop.first == "slowMoTime")
+		{
+			setFloat(slowMoTime);
+		}
+		else if (prop.first == "slowMoDistance")
+		{
+			setFloat(slowMoDistance);
+		}
+		else if (prop.first == "slowMoTimeScale")
+		{
+			setFloat(slowMoTimeScale);
+		}
+		else if (prop.first == "slowMoZ")
+		{
+			setFloat(slowMoZ);
+		}
 		else
 			LOG("CAMERA CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 	}
@@ -75,6 +96,8 @@ void CameraController::handleState()
 {
 	if (state == MIDPOINT)
 		setTargetToMidPointPlayers();
+	else if (state == SLOWMO)
+		setTargetToSlowMo();
 }
 
 float CameraController::getMaxDistBetweenPlayers()
@@ -95,6 +118,36 @@ float CameraController::getMaxDistBetweenPlayers()
 	}
 
 	return maxDist;
+}
+
+void CameraController::setTargetToSlowMo()
+{
+	if (playerPunching == nullptr)
+		return;
+
+	Vector3 playerPunchingPos = playerPunching->transform->getPosition();
+	target = { playerPunchingPos.x, playerPunchingPos.y, slowMoZ };
+}
+
+void CameraController::checkSlowMo()
+{
+	playerPunching = someonePunching();
+
+	if (playerPunching != nullptr && getMaxDistBetweenPlayers() < slowMoDistance)
+		activateSlowMo();
+}
+
+void CameraController::activateSlowMo()
+{
+	Timer::GetInstance()->setTimeScale(slowMoTimeScale);
+	time = slowMoTime;
+	state = SLOWMO;
+}
+
+void CameraController::deactivateSlowMo()
+{
+	Timer::GetInstance()->setTimeScale(1.0f);
+	state = MIDPOINT;
 }
 
 Vector3 CameraController::getMidPointBetweenPlayers()

@@ -3,20 +3,20 @@ particle_system SpectreSplash
   material SpectreSplash
   particle_width 1.2
   particle_height 1.2
-  quota 50
+  quota 200
 
   emitter Box
   {
     position 0 0 2
-    width 2
-    height 2
-    depth 2
+    width 4
+    height 4
+    depth 4
     direction 0 1 -1
     angle 120
-    emission_rate 1000
+    emission_rate 10000
     time_to_live 0.5
-    velocity_min 4
-    velocity_max 6
+    velocity_min 8
+    velocity_max 10
     colour 0.3 0.16 0.5 0.5
   }
 

@@ -33,7 +33,7 @@ public:
 	virtual ~ParticleManager();
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
 
 private:
 	/* CREATE CHILDREN */
