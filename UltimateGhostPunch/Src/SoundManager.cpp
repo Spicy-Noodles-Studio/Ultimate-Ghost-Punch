@@ -31,7 +31,7 @@ else\
 	stopSound(sound);
 
 SoundManager::SoundManager(GameObject* gameObject) : UserComponent(gameObject), soundEmitter(nullptr), playerState(nullptr), attackStarted(false), ghostStarted(false), blockGrabStarted(false),
-													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false), deathStarted(false)
+													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false), deathStarted(false), punchSuccess(false)
 {
 
 }
@@ -63,7 +63,7 @@ void SoundManager::playTaunt()
 
 void SoundManager::manageJumpSound()
 {
-	playSoundInstant2("jump", isGrounded, isJumping);
+	playSoundInstant2("jump2", isGrounded, isJumping);
 }
 
 void SoundManager::manageLandSound()
@@ -136,7 +136,7 @@ void SoundManager::manageDodgeSound()
 
 void SoundManager::manageStunSound()
 {
-	playSoundRepeatedly("stun", isStunned)
+	playSoundRepeatedly("stun2", isStunned)
 }
 
 void SoundManager::manageHeavyAttackSound()
@@ -179,6 +179,11 @@ void SoundManager::manageDeathSound()
 	playSoundOnce("death", hasKnightDied, deathStarted);
 }
 
+void SoundManager::managePunchSuccessSound()
+{
+	playSoundOnce("punch", punchSucceeded, punchSuccess);
+}
+
 void SoundManager::playSound(const std::string& sound)
 {
 	if (soundEmitter != nullptr && !soundEmitter->isPlaying(sound)) soundEmitter->playSound(sound);
@@ -214,6 +219,7 @@ void SoundManager::manageSounds()
 	manageGhostSound();
 	manageRespawnSound();
 	manageDeathSound();
+	managePunchSuccessSound();
 }
 
 std::string SoundManager::getRandomSound(const std::vector<std::string>& sounds)

@@ -18,7 +18,7 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
-	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess, deathStarted;
+	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess, deathStarted, punchSuccess;
 
 public:
 	SoundManager(GameObject* gameObject);
@@ -60,6 +60,7 @@ private:
 	void manageGhostSound();
 	void manageRespawnSound();
 	void manageDeathSound();
+	void managePunchSuccessSound();
 };
 
 #endif

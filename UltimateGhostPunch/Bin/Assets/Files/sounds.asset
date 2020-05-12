@@ -68,6 +68,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Land.mp3 land 3D false
 .//Assets//Sounds//melee.wav melee 3D false
 .//Assets//Sounds//meleeEnemyHit.wav meleeEnemyHit 3D false
+.//Assets//Sounds//Punch.mp3 punch 3D false
 .//Assets//Sounds//Noo1.mp3 noo 3D false
 .//Assets//Sounds//Respawn.wav respawn 3D false
 .//Assets//Sounds//Run.mp3 run 3D false
@@ -75,6 +76,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Slash.wav slash 3D false
 .//Assets//Sounds//Shield.mp3 shield 3D false
 .//Assets//Sounds//Stun.mp3 stun 3D false
+.//Assets//Sounds//Stun2.mp3 stun2 3D false
 .//Assets//Sounds//Swipe.mp3 swipe 3D false
 .//Assets//Sounds//Swipe2.mp3 swipe2 3D false
 .//Assets//Sounds//Swipe3.mp3 swipe3 3D false

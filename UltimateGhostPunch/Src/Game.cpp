@@ -355,4 +355,5 @@ void Game::chooseWinner()
 	}
 
 	songManager->play2DSound("victory4");
+	gameManager->pauseAllSounds();
 }

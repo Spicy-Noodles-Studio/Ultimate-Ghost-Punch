@@ -146,7 +146,7 @@ bool PlayerState::isAiming() const
 
 bool PlayerState::punchSucceeded() const
 {
-	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->punchSuccess());
+	return (ghostPunch != nullptr && ghostPunch->punchSuccess());
 }
 
 bool PlayerState::isGhost() const
@@ -191,7 +191,12 @@ bool PlayerState::hasMissedGrab() const
 
 bool PlayerState::hasGhostSucceeded() const
 {
-	return ghostManager != nullptr && ghostManager->ghostSuccess();
+	return ghostManager != nullptr && ghostManager->ghostSuccess() && !punchSucceeded();
+}
+
+bool PlayerState::hasPunchSucceeded() const
+{
+	return ghostPunch != nullptr && ghostPunch->punchSuccess();
 }
 
 bool PlayerState::hasGhostDied() const
