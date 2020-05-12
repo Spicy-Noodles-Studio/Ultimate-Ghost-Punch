@@ -6,14 +6,16 @@
 #include <UIElement.h>
 
 class InputSystem;
+class Countdown;
 
 class PauseMenu : public UserComponent
 {
 private:
 	InputSystem* inputSystem;
+	Countdown* countdown;
 
 	UIElement pauseMenu;
-	UIElement pauseText;
+	UIElement pausePanel;
 
 	UIElement optionsMenu;
 

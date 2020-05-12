@@ -147,7 +147,11 @@ void PlayerUI::updateIndicator()
 		return;
 
 	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());
-	playerIndicator.setPosition((float)pos.x - 0.025f, (float)pos.y - 0.15f);
+
+	if (ghostManager != nullptr && ghostManager->isGhost())
+		playerIndicator.setPosition((float)pos.x - 0.025f, (float)pos.y - 0.25f);
+	else
+		playerIndicator.setPosition((float)pos.x - 0.025f, (float)pos.y - 0.15f);
 }
 
 void PlayerUI::setVisible(bool visible)

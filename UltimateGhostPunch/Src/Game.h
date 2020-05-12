@@ -31,7 +31,7 @@ private:
 	UILayout* gameLayout;
 	Countdown* countdown;
 
-	UIElement timeText;
+	UIElement timePanel;
 
 	std::vector<int> playerIndexes;
 	std::vector<Vector3> playerColours;
@@ -56,6 +56,8 @@ private:
 	void configureLevelCollider(const std::string& name);
 
 	void chooseWinner();
+
+	std::pair<std::string, std::string> timeToText();
 
 public:
 	Game(GameObject* gameObject);

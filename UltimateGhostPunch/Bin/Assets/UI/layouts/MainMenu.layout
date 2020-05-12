@@ -4,21 +4,21 @@
     <Window type="DefaultWindow" name="MainMenu" >
         <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property name="MaxSize" value="{{1,0},{1,0}}" />
-        # LOGO IMAGE
-        <Window type="TaharezLook/StaticImage" name="LogoBackground" >
-            <Property name="Area" value="{{0.35,0},{0.15,0},{0.65,0},{0.45,0}}" />
+        # BACKGROUND
+        <Window type="TaharezLook/StaticImage" name="Background" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            # LOGO IMAGE
             <Window type="TaharezLook/StaticImage" name="LogoImage" >
-                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="Area" value="{{0.3,0},{0.1,0},{0.7,0},{0.5,0}}" />
                 <Property name="Disabled" value="true" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Image" value="logo"/>
                 <Property name="FrameEnabled" Value="False" />
                 <Property name="BackgroundEnabled" Value="False" />
             </Window>
-        </Window>
-        # PLAY
-        <Window type="TaharezLook/Button" name="PlayButton" >
+            # PLAY
+            <Window type="TaharezLook/Button" name="PlayButton" >
                 <Property name="Area" value="{{0.3,0},{0.6,0},{0.7,0},{0.75,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="PLAY" />
@@ -27,9 +27,9 @@
                 <Property name="LeftButton" value="PlayButton" />
                 <Property name="RightButton" value="PlayButton" />
                 <Property name="Font" value="Sans" />
-        </Window>
-        # OPTIONS
-        <Window type="TaharezLook/Button" name="OptionsButton" >
+            </Window>
+            # OPTIONS
+            <Window type="TaharezLook/Button" name="OptionsButton" >
                 <Property name="Area" value="{{0.28,0},{0.8,0},{0.48,0},{0.9,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="OPTIONS" />
@@ -38,26 +38,27 @@
                 <Property name="LeftButton" value="OptionsButton" />
                 <Property name="RightButton" value="ExitButton" />
                 <Property name="Font" value="Sans" />
-        </Window>
-        # EXIT
-        <Window type="TaharezLook/Button" name="ExitButton" >
-            <Property name="Area" value="{{0.52,0},{0.8,0},{0.72,0},{0.9,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="EXIT" />
-            <Property name="UpButton" value="PlayButton" />
-            <Property name="DownButton" value="ExitButton" />
-            <Property name="LeftButton" value="OptionsButton" />
-            <Property name="RightButton" value="ExitButton" />
-            <Property name="Font" value="Sans" />
-        </Window>
-        # INFO TEXT
-        <Window type="TaharezLook/StaticText" name="InfoText" >
-            <Property name="Area" value="{{0,0},{0.9,0},{1,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Disabled" value="true" />
-            <Property name="Text" value="Ultimate Ghost Punch v1.0 is powered by Gaia. All rights reserved. Spicy Noodles (C) 2020." />
-            <Property name="Font" value="Sans" />
-            <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+            # EXIT
+            <Window type="TaharezLook/Button" name="ExitButton" >
+                <Property name="Area" value="{{0.52,0},{0.8,0},{0.72,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="EXIT" />
+                <Property name="UpButton" value="PlayButton" />
+                <Property name="DownButton" value="ExitButton" />
+                <Property name="LeftButton" value="OptionsButton" />
+                <Property name="RightButton" value="ExitButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # INFO TEXT
+            <Window type="TaharezLook/StaticText" name="InfoText" >
+                <Property name="Area" value="{{0,0},{0.9,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="Ultimate Ghost Punch v1.0 is powered by Gaia. All rights reserved. Spicy Noodles (C) 2020." />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
         </Window>
     </Window>
 </GUILayout>

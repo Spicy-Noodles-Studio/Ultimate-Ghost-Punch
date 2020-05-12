@@ -20,7 +20,7 @@
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), gameLayout(nullptr), countdown(nullptr), timeText(NULL),
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), gameLayout(nullptr), countdown(nullptr), timePanel(NULL),
 nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
 {
 
@@ -40,7 +40,7 @@ void Game::start()
 		gameLayout = mainCamera->getComponent<UILayout>();
 
 	if (gameLayout != nullptr)
-		timeText = gameLayout->getRoot().getChild("Time");
+		timePanel = gameLayout->getRoot().getChild("TimeBackground");
 
 	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 
@@ -64,11 +64,13 @@ void Game::update(float deltaTime)
 {
 	if (!countdown->isCounting() && timer > 0)
 	{
-		timer -= deltaTime;
-		if (timer < 0.)
-			timer = 0;
+		if (!timePanel.isVisible())
+			timePanel.setVisible(true);
 
-		timeText.setText(std::to_string((int)timer % 60));
+		timePanel.getChild("Time").setText(timeToText().first + " : " + timeToText().second);
+
+		timer -= deltaTime;
+		if (timer < 0) timer = 0;
 	}
 	else if (timer == 0) // If its negative it means match its not timed
 		chooseWinner();
@@ -211,6 +213,7 @@ void Game::createKnights()
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
 		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
 		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
+		knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
 		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
 
 		gameManager->getKnights().push_back(knight);
@@ -346,4 +349,17 @@ void Game::chooseWinner()
 	}
 
 	SceneManager::GetInstance()->changeScene("StatsMenu");
+}
+
+std::pair<std::string, std::string> Game::timeToText()
+{
+	std::string minutes = std::to_string((int)timer / 60);
+	std::string seconds;
+
+	if ((int)timer % 60 < 10)
+		seconds = "0" + std::to_string((int)timer % 60);
+	else
+		seconds = std::to_string((int)timer % 60);
+
+	return std::pair<std::string, std::string>(minutes, seconds);
 }

@@ -48,10 +48,10 @@
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
-               <Window type="TaharezLook/StaticText" name="P1AcuracyPercentage" >
+               <Window type="TaharezLook/StaticText" name="P1AccuracyPercentage" >
                     <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Acuracy of hits: " />
+                    <Property name="Text" value="Accuracy: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -65,14 +65,14 @@
                <Window type="TaharezLook/StaticText" name="P1HitsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Hits by enviroment: " />
+                    <Property name="Text" value="Hits by spikes: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
                <Window type="TaharezLook/StaticText" name="P1DeathsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Deaths by enviroment: " />
+                    <Property name="Text" value="Deaths by spikes and falls: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -112,10 +112,10 @@
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
-               <Window type="TaharezLook/StaticText" name="P2AcuracyPercentage" >
+               <Window type="TaharezLook/StaticText" name="P2AccuracyPercentage" >
                     <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Acuracy of hits: " />
+                    <Property name="Text" value="Accuracy: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -129,14 +129,14 @@
                <Window type="TaharezLook/StaticText" name="P2HitsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Hits by enviroment: " />
+                    <Property name="Text" value="Hits by spikes: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
                <Window type="TaharezLook/StaticText" name="P2DeathsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Deaths by enviroment: " />
+                    <Property name="Text" value="Deaths by spikes and falls: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -176,10 +176,10 @@
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
-               <Window type="TaharezLook/StaticText" name="P3AcuracyPercentage" >
+               <Window type="TaharezLook/StaticText" name="P3AccuracyPercentage" >
                     <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Acuracy of hits: " />
+                    <Property name="Text" value="Accuracy: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -193,14 +193,14 @@
                <Window type="TaharezLook/StaticText" name="P3HitsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Hits by enviroment: " />
+                    <Property name="Text" value="Hits by spikes: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
                <Window type="TaharezLook/StaticText" name="P3DeathsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Deaths by enviroment: " />
+                    <Property name="Text" value="Deaths by spikes and falls: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -240,10 +240,10 @@
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
-               <Window type="TaharezLook/StaticText" name="P4AcuracyPercentage" >
+               <Window type="TaharezLook/StaticText" name="P4AccuracyPercentage" >
                     <Property name="Area" value="{{0.05,0},{0.35,0},{1,0},{0.45,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Acuracy of hits: " />
+                    <Property name="Text" value="Accuracy: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
@@ -257,14 +257,14 @@
                <Window type="TaharezLook/StaticText" name="P4HitsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.55,0},{1,0},{0.65,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Hits by enviroment: " />
+                    <Property name="Text" value="Hits by spikes: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>
                <Window type="TaharezLook/StaticText" name="P4DeathsByEnviroment" >
                     <Property name="Area" value="{{0.05,0},{0.65,0},{1,0},{0.75,0}}" />
                     <Property name="MaxSize" value="{{1,0},{1,0}}" />
-                    <Property name="Text" value="Deaths by enviroment: " />
+                    <Property name="Text" value="Deaths by spikes and falls: " />
                     <Property name="Disabled" value="true" />
                     <Property name="Font" value="Sans" />
                </Window>

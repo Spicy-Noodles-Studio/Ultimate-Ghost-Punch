@@ -23,7 +23,7 @@ private:
 
 	void setDamageDealt(int playerIndex);
 	void setDamageReceived(int playerIndex);
-	void setAcuracyPercentage(int playerIndex);
+	void setAccuracy(int playerIndex);
 
 	void setTimesFallen(int playerIndex);
 

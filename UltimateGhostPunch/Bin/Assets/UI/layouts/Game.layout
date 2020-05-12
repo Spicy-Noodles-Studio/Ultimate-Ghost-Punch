@@ -5,34 +5,45 @@
         <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
         <Property name="MaxSize" value="{{1,0},{1,0}}" />
 		# COUNTDOWN
-        <Window type="TaharezLook/StaticText" name="Countdown" >
-            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Text" value="0" />
-            <Property name="Disabled" value="true" />
-            <Property name="Font" value="Sans72" />
-            <Property name="HorzFormatting" value="CentreAligned" />
-        </Window>
-        # TIME
-        <Window type="TaharezLook/StaticText" name="Time" >
-            <Property name="Area" value="{{0,0},{0.1,0},{1,0},{1,0}}" />
-            <Property name="MaxSize" value="{{1,0},{0.05,0}}" />
-            <Property name="Text" value="0" />
-            <Property name="Disabled" value="true" />
-            <Property name="Font" value="Sans" />
-            <Property name="HorzFormatting" value="CentreAligned" />
-        </Window>
-        # PAUSE TEXT
-        <Window type="TaharezLook/StaticImage" name="PauseText" >
-            <Property name="Area" value="{{0,0},{0.1,0},{0.15,0},{0.2,0}}" />
+        <Window type="TaharezLook/StaticImage" name="CountdownBackground" >
+            <Property name="Area" value="{{0,0},{0.4,0},{1,0},{0.6,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Visible" value="False" />
-            <Window type="TaharezLook/StaticText" name="Pause" >
-                <Property name="Area" value="{{0.3,0},{0,0},{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="Countdown" >
+                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="0" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans72" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+        </Window>
+        # TIME
+        <Window type="TaharezLook/StaticImage" name="TimeBackground" >
+            <Property name="Area" value="{{0.45,0},{0,0},{0.55,0},{0.05,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+            <Window type="TaharezLook/StaticText" name="Time" >
+                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="0" />
+                <Property name="Disabled" value="true" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+        </Window>
+        # PAUSE
+        <Window type="TaharezLook/StaticImage" name="Pause" >
+            <Property name="Area" value="{{0.4,0},{0.2,0},{0.6,0},{0.25,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Visible" value="False" />
+            <Window type="TaharezLook/StaticText" name="PauseText" >
+                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="PAUSE" />
                 <Property name="Disabled" value="true" />
                 <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="CentreAligned" />
             </Window>
         </Window>
         # PAUSE MENU
@@ -42,7 +53,7 @@
             <Property name="Visible" value="False" />
             # RESUME BUTTON
             <Window type="TaharezLook/Button" name="ResumeButton" >
-                <Property name="Area" value="{{0.1,0},{0.1,0},{0.9,0},{0.2,0}}" />
+                <Property name="Area" value="{{0.1,0},{0.15,0},{0.9,0},{0.3,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Resume" />
 				<Property name="UpButton" value="ResumeButton" />
@@ -53,7 +64,7 @@
             </Window>
             # OPTIONS BUTTON
             <Window type="TaharezLook/Button" name="OptionsButton" >
-                <Property name="Area" value="{{0.1,0},{0.4,0},{0.9,0},{0.5,0}}" />
+                <Property name="Area" value="{{0.1,0},{0.4,0},{0.9,0},{0.55,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Options" />
 				<Property name="UpButton" value="ResumeButton" />
@@ -64,7 +75,7 @@
             </Window>
             # EXIT BUTTON
             <Window type="TaharezLook/Button" name="ExitButton" >
-                <Property name="Area" value="{{0.1,0},{0.7,0},{0.9,0},{0.8,0}}" />
+                <Property name="Area" value="{{0.1,0},{0.65,0},{0.9,0},{0.8,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Text" value="Exit" />
 				<Property name="UpButton" value="OptionsButton" />
@@ -76,7 +87,7 @@
         </Window>
         # PLAYER 1 INFO
         <Window type="TaharezLook/StaticImage" name="Player1Background" >
-            <Property name="Area" value="{{0.05,0},{0.85,0},{0.25,0},{0.95,0}}" />
+            <Property name="Area" value="{{0.05,0},{0.85,0},{0.2,0},{0.95,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
@@ -84,7 +95,7 @@
                 <Property name="Area" value="{{0.3,0},{-0.3,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P1" />
+                <Property name="Text" value="[colour='FF0000FF']P1" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -98,14 +109,14 @@
                 <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P1" />
+                <Property name="Text" value="[colour='FF0000FF']P1" />
                 <Property name="Font" value="Sans" />
                 <Property name="HorzFormatting" value="CentreAligned" />
             </Window>
         </Window>
         # PLAYER 2 INFO
         <Window type="TaharezLook/StaticImage" name="Player2Background" >
-            <Property name="Area" value="{{0.3,0},{0.85,0},{0.5,0},{0.95,0}}" />
+            <Property name="Area" value="{{0.3,0},{0.85,0},{0.45,0},{0.95,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
@@ -113,7 +124,7 @@
                 <Property name="Area" value="{{0.3,0},{-0.3,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P2" />
+                <Property name="Text" value="[colour='FF00FF00']P2" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -127,14 +138,14 @@
                 <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P2" />
+                <Property name="Text" value="[colour='FF00FF00']P2" />
                 <Property name="Font" value="Sans" />
                 <Property name="HorzFormatting" value="CentreAligned" />
             </Window>
         </Window>
         # PLAYER 3 INFO
         <Window type="TaharezLook/StaticImage" name="Player3Background" >
-            <Property name="Area" value="{{0.55,0},{0.85,0},{0.75,0},{0.95,0}}" />
+            <Property name="Area" value="{{0.55,0},{0.85,0},{0.7,0},{0.95,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
@@ -142,7 +153,7 @@
                 <Property name="Area" value="{{0.3,0},{-0.3,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P3" />
+                <Property name="Text" value="[colour='FFFFFF00']P3" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -156,14 +167,14 @@
                 <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P3" />
+                <Property name="Text" value="[colour='FFFFFF00']P3" />
                 <Property name="Font" value="Sans" />
                 <Property name="HorzFormatting" value="CentreAligned" />
             </Window>
         </Window>
         # PLAYER 4 INFO
         <Window type="TaharezLook/StaticImage" name="Player4Background" >
-            <Property name="Area" value="{{0.8,0},{0.85,0},{0.9,0},{0.95,0}}" />
+            <Property name="Area" value="{{0.8,0},{0.85,0},{0.95,0},{0.95,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Alpha" value="0.8" />
             <Property name="Visible" value="False" />
@@ -171,7 +182,7 @@
                 <Property name="Area" value="{{0.3,0},{-0.3,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P4" />
+                <Property name="Text" value="[colour='FF000000']P4" />
                 <Property name="Font" value="Sans" />
             </Window>
         </Window>
@@ -185,7 +196,7 @@
                 <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
                 <Property name="MaxSize" value="{{1,0},{1,0}}" />
                 <Property name="Disabled" value="true" />
-                <Property name="Text" value="P4" />
+                <Property name="Text" value="[colour='FF000000']P4" />
                 <Property name="Font" value="Sans" />
                 <Property name="HorzFormatting" value="CentreAligned" />
             </Window>

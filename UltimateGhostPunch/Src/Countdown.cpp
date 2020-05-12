@@ -14,7 +14,7 @@
 
 REGISTER_FACTORY(Countdown);
 
-Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), text(NULL), players(), cameraControl(nullptr), time(0), startCounting(false), countingDown(false)
+Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), panel(NULL), players(), cameraControl(nullptr), time(0), startCounting(false), countingDown(false)
 {
 
 }
@@ -29,7 +29,7 @@ void Countdown::start()
 	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
 
 	if (cameraLayout != nullptr)
-		text = cameraLayout->getRoot().getChild("Countdown");
+		panel = cameraLayout->getRoot().getChild("CountdownBackground");
 
 
 	cameraControl = findGameObjectWithName("MainCamera")->getComponent<CameraController>();
@@ -47,28 +47,34 @@ void Countdown::update(float deltaTime)
 
 		startCounting = true;
 		countingDown = true;
+		panel.setVisible(true);
+
+		last = std::chrono::steady_clock::now();
 	}
 
 	if (countingDown)
 	{
-		time -= deltaTime;
-
 		if (time >= 1)
-			text.setText(std::to_string((int)time));
+			panel.getChild("Countdown").setText(std::to_string((int)time));
 		else
-			text.setText("FIGHT!");
+			panel.getChild("Countdown").setText("FIGHT!");
 
 		if (time <= 0)
 		{
-			text.setText("");
-
 			for (int i = 0; i < players.size(); i++)
 				players[i]->getComponent<PlayerController>()->setActive(true);
 
 			cameraControl->setActive(true);
 
 			countingDown = false;
+			panel.setVisible(false);
 		}
+
+		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
+		std::chrono::duration<float> elapsed = std::chrono::duration_cast<std::chrono::duration<float>>(current - last);
+
+		last = current;
+		time -= elapsed.count();
 	}
 }
 

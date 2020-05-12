@@ -71,13 +71,13 @@ void ConfigurationMenu::start()
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 
 	if (mainCamera != nullptr)
+	{
 		configurationLayout = mainCamera->getComponent<UILayout>();
+		settingsPanel = mainCamera->getChildren()[0]->getComponent<UILayout>()->getRoot();
+	}
 
 	if (configurationLayout != nullptr)
-	{
-		settingsPanel = configurationLayout->getRoot().getChild("SettingsBackground");
 		startButton = configurationLayout->getRoot().getChild("StartButton");
-	}
 
 	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
 	std::vector<int> indexes = gameManager->getPlayerIndexes();
@@ -215,7 +215,7 @@ bool ConfigurationMenu::changeHealth(int value)
 	if (health < MIN_HEALTH) health = MIN_HEALTH;
 	if (health > MAX_HEALTH) health = MAX_HEALTH;
 
-	settingsPanel.getChild("Health").setText(std::to_string(health));
+	settingsPanel.getChild("SettingsBackground").getChild("Health").setText(std::to_string(health));
 
 	return false;
 }
@@ -223,7 +223,7 @@ bool ConfigurationMenu::changeHealth(int value)
 bool ConfigurationMenu::changeTimeMode(int value)
 {
 	mode = value;
-	settingsPanel.getChild("TimeMode").setText(timeModes[mode]);
+	settingsPanel.getChild("SettingsBackground").getChild("TimeMode").setText(timeModes[mode]);
 
 	return false;
 }
@@ -235,7 +235,7 @@ bool ConfigurationMenu::changeTime(int value)
 	if (time < MIN_TIME) time = MIN_TIME;
 	if (time > MAX_TIME) time = MAX_TIME;
 
-	settingsPanel.getChild("Time").setText(std::to_string(time));
+	settingsPanel.getChild("SettingsBackground").getChild("Time").setText(std::to_string(time));
 
 	return false;
 }
@@ -298,15 +298,17 @@ bool ConfigurationMenu::settingsButtonClick()
 	{
 		settingsPanel.setVisible(true);
 		settingsPanel.setAlwaysOnTop(true);
+
+		InterfaceSystem::GetInstance()->clearControllerMenuInput();
+		InterfaceSystem::GetInstance()->initControllerMenuInput(&settingsPanel);
 	}
 	else
 	{
 		settingsPanel.setVisible(false);
 		settingsPanel.setAlwaysOnTop(false);
-	}
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
-	InterfaceSystem::GetInstance()->initControllerMenuInput(&settingsPanel);
+		InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	}
 
 	return false;
 }

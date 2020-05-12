@@ -43,7 +43,7 @@ void StatsMenu::start()
 	{
 		std::string name = "P" + std::to_string(i + 1);
 		texts.push_back(root.getChild(name));
-		root.getChild(name).setText(name + ": " + std::to_string(gameManager->getPlayerRanking(i + 1)) + "º");
+		root.getChild(name).setText("Player " + std::to_string(i + 1) + ": " + std::to_string(gameManager->getPlayerRanking(i + 1)) + "º");
 
 		name = name + "Background";
 		panels.push_back(root.getChild(name));
@@ -108,7 +108,7 @@ void StatsMenu::initStatistics(int numOfPlayers)
 
 		setDamageDealt(i + 1);
 		setDamageReceived(i + 1);
-		setAcuracyPercentage(i + 1);
+		setAccuracy(i + 1);
 
 		setTimesFallen(i + 1);
 
@@ -152,14 +152,14 @@ void StatsMenu::setDamageReceived(int playerIndex)
 		panels.at(playerIndex - 1).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
 }
 
-void StatsMenu::setAcuracyPercentage(int playerIndex)
+void StatsMenu::setAccuracy(int playerIndex)
 {
 	Score* score = gameManager->getScore();
 	std::string name = "P" + std::to_string(playerIndex);
-	name = name + "AcuracyPercentage";
+	name = name + "AccuracyPercentage";
 
 	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Acuracy percentage: " + std::to_string(score->getPercentOfHits(playerIndex)) + "%");
+		panels.at(playerIndex - 1).getChild(name).setText("Accuracy: " + std::to_string(score->getPercentOfHits(playerIndex)) + "%");
 }
 
 void StatsMenu::setTimesFallen(int playerIndex)
@@ -179,7 +179,7 @@ void StatsMenu::setHitsByEnviroment(int playerIndex)
 	name = name + "HitsByEnviroment";
 
 	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Hits by enviroment: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+		panels.at(playerIndex - 1).getChild(name).setText("Hits by spikes: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 }
 
 void StatsMenu::setDeathsByEnviroment(int playerIndex)
@@ -189,5 +189,5 @@ void StatsMenu::setDeathsByEnviroment(int playerIndex)
 	name = name + "DeathsByEnviroment";
 
 	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Deaths by enviroment: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+		panels.at(playerIndex - 1).getChild(name).setText("Deaths by\nspikes and falls: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 }

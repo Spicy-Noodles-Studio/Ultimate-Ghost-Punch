@@ -7,6 +7,7 @@
 #include <UILayout.h>
 
 #include "GameManager.h"
+#include "Countdown.h"
 
 REGISTER_FACTORY(PauseMenu);
 
@@ -33,7 +34,7 @@ bool PauseMenu::exitButtonClick()
 	return false;
 }
 
-PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), pauseText(NULL), optionsMenu(NULL)
+PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
 {
 	inputSystem = InputSystem::GetInstance();
 
@@ -57,13 +58,15 @@ void PauseMenu::start()
 	if (cameraLayout != nullptr)
 	{
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
-		pauseText = cameraLayout->getRoot().getChild("PauseText");
+		pausePanel = cameraLayout->getRoot().getChild("Pause");
 	}
+
+	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if ((inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+	if (!countdown->isCounting() && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
 		setPaused(!GameManager::GetInstance()->isPaused());
 }
 
@@ -91,7 +94,7 @@ void PauseMenu::setPaused(bool paused)
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
 
-	pauseText.setVisible(paused);
+	pausePanel.setVisible(paused);
 
 	GameManager::GetInstance()->setPaused(paused);
 }
