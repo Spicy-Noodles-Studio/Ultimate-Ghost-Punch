@@ -1,15 +1,12 @@
 USAGE: "file_name" "sound_name" "2D/3D" "true/false (loop)"
 EXAMPLE: ej.mp3 ej 2D true
 MUSIC
-.//Assets//Songs//BustinLoose.mp3 bustinLoose 2D true
-.//Assets//Songs//BustinLooseLead.mp3 bustinLooseLead 2D true
+.//Assets//Songs//BustinLooseLead.mp3 bustinLoose 2D true
 .//Assets//Songs//Cycles.mp3 cycles 2D true
 .//Assets//Songs//DistrictFour.mp3 districtFour 2D true
 .//Assets//Songs//EpicBattle.mp3 epicBattle 2D true
 .//Assets//Songs//FightScene.mp3 fightScene 2D true
 .//Assets//Songs//GreenDaze.mp3 greenDaze 2D true
-.//Assets//Songs//HipHopInstrumental.mp3 hipHopInstrumental 2D true
-.//Assets//Songs//HipHopNoVocal.mp3 hipHopNoVocal 2D true
 .//Assets//Songs//OpusOne.mp3 opusOne 2D true
 .//Assets//Songs//StrengthOfTheTitans.mp3 strengthOfTheTitans 2D true
 .//Assets//Songs//TVDrama.mp3 tvDrama 2D true
@@ -53,7 +50,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Shield.mp3 shield 3D false
 .//Assets//Sounds//Stun.mp3 stun 3D false
 .//Assets//Sounds//Swipe.mp3 swipe 3D false
-.//Assets//Sounds//SwordOnShield.mp3 swordOnShield 3D false
+.//Assets//Sounds//SwordOnShield2.mp3 swordOnShield 3D false
 .//Assets//Sounds//Throw1.wav throw1 3D false
 .//Assets//Sounds//Throw2.wav throw2 3D false
 .//Assets//Sounds//Throw3.wav throw3 3D false

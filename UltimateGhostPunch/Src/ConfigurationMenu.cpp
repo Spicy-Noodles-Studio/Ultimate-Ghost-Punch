@@ -143,8 +143,6 @@ void ConfigurationMenu::initNames()
 	songNames["Epic Battle"] = "epicBattle";
 	songNames["Fight"] = "fightScene";
 	songNames["Green Daze"] = "greenDaze";
-	songNames["Hip Hop"] = "hipHopInstrumental";
-	songNames["Hip Hop 2"] = "hipHopNoVocal";
 	songNames["Opus One"] = "opusOne";
 	songNames["Strength"] = "strengthOfTheTitans";
 	songNames["UGP"] = "ugpTrack1";
