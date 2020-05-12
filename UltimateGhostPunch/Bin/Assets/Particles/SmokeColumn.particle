@@ -4,6 +4,7 @@ particle_system SmokeColumn
     particle_width 0.5
     particle_height 0.5
     quota 50000
+    sorted true
 
   emitter Point
   { 
@@ -84,6 +85,11 @@ particle_system SmokeColumn
     repeat_delay_min 5
     repeat_delay_max 10
   }
+  
+  affector ColourImage
+  {
+    image darkcloudcolors.png
+  }
 
   affector ColourFader
   { 
@@ -108,6 +114,6 @@ particle_system SmokeColumn
 
   affector Scaler
   { 
-    rate 2
+    rate 4
   }
 }

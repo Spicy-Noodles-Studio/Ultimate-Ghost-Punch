@@ -23,6 +23,10 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
+	/* DELAY AND TIMER */
+	float stunDelay;
+	float stunTimer;
+
 public:
 	ParticleManager(GameObject* gameObject);
 	virtual ~ParticleManager();
@@ -40,7 +44,7 @@ private:
 	void manageLandDust();
 	void manageBloodSplash();
 	void manageBlockSparks();
-	void manageStunSparks();
+	void manageStunSparks(float deltaTime);
 	void manageSpectre();
 };
 

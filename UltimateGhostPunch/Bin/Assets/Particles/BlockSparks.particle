@@ -10,14 +10,15 @@ particle_system BlockSparks
     direction 0 1 1
     angle 120
     emission_rate 10000
-    time_to_live 0.4
-    velocity_min 4
-    velocity_max 6
+    time_to_live 0.3
+    velocity_min 8
+    velocity_max 10
+    position 0 0 2
   }
 
   affector LinearForce
   { 
-    force_vector 0 -10 0
+    force_vector 0 -20 0
   }
 
   affector Rotator

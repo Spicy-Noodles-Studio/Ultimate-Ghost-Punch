@@ -17,6 +17,7 @@
     ],
     "Particles" : [
         ["MagmaRock", "0 1.5 0"],
-        ["SmokeColumn", "0 1.5 0"]
+        ["SmokeColumn", "0 1.5 0"],
+        ["DarkCloud", "0 -15 -35"]
     ]
 }

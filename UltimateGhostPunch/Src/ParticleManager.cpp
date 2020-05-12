@@ -9,7 +9,8 @@ REGISTER_FACTORY(ParticleManager);
 
 ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
 															bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
-															spectre(nullptr), playerState(nullptr)
+															spectre(nullptr), playerState(nullptr),
+															stunDelay(0.0f), stunTimer(0.0f)
 {
 
 }
@@ -41,8 +42,9 @@ void ParticleManager::start()
 	/* BLOCK SPARKS */
 	createParticle(&blockSparks, "BlockSparks");
 
-	/* BLOCK SPARKS */
+	/* STUN SPARKS */
 	createParticle(&stunSparks, "StunSparks", Vector3::UP * 2.5f);
+	stunDelay = 0.5f;
 
 	/* SPECTRE */
 	createParticle(&spectre, "Spectre");
@@ -67,7 +69,7 @@ void ParticleManager::update(float deltaTime)
 	manageBlockSparks();
 
 	/* STUN SPARKS */
-	manageStunSparks();
+	manageStunSparks(deltaTime);
 
 	/* SPECTRE */
 	manageSpectre();
@@ -142,14 +144,19 @@ void ParticleManager::manageBlockSparks()
 		blockSparks->stop();
 }
 
-void ParticleManager::manageStunSparks()
+void ParticleManager::manageStunSparks(float deltaTime)
 {
 	if (stunSparks == nullptr) return;
 
-	if (playerState->isStunned())
-		stunSparks->start();
-	else
+	if (playerState->isStunned()) {
+		stunTimer -= deltaTime;
+		if(stunTimer <= 0.0f)
+			stunSparks->start();
+	}
+	else {
 		stunSparks->stop();
+		stunTimer = stunDelay;
+	}
 }
 
 void ParticleManager::manageSpectre()
