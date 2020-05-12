@@ -9,7 +9,8 @@ REGISTER_FACTORY(ParticleManager);
 
 ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
 															bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
-															spectre(nullptr), playerState(nullptr)
+															spectre(nullptr), spectreSplash(nullptr), playerState(nullptr),
+															stunDelay(0.0f), stunTimer(0.0f)
 {
 
 }
@@ -41,15 +42,19 @@ void ParticleManager::start()
 	/* BLOCK SPARKS */
 	createParticle(&blockSparks, "BlockSparks");
 
-	/* BLOCK SPARKS */
+	/* STUN SPARKS */
 	createParticle(&stunSparks, "StunSparks", Vector3::UP * 2.5f);
+	stunDelay = 0.5f;
 
 	/* SPECTRE */
 	createParticle(&spectre, "Spectre");
 
+	/* SPECTRE SPLASH */
+	createParticle(&spectreSplash, "SpectreSplash");
+
 }
 
-void ParticleManager::update(float deltaTime)
+void ParticleManager::preUpdate(float deltaTime)
 {
 	/* FLOOR DUST */
 	manageFloorDust();
@@ -67,10 +72,13 @@ void ParticleManager::update(float deltaTime)
 	manageBlockSparks();
 
 	/* STUN SPARKS */
-	manageStunSparks();
+	manageStunSparks(deltaTime);
 
 	/* SPECTRE */
 	manageSpectre();
+
+	/* SPECTRE SPLASH */
+	manageSpectreSplash();
 }
 
 void ParticleManager::createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position)
@@ -142,14 +150,19 @@ void ParticleManager::manageBlockSparks()
 		blockSparks->stop();
 }
 
-void ParticleManager::manageStunSparks()
+void ParticleManager::manageStunSparks(float deltaTime)
 {
 	if (stunSparks == nullptr) return;
 
-	if (playerState->isStunned())
-		stunSparks->start();
-	else
+	if (playerState->isStunned()) {
+		stunTimer -= deltaTime;
+		if(stunTimer <= 0.0f)
+			stunSparks->start();
+	}
+	else {
 		stunSparks->stop();
+		stunTimer = stunDelay;
+	}
 }
 
 void ParticleManager::manageSpectre()
@@ -160,4 +173,14 @@ void ParticleManager::manageSpectre()
 		spectre->start();
 	else
 		spectre->stop();
+}
+
+void ParticleManager::manageSpectreSplash()
+{
+	if (spectreSplash == nullptr) return;
+
+	if (playerState->punchHasSucceeded())
+		spectreSplash->start();
+	else
+		spectreSplash->stop();
 }

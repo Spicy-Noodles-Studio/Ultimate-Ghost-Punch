@@ -69,6 +69,7 @@ public:
 	bool hasPunchSucceeded() const;
 	bool hasGhostDied() const;
 	bool hasKnightDied() const;
+	bool punchHasSucceeded() const;
 };
 
 #endif

@@ -24,6 +24,7 @@ private:
 	bool ended;
 	bool success;
 	bool ghostDead;
+	bool punchSuccess;
 	
 	enum GhostMode
 	{
@@ -61,6 +62,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 
@@ -79,6 +81,7 @@ public:
 
 	bool ghostSuccess() const;
 	bool ghostDeath() const;
+	bool hasPunchSuccess() const;
 };
 
 #endif

@@ -208,3 +208,8 @@ bool PlayerState::hasKnightDied() const
 {
 	return health!= nullptr && !health->isAlive();
 }
+
+bool PlayerState::punchHasSucceeded() const
+{
+	return ghostManager->hasPunchSuccess();
+}

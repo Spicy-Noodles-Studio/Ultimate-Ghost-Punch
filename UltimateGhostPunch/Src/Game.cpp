@@ -7,6 +7,7 @@
 #include <RigidBody.h>
 #include <Light.h>
 #include <Strider.h>
+#include <ParticleEmitter.h>
 #include <GaiaData.h>
 
 #include "PlayerController.h"
@@ -126,7 +127,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -134,7 +135,7 @@ void Game::createLevel()
 		double rotX, rotY, rotZ;
 		if (!(ss >> rotX >> rotY >> rotZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
 			continue;
 		}
 		playerTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
@@ -149,7 +150,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -157,7 +158,7 @@ void Game::createLevel()
 		double rotX, rotY, rotZ;
 		if (!(ss >> rotX >> rotY >> rotZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
 			continue;
 		}
 		spikesTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
@@ -172,7 +173,7 @@ void Game::createLevel()
 		std::string type;
 		if (!(ss >> type))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -180,7 +181,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
 			continue;
 		}
 
@@ -188,7 +189,7 @@ void Game::createLevel()
 		float intensity;
 		if (!(ss >> intensity))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
 			continue;
 		}
 
@@ -196,7 +197,7 @@ void Game::createLevel()
 		double colX, colY, colZ;
 		if (!(ss >> colX >> colY >> colZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
 			continue;
 		}
 
@@ -204,11 +205,38 @@ void Game::createLevel()
 		double dirX, dirY, dirZ;
 		if (!(ss >> dirX >> dirY >> dirZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
 			continue;
 		}
 
 		lights.push_back({ type, { posX, posY, posZ }, intensity, { colX, colY, colZ }, { dirX, dirY, dirZ } });
+	}
+
+	// Read Particles
+	GaiaData particlesData = levelData.find("Particles");
+	GameObject* levelParticles = findGameObjectWithName("LevelParticles");
+	if (levelParticles == nullptr) {
+		LOG("LevelParticles not found");
+		return;
+	}
+	// Create Particles
+	for (int i = 0; i < particlesData.size(); i++) {
+		if (particlesData[i].size() < 2) continue;
+		// Get name and position
+		std::string name = particlesData[i][0].getValue();
+		std::stringstream ss(particlesData[i][1].getValue());
+		Vector3 position; ss >> position.x >> position.y >> position.z;
+		// Create Particle Emitter through blueprint
+		GameObject* particlesObject = instantiate("ParticleEmitter");
+		if (particlesObject == nullptr)
+			continue;
+		levelParticles->addChild(particlesObject);
+		particlesObject->transform->setPosition(position);
+		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
+		if (particleEmitter == nullptr)
+			continue;
+		particleEmitter->newEmitter(name);
+		particleEmitter->start();
 	}
 }
 
@@ -222,14 +250,14 @@ void Game::configureLevelRender(const std::string& name)
 	GameObject* levelRender = findGameObjectWithName("LevelRender");
 	if (levelRender == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene");
+		LOG_ERROR("GAME", "LevelRender object not found on scene");
 		return;
 	}
 
 	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
 	if (meshRenderer == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+		LOG_ERROR("GAME", "MeshRenderer not found"); return;
 	}
 
 	meshRenderer->setMesh("levelRender", name);
@@ -241,19 +269,19 @@ void Game::configureLevelCollider(const std::string& name)
 	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
 	if (levelCollider == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return;
+		LOG_ERROR("GAME", "LevelCollider object not found on scene"); return;
 	}
 
 	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
 	if (meshRenderer == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
+		LOG_ERROR("GAME", "MeshRenderer not found"); return;
 	}
 
 	Strider* strider = levelCollider->getComponent<Strider>();
 	if (strider == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "Strider not found"); return;
+		LOG_ERROR("GAME", "Strider not found"); return;
 	}
 
 	meshRenderer->setMesh("levelCollider", name);
@@ -313,6 +341,11 @@ void Game::createLights()
 		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 		light->transform->setDirection(lights[i].direction);
 	}
+}
+
+void Game::createParticles()
+{
+
 }
 
 void Game::chooseWinner()

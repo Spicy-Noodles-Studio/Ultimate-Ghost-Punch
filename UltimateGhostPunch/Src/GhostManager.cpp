@@ -23,7 +23,7 @@ REGISTER_FACTORY(GhostManager);
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), deathPosChanged(false), ended(false), ghost(false), used(false),
 													 movement(nullptr), ghostMovement(nullptr), health(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), game(nullptr), anim(nullptr),
 													 resurrectionHealth(2), playerGravity(-10.0f), ghostTime(10.0f), ghostDamage(1), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), deathPosition(Vector3::ZERO),
-													 ghostSpawnOffset(Vector3::ZERO), success(false), ghostDead(false)
+													 ghostSpawnOffset(Vector3::ZERO), success(false), ghostDead(false), punchSuccess(false)
 {
 }
 
@@ -83,6 +83,11 @@ void GhostManager::update(float deltaTime)
 				movement->stop();
 		}
 	}
+}
+
+void GhostManager::postUpdate(float deltaTime)
+{
+	punchSuccess = false;
 }
 
 void GhostManager::handleData(ComponentData* data)
@@ -150,6 +155,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 				{
 					anim->punchSuccessAnimation();
 					punch->punchSucceeded();
+					punchSuccess = true;
 				}
 				else
 					anim->notLoopAnimation("UGPSuccess");
@@ -304,4 +310,8 @@ bool GhostManager::ghostSuccess() const
 bool GhostManager::ghostDeath() const
 {
 	return ghostDead;
+}
+bool GhostManager::hasPunchSuccess() const
+{
+	return punchSuccess;
 }

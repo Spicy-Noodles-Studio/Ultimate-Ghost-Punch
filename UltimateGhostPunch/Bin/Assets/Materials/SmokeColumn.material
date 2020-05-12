@@ -1,4 +1,4 @@
-material StunSparks
+material SmokeColumn
 {
 	technique
 	{
@@ -11,7 +11,7 @@ material StunSparks
 
 			texture_unit
 			{
-				texture pluma.png
+				texture smoke.png
 				tex_address_mode clamp
 			}
 		}

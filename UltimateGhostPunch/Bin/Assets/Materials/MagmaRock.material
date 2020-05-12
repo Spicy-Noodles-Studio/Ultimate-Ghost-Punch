@@ -1,8 +1,8 @@
-material StunSparks
+material MagmaRock 
 {
-	technique
+    technique 
 	{
-		pass
+        pass 
 		{
 			lighting off
 			scene_blend alpha_blend
@@ -11,9 +11,9 @@ material StunSparks
 
 			texture_unit
 			{
-				texture pluma.png
+				texture lava.png
 				tex_address_mode clamp
 			}
-		}
-	}
+        }
+    }
 }

@@ -19,16 +19,21 @@ private:
 	ParticleEmitter* blockSparks;
 	ParticleEmitter* stunSparks;
 	ParticleEmitter* spectre;
+	ParticleEmitter* spectreSplash;
 
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
+
+	/* DELAY AND TIMER */
+	float stunDelay;
+	float stunTimer;
 
 public:
 	ParticleManager(GameObject* gameObject);
 	virtual ~ParticleManager();
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
 
 private:
 	/* CREATE CHILDREN */
@@ -40,8 +45,9 @@ private:
 	void manageLandDust();
 	void manageBloodSplash();
 	void manageBlockSparks();
-	void manageStunSparks();
+	void manageStunSparks(float deltaTime);
 	void manageSpectre();
+	void manageSpectreSplash();
 };
 
 #endif
