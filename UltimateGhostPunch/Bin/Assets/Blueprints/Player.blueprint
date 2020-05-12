@@ -38,6 +38,9 @@
             "ComponentName": "PlayerFX"
         },
         {
+            "ComponentName": "ParticleManager"
+        },
+        {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
                [ "shape", "Box"],
@@ -62,7 +65,7 @@
                 ["controllerIndex", "0"]
             ]
         },
-         {  
+        {  
             "ComponentName": "PlayerIndex",
             "ComponentProperties":[ 
                 ["index", "0"]

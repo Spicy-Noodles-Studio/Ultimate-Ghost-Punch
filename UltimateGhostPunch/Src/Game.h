@@ -51,6 +51,8 @@ private:
 	void createKnights();
 	void createSpikes();
 	void createLights();
+	void createParticles();
+
 	void playSong();
 
 	void configureLevelRender(const std::string& name);
