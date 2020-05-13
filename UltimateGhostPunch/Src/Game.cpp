@@ -2,27 +2,28 @@
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
-#include <UILayout.h>
 #include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <Light.h>
 #include <Strider.h>
+#include <UILayout.h>
 #include <ParticleEmitter.h>
 #include <GaiaData.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
+#include "Score.h"
 #include "Health.h"
 #include "GhostManager.h"
-#include "Score.h"
+#include "Countdown.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
 #include "SongManager.h"
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
-fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), timePanel(NULL),
+nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
 {
 
 }
@@ -38,16 +39,13 @@ void Game::start()
 	songManager = SongManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr) 
-		fightLayout = mainCamera->getComponent<UILayout>();
+	if (mainCamera != nullptr)
+		gameLayout = mainCamera->getComponent<UILayout>();
 
-	if (fightLayout != nullptr)
-	{
-		timeText = fightLayout->getRoot().getChild("Time");
-		winnerPanel = fightLayout->getRoot().getChild("WinnerBackground");
-		winnerText = winnerPanel.getChild("Winner");
-	}
-	winnerPanel.setVisible(false);
+	if (gameLayout != nullptr)
+		timePanel = gameLayout->getRoot().getChild("TimeBackground");
+
+	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 
 	playerIndexes = gameManager->getPlayerIndexes();
 	playerColours = gameManager->getPlayerColours();
@@ -57,58 +55,48 @@ void Game::start()
 	createSpikes();
 	createKnights();
 	createLights();
-	gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
 
-	fightTimer = gameManager->getTime();
-	finishTimer = 4.0f; // Hard Coded
+	timer = gameManager->getTime();
+	gameManager->getScore()->initScore(gameManager->getInitialPlayers());
+	gameManager->setPaused(false);
 
-	gameManager->pauseGame(false);
 	playSong();
 }
 
 void Game::update(float deltaTime)
 {
-	if (fightTimer > 0)
+	if (!countdown->isCounting() && timer > 0)
 	{
-		fightTimer -= deltaTime;
-		if (fightTimer < 0.0f)
-			fightTimer = 0.0f;
+		if (!timePanel.isVisible())
+			timePanel.setVisible(true);
 
-		timeText.setText(std::to_string((int)fightTimer % 60));
-	}
-	else if (fightTimer == 0)
-	{
-		// If its negative it means match its not timed
-		// End game
-		if (winner == -1)
-			chooseWinner();
+		timePanel.getChild("Time").setText(timeToText().first + " : " + timeToText().second);
 
-		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f)
-		{
-			gameManager->emptyKnights();
-			gameManager->pauseAllSounds();
-			songManager->pauseSong(gameManager->getSong());
-			SceneManager::GetInstance()->changeScene("StatsMenu");
-		}
+		timer -= deltaTime;
+		if (timer < 0.0f)
+			timer = 0;
 	}
+	else if (timer == 0) // If its negative it means match its not timed
+		chooseWinner();
 }
 
-void Game::playerDie()
+void Game::playerDie(int index)
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getPlayersAlive();
+	gameManager->setPlayerRanking(index, nPlayers);
+
 	nPlayers--;
 
-	if (nPlayers == 1)
+	if (nPlayers <= 1)
 		chooseWinner();
 	else
-		gameManager->setNumPlayers(nPlayers);
+		gameManager->setPlayersAlive(nPlayers);
 }
 
 void Game::createLevel()
 {
 	GaiaData levelData;
-	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
+	levelData.load("./Assets/Levels/" + gameManager->getLevel().first + ".level");
 
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
@@ -215,34 +203,96 @@ void Game::createLevel()
 	// Read Particles
 	GaiaData particlesData = levelData.find("Particles");
 	GameObject* levelParticles = findGameObjectWithName("LevelParticles");
-	if (levelParticles == nullptr) {
+	if (levelParticles == nullptr)
+	{
 		LOG("LevelParticles not found");
 		return;
 	}
+
 	// Create Particles
-	for (int i = 0; i < particlesData.size(); i++) {
+	for (int i = 0; i < particlesData.size(); i++)
+	{
 		if (particlesData[i].size() < 2) continue;
+
 		// Get name and position
 		std::string name = particlesData[i][0].getValue();
 		std::stringstream ss(particlesData[i][1].getValue());
 		Vector3 position; ss >> position.x >> position.y >> position.z;
+
 		// Create Particle Emitter through blueprint
 		GameObject* particlesObject = instantiate("ParticleEmitter");
-		if (particlesObject == nullptr)
-			continue;
+		if (particlesObject == nullptr) continue;
+
 		levelParticles->addChild(particlesObject);
 		particlesObject->transform->setPosition(position);
+
 		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
-		if (particleEmitter == nullptr)
-			continue;
+		if (particleEmitter == nullptr) continue;
+
 		particleEmitter->newEmitter(name);
 		particleEmitter->start();
 	}
 }
 
+void Game::createKnights()
+{
+	int nPlayers = gameManager->getInitialPlayers();
+
+	gameManager->emptyKnights();
+
+	for (int i = 0; i < nPlayers; i++)
+	{
+		GameObject* knight = instantiate("Player", playerTransforms[i].first);
+		if (knight == nullptr) break;
+
+		knight->transform->setRotation(playerTransforms[i].second);
+
+		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
+		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
+
+		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
+		knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
+
+		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+
+		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
+
+		gameManager->getKnights().push_back(knight);
+	}
+}
+
+void Game::createSpikes()
+{
+	for (int i = 0; i < nSpikes; i++)
+	{
+		GameObject* spikes = instantiate("Spikes", spikesTransforms[i].first);
+		spikes->transform->setRotation(spikesTransforms[i].second);
+	}
+}
+
+void Game::createLights()
+{
+	for (int i = 0; i < nLights; i++)
+	{
+		GameObject* light = instantiate("Light", lights[i].position);
+		Light* lightComp = light->getComponent<Light>();
+
+		if (lights[i].type == "Point")
+			lightComp->setType(Light::Point);
+		else if (lights[i].type == "Spotlight")
+			lightComp->setType(Light::Spotlight);
+		else if (lights[i].type == "Directional")
+			lightComp->setType(Light::Directional);
+
+		lightComp->setIntensity(lights[i].intensity);
+		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
+		light->transform->setDirection(lights[i].direction);
+	}
+}
+
 void Game::playSong()
 {
-	songManager->playSong(gameManager->getSong());
+	songManager->playSong(gameManager->getSong().first);
 }
 
 void Game::configureLevelRender(const std::string& name)
@@ -291,77 +341,20 @@ void Game::configureLevelCollider(const std::string& name)
 	strider->setFriction(0.5f);
 }
 
-void Game::createKnights()
-{
-	int nPlayers = gameManager->getNumPlayers();
-
-	gameManager->getKnights().clear();
-
-	for (int i = 0; i < nPlayers; i++)
-	{
-		GameObject* knight = instantiate("Player", playerTransforms[i].first);
-		if (knight == nullptr) break;
-		knight->transform->setRotation(playerTransforms[i].second);
-
-		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
-
-		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
-		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
-		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
-		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
-
-		gameManager->getKnights().push_back(knight);
-	}
-}
-
-void Game::createSpikes()
-{
-	for (int i = 0; i < nSpikes; i++)
-	{
-		GameObject* spikes = instantiate("Spikes", spikesTransforms[i].first);
-		spikes->transform->setRotation(spikesTransforms[i].second);
-	}
-}
-
-void Game::createLights()
-{
-	for (int i = 0; i < nLights; i++)
-	{
-		GameObject* light = instantiate("Light", lights[i].position);
-		Light* lightComp = light->getComponent<Light>();
-
-		if (lights[i].type == "Point")
-			lightComp->setType(Light::Point);
-		else if (lights[i].type == "Spotlight")
-			lightComp->setType(Light::Spotlight);
-		else if (lights[i].type == "Directional")
-			lightComp->setType(Light::Directional);
-
-		lightComp->setIntensity(lights[i].intensity);
-		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
-		light->transform->setDirection(lights[i].direction);
-	}
-}
-
-void Game::createParticles()
-{
-
-}
-
 void Game::chooseWinner()
 {
-	fightTimer = 0.0f;
-
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	bool tie = false;
 	int majorHealth = 0;
 	int majorIndex = 0;
+	int tieIndex = 0;
 
 	for (int i = 0; i < knights.size(); i++)
 	{
 		Health* health = knights[i]->getComponent<Health>();
-		if (health == nullptr) continue;
+		if (health == nullptr)
+			continue;
 
 		if (health->isAlive())
 		{
@@ -369,24 +362,51 @@ void Game::chooseWinner()
 			{
 				majorHealth = health->getHealth();
 				majorIndex = i;
+				tie = false;
 			}
 			else if (health->getHealth() == majorHealth)
+			{
+				tieIndex = i;
 				tie = true;
+			}
 		}
 	}
-	winnerPanel.setVisible(true);
 
 	if (tie)
 	{
-		winner = -1;
-		winnerText.setText("TIE");
+		for (int i = 0; i < knights.size(); i++)
+		{
+			if (i == majorIndex || i == tieIndex)
+				gameManager->setPlayerRanking(i + 1, 1);
+			else
+				gameManager->setPlayerRanking(i + 1, gameManager->getPlayerRanking(i + 1) - 1);
+		}
+		gameManager->setWinner(-1);
 	}
 	else
 	{
-		winner = majorIndex;
-		winnerText.setText("Winner: P" + std::to_string(winner + 1));
+		gameManager->setPlayerRanking(majorIndex + 1, 1);
+		gameManager->setWinner(majorIndex + 1);
 	}
 
-	songManager->play2DSound("victory4");
+	gameManager->emptyKnights();
 	gameManager->pauseAllSounds();
+
+	songManager->play2DSound("victory4");
+	songManager->pauseSong(gameManager->getSong().first);
+
+	SceneManager::GetInstance()->changeScene("StatsMenu");
+}
+
+std::pair<std::string, std::string> Game::timeToText()
+{
+	std::string minutes = std::to_string((int)timer / 60);
+	std::string seconds;
+
+	if ((int)timer % 60 < 10)
+		seconds = "0" + std::to_string((int)timer % 60);
+	else
+		seconds = std::to_string((int)timer % 60);
+
+	return std::pair<std::string, std::string>(minutes, seconds);
 }

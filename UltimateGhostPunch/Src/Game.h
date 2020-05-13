@@ -11,8 +11,9 @@
 
 class InputSystem;
 class GameManager;
-class UILayout;
 class SongManager;
+class UILayout;
+class Countdown;
 
 class Game : public UserComponent
 {
@@ -29,17 +30,14 @@ private:
 
 	GameManager* gameManager;
 	SongManager* songManager;
-	UILayout* fightLayout;
 
-	UIElement timeText;
-	UIElement winnerPanel;
-	UIElement winnerText;
+	UILayout* gameLayout;
+	Countdown* countdown;
+
+	UIElement timePanel;
 
 	std::vector<int> playerIndexes;
 	std::vector<Vector3> playerColours;
-
-	float fightTimer; // If time is -1, then infinite
-	float finishTimer; // Time taken to send us back to MainMenu
 
 	std::vector<std::pair<Vector3, Vector3>> playerTransforms;
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
@@ -49,11 +47,12 @@ private:
 	int nLights;
 	int winner;
 
+	float timer; // If time is -1, then infinite
+
 	void createLevel();
 	void createKnights();
 	void createSpikes();
 	void createLights();
-	void createParticles();
 
 	void playSong();
 
@@ -62,6 +61,8 @@ private:
 
 	void chooseWinner();
 
+	std::pair<std::string, std::string> timeToText();
+
 public:
 	Game(GameObject* gameObject);
 	virtual ~Game();
@@ -69,8 +70,7 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 
-	void playerDie();
-
+	void playerDie(int index);
 };
 
 #endif

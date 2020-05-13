@@ -1,6 +1,7 @@
 #include "OptionsMenu.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
+#include <InputSystem.h>
 #include <RenderSystem.h>
 #include <SoundSystem.h>
 #include <WindowManager.h>
@@ -15,49 +16,40 @@
 
 REGISTER_FACTORY(OptionsMenu);
 
-// EVENTS----
-
-bool OptionsMenu::resolutionButtonClick()
+bool OptionsMenu::applyButtonClick()
 {
-	if (currResolution != resolution)
+	windowManager->setFullscreen(false);
+
+	if (currentResolution != resolution)
 	{
-		if (fullscreen)
-		{
-			windowManager->setFullscreen(false);
-			windowManager->windowResize(resolutions[resolution].first, resolutions[resolution].second);
-			windowManager->setFullscreen(true);
-			currResolution = resolution;
-			windowManager->setActualResolutionId(currResolution);
-		}
-		else
-		{
-			windowManager->windowResize(resolutions[resolution].first, resolutions[resolution].second);
-			currResolution = resolution;
-			windowManager->setActualResolutionId(currResolution);
-		}
+		windowManager->windowResize(resolutions[resolution].first, resolutions[resolution].second);
+		currentResolution = resolution;
+		windowManager->setActualResolutionId(currentResolution);
 	}
 
+	if (fullscreen)
+		windowManager->setFullscreen(true);
+		
 	buttonClick(buttonSound);
 
 	return false;
 }
 
-bool OptionsMenu::resetConfigButtonClick()
+bool OptionsMenu::restoreButtonClick()
 {
-	fullscreen = false;
-	resolution = 1;
-	soundsVolume = 100;
+	brightness = 100;
+	soundVolume = 100;
 	musicVolume = 100;
-	gamma = 100;
+
+	fullscreen = false;
+	resolution = initialResolution;
 
 	changeResolution(0);
+	changeFullscreen(fullscreen);
 
+	brightnessScroll.setScrollPositionScrollBar(brightness);
+	soundScroll.setScrollPositionScrollBar(soundVolume);
 	musicScroll.setScrollPositionScrollBar(musicVolume);
-	volumeScroll.setScrollPositionScrollBar(soundsVolume);
-	gammaScroll.setScrollPositionScrollBar(gamma);
-
-	checkbox.setCheckBoxState(false);
-	changeFullscreen(false);
 
 	buttonClick(buttonSound);
 
@@ -81,10 +73,21 @@ bool OptionsMenu::changeResolution(int value)
 	return false;
 }
 
-bool OptionsMenu::changeFullscreen(bool value)
+bool OptionsMenu::changeFullscreen(int value)
 {
 	fullscreen = value;
-	windowManager->setFullscreen(fullscreen);
+	fullscreenText.setText(screenNames[fullscreen]);
+
+	buttonClick(buttonSound);
+
+	return false;
+}
+
+bool OptionsMenu::changeBrightness()
+{
+	brightnessText.setText(std::to_string((int)(brightnessScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
+	renderSystem->changeParamOfShader("LuminancePS", "brigh", brightnessScroll.getScrollPositionScrollBar());
+	windowManager->setBrightness(brightnessScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
 
@@ -93,8 +96,8 @@ bool OptionsMenu::changeFullscreen(bool value)
 
 bool OptionsMenu::changeSoundVolume()
 {
-	volumeText.setText(std::to_string((int)(volumeScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
-	soundSystem->setSoundEffectsVolume(volumeScroll.getScrollPositionScrollBar());
+	soundText.setText(std::to_string((int)(soundScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
+	soundSystem->setSoundEffectsVolume(soundScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
 
@@ -103,7 +106,7 @@ bool OptionsMenu::changeSoundVolume()
 
 bool OptionsMenu::changeMusicVolume()
 {
-	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VOLUME + 0.5)));
+	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
 	soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
@@ -111,41 +114,29 @@ bool OptionsMenu::changeMusicVolume()
 	return false;
 }
 
-bool OptionsMenu::changeGamma()
+OptionsMenu::OptionsMenu(GameObject* gameObject) : Menu(gameObject), applyButton(NULL), restoreButton(NULL), brightnessScroll(NULL), soundScroll(NULL), musicScroll(NULL),
+renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr), resolutionText(NULL), fullscreenText(NULL), brightnessText(NULL), soundText(NULL), musicText(NULL), root(NULL)
 {
-	gammaText.setText(std::to_string((int)(gammaScroll.getScrollPositionScrollBar() * MAX_GAMMA + 0.5)));
-	renderSystem->changeParamOfShader("LuminancePS", "brigh", gammaScroll.getScrollPositionScrollBar());
-	windowManager->setBrightness(gammaScroll.getScrollPositionScrollBar());
+	renderSystem = RenderSystem::GetInstance();
+	soundSystem = SoundSystem::GetInstance();
+	windowManager = WindowManager::GetInstance();
 
-	buttonClick(buttonSound);
-
-	return false;
-}
-
-// -----
-OptionsMenu::OptionsMenu(GameObject* gameObject) : Menu(gameObject), resolutionButton(NULL), volumeScroll(NULL), musicScroll(NULL), gammaScroll(NULL),
-renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr),
-resolutionText(NULL), volumeText(NULL), musicText(NULL), gammaText(NULL), checkbox(NULL), root(NULL)
-{
 	interfaceSystem->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
 	interfaceSystem->registerEvent("+resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(+1); }));
 
-	interfaceSystem->registerEvent("fullscreenYesButtonClick", UIEvent("ToggleClicked", [this]() {return changeFullscreen(!fullscreen); }));
+	interfaceSystem->registerEvent("-fullscreenButtonClick", UIEvent("ButtonClicked", [this]() {return changeFullscreen(!fullscreen); }));
+	interfaceSystem->registerEvent("+fullscreenButtonClick", UIEvent("ButtonClicked", [this]() {return changeFullscreen(!fullscreen); }));
 
-	interfaceSystem->registerEvent("volumeScrollChange", UIEvent("ScrollChange", [this]() {return changeSoundVolume(); }));
-	interfaceSystem->registerEvent("volumeMusicScrollChange", UIEvent("ScrollChange", [this]() {return changeMusicVolume(); }));
-	interfaceSystem->registerEvent("gammaScrollChange", UIEvent("ScrollChange", [this]() {return changeGamma(); }));
+	interfaceSystem->registerEvent("brightnessScrollChange", UIEvent("ScrollChange", [this]() {return changeBrightness(); }));
+	interfaceSystem->registerEvent("soundScrollChange", UIEvent("ScrollChange", [this]() {return changeSoundVolume(); }));
+	interfaceSystem->registerEvent("musicScrollChange", UIEvent("ScrollChange", [this]() {return changeMusicVolume(); }));
 
-	interfaceSystem->registerEvent("resetConfigurationsButtonClick", UIEvent("ButtonClicked", [this]() {return resetConfigButtonClick(); }));
-	interfaceSystem->registerEvent("resolutionApplyButtonClick", UIEvent("ButtonClicked", [this]() {return resolutionButtonClick(); }));
+	interfaceSystem->registerEvent("applyButtonClick", UIEvent("ButtonClicked", [this]() {return applyButtonClick(); }));
+	interfaceSystem->registerEvent("restoreButtonClick", UIEvent("ButtonClicked", [this]() {return restoreButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
-	currResolution = -1;
-
-	windowManager = WindowManager::GetInstance();
-	renderSystem = RenderSystem::GetInstance();
-	soundSystem = SoundSystem::GetInstance();
 
 	resolutionNames = windowManager->getAvailableResolutionsStrings();
+	screenNames = { "Windowed", "Fullscreen" };
 	resolutions = windowManager->getAvailableResolutionsForWindow();
 }
 
@@ -154,14 +145,15 @@ OptionsMenu::~OptionsMenu()
 	interfaceSystem->unregisterEvent("-resolutionButtonClick");
 	interfaceSystem->unregisterEvent("+resolutionButtonClick");
 
-	interfaceSystem->unregisterEvent("fullscreenYesButtonClick");
+	interfaceSystem->unregisterEvent("-fullscreenButtonClick");
+	interfaceSystem->unregisterEvent("+fullscreenButtonClick");
 
-	interfaceSystem->unregisterEvent("volumeScrollChange");
-	interfaceSystem->unregisterEvent("volumeMusicScrollChange");
-	interfaceSystem->unregisterEvent("gammaScrollChange");
+	interfaceSystem->unregisterEvent("brightnessScrollChange");
+	interfaceSystem->unregisterEvent("soundScrollChange");
+	interfaceSystem->unregisterEvent("musicScrollChange");
 
-	interfaceSystem->unregisterEvent("resetConfigurationsButtonClick");
-	interfaceSystem->unregisterEvent("resolutionApplyButtonClick");
+	interfaceSystem->unregisterEvent("applyButtonClick");
+	interfaceSystem->unregisterEvent("restoreButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
 }
 
@@ -174,36 +166,54 @@ void OptionsMenu::start()
 	root = mainCamera->getComponent<UILayout>()->getRoot().getChild("OptionsBackground");
 	root.setVisible(true);
 
-	resolutionButton = root.getChild("ResolutionApplyButton");
+	applyButton = root.getChild("ApplyButton");
+	restoreButton = root.getChild("RestoreButton");
 
-	volumeScroll = root.getChild("SoundScroll");
+	brightnessScroll = root.getChild("BrightnessScroll");
+	soundScroll = root.getChild("SoundScroll");
 	musicScroll = root.getChild("MusicScroll");
-	gammaScroll = root.getChild("GammaScroll");
 
 	resolutionText = root.getChild("Resolution");
-
-	volumeText = root.getChild("SoundVolume");
+	fullscreenText = root.getChild("Fullscreen");
+	brightnessText = root.getChild("Brightness");
+	soundText = root.getChild("SoundVolume");
 	musicText = root.getChild("MusicVolume");
-	gammaText = root.getChild("Gamma");
 
-	checkbox = root.getChild("FullscreenYesButton");
-
-	UIElement checkbox = root.getChild("FullscreenYesButton");
-
+	brightness = windowManager->getBrightness();
 	musicVolume = soundSystem->getMusicVolume();
-	soundsVolume = soundSystem->getSoundVolume();
-	gamma = windowManager->getBrightness();
+	soundVolume = soundSystem->getSoundVolume();
 
-	resolution = windowManager->getActualResolutionId();
-
-	if (resolution == 0)
-		resolution = 1;
-
-	changeResolution(0);
-
+	brightnessScroll.setScrollPositionScrollBar(brightness);
 	musicScroll.setScrollPositionScrollBar(musicVolume);
-	volumeScroll.setScrollPositionScrollBar(soundsVolume);
-	gammaScroll.setScrollPositionScrollBar(gamma);
+	soundScroll.setScrollPositionScrollBar(soundVolume);
 
-	checkbox.setCheckBoxState(windowManager->getFullscreen());
+	fullscreen = windowManager->getFullscreen();
+	resolution = windowManager->getActualResolutionId();
+	currentResolution = resolution;
+	initialResolution = resolution;
+
+	changeFullscreen(fullscreen);
+	changeResolution(0);
+}
+
+void OptionsMenu::update(float deltaTime)
+{
+	if ((inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && SceneManager::GetInstance()->getCurrentScene()->getName() == "OptionsMenu")
+		backButtonClick();
+}
+
+bool OptionsMenu::checkControllersInput()
+{
+	bool result = false;
+
+	int i = 0;
+	while (i < 4 && !result)
+	{
+		if (inputSystem->getButtonPress(i, "B"))
+			result = true;
+
+		i++;
+	}
+
+	return result;
 }

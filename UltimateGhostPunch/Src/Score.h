@@ -30,7 +30,6 @@ class Score
 
 private:
 	int numPlayers;
-	std::vector<int> playerIndexes;
 	std::vector<ScorePlayer*> playerScores;
 
 	void initScorePlayer(ScorePlayer* player);
@@ -39,7 +38,7 @@ public:
 	Score();
 	~Score();
 
-	void initScore(int numOfPlayers, std::vector<int> playerIndexes);
+	void initScore(int numOfPlayers);
 	void attackDone(int playerIndex,bool groundAttack);
 	void receiveHitFrom(int playerIndex, int fromIndex);
 	void damageRecivedFrom(int playerIndex, int fromIndex,int amount);

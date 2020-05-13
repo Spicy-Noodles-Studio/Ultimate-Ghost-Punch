@@ -23,7 +23,26 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "ConfigurationMenu.layout"],
-                        ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | -HealthButton -healthButtonClick | +HealthButton +healthButtonClick | -TimeButton -timeButtonClick | +TimeButton +timeButtonClick | FightButton fightButtonClick | BackButton backButtonClick | PreviewSongButton previewSongButtonClick"]
+                        ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | PreviewSongButton previewSongButtonClick | StartButton startButtonClick | SettingsButton settingsButtonClick | BackButton backButtonClick"]
+                    ]
+                }
+            ],
+            "Children": 
+            [
+                {
+                    "ObjectType": "GAMEOBJECT",
+                    "ObjectName": "CustomSettings",
+                    "Tag": "customSettings",
+                    "Components":
+                    [
+                        {
+                            "ComponentName": "UILayout",
+                            "ComponentProperties": 
+                            [
+                                ["layout" , "CustomSettings.layout"],
+                                ["event" ,  "-HealthButton -healthButtonClick | +HealthButton +healthButtonClick | -TimeModeButton -timeModeButtonClick | +TimeModeButton +timeModeButtonClick | -TimeButton -timeButtonClick | +TimeButton +timeButtonClick"]
+                            ]
+                        }
                     ]
                 }
             ]

@@ -23,7 +23,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "OptionsMenu.layout"],
-                        ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
+                        ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | -FullscreenButton -fullscreenButtonClick | +FullscreenButton +fullscreenButtonClick | ApplyButton applyButtonClick | RestoreButton restoreButtonClick | BackButton backButtonClick | BrightnessScroll brightnessScrollChange | SoundScroll soundScrollChange | MusicScroll musicScrollChange"]
                     ]
                 }
             ]

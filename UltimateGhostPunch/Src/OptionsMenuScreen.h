@@ -19,6 +19,7 @@ public:
 	virtual ~OptionsMenuScreen();
 
 	virtual void start();
+	virtual void preUpdate(float deltaTime);
 };
 
 #endif

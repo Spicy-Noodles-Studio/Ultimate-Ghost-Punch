@@ -9,3 +9,10 @@ Font = DejaVuSans.ttf Sans32 32
 Font = DejaVuSans.ttf Sans72 72
 Font = batang.ttf Batang7 7
 Font = batang.ttf Batang8 8
+
+Image = logo.png logo
+Image = ghostHead.png ghost
+Image = halfHeart.png heart
+Image = level3.png level3
+Image = level4.png level4
+Image = level5.png level5

@@ -15,26 +15,32 @@ class GameManager : public UserComponent
 private:
 	static GameManager* instance;
 
-	bool paused;
-	int numPlayers;
+	Score scores;
+
+	std::vector<int> playerIndexes;
+	std::vector<int> playerRanking;
 
 	std::vector<Vector3> playerColours;
-	std::vector<int> playerIndexes;
 	std::vector<GameObject*> knights;
 
 	std::string level;
+	std::string levelName;
+
 	std::string song;
+	std::string songName;
 
-	std::string lastLevel;
-	std::string lastSong;
+	int initialPlayers;
+	int playersAlive;
+	int winner;
 
+	bool paused;
+
+	// Remember Configuration Menu's information
 	int health;
+
 	int time;
-	int maxTime;
-	float bottomLimit;
-
-	Score scores;
-
+	int initialTime;
+	bool timeMode;
 
 public:
 	GameManager();
@@ -46,36 +52,47 @@ public:
 
 	virtual void start();
 
-	void reset();
-	void pauseGame(bool setPaused);
-	bool gameIsPaused();
+	void setPaused(bool setPaused);
+	bool isPaused() const;
 
-	void setNumPlayers(int nPlayers);
-	int getNumPlayers();
+	Score* getScore();
 
-	void setPlayerIndexes(std::vector<int> playerIndexes);
+	void setPlayerIndexes(std::vector<int>& playerIndexes);
 	std::vector<int>& getPlayerIndexes();
-	std::vector<GameObject*>& getKnights();
+
+	void initPlayerRanking(int tam);
+	void setPlayerRanking(int index, int rank);
+	int getPlayerRanking(int index) const;
+
+	void setInitialPlayers(int players);
+	int getInitialPlayers() const;
+
 	std::vector<Vector3>& getPlayerColours();
+	std::vector<GameObject*>& getKnights();
 
 	void emptyKnights();
 
-	void setLevel(std::string level);
-	std::string getLevel();
-	std::string getLastLevel();
+	void setLevel(std::string level, std::string name);
+	std::pair<std::string, std::string> getLevel() const;
 
-	void setSong(std::string song);
-	std::string getSong();
-	std::string getLastSong();
+	void setSong(std::string song, std::string name);
+	std::pair<std::string, std::string> getSong() const;
 
 	void setHealth(int health);
-	int getHealth();
+	int getHealth() const;
 
 	void setTime(int time);
-	int getTime();
-	int getInitialTime();
+	int getTime() const;
+	int getInitialTime() const;
 
-	Score* getScore();
+	void setTimeMode(bool mode);
+	bool getTimeMode() const;
+
+	void setPlayersAlive(int players);
+	int getPlayersAlive() const;
+
+	void setWinner(int winner);
+	int getWinner() const;
 
 	bool isAnyGhost() const;
 

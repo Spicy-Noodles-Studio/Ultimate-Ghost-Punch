@@ -9,11 +9,11 @@
 #include <vector>
 #include <string>
 
-const int MIN_TIME = 20;
-const int MAX_TIME = 240;
-const int CHANGE_TIME = 20;
+const int MIN_TIME = 60;
+const int MAX_TIME = 300;
+const int CHANGE_TIME = 10;
 
-const int MIN_HEALTH = 1;
+const int MIN_HEALTH = 2;
 const int MAX_HEALTH = 10;
 const int CHANGE_HEALTH = 1;
 
@@ -25,13 +25,20 @@ class UILayout;
 class ConfigurationMenu : public Menu
 {
 private:
-	std::vector<std::pair<int, UIElement>> slots;
-	UILayout* configLayout;
-	UIElement fightButton;
+	UILayout* configurationLayout;
 
-	int numPlayers;
+	UIElement settingsPanel;
+	UIElement startButton;
+
+	std::vector<std::pair<int, UIElement>> slots;
+
+	int nPlayers;
 	int health;
+
 	int time;
+	bool mode;
+
+	std::vector<std::string> timeModes;
 
 	float previewTime;
 	float timer;
@@ -41,12 +48,11 @@ private:
 	std::map<std::string, std::string> levelNames;
 	std::map<std::string, std::string> songNames;
 
-	std::string fightSound = "fight";
-
 	std::string currentLevel;
 	std::string currentSong;
 
 private:
+	void initNames();
 	void checkInput();
 
 	void fillSlot(int slotIndex, int deviceIndex);
@@ -56,17 +62,20 @@ private:
 	int isIndexConnected(int index);
 
 	bool changeHealth(int value);
-	bool changeTime(int value);
-	bool changeSong(int value);
-	bool changeLevel(int value);
 
-	bool previewSong();
+	bool changeTimeMode(int value);
+	bool changeTime(int value);
+
+	bool changeLevel(int value);
+	bool changeSong(int value);
+	bool previewSong(bool value);
+
 	void stopPreview();
 
-	bool fightButtonClick();
-	void initNames();
-
+	bool startButtonClick();
+	bool settingsButtonClick();
 	virtual bool backButtonClick();
+
 public:
 	ConfigurationMenu(GameObject* gameObject);
 	virtual ~ConfigurationMenu();
