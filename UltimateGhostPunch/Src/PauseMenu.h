@@ -2,16 +2,14 @@
 #ifndef PAUSE_MENU_H
 #define PAUSE_MENU_H
 
-#include <UserComponent.h>
 #include <UIElement.h>
+#include "Menu.h"
 
-class InputSystem;
 class Countdown;
 
-class PauseMenu : public UserComponent
+class PauseMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
 	Countdown* countdown;
 
 	UIElement pauseMenu;
@@ -19,6 +17,7 @@ private:
 
 	UIElement optionsMenu;
 
+	bool resumeButtonClick();
 	bool optionsButtonClick();
 	bool exitButtonClick();
 

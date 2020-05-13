@@ -69,3 +69,9 @@ float Movement::getSpeed() const
 {
 	return speed;
 }
+
+bool Movement::isMoving() const
+{
+	if (rigidBody == nullptr) return false;
+	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f;
+}

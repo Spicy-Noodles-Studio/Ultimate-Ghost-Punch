@@ -2,7 +2,8 @@
 #ifndef CONFIGURATION_MENU_H
 #define CONFIGURATION_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 
 #include <vector>
@@ -21,10 +22,9 @@ const int MIN_PLAYERS = 1;
 class InputSystem;
 class UILayout;
 
-class ConfigurationMenu : public UserComponent
+class ConfigurationMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
 	UILayout* configurationLayout;
 
 	UIElement settingsPanel;
@@ -39,13 +39,20 @@ private:
 	bool mode;
 
 	std::vector<std::string> timeModes;
-	std::vector<std::string> levelNames;
-	std::vector<std::string> songNames;
 
-	int levelIndex;
-	int songIndex;
+	float previewTime;
+	float timer;
+
+	bool songPreview;
+
+	std::map<std::string, std::string> levelNames;
+	std::map<std::string, std::string> songNames;
+
+	std::string currentLevel;
+	std::string currentSong;
 
 private:
+	void initNames();
 	void checkInput();
 
 	void fillSlot(int slotIndex, int deviceIndex);
@@ -61,10 +68,13 @@ private:
 
 	bool changeLevel(int value);
 	bool changeSong(int value);
+	bool previewSong(bool value);
+
+	void stopPreview();
 
 	bool startButtonClick();
 	bool settingsButtonClick();
-	bool backButtonClick();
+	virtual bool backButtonClick();
 
 public:
 	ConfigurationMenu(GameObject* gameObject);

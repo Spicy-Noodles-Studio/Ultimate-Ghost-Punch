@@ -23,7 +23,10 @@ private:
 	std::vector<Vector3> playerColours;
 	std::vector<GameObject*> knights;
 
+	std::string level;
 	std::string levelName;
+
+	std::string song;
 	std::string songName;
 
 	int initialPlayers;
@@ -39,9 +42,6 @@ private:
 	int initialTime;
 	bool timeMode;
 
-	int level;
-	int song;
-
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -52,7 +52,6 @@ public:
 
 	virtual void start();
 
-	void reset();
 	void setPaused(bool setPaused);
 	bool isPaused() const;
 
@@ -65,21 +64,19 @@ public:
 	void setPlayerRanking(int index, int rank);
 	int getPlayerRanking(int index) const;
 
+	void setInitialPlayers(int players);
 	int getInitialPlayers() const;
+
 	std::vector<Vector3>& getPlayerColours();
 	std::vector<GameObject*>& getKnights();
 
-	void setLevel(int level);
-	int getLevel() const;
+	void emptyKnights();
 
-	void setLevelName(std::string name);
-	std::string getLevelName() const;
+	void setLevel(std::string level, std::string name);
+	std::pair<std::string, std::string> getLevel() const;
 
-	void setSong(int song);
-	int getSong() const;
-
-	void setSongName(std::string name);
-	std::string getSongName() const;
+	void setSong(std::string song, std::string name);
+	std::pair<std::string, std::string> getSong() const;
 
 	void setHealth(int health);
 	int getHealth() const;
@@ -96,6 +93,11 @@ public:
 
 	void setWinner(int winner);
 	int getWinner() const;
+
+	bool isAnyGhost() const;
+
+	void pauseAllSounds();
+	void resumeAllSound();
 };
 
 #endif

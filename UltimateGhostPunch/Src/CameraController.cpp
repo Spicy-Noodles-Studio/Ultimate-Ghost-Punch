@@ -120,6 +120,36 @@ float CameraController::getMaxDistBetweenPlayers()
 	return maxDist;
 }
 
+void CameraController::setTargetToSlowMo()
+{
+	if (playerPunching == nullptr)
+		return;
+
+	Vector3 playerPunchingPos = playerPunching->transform->getPosition();
+	target = { playerPunchingPos.x, playerPunchingPos.y, slowMoZ };
+}
+
+void CameraController::checkSlowMo()
+{
+	playerPunching = someonePunching();
+
+	if (playerPunching != nullptr && getMaxDistBetweenPlayers() < slowMoDistance)
+		activateSlowMo();
+}
+
+void CameraController::activateSlowMo()
+{
+	Timer::GetInstance()->setTimeScale(slowMoTimeScale);
+	time = slowMoTime;
+	state = SLOWMO;
+}
+
+void CameraController::deactivateSlowMo()
+{
+	Timer::GetInstance()->setTimeScale(1.0f);
+	state = MIDPOINT;
+}
+
 Vector3 CameraController::getMidPointBetweenPlayers()
 {
 	// Vector with every player alive
@@ -150,36 +180,6 @@ void CameraController::setTargetToMidPointPlayers()
 	dist = std::min(maxZ, std::max(dist, minZ));
 
 	target = midPos + Vector3(0, 0, dist);
-}
-
-void CameraController::setTargetToSlowMo()
-{
-	if (playerPunching == nullptr)
-		return;
-
-	Vector3 playerPunchingPos = playerPunching->transform->getPosition();
-	target = { playerPunchingPos.x, playerPunchingPos.y, slowMoZ };
-}
-
-void CameraController::checkSlowMo()
-{
-	playerPunching = someonePunching();
-
-	if (playerPunching != nullptr && getMaxDistBetweenPlayers() < slowMoDistance)
-		activateSlowMo();
-}
-
-void CameraController::activateSlowMo()
-{
-	Timer::GetInstance()->setTimeScale(slowMoTimeScale);
-	time = slowMoTime;
-	state = SLOWMO;
-}
-
-void CameraController::deactivateSlowMo()
-{
-	Timer::GetInstance()->setTimeScale(1.0f);
-	state = MIDPOINT;
 }
 
 GameObject* CameraController::someonePunching()

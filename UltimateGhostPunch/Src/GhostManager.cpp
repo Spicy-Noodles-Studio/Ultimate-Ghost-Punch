@@ -20,7 +20,7 @@
 
 REGISTER_FACTORY(GhostManager);
 
-GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), ghost(false), used(false), ended(false), deathPositionChanged(false),
+GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), ghost(false), used(false), ended(false), deathPositionChanged(false), success(false), ghostDead(false), punchSuccess(false),
 game(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), movement(nullptr), ghostMovement(nullptr), health(nullptr), playerUI(nullptr), control(nullptr), anim(nullptr),
 playerColour(Vector3::ZERO), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO), deathPosition(Vector3::ZERO),
 ghostTime(10.0f), playerGravity(-10.0f), ghostDamage(1), resurrectionHealth(2), mode(ALIVE)
@@ -80,10 +80,11 @@ void GhostManager::update(float deltaTime)
 		{
 			ended = true;
 			ghost = false;
+			ghostDead = true;
 
 			if (anim != nullptr)
 				anim->notLoopAnimation("Disappear");
-			
+
 			// Deactivate controller
 			if (control != nullptr)
 				control->setActive(false);
@@ -92,6 +93,11 @@ void GhostManager::update(float deltaTime)
 				movement->stop();
 		}
 	}
+}
+
+void GhostManager::postUpdate(float deltaTime)
+{
+	punchSuccess = false;
 }
 
 void GhostManager::handleData(ComponentData* data)
@@ -158,6 +164,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 				{
 					anim->punchSuccessAnimation();
 					punch->punchSucceeded();
+					punchSuccess = true;
 				}
 				else
 					anim->notLoopAnimation("UGPSuccess");
@@ -168,6 +175,9 @@ void GhostManager::onObjectEnter(GameObject* other)
 
 			if (movement != nullptr)
 				movement->stop();
+
+			ghost = false;
+			success = true;
 		}
 	}
 }
@@ -313,4 +323,19 @@ void GhostManager::handlePlayerDeath()
 	}
 	else
 		deactivatePlayer();
+}
+
+bool GhostManager::ghostSuccess() const
+{
+	return success;
+}
+
+bool GhostManager::ghostDeath() const
+{
+	return ghostDead;
+}
+
+bool GhostManager::hasPunchSuccess() const
+{
+	return punchSuccess;
 }

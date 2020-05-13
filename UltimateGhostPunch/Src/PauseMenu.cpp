@@ -7,9 +7,17 @@
 #include <UILayout.h>
 
 #include "GameManager.h"
+#include "SongManager.h"
 #include "Countdown.h"
 
 REGISTER_FACTORY(PauseMenu);
+
+bool PauseMenu::resumeButtonClick()
+{
+	setPaused(false);
+	buttonClick(buttonSound);
+	return false;
+}
 
 bool PauseMenu::optionsButtonClick()
 {
@@ -20,46 +28,56 @@ bool PauseMenu::optionsButtonClick()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
-	InterfaceSystem::GetInstance()->initControllerMenuInput(&optionsMenu);
+	interfaceSystem->clearControllerMenuInput();
+	interfaceSystem->initControllerMenuInput(&optionsMenu);
+
+	buttonClick(buttonSound);
 
 	return false;
 }
 
 bool PauseMenu::exitButtonClick()
 {
-	GameManager::GetInstance()->setPaused(false);
-	SceneManager::GetInstance()->changeScene("MainMenu");
+	gameManager->setPaused(false);
+	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
-	return false;
+	songManager->stopSong(gameManager->getSong().first);
+
+	return Menu::backButtonClick();
 }
 
-PauseMenu::PauseMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
+PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), countdown(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
 {
-	inputSystem = InputSystem::GetInstance();
-
-	InterfaceSystem::GetInstance()->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
-	InterfaceSystem::GetInstance()->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
+	interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
+	interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
 }
 
 PauseMenu::~PauseMenu()
 {
-	InterfaceSystem::GetInstance()->unregisterEvent("resumeButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseOptionsButtonClick");
-	InterfaceSystem::GetInstance()->unregisterEvent("pauseExitButtonClick");
+	interfaceSystem->unregisterEvent("resumeButtonClick");
+	interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
+	interfaceSystem->unregisterEvent("pauseExitButtonClick");
 }
 
 void PauseMenu::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
-	optionsMenu = findGameObjectWithName("OptionsMenuScreen")->getComponent<UILayout>()->getRoot();
+	Menu::start();
 
-	if (cameraLayout != nullptr)
+	if (mainCamera != nullptr)
 	{
-		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
-		pausePanel = cameraLayout->getRoot().getChild("Pause");
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		if (cameraLayout != nullptr)
+		{
+			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
+			pausePanel = cameraLayout->getRoot().getChild("Pause");
+		}
 	}
+
+	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
+	if (options != nullptr)
+		optionsMenu = options->getComponent<UILayout>()->getRoot();
 
 	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 }
@@ -88,15 +106,16 @@ bool PauseMenu::checkControllersInput()
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (paused == GameManager::GetInstance()->isPaused())
-		return;
+	if (paused == gameManager->isPaused()) return;
+
+	if (paused)	songManager->pauseSong(gameManager->getSong().first);
+	else songManager->resumeSong(gameManager->getSong().first);
 
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
-
 	pausePanel.setVisible(paused);
 
-	GameManager::GetInstance()->setPaused(paused);
+	gameManager->setPaused(paused);
 }
 
 bool PauseMenu::isVisible()

@@ -1,7 +1,10 @@
 #include "GameManager.h"
 #include <ComponentRegister.h>
+#include <SoundEmitter.h>
+#include <GameObject.h>
 
 #include "Timer.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(GameManager);
 
@@ -12,7 +15,7 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(0), song(0), health(4), time(60), initialTime(time), timeMode(false), paused(false)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false)
 {
 	if (instance == nullptr)
 		instance = this;
@@ -40,22 +43,20 @@ void GameManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
-void GameManager::reset()
-{
-	Timer::GetInstance()->setTimeScale(1.0f);
-	paused = false;
-}
-
 void GameManager::setPaused(bool setPaused)
 {
 	if (paused == setPaused) return;
 
 	paused = setPaused;
 
-	if (paused)
+	if (paused) {
+		pauseAllSounds();
 		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	else
+	}
+	else {
+		resumeAllSound();
 		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+	}
 }
 
 bool GameManager::isPaused() const
@@ -104,6 +105,11 @@ int GameManager::getPlayerRanking(int index) const
 	return -1;
 }
 
+void GameManager::setInitialPlayers(int players)
+{
+	initialPlayers = players;
+}
+
 int GameManager::getInitialPlayers() const
 {
 	return initialPlayers;
@@ -119,44 +125,31 @@ std::vector<GameObject*>& GameManager::getKnights()
 	return knights;
 }
 
-void GameManager::setLevel(int level)
+void GameManager::emptyKnights()
+{
+	knights.clear();
+}
+
+void GameManager::setLevel(std::string level, std::string name)
 {
 	this->level = level;
-}
-
-int GameManager::getLevel() const
-{
-	return level;
-}
-
-void GameManager::setLevelName(std::string name)
-{
 	levelName = name;
 }
 
-std::string GameManager::getLevelName() const
+std::pair<std::string, std::string> GameManager::getLevel() const
 {
-	return levelName;
+	return std::pair<std::string, std::string>(level, levelName);
 }
 
-void GameManager::setSong(int song)
+void GameManager::setSong(std::string song, std::string name)
 {
 	this->song = song;
-}
-
-int GameManager::getSong() const
-{
-	return song;
-}
-
-void GameManager::setSongName(std::string name)
-{
 	songName = name;
 }
 
-std::string GameManager::getSongName() const
+std::pair<std::string, std::string> GameManager::getSong() const
 {
-	return songName;
+	return std::pair<std::string, std::string>(song, songName);
 }
 
 void GameManager::setHealth(int health)
@@ -213,4 +206,39 @@ void GameManager::setWinner(int winner)
 int GameManager::getWinner() const
 {
 	return winner;
+}
+
+bool GameManager::isAnyGhost() const
+{
+	int i = 0;
+	bool anyGhost = false;
+	while (i < knights.size() && !anyGhost)
+	{
+		if (knights[i] != nullptr)
+		{
+			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
+			anyGhost = ghostManager != nullptr && ghostManager->isGhost();
+		}
+		i++;
+	}
+
+	return anyGhost;
+}
+
+void GameManager::pauseAllSounds()
+{
+	for (GameObject* knight : knights)
+	{
+		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+		if (emitter != nullptr) emitter->pauseAll();
+	}
+}
+
+void GameManager::resumeAllSound()
+{
+	for (GameObject* knight : knights)
+	{
+		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+		if (emitter != nullptr) emitter->resumeAll();
+	}
 }

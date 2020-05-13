@@ -6,29 +6,32 @@
 #include <WindowManager.h>
 #include <GameObject.h>
 
-#include "GameManager.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(MainMenu);
 
 bool MainMenu::playButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
+	buttonClick(buttonSound);
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
 	SceneManager::GetInstance()->changeScene("OptionsMenu");
+	buttonClick(buttonSound);
 	return false;
 }
 
 bool MainMenu::exitButtonClick()
 {
 	WindowManager::GetInstance()->closeWindow();
+	buttonClick(backSound);
 	return false;
 }
 
-MainMenu::MainMenu(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr)
+MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject)
 {
 	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
 
@@ -44,4 +47,11 @@ MainMenu::~MainMenu()
 	interfaceSystem->unregisterEvent("playButtonClick");
 	interfaceSystem->unregisterEvent("optionsButtonClick");
 	interfaceSystem->unregisterEvent("exitButtonClick");
+}
+
+void MainMenu::start()
+{
+	Menu::start();
+
+	songManager->playMenuSong();
 }

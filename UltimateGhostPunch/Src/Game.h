@@ -11,6 +11,7 @@
 
 class InputSystem;
 class GameManager;
+class SongManager;
 class UILayout;
 class Countdown;
 
@@ -28,6 +29,8 @@ private:
 	};
 
 	GameManager* gameManager;
+	SongManager* songManager;
+
 	UILayout* gameLayout;
 	Countdown* countdown;
 
@@ -50,6 +53,7 @@ private:
 	void createKnights();
 	void createSpikes();
 	void createLights();
+
 	void playSong();
 
 	void configureLevelRender(const std::string& name);

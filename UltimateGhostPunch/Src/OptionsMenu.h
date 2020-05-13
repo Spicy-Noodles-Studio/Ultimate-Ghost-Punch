@@ -2,7 +2,8 @@
 #ifndef OPTIONS_MENU_H
 #define OPTIONS_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 
 #include <vector>
@@ -10,17 +11,13 @@
 
 const int MAX_VALUE = 100;
 
-class InterfaceSystem;
-class InputSystem;
 class RenderSystem;
 class SoundSystem;
 class WindowManager;
 
-class OptionsMenu : public UserComponent
+class OptionsMenu : public Menu
 {
 protected:
-	InterfaceSystem* interfaceSystem;
-	InputSystem* inputSystem;
 	RenderSystem* renderSystem;
 	SoundSystem* soundSystem;
 	WindowManager* windowManager;
@@ -54,7 +51,6 @@ protected:
 	std::vector<std::pair<int, int>> resolutions;
 
 protected:
-	bool backButtonClick();
 	bool applyButtonClick();
 	bool restoreButtonClick();
 

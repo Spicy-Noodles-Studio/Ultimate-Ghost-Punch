@@ -11,6 +11,7 @@
 #include "CameraController.h"
 #include "GameManager.h"
 #include "DebugUtils.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(Countdown);
 
@@ -26,13 +27,17 @@ Countdown::~Countdown()
 
 void Countdown::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 
-	if (cameraLayout != nullptr)
-		panel = cameraLayout->getRoot().getChild("CountdownBackground");
+	if (mainCamera != nullptr)
+	{
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		cameraControl = mainCamera->getComponent<CameraController>();
+		
+		if (cameraLayout != nullptr)
+			panel = cameraLayout->getRoot().getChild("CountdownBackground");
+	}
 
-
-	cameraControl = findGameObjectWithName("MainCamera")->getComponent<CameraController>();
 	players = GameManager::GetInstance()->getKnights();
 }
 
@@ -50,6 +55,8 @@ void Countdown::update(float deltaTime)
 		panel.setVisible(true);
 
 		last = std::chrono::steady_clock::now();
+
+		SongManager::GetInstance()->play2DSound("countdown");
 	}
 
 	if (countingDown)
@@ -59,7 +66,7 @@ void Countdown::update(float deltaTime)
 		else
 			panel.getChild("Countdown").setText("FIGHT!");
 
-		if (time <= 0)
+		if (time < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
 				players[i]->getComponent<PlayerController>()->setActive(true);

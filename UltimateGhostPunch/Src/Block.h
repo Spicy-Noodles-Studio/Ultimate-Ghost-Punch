@@ -18,6 +18,7 @@ private:
 
 	bool grounded;
 	bool blocking;
+	bool blocked;
 
 	float blockDirection;
 
@@ -27,6 +28,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
@@ -38,8 +40,10 @@ public:
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
-	bool wasGrabBlocked() const;
+	bool canBlockGrab() const;
 	bool isBlocking() const;
+	// Return if it has just blocked an attack (only true during current frame)
+	bool hasBlocked() const;
 };
 
 #endif

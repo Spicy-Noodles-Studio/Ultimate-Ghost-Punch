@@ -29,6 +29,8 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
+	bool dropped, missed;
+
 	State state;
 
 	GameObject* parent;
@@ -68,6 +70,9 @@ public:
 
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
+	bool isStunned() const;
+	bool hasMissed() const;
+	bool hasDropped() const;
 };
 
 #endif

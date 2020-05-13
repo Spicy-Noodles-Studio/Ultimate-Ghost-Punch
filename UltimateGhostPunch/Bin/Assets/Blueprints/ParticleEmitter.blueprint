@@ -1,0 +1,14 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "ParticleEmitter",
+    "Tag": "particles",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform"
+        },
+        {
+            "ComponentName": "ParticleEmitter"
+        }
+    ]
+}

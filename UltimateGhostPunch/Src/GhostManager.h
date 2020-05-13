@@ -4,7 +4,6 @@
 
 #include <UserComponent.h>
 
-
 class Game;
 class Transform;
 class MeshRenderer;
@@ -23,6 +22,9 @@ private:
 	bool used;
 	bool ended;
 	bool deathPositionChanged;
+	bool success;
+	bool ghostDead;
+	bool punchSuccess;
 	
 	enum GhostMode
 	{
@@ -61,6 +63,7 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 
@@ -78,6 +81,10 @@ public:
 
 	void deactivatePlayer();
 	void handlePlayerDeath();
+
+	bool ghostSuccess() const;
+	bool ghostDeath() const;
+	bool hasPunchSuccess() const;
 };
 
 #endif

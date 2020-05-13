@@ -15,5 +15,8 @@
     ],
     "Lights":[
         ["Directional", "0 0 0", "3", "0 0 1", "0 -1 0"]
+    ],
+    "Particles" : [
+        ["WaterLeaks", "0 50 0"]
     ]
 }

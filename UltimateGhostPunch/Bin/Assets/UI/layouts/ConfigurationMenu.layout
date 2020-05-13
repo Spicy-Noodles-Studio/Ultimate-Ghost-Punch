@@ -86,17 +86,19 @@
             <Property name="UpButton" value="-LevelButton" />
             <Property name="DownButton" value="StartButton" />
             <Property name="LeftButton" value="-SongButton" />
-            <Property name="RightButton" value="+SongButton" />
+            <Property name="RightButton" value="PreviewSongButton" />
             <Property name="Font" value="Sans" />
         </Window>
-        # SONG TEXT
-        <Window type="TaharezLook/StaticText" name="Song" >
-            <Property name="Area" value="{{0.4,0},{0.45,0},{0.6,0},{0.55,0}}" />
+        # SONG PREVIEW BUTTON
+        <Window type="TaharezLook/Button" name="PreviewSongButton" >
+            <Property name="Area" value="{{0.4,0},{0.47,0},{0.6,0},{0.52,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
-            <Property name="Disabled" value="true" />
-            <Property name="Text" value="song" />
+            <Property name="Text" value="Play" />
+            <Property name="UpButton" value="BackButton" />
+            <Property name="DownButton" value="StartButton" />
+            <Property name="LeftButton" value="-SongButton" />
+            <Property name="RightButton" value="+SongButton" />
             <Property name="Font" value="Sans" />
-            <Property name="HorzFormatting" value="CentreAligned" />
         </Window>
         # +SONG BUTTON
         <Window type="TaharezLook/Button" name="+SongButton" >
@@ -105,7 +107,7 @@
             <Property name="Text" value="}" />
             <Property name="UpButton" value="+LevelButton" />
             <Property name="DownButton" value="StartButton" />
-            <Property name="LeftButton" value="-SongButton" />
+            <Property name="LeftButton" value="PreviewSongButton" />
             <Property name="RightButton" value="+SongButton" />
             <Property name="Font" value="Sans" />
         </Window>
