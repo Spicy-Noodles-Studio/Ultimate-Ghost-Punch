@@ -253,7 +253,7 @@
                 {
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": [
-                        [ "mesh", "shield Sphere.mesh"],
+                        [ "mesh", "shield Shield.mesh"],
                         [ "material", "shield Shield"]
                     ]
                 }

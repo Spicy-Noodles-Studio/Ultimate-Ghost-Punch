@@ -8,6 +8,7 @@ class Block : public UserComponent
 {
 private:
 	GameObject* parent;
+	GameObject* shield;
 
 	float maxBlockTime; //Duration of block when started
 	float blockTime; //Remaining time of blocking

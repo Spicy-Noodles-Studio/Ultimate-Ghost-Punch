@@ -26,6 +26,7 @@ Block::~Block()
 void Block::start()
 {
 	parent = gameObject->getParent();
+	shield = parent->findChildWithName("Shield");
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
 }
@@ -38,7 +39,7 @@ void Block::update(float deltaTime)
 		return;
 	}
 
-	//Recharge block
+	// Recharge block
 	if (!blocking && blockTime != maxBlockTime)
 	{
 		timeElapsed += deltaTime;
@@ -50,7 +51,7 @@ void Block::update(float deltaTime)
 		}
 	}
 
-	//Blocking
+	// Blocking
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
@@ -61,6 +62,9 @@ void Block::update(float deltaTime)
 			LOG("BLOCK ENDED\n");
 		}
 	}
+
+	// Shield reduction
+	shield->transform->setScale(Vector3::IDENTITY * blockTime * 2);
 }
 
 void Block::postUpdate(float deltaTime)
