@@ -201,12 +201,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_2045B6EFE15B4D6EB65DE8129ED0B500"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_20B82FA2A76440749A5D400A7CB3866D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -285,12 +279,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_31AF0638BF594DF298A46971CF6A2B2C"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_31BB90B90C1649819E4431B23D1811DC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -304,12 +292,6 @@
         "Entry"
         {
         "MsmKey" = "8:_33C0EECA822141EFB054E31FF92578A8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_33FC3A4EEB3D4C37ADB754EFCC0CF2D2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -615,12 +597,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5896994A124B40C6B78D7D0208DEDD2B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5942D61B2B9841FFA67384B9E4402574"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -711,12 +687,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_688637000C5D4DB78DA214BC411E69B0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_68C0DBAF828947739FB229FAF04D1C84"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -771,19 +741,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_72AF2BA098F043FDB4855E5DB90F4475"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_72BD2F4E6DA74AF69333736119922296"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7359139C513C4052929A7F2AF80323B8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -838,12 +796,6 @@
         "Entry"
         {
         "MsmKey" = "8:_7AB5CC15C9DB41D2B23811024FA43A12"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7BB32BDF4D9D4E978ABD241222902F21"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1095,12 +1047,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_A7EFF8E0EA654FCCA811819EA1AC1904"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A80B94722BA14434901A9DFC72233092"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1161,12 +1107,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B0B47E79791042ACA48DD264C2C48841"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_B0D0BB04ECD04A84881C59BDE6A41AA4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1216,12 +1156,6 @@
         "Entry"
         {
         "MsmKey" = "8:_B726DA1BD7D843C2A672597D96249313"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B7E3C350795B4E81B2EFC109B36A89C7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1299,19 +1233,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BEDC832B61DC4034A9DAFB2C5A843DF3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C0C6BEA9F5DB40D49BC1F3792EC46844"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C18CAA47E31645128F98F926797730F5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1342,12 +1264,6 @@
         "Entry"
         {
         "MsmKey" = "8:_C773D8E98FFE43B7812CFF2E3EA73361"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C7D6DE69905B4118A44A425A0B709A3F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1413,12 +1329,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D1DFD66176FD46F796482CFB6B1EBC1F"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_D2196077904B4A4AA18A96B92ED36CF4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1426,12 +1336,6 @@
         "Entry"
         {
         "MsmKey" = "8:_D236A3649A2F41059001204CE8E8DA48"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D2BB6BF639554E878C62108348A359B9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1539,12 +1443,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_DF236F4844AD4571A6D47F28BE1030C0"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_DF4E67F24B094E41891B1812970D5A96"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1564,24 +1462,6 @@
         "Entry"
         {
         "MsmKey" = "8:_E3489D420CB94A91AB9E515B649BCB21"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E355325A7117489EA8BD7BAB975386D7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E36702848236487FBE44DAA9225B31CB"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E4C8C6045E2E4A2D8C09B8105E766B1C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1671,12 +1551,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F1690D3B50484A389B9F2D5D19B7A336"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F1A7DD600FE2422DA6A9179AF0108D16"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1701,12 +1575,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F565B3D971244E38B7305189FD8B5904"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F6172E3CE4DB45FB982FC49152DD51E1"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -1725,19 +1593,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F7BE116A62D6480BA9265B1D8957D536"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F930D38E5DCE4BEE9572B328E9328A3A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_F9D0C702CB594939A2D84968445E8BDB"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2494,26 +2350,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2045B6EFE15B4D6EB65DE8129ED0B500"
-            {
-            "SourcePath" = "8:..\\Bin\\jpeg_d.dll"
-            "TargetName" = "8:jpeg_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_20B82FA2A76440749A5D400A7CB3866D"
             {
             "SourcePath" = "8:..\\Bin\\SDL2.dll"
@@ -2774,26 +2610,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31AF0638BF594DF298A46971CF6A2B2C"
-            {
-            "SourcePath" = "8:..\\Bin\\window_d.cfg"
-            "TargetName" = "8:window_d.cfg"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_31BB90B90C1649819E4431B23D1811DC"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\UI\\looknfeel\\InventoryComponents.looknfeel"
@@ -2838,26 +2654,6 @@
             {
             "SourcePath" = "8:..\\Bin\\plugins.cfg"
             "TargetName" = "8:plugins.cfg"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_33FC3A4EEB3D4C37ADB754EFCC0CF2D2"
-            {
-            "SourcePath" = "8:..\\Bin\\CEGUIOgreRenderer-0_d.dll"
-            "TargetName" = "8:CEGUIOgreRenderer-0_d.dll"
             "Tag" = "8:"
             "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
@@ -3874,26 +3670,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5896994A124B40C6B78D7D0208DEDD2B"
-            {
-            "SourcePath" = "8:..\\Bin\\pcre_d.dll"
-            "TargetName" = "8:pcre_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5942D61B2B9841FFA67384B9E4402574"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\UI\\imagesets\\TaharezLook.png"
@@ -4194,26 +3970,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_688637000C5D4DB78DA214BC411E69B0"
-            {
-            "SourcePath" = "8:..\\Bin\\OgreRTShaderSystem_d.dll"
-            "TargetName" = "8:OgreRTShaderSystem_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_68C0DBAF828947739FB229FAF04D1C84"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Sounds\\Taunt3.mp3"
@@ -4394,52 +4150,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_72AF2BA098F043FDB4855E5DB90F4475"
-            {
-            "SourcePath" = "8:..\\Bin\\Codec_STBI_d.dll"
-            "TargetName" = "8:Codec_STBI_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_72BD2F4E6DA74AF69333736119922296"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Meshes\\Level4Render.mesh"
             "TargetName" = "8:Level4Render.mesh"
             "Tag" = "8:"
             "Folder" = "8:_133375FFD1AF49FC8935B1B7FD33F0A1"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7359139C513C4052929A7F2AF80323B8"
-            {
-            "SourcePath" = "8:..\\Bin\\fmodL.dll"
-            "TargetName" = "8:fmodL.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -4620,26 +4336,6 @@
             "TargetName" = "8:CEGUIConfig.xsd"
             "Tag" = "8:"
             "Folder" = "8:_57D31331D63E4DF59BBF745B29A3C846"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7BB32BDF4D9D4E978ABD241222902F21"
-            {
-            "SourcePath" = "8:..\\Bin\\libexpat_d.dll"
-            "TargetName" = "8:libexpat_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -5474,26 +5170,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A7EFF8E0EA654FCCA811819EA1AC1904"
-            {
-            "SourcePath" = "8:..\\Bin\\libpng_d.dll"
-            "TargetName" = "8:libpng_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A80B94722BA14434901A9DFC72233092"
             {
             "SourcePath" = "8:..\\Bin\\CEGUISILLYImageCodec.dll"
@@ -5694,26 +5370,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B0B47E79791042ACA48DD264C2C48841"
-            {
-            "SourcePath" = "8:..\\Bin\\RenderSystem_Direct3D11_d.dll"
-            "TargetName" = "8:RenderSystem_Direct3D11_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B0D0BB04ECD04A84881C59BDE6A41AA4"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Songs\\BustinLooseLead.mp3"
@@ -5880,26 +5536,6 @@
             "TargetName" = "8:shieldSpark.png"
             "Tag" = "8:"
             "Folder" = "8:_3CCFDD63F3C344679376484F032465BA"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7E3C350795B4E81B2EFC109B36A89C7"
-            {
-            "SourcePath" = "8:..\\Bin\\glew_d.dll"
-            "TargetName" = "8:glew_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6154,52 +5790,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BEDC832B61DC4034A9DAFB2C5A843DF3"
-            {
-            "SourcePath" = "8:..\\Bin\\SILLY_d.dll"
-            "TargetName" = "8:SILLY_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0C6BEA9F5DB40D49BC1F3792EC46844"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Songs\\OpusOne.mp3"
             "TargetName" = "8:OpusOne.mp3"
             "Tag" = "8:"
             "Folder" = "8:_C2C47BA0FE0C4A49A289E495D9E89D18"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C18CAA47E31645128F98F926797730F5"
-            {
-            "SourcePath" = "8:..\\Bin\\resources_d.cfg"
-            "TargetName" = "8:resources_d.cfg"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6300,26 +5896,6 @@
             "TargetName" = "8:level1.level"
             "Tag" = "8:"
             "Folder" = "8:_A9C6B75883FD4D90BAE449D26F4AB2E8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C7D6DE69905B4118A44A425A0B709A3F"
-            {
-            "SourcePath" = "8:..\\Bin\\Plugin_ParticleFX_d.dll"
-            "TargetName" = "8:Plugin_ParticleFX_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6534,26 +6110,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D1DFD66176FD46F796482CFB6B1EBC1F"
-            {
-            "SourcePath" = "8:..\\Bin\\Gaia_d_x64.dll"
-            "TargetName" = "8:Gaia_d_x64.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D2196077904B4A4AA18A96B92ED36CF4"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Materials\\MagmaRock.material"
@@ -6580,26 +6136,6 @@
             "TargetName" = "8:GhostLaugh.mp3"
             "Tag" = "8:"
             "Folder" = "8:_3F93F1AB17784E218DCBBBABC01C2F9D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D2BB6BF639554E878C62108348A359B9"
-            {
-            "SourcePath" = "8:..\\Bin\\freetype_d.dll"
-            "TargetName" = "8:freetype_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -6934,26 +6470,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DF236F4844AD4571A6D47F28BE1030C0"
-            {
-            "SourcePath" = "8:..\\Bin\\OgreMain_d.dll"
-            "TargetName" = "8:OgreMain_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DF4E67F24B094E41891B1812970D5A96"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\UI\\xml_schemas\\Imageset.xsd"
@@ -7020,66 +6536,6 @@
             "TargetName" = "8:StunSparks.particle"
             "Tag" = "8:"
             "Folder" = "8:_9855813C496D45DC9C299B0FF3C2DA09"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E355325A7117489EA8BD7BAB975386D7"
-            {
-            "SourcePath" = "8:..\\Bin\\CEGUISILLYImageCodec_d.dll"
-            "TargetName" = "8:CEGUISILLYImageCodec_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E36702848236487FBE44DAA9225B31CB"
-            {
-            "SourcePath" = "8:..\\Bin\\CEGUIBase-0_d.dll"
-            "TargetName" = "8:CEGUIBase-0_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E4C8C6045E2E4A2D8C09B8105E766B1C"
-            {
-            "SourcePath" = "8:..\\Bin\\CEGUIExpatParser_d.dll"
-            "TargetName" = "8:CEGUIExpatParser_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -7374,26 +6830,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1690D3B50484A389B9F2D5D19B7A336"
-            {
-            "SourcePath" = "8:..\\Bin\\RenderSystem_GL_d.dll"
-            "TargetName" = "8:RenderSystem_GL_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F1A7DD600FE2422DA6A9179AF0108D16"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Sounds\\Hurt2.wav"
@@ -7474,26 +6910,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F565B3D971244E38B7305189FD8B5904"
-            {
-            "SourcePath" = "8:..\\Bin\\CEGUICoreWindowRendererSet_d.dll"
-            "TargetName" = "8:CEGUICoreWindowRendererSet_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6172E3CE4DB45FB982FC49152DD51E1"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\UI\\layouts\\StatsMenu.layout"
@@ -7554,52 +6970,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F7BE116A62D6480BA9265B1D8957D536"
-            {
-            "SourcePath" = "8:..\\Bin\\plugins_d.cfg"
-            "TargetName" = "8:plugins_d.cfg"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F930D38E5DCE4BEE9572B328E9328A3A"
             {
             "SourcePath" = "8:..\\Bin\\Assets\\Levels\\PlatformsGraph.graph"
             "TargetName" = "8:PlatformsGraph.graph"
             "Tag" = "8:"
             "Folder" = "8:_A9C6B75883FD4D90BAE449D26F4AB2E8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F9D0C702CB594939A2D84968445E8BDB"
-            {
-            "SourcePath" = "8:..\\Bin\\glfw_d.dll"
-            "TargetName" = "8:glfw_d.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_71BFC612FDC948F3B076F8E1F2268DEB"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
