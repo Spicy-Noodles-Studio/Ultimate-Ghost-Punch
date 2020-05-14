@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UltimateGhostPunch", "Proje
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DLLCopier", "Projects\DLLCopier\DLLCopier.vcxproj", "{D298210C-EF35-4087-86B4-61073A6FC670}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "UGPSetup", "UGPSetup\UGPSetup.vdproj", "{A5AB695C-FC88-451B-8BC3-539E349FBFA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,17 @@ Global
 		{D298210C-EF35-4087-86B4-61073A6FC670}.ReleaseStatic|x64.Build.0 = ReleaseStatic|x64
 		{D298210C-EF35-4087-86B4-61073A6FC670}.ReleaseStatic|x86.ActiveCfg = ReleaseStatic|Win32
 		{D298210C-EF35-4087-86B4-61073A6FC670}.ReleaseStatic|x86.Build.0 = ReleaseStatic|Win32
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Debug|x64.ActiveCfg = Debug
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Debug|x64.Build.0 = Debug
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Debug|x86.ActiveCfg = Debug
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.DebugStatic|x64.ActiveCfg = Debug
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.DebugStatic|x86.ActiveCfg = Debug
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Record|x64.ActiveCfg = Release
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Record|x86.ActiveCfg = Release
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Release|x64.ActiveCfg = Release
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.Release|x86.ActiveCfg = Release
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.ReleaseStatic|x64.ActiveCfg = Release
+		{A5AB695C-FC88-451B-8BC3-539E349FBFA9}.ReleaseStatic|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
