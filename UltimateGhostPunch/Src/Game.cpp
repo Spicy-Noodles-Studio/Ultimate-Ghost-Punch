@@ -93,6 +93,14 @@ void Game::playerDie(int index)
 		gameManager->setPlayersAlive(nPlayers);
 }
 
+Vector3 Game::getPlayerInitialPosition(int player)
+{
+	if (player > 0 && player < playerTransforms.size())
+		return playerTransforms[player - 1].first;
+
+	return Vector3::ZERO;
+}
+
 void Game::createLevel()
 {
 	GaiaData levelData;

@@ -13,8 +13,8 @@ private:
 	// Strength of the impulse for player that collides
 	float pushStrength;
 
-	// Offset for respawn used if the player dies from the obstacle's damage
-	Vector3 respawnOffset;
+	// Position for respawn used if the player dies from the obstacle's damage
+	Vector3 initialPosition;
 
 public:
 	Obstacle(GameObject* gameObject);

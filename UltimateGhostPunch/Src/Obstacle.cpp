@@ -4,6 +4,7 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "Game.h"
 #include "Health.h"
 #include "Score.h"
 #include "PlayerIndex.h"
@@ -12,7 +13,7 @@
 
 REGISTER_FACTORY(Obstacle);
 
-Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(1), pushStrength(40.0f), respawnOffset(5.0, 0.0, 0.0)
+Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(1), pushStrength(40.0f), initialPosition(Vector3::ZERO)
 {
 
 }
@@ -36,10 +37,6 @@ void Obstacle::handleData(ComponentData* data)
 		{
 			setFloat(pushStrength);
 		}
-		else if (prop.first == "respawnOffset")
-		{
-			setVector3(respawnOffset);
-		}
 		else
 			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
 	}
@@ -54,27 +51,36 @@ void Obstacle::onCollisionEnter(GameObject* other)
 
 		// The player receives damage
 		Score* score = GameManager::GetInstance()->getScore();
-		int otherId = other->getComponent<PlayerIndex>()->getIndex();
+
 		Health* health = other->getComponent<Health>();
+		int otherId = other->getComponent<PlayerIndex>()->getIndex();
 
 		if (health == nullptr) return;
 
 		int h = health->getHealth();
 		health->receiveDamage(damage);
 
-		if (h != health->getHealth()&&score!=nullptr)
+		if (score != nullptr && h != health->getHealth())
 			score->damagedBySpike(otherId);
 
 		// If the player has died, add an offset to the respawn position, in case it resurrects
 		if (!health->isAlive())
 		{
+			GameObject* aux = findGameObjectWithName("Game");
+			if (aux != nullptr)
+			{
+				Game* game = aux->getComponent<Game>();
+				if (game != nullptr)
+					initialPosition = game->getPlayerInitialPosition(otherId);
+			}
+
 			GhostManager* ghostManager = other->getComponent<GhostManager>();
+
 			if (ghostManager != nullptr)
 			{
-				respawnOffset.x *= xDir;
-				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
-				if(score!=nullptr)
-				score->deathByEnviromentHazard(otherId);
+				ghostManager->setDeathPosition(initialPosition);
+				if (score != nullptr)
+					score->deathByEnviromentHazard(otherId);
 			}
 		}
 		else
