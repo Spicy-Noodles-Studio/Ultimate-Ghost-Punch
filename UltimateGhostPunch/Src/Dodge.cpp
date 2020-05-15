@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerState.h"
@@ -22,7 +23,9 @@ Dodge::~Dodge()
 void Dodge::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
-	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity();
+
+	if (rigidBody != nullptr)
+		playerGravity = rigidBody->getGravity();
 }
 
 void Dodge::update(float deltaTime)
@@ -93,6 +96,7 @@ void Dodge::dodge()
 		state = State::DODGING;
 		time = duration;
 
+		//Animation
 		PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
 		if (anim != nullptr) anim->dashAnimation();
 	}

@@ -2,26 +2,28 @@
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
-#include <UILayout.h>
 #include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <Light.h>
 #include <Strider.h>
+#include <UILayout.h>
+#include <ParticleEmitter.h>
 #include <GaiaData.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
+#include "Score.h"
 #include "Health.h"
 #include "GhostManager.h"
-#include "Score.h"
+#include "Countdown.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
-#include "PlatformGraph.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), fightLayout(nullptr), timeText(NULL), winnerPanel(NULL), winnerText(NULL),
-fightTimer(-1.0f), finishTimer(-1.0f), winner(-1), nLights(0), nSpikes(0)
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), timePanel(NULL),
+nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
 {
 
 }
@@ -31,25 +33,19 @@ Game::~Game()
 
 }
 
-void Game::awake()
-{
-}
-
 void Game::start()
 {
 	gameManager = GameManager::GetInstance();
+	songManager = SongManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	if (mainCamera != nullptr)
-		fightLayout = mainCamera->getComponent<UILayout>();
+		gameLayout = mainCamera->getComponent<UILayout>();
 
-	if (fightLayout != nullptr)
-	{
-		timeText = fightLayout->getRoot().getChild("Time");
-		winnerPanel = fightLayout->getRoot().getChild("WinnerBackground");
-		winnerText = winnerPanel.getChild("Winner");
-	}
-	winnerPanel.setVisible(false);
+	if (gameLayout != nullptr)
+		timePanel = gameLayout->getRoot().getChild("TimeBackground");
+
+	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
 
 	playerIndexes = gameManager->getPlayerIndexes();
 	playerColours = gameManager->getPlayerColours();
@@ -61,59 +57,52 @@ void Game::start()
 	createLights();
 	#ifndef RECORD_PATH
 		createAI();
-		gameManager->getScore()->initScore(4, gameManager->getPlayerIndexes());
+		gameManager->getScore()->initScore(/*4, gameManager->getPlayerIndexes()*/gameManager->getInitialPlayers());
 	#else
-		gameManager->getScore()->initScore(gameManager->getNumPlayers(), gameManager->getPlayerIndexes());
+		gameManager->getScore()->initScore(gameManager->getInitialPlayers());
 	#endif
 
-	fightTimer = gameManager->getTime();
-	finishTimer = 4.0f; // Hard Coded
 
-	gameManager->pauseGame(false);
+	timer = gameManager->getTime();
+	gameManager->setPaused(false);
+
 	playSong();
 }
 
 void Game::update(float deltaTime)
 {
-	if (fightTimer > 0)
+	if (!countdown->isCounting() && timer > 0)
 	{
-		fightTimer -= deltaTime;
-		if (fightTimer < 0.0f)
-			fightTimer = 0.0f;
+		if (!timePanel.isVisible())
+			timePanel.setVisible(true);
 
-		timeText.setText(std::to_string((int)fightTimer % 60));
-	}
-	else if (fightTimer == 0)
-	{
-		// If its negative it means match its not timed
-		// End game
-		if (winner == -1)
-			chooseWinner();
+		timePanel.getChild("Time").setText(timeToText().first + " : " + timeToText().second);
 
-		finishTimer -= deltaTime;
-		if (finishTimer <= 0.0f)
-		{
-			gameManager->getKnights().clear();
-			SceneManager::GetInstance()->changeScene("StatsMenu");
-		}
+		timer -= deltaTime;
+		if (timer < 0.0f)
+			timer = 0;
 	}
+	else if (timer == 0) // If its negative it means match its not timed
+		chooseWinner();
 }
 
-void Game::playerDie()
+void Game::playerDie(int index)
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getPlayersAlive();
+	gameManager->setPlayerRanking(index, nPlayers);
+
 	nPlayers--;
 
-	if (nPlayers == 1)
+	if (nPlayers <= 1)
 		chooseWinner();
 	else
-		gameManager->setNumPlayers(nPlayers);
+		gameManager->setPlayersAlive(nPlayers);
 }
 
 void Game::createLevel()
 {
 	GaiaData levelData;
-	levelData.load("./Assets/Levels/" + GameManager::GetInstance()->getLevel() + ".level");
+	levelData.load("./Assets/Levels/" + gameManager->getLevel().first + ".level");
 
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
@@ -132,7 +121,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -140,7 +129,7 @@ void Game::createLevel()
 		double rotX, rotY, rotZ;
 		if (!(ss >> rotX >> rotY >> rotZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
 			continue;
 		}
 		playerTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
@@ -155,7 +144,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -163,7 +152,7 @@ void Game::createLevel()
 		double rotX, rotY, rotZ;
 		if (!(ss >> rotX >> rotY >> rotZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
 			continue;
 		}
 		spikesTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
@@ -178,7 +167,7 @@ void Game::createLevel()
 		std::string type;
 		if (!(ss >> type))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light type \"%s\"", lightsData[i][0].getValue().c_str());
 			continue;
 		}
 
@@ -186,7 +175,7 @@ void Game::createLevel()
 		double posX, posY, posZ;
 		if (!(ss >> posX >> posY >> posZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
 			continue;
 		}
 
@@ -194,7 +183,7 @@ void Game::createLevel()
 		float intensity;
 		if (!(ss >> intensity))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light intensity \"%s\"", lightsData[i][2].getValue().c_str());
 			continue;
 		}
 
@@ -202,7 +191,7 @@ void Game::createLevel()
 		double colX, colY, colZ;
 		if (!(ss >> colX >> colY >> colZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
 			continue;
 		}
 
@@ -210,89 +199,69 @@ void Game::createLevel()
 		double dirX, dirY, dirZ;
 		if (!(ss >> dirX >> dirY >> dirZ))
 		{
-			LOG_ERROR("FIGHT MANAGER", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
+			LOG_ERROR("GAME", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
 			continue;
 		}
 
 		lights.push_back({ type, { posX, posY, posZ }, intensity, { colX, colY, colZ }, { dirX, dirY, dirZ } });
 	}
-}
 
-void Game::playSong()
-{
-	//findGameObjectWithName("MainCamera")->getComponent<SoundEmitter>()->play(GameManager::GetInstance()->getSong());
-}
-
-void Game::configureLevelRender(const std::string& name)
-{
-	GameObject* levelRender = findGameObjectWithName("LevelRender");
-	if (levelRender == nullptr)
+	// Read Particles
+	GaiaData particlesData = levelData.find("Particles");
+	GameObject* levelParticles = findGameObjectWithName("LevelParticles");
+	if (levelParticles == nullptr)
 	{
-		LOG_ERROR("FIGHT MANAGER", "LevelRender object not found on scene");
+		LOG("LevelParticles not found");
 		return;
 	}
 
-	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
+	// Create Particles
+	for (int i = 0; i < particlesData.size(); i++)
 	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
-	}
+		if (particlesData[i].size() < 2) continue;
 
-	meshRenderer->setMesh("levelRender", name);
-	meshRenderer->attachEntityToNode("levelRender");
-}
+		// Get name and position
+		std::string name = particlesData[i][0].getValue();
+		std::stringstream ss(particlesData[i][1].getValue());
+		Vector3 position; ss >> position.x >> position.y >> position.z;
 
-void Game::configureLevelCollider(const std::string& name)
-{
-	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
-	if (levelCollider == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "LevelCollider object not found on scene"); return;
-	}
+		// Create Particle Emitter through blueprint
+		GameObject* particlesObject = instantiate("ParticleEmitter");
+		if (particlesObject == nullptr) continue;
 
-	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "MeshRenderer not found"); return;
-	}
+		levelParticles->addChild(particlesObject);
+		particlesObject->transform->setPosition(position);
 
-	Strider* strider = levelCollider->getComponent<Strider>();
-	if (strider == nullptr)
-	{
-		LOG_ERROR("FIGHT MANAGER", "Strider not found"); return;
-	}
+		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
+		if (particleEmitter == nullptr) continue;
 
-	meshRenderer->setMesh("levelCollider", name);
-	meshRenderer->attachEntityToNode("levelCollider");
-	meshRenderer->setVisible(false);
-	strider->stride("levelCollider");
-	strider->setFriction(0.5f);
-	PlatformGraph* graph = gameObject->getComponent<PlatformGraph>();
-	if (graph != nullptr)
-	{
-		graph->setLoadFileName(GameManager::GetInstance()->getLevel() + ".graph");
-		graph->setSaveFileName(GameManager::GetInstance()->getLevel() + ".graph");
+		particleEmitter->newEmitter(name);
+		particleEmitter->start();
 	}
 }
 
 void Game::createKnights()
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getInitialPlayers();
 
-	gameManager->getKnights().clear();
+	gameManager->emptyKnights();
 
 	for (int i = 0; i < nPlayers; i++)
 	{
 		GameObject* knight = instantiate("Player", playerTransforms[i].first);
-		knight->transform->setRotation(playerTransforms[i].second);
+		if (knight == nullptr) break;
 
-		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+		knight->transform->setRotation(playerTransforms[i].second);
 
 		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
 		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
-		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
-		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
 
+		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
+		knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
+
+		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+
+		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
 		gameManager->getKnights().push_back(knight);
 	}
 }
@@ -345,20 +314,77 @@ void Game::createLights()
 	}
 }
 
+void Game::playSong()
+{
+	songManager->playSong(gameManager->getSong().first);
+}
+
+void Game::configureLevelRender(const std::string& name)
+{
+	GameObject* levelRender = findGameObjectWithName("LevelRender");
+	if (levelRender == nullptr)
+	{
+		LOG_ERROR("GAME", "LevelRender object not found on scene");
+		return;
+	}
+
+	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("GAME", "MeshRenderer not found"); return;
+	}
+
+	meshRenderer->setMesh("levelRender", name);
+	meshRenderer->attachEntityToNode("levelRender");
+}
+
+void Game::configureLevelCollider(const std::string& name)
+{
+	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
+	if (levelCollider == nullptr)
+	{
+		LOG_ERROR("GAME", "LevelCollider object not found on scene"); return;
+	}
+
+	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
+	if (meshRenderer == nullptr)
+	{
+		LOG_ERROR("GAME", "MeshRenderer not found"); return;
+	}
+
+	Strider* strider = levelCollider->getComponent<Strider>();
+	if (strider == nullptr)
+	{
+		LOG_ERROR("GAME", "Strider not found"); return;
+	}
+
+	meshRenderer->setMesh("levelCollider", name);
+	meshRenderer->attachEntityToNode("levelCollider");
+	meshRenderer->setVisible(false);
+	strider->stride("levelCollider");
+	strider->setFriction(0.5f);
+	PlatformGraph* graph = gameObject->getComponent<PlatformGraph>();
+	if (graph != nullptr)
+	{
+		graph->setLoadFileName(GameManager::GetInstance()->getLevel() + ".graph");
+		graph->setSaveFileName(GameManager::GetInstance()->getLevel() + ".graph");
+	}
+}
+
 void Game::chooseWinner()
 {
-	fightTimer = 0.0f;
-
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	bool tie = false;
 	int majorHealth = 0;
 	int majorIndex = 0;
+	int tieIndex = 0;
 
 	for (int i = 0; i < knights.size(); i++)
 	{
 		Health* health = knights[i]->getComponent<Health>();
-		if (health == nullptr) continue;
+		if (health == nullptr)
+			continue;
 
 		if (health->isAlive())
 		{
@@ -366,21 +392,51 @@ void Game::chooseWinner()
 			{
 				majorHealth = health->getHealth();
 				majorIndex = i;
+				tie = false;
 			}
 			else if (health->getHealth() == majorHealth)
+			{
+				tieIndex = i;
 				tie = true;
+			}
 		}
 	}
-	winnerPanel.setVisible(true);
 
 	if (tie)
 	{
-		winner = -1;
-		winnerText.setText("TIE");
+		for (int i = 0; i < knights.size(); i++)
+		{
+			if (i == majorIndex || i == tieIndex)
+				gameManager->setPlayerRanking(i + 1, 1);
+			else
+				gameManager->setPlayerRanking(i + 1, gameManager->getPlayerRanking(i + 1) - 1);
+		}
+		gameManager->setWinner(-1);
 	}
 	else
 	{
-		winner = majorIndex;
-		winnerText.setText("Winner: P" + std::to_string(winner + 1));
+		gameManager->setPlayerRanking(majorIndex + 1, 1);
+		gameManager->setWinner(majorIndex + 1);
 	}
+
+	gameManager->emptyKnights();
+	gameManager->pauseAllSounds();
+
+	songManager->play2DSound("victory4");
+	songManager->pauseSong(gameManager->getSong().first);
+
+	SceneManager::GetInstance()->changeScene("StatsMenu");
+}
+
+std::pair<std::string, std::string> Game::timeToText()
+{
+	std::string minutes = std::to_string((int)timer / 60);
+	std::string seconds;
+
+	if ((int)timer % 60 < 10)
+		seconds = "0" + std::to_string((int)timer % 60);
+	else
+		seconds = std::to_string((int)timer % 60);
+
+	return std::pair<std::string, std::string>(minutes, seconds);
 }

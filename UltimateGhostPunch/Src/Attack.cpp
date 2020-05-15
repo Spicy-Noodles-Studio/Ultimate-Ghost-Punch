@@ -17,7 +17,7 @@ REGISTER_FACTORY(Attack);
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), score(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
 										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr)
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), hit(false)
 {
 
 }
@@ -30,7 +30,8 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if(parent!= nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+	if (parent != nullptr) 
+		id = parent->getComponent<PlayerIndex>()->getIndex();
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
@@ -62,6 +63,11 @@ void Attack::update(float deltaTime)
 		// Reset the current attack state
 		state = NOT_ATTACKING;
 	}
+}
+
+void Attack::postUpdate(float deltaTime)
+{
+	hit = false;
 }
 
 void Attack::handleData(ComponentData* data)
@@ -145,9 +151,11 @@ void Attack::onObjectStay(GameObject* other)
 
 		if (enemyBlock != nullptr && parent != nullptr)
 		{
-			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()));
+			Health* enemyHealth = other->getComponent<Health>();
+			if(!enemyHealth->isInvencible()) hit = true;
+
+			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()))
 			{
-				Health* enemyHealth = other->getComponent<Health>();
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
 
@@ -160,6 +168,7 @@ void Attack::onObjectStay(GameObject* other)
 
 			// Reset the current attack state
 			state = NOT_ATTACKING;
+
 		}
 	}
 }
@@ -272,4 +281,19 @@ bool Attack::isQuickAttackOnRange(GameObject* obj)
 bool Attack::isStrongAttackOnRange(GameObject* obj)
 {
 	return isAttackOnRange(obj, strongAttackScale);
+}
+
+bool Attack::isHeavyAttacking() const
+{
+	return isAttacking() && currentAttack == STRONG;
+}
+
+bool Attack::isQuickAttacking() const
+{
+	return isAttacking() && currentAttack == QUICK;
+}
+
+bool Attack::hasHit() const
+{
+	return hit;
 }

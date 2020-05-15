@@ -10,13 +10,13 @@
                 {
                     "ComponentName": "LoadingScreen",
 					"ComponentProperties": [
-						["tip1" , "Masahiro Sakurai: \"Ultimate Ghost Punch es el mejor juego de lucha que he visto jamas\"."],
-						["tip2" , "Pista: Los bloqueos solo funcionan de frente. Vigila tu espalda."],
-						["tip3" , "Pista: La muerte solo es el principio. Dale la vuelta a la partida con tu UGP."],
-						["tip4" , "Pro tip: Los pinchos hacen pupa, trata de evitarlos."],
-						["tip5" , "Pista: Si agarras al enemigo puedes lanzarle al vacío sin defensa posible."],
-						["tip6" , "Pista: Puedes bloquear un agarre si activas tu escudo en el momento preciso."],
-						["tip7" , "Pista: Los mejores fideos son los fideos picantones"]
+						["tip1" , "Masahiro Sakurai: \"Ultimate Ghost Punch is the best fighting game i've ever seen\"."],
+						["tip2" , "Clue: Blocking only covers the front, keep an eye on your back."],
+						["tip3" , "Clue: Death is only the begining, turn the game around with your UGP."],
+						["tip4" , "Clue: The spikes make damage, stay healthy."],
+						["tip5" , "Clue: If you grab an enemy, you can throw him away defenseless."],
+						["tip6" , "Clue: You can parry a grab if you block it in time."],
+						["tip7" , "Clue: The best noodles are the spicy ones."]
 					]
                 }
             ]

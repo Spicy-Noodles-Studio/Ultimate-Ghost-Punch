@@ -13,7 +13,7 @@ class PlayerAnimController;
 class Grab : public UserComponent
 {
 private:
-	enum State { IDLE, GRABBED, BEING_GRABBED, BLOCKED };
+	enum State { IDLE, GRABBED, BLOCKED };
 
 	int id;
 
@@ -28,6 +28,8 @@ private:
 
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
+
+	bool dropped, missed;
 
 	State state;
 
@@ -69,8 +71,9 @@ public:
 	bool isGrabbing() const;
 	bool isGrabbed() const;
 	bool isOnCooldown() const;
-
-	void setState(State s);
+	bool isStunned() const;
+	bool hasMissed() const;
+	bool hasDropped() const;
 };
 
 #endif

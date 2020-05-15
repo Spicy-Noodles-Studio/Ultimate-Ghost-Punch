@@ -8,30 +8,31 @@
 #include <chrono>
 
 class UILayout;
+class CameraController;
 
 class Countdown : public UserComponent
 {
 private:
-	void startGame();
-	void pauseGame();
+	UIElement panel;
+
+	std::vector<GameObject*> players;
+	CameraController* cameraControl;
 
 	float time;
-
-	bool started;
-	bool charged;
-	bool paused;
-
 	std::chrono::steady_clock::time_point last;
 
-	UIElement text;
+	bool startCounting;
+	bool countingDown;
 
 public:
 	Countdown(GameObject* gameObject);
 	virtual ~Countdown();
 
 	virtual void start();
-	virtual void preUpdate(float deltaTime);
+	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+	bool isCounting() const;
 };
 
 #endif

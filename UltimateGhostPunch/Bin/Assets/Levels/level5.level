@@ -1,0 +1,23 @@
+{
+    "RenderMesh" : "Level5Render.mesh",
+    "ColliderMesh" : "Level5.mesh",
+    "PlayerTransforms":[
+        ["-16 6 0", "0 90 0"],
+        ["16 6 0", "0 -90 0"],
+        ["-10 13 0", "0 90 0"],
+        ["10 13 0", "0 -90 0"]
+    ],
+    "SpikesTransforms":[
+        ["-1.9 9 0", "0 0 135"],
+        ["2.1 9 0", "0 0 -135"]
+    ],
+    "Lights":[
+        ["Directional", "0 0 0", "1", "1 0 0", "0 1 0"],
+        ["Point", "-20 4 0", "1", "1 0 0", "0 0 0"]
+    ],
+    "Particles" : [
+        ["MagmaRock", "0 1.5 0"],
+        ["SmokeColumn", "0 1.5 0"],
+        ["DarkCloud", "0 -15 -35"]
+    ]
+}

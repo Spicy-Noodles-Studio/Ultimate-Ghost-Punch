@@ -7,6 +7,8 @@
 
 #include "PlayerState.h"
 
+#include "PlayerState.h"
+
 REGISTER_FACTORY(Movement);
 
 Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), maxVelocity(10.0f), speed(75.0f)
@@ -69,4 +71,10 @@ void Movement::setSpeed(float speed)
 float Movement::getSpeed() const
 {
 	return speed;
+}
+
+bool Movement::isMoving() const
+{
+	if (rigidBody == nullptr) return false;
+	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f;
 }

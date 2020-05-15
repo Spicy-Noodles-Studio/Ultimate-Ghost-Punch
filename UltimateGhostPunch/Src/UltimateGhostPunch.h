@@ -44,8 +44,11 @@ public:
 	const State& getState();
 	const Vector3& getDirection();
 
-	bool isPunching();
+	bool isPunching() const;
+	bool isAiming() const;
+	bool punchSuccess() const;
 	void punchSucceeded();
+
 };
 
 #endif

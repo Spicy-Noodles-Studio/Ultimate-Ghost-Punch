@@ -45,7 +45,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "Game.layout"],
-                        ["event" , "BackButton pauseBackButtonClick | ResumeButton resumeButtonClick |OptionsButton pauseOptionsButtonClick"]
+                        ["event" , "ResumeButton resumeButtonClick | OptionsButton pauseOptionsButtonClick | ExitButton pauseExitButtonClick"]
                     ]
                 },
                 {
@@ -71,7 +71,7 @@
                             "ComponentProperties": 
                             [
                                 ["layout" , "OptionsMenu.layout"],
-                                ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | FullscreenYesButton fullscreenYesButtonClick | ResolutionApplyButton resolutionApplyButtonClick | BackButton backToMenuButtonClick | SoundScroll volumeScrollChange | MusicScroll volumeMusicScrollChange | GammaScroll gammaScrollChange | DefaultOptionsButton resetConfigurationsButtonClick"]
+                                ["event" ,  "-ResolutionButton -resolutionButtonClick | +ResolutionButton +resolutionButtonClick | -FullscreenButton -fullscreenButtonClick | +FullscreenButton +fullscreenButtonClick | ApplyButton applyButtonClick | RestoreButton restoreButtonClick | BackButton backToMenuButtonClick | BrightnessScroll brightnessScrollChange | SoundScroll soundScrollChange | MusicScroll musicScrollChange"]
                             ]
                         }
                     ]
@@ -166,6 +166,17 @@
                         ["levelStart", "-32.5 23 0"],
                         ["levelEnd", "32.5 -5 0"]
                     ]
+                }
+            ]
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "LevelParticles",
+            "Tag": "levelParticles",
+            "Components":
+            [
+                {
+                    "ComponentName": "Transform"
                 }
             ]
         }

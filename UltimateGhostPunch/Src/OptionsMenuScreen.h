@@ -4,8 +4,6 @@
 
 #include "OptionsMenu.h"
 
-class GameObject;
-
 class OptionsMenuScreen : public OptionsMenu
 {
 private:
@@ -21,6 +19,7 @@ public:
 	virtual ~OptionsMenuScreen();
 
 	virtual void start();
+	virtual void preUpdate(float deltaTime);
 };
 
 #endif

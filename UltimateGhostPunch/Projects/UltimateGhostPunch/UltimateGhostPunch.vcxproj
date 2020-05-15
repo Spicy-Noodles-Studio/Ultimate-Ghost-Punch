@@ -53,6 +53,7 @@
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
+    <ClCompile Include="..\..\Src\Menu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
     <ClCompile Include="..\..\Src\CameraController.cpp" />
     <ClCompile Include="..\..\Src\ConfigurationMenu.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="..\..\Src\GameManager.cpp" />
     <ClCompile Include="..\..\Src\OptionsMenu.cpp" />
     <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp" />
+    <ClCompile Include="..\..\Src\ParticleManager.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
     <ClCompile Include="..\..\Src\PlatformMovement.cpp" />
@@ -85,6 +87,9 @@
     <ClCompile Include="..\..\Src\ScoreManager.cpp" />
     <ClCompile Include="..\..\Src\StateAction.cpp" />
     <ClCompile Include="..\..\Src\StateMachine.cpp" />
+    <ClCompile Include="..\..\Src\StatsMenu.cpp" />
+    <ClCompile Include="..\..\Src\SongManager.cpp" />
+    <ClCompile Include="..\..\Src\SoundManager.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +105,7 @@
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\LoadingScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
+    <ClInclude Include="..\..\Src\Menu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
     <ClInclude Include="..\..\Src\CameraController.h" />
     <ClInclude Include="..\..\Src\ConfigurationMenu.h" />
@@ -107,6 +113,7 @@
     <ClInclude Include="..\..\Src\GameManager.h" />
     <ClInclude Include="..\..\Src\OptionsMenu.h" />
     <ClInclude Include="..\..\Src\OptionsMenuScreen.h" />
+    <ClInclude Include="..\..\Src\ParticleManager.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
     <ClInclude Include="..\..\Src\PlatformMovement.h" />
@@ -125,6 +132,9 @@
     <ClInclude Include="..\..\Src\ScoreManager.h" />
     <ClInclude Include="..\..\Src\StateAction.h" />
     <ClInclude Include="..\..\Src\StateMachine.h" />
+    <ClInclude Include="..\..\Src\StatsMenu.h" />
+    <ClInclude Include="..\..\Src\SongManager.h" />
+    <ClInclude Include="..\..\Src\SoundManager.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

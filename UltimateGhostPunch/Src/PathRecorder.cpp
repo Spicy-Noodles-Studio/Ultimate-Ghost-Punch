@@ -153,6 +153,12 @@ void PathRecorder::saveState(const std::vector<Action>& actions)
 	this->actions.clear();
 }
 
+void PathRecorder::startRecording()
+{
+	iniPos = gameObject->transform->getWorldPosition();
+	recording = true;
+}
+
 void PathRecorder::stopRecording()
 {
 	recording = false;

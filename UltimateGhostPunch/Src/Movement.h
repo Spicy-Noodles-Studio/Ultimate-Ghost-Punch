@@ -24,6 +24,8 @@ public:
 
 	void setSpeed(float speed);
 	float getSpeed() const;
+
+	bool isMoving() const;
 };
 
 #endif

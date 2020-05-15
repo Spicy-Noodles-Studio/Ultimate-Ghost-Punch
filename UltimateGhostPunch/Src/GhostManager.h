@@ -4,14 +4,15 @@
 
 #include <UserComponent.h>
 
-class Movement;
-class GhostMovement;
-class Health;
+class Game;
 class Transform;
 class MeshRenderer;
 class RigidBody;
+class Movement;
+class GhostMovement;
+class Health;
 class PlayerUI;
-class Game;
+class PlayerController;
 class PlayerAnimController;
 class PlayerController;
 
@@ -20,8 +21,11 @@ class GhostManager : public UserComponent
 private:
 	bool ghost;
 	bool used;
-	bool deathPosChanged;
 	bool ended;
+	bool deathPositionChanged;
+	bool success;
+	bool ghostDead;
+	bool punchSuccess;
 	
 	enum GhostMode
 	{
@@ -34,23 +38,24 @@ private:
 	int ghostDamage;
 	int resurrectionHealth;
 
-	Movement* movement;
-	GhostMovement* ghostMovement;
-	Health* health;
+	Game* game;
 	Transform* transform;
 	MeshRenderer* meshRenderer;
 	RigidBody* rigidBody;
+	Movement* movement;
+	GhostMovement* ghostMovement;
+	Health* health;
 	PlayerUI* playerUI;
-	Game* game;
-	PlayerAnimController* anim;
 	PlayerController* control;
+	PlayerAnimController* anim;
 
+	Vector3 playerColour;
 	Vector3 aliveScale;
 	Vector3 ghostScale;
+
 	Vector3 ghostSpawnOffset;
 	Vector3 deathPosition;
 
-	Vector3 playerColour;
 	GhostMode mode;
 
 public:
@@ -59,22 +64,29 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 
-	bool isGhost();
-	bool ghostEnded();
+	bool isGhost() const;
+	bool ghostUsed() const;
+	bool ghostEnded() const;
+
 	float getGhostTime();
 	bool ghostUsed();
 
 	void activateGhost();
 	void deactivateGhost();
 
-	void setDeathPosition(const Vector3& dPos);
 	void setPlayerColour(const Vector3& colour);
+	void setDeathPosition(const Vector3& position);
 
 	void deactivatePlayer();
 	void handlePlayerDeath();
+
+	bool ghostSuccess() const;
+	bool ghostDeath() const;
+	bool hasPunchSuccess() const;
 };
 
 #endif

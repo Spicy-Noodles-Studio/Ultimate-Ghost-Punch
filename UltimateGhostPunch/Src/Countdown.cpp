@@ -6,14 +6,16 @@
 #include <WindowManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
-#include <ctime>
 
+#include "PlayerController.h"
+#include "CameraController.h"
 #include "GameManager.h"
 #include "DebugUtils.h"
+#include "SongManager.h"
 
 REGISTER_FACTORY(Countdown);
 
-Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), text(NULL), time(0), started(false), charged(false), paused(false)
+Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), panel(NULL), players(), cameraControl(nullptr), time(0), startCounting(false), countingDown(false)
 {
 
 }
@@ -25,49 +27,62 @@ Countdown::~Countdown()
 
 void Countdown::start()
 {
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 
-	if (cameraLayout != nullptr)
-		text = cameraLayout->getRoot().getChild("Countdown");
-}
-
-void Countdown::preUpdate(float deltaTime)
-{
-	if (charged && !started)
+	if (mainCamera != nullptr)
 	{
-		pauseGame();
-		started = true;
-		paused = true;
-		last = std::chrono::steady_clock::now();
+		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
+		cameraControl = mainCamera->getComponent<CameraController>();
+		
+		if (cameraLayout != nullptr)
+			panel = cameraLayout->getRoot().getChild("CountdownBackground");
 	}
 
-	if (paused)
+	players = GameManager::GetInstance()->getKnights();
+}
+
+void Countdown::update(float deltaTime)
+{
+	if (!startCounting)
 	{
+		for (int i = 0; i < players.size(); i++)
+			players[i]->getComponent<PlayerController>()->setActive(false);
+
+		cameraControl->setActive(false);
+
+		startCounting = true;
+		countingDown = true;
+		panel.setVisible(true);
+
+		last = std::chrono::steady_clock::now();
+
+		SongManager::GetInstance()->play2DSound("countdown");
+	}
+
+	if (countingDown)
+	{
+		if (time >= 1)
+			panel.getChild("Countdown").setText(std::to_string((int)time));
+		else
+			panel.getChild("Countdown").setText("FIGHT!");
+
+		if (time < 0)
+		{
+			for (int i = 0; i < players.size(); i++)
+				players[i]->getComponent<PlayerController>()->setActive(true);
+
+			cameraControl->setActive(true);
+
+			countingDown = false;
+			panel.setVisible(false);
+		}
+
 		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
 		std::chrono::duration<float> elapsed = std::chrono::duration_cast<std::chrono::duration<float>>(current - last);
 
-		deltaTime = elapsed.count();
 		last = current;
-		time -= deltaTime;
-
-		if (time >= 1)
-			text.setText(std::to_string((int)time));
-		else
-		{ 
-			text.setPosition(0.3f, 0.25f);
-			text.setText("FIGHT!"); 
-		}
-
-		if (time <= 0)
-		{ 
-			startGame(); 
-			paused = false;
-			text.setText("");
-		}
+		time -= elapsed.count();
 	}
-	
-	if (!charged)
-		charged = true;
 }
 
 void Countdown::handleData(ComponentData* data)
@@ -85,12 +100,7 @@ void Countdown::handleData(ComponentData* data)
 	}
 }
 
-void Countdown::startGame()
+bool Countdown::isCounting() const
 {
-	GameManager::GetInstance()->pauseGame(false);
-}
-
-void Countdown::pauseGame()
-{
-	GameManager::GetInstance()->pauseGame(true);
+	return countingDown;
 }

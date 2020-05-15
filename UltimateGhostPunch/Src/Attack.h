@@ -26,6 +26,8 @@ private:
 	float attackDuration; // The time that the attack remains active
 	float activeTime;
 
+	bool hit;
+
 	enum AttackType
 	{
 		QUICK, STRONG, NONE
@@ -62,16 +64,22 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
 
 	void quickAttack();
 	void strongAttack();
-	bool isAttacking() const;
 	bool isQuickAttackOnRange(GameObject* obj);
 	bool isStrongAttackOnRange(GameObject* obj);
 
 	bool attackOnCD();
+
+	bool isAttacking() const;
+	bool isHeavyAttacking() const;
+	bool isQuickAttacking() const;
+
+	bool hasHit() const;
 };
 
 #endif

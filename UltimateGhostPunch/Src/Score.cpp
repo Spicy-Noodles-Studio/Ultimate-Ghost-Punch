@@ -28,10 +28,9 @@ void Score::initScorePlayer(ScorePlayer* player)
 	player->TotalDamgeTaken = 0;
 }
 
-void Score::initScore(int numOfPlayers, std::vector<int> playerIndexes)
+void Score::initScore(int numOfPlayers)
 {
 	playerScores.clear();
-	this->playerIndexes = playerIndexes;
 	this->numPlayers = numOfPlayers;
 
 	for (int i = 0; i < numOfPlayers; i++)

@@ -16,6 +16,7 @@ private:
 	int frame;//The frame of the trajectory were we�re at
 	float time;//Time that has passed since the begining of the recording
 	Vector3 pos;
+	int frame; //The frame of the trajectory were we�re at
 
 public:
 	State();

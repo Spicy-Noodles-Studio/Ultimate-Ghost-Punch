@@ -167,6 +167,8 @@ void PlayerFX::deactivateInvencible()
 
 	effect = NONE;
 
+	effect = NONE;
+
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		mesh->setDiffuse(i, diffuses[i], 1);
 }

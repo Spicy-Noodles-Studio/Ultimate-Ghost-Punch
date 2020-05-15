@@ -81,12 +81,12 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 
 void UltimateGhostPunch::charge()
 {
-	if(state == State::AVAILABLE)
-	state = State::CHARGING;
+	if (state == State::AVAILABLE)
+		state = State::CHARGING;
 	if (ghostMovement != nullptr)
 		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
 
-	if (anim != nullptr) 
+	if (anim != nullptr)
 		anim->chargingGhostAnimation();
 }
 
@@ -107,11 +107,6 @@ void UltimateGhostPunch::aim(double x, double y)
 		Vector3 finalDirection = Vector3(0.0, 90.0f * flippedX, angle * RAD_TO_DEG * flippedX * flippedY);
 		gameObject->transform->setRotation(finalDirection);
 	}
-}
-
-void UltimateGhostPunch::aim(const Vector3& dir)
-{
-	aim(dir.x, dir.y);
 }
 
 void UltimateGhostPunch::ghostPunch()
@@ -136,9 +131,18 @@ const Vector3& UltimateGhostPunch::getDirection()
 	return direction;
 }
 
-bool UltimateGhostPunch::isPunching()
+bool UltimateGhostPunch::isPunching() const
 {
 	return state == State::PUNCHING;
+}
+
+bool UltimateGhostPunch::isAiming() const
+{
+	return state == State::CHARGING;
+}
+bool UltimateGhostPunch::punchSuccess() const
+{
+	return state == State::SUCCESS;
 }
 
 void UltimateGhostPunch::punchSucceeded()

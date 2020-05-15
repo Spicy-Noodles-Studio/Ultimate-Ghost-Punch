@@ -1,6 +1,7 @@
 #include "OptionsMenuScreen.h"
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
+#include <InputSystem.h>
 #include <RenderSystem.h>
 #include <SoundSystem.h>
 #include <WindowManager.h>
@@ -19,10 +20,12 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	InterfaceSystem::GetInstance()->clearControllerMenuInput();
+	interfaceSystem->clearControllerMenuInput();
 
 	pauseMenu.setAlwaysOnTop(true);
 	pauseMenu.setVisible(true);
+
+	buttonClick(backSound);
 
 	return false;
 }
@@ -39,7 +42,12 @@ OptionsMenuScreen::~OptionsMenuScreen()
 
 void OptionsMenuScreen::start()
 {
+	Menu::start();
+
 	screen = findGameObjectWithName("OptionsMenuScreen");
+	if (mainCamera == nullptr || screen == nullptr) return;
+
+	
 	root = screen->getComponent<UILayout>()->getRoot();
 
 	optionsMenu = root.getChild("OptionsBackground");
@@ -48,38 +56,43 @@ void OptionsMenuScreen::start()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	UILayout* cameraLayout = findGameObjectWithName("MainCamera")->getComponent<UILayout>();
+	UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 
 	if (cameraLayout != nullptr)
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 
-	resolutionButton = optionsMenu.getChild("ResolutionApplyButton");
+	applyButton = optionsMenu.getChild("ApplyButton");
+	restoreButton = optionsMenu.getChild("RestoreButton");
 
-	volumeScroll = optionsMenu.getChild("SoundScroll");
+	brightnessScroll = optionsMenu.getChild("BrightnessScroll");
+	soundScroll = optionsMenu.getChild("SoundScroll");
 	musicScroll = optionsMenu.getChild("MusicScroll");
-	gammaScroll = optionsMenu.getChild("GammaScroll");
 
 	resolutionText = optionsMenu.getChild("Resolution");
-
-	volumeText = optionsMenu.getChild("SoundVolume");
+	fullscreenText = optionsMenu.getChild("Fullscreen");
+	brightnessText = optionsMenu.getChild("Brightness");
+	soundText = optionsMenu.getChild("SoundVolume");
 	musicText = optionsMenu.getChild("MusicVolume");
-	gammaText = optionsMenu.getChild("Gamma");
 
-	checkbox = optionsMenu.getChild("FullscreenYesButton");
-
+	brightness = windowManager->getBrightness();
+	soundVolume = soundSystem->getSoundVolume();
 	musicVolume = soundSystem->getMusicVolume();
-	soundsVolume = soundSystem->getSoundVolume();
-	gamma = windowManager->getBrightness();
 
-	resolution = windowManager->getActualResolutionId();
-	if (resolution == 0)
-		resolution = 1;
-
-	changeResolution(0);
-
+	brightnessScroll.setScrollPositionScrollBar(brightness);
+	soundScroll.setScrollPositionScrollBar(soundVolume);
 	musicScroll.setScrollPositionScrollBar(musicVolume);
-	volumeScroll.setScrollPositionScrollBar(soundsVolume);
-	gammaScroll.setScrollPositionScrollBar(gamma);
 
-	checkbox.setCheckBoxState(windowManager->getFullscreen());
+	fullscreen = windowManager->getFullscreen();
+	resolution = windowManager->getActualResolutionId();
+	currentResolution = resolution;
+	initialResolution = resolution;
+
+	changeFullscreen(fullscreen);
+	changeResolution(0);
+}
+
+void OptionsMenuScreen::preUpdate(float deltaTime)
+{
+	if ((inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && root.isVisible())
+		backToMenuButtonClick();
 }

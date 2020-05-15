@@ -3,12 +3,12 @@
     "SceneObjects": [
         {
             "ObjectType": "GAMEOBJECT",
-            "ObjectName": "ScoreManager",
-            "Tag": "scoreManager",
+            "ObjectName": "StatsMenu",
+            "Tag": "statsMenu",
             "Components":
             [
                 {
-                    "ComponentName" : "ScoreManager"
+                    "ComponentName" : "StatsMenu"
                 }
             ]
         },
@@ -22,8 +22,7 @@
                 {
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
-                        ["layout" , "StatsMenu.layout"],
-                        ["event" , "BackButton backButtonClick | ResetButton resetButtonClick"]
+                        ["layout" , "StatsMenu.layout"]
                     ]
                 }
             ]

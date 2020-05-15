@@ -18,20 +18,17 @@
     <Filter Include="Archivos de encabezado\Menus">
       <UniqueIdentifier>{cfbdc250-53e4-4f26-9a76-7143975fa38d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Menus">
-      <UniqueIdentifier>{10a5e764-bb44-4321-80ac-7ead5ce194dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de encabezado\Managers">
       <UniqueIdentifier>{2f818457-ef32-4d5b-890c-8ff3d70ca3c5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de origen\Managers">
       <UniqueIdentifier>{5dfe4c89-5e5e-4db8-ac96-245ba575e2df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Menus">
+      <UniqueIdentifier>{10a5e764-bb44-4321-80ac-7ead5ce194dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Attack.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -98,13 +95,7 @@
     <ClCompile Include="..\..\Src\Score.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\ScoreManager.cpp">
-      <Filter>Archivos de origen\Managers</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\PlayerAnimController.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\ScoreManager.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Score.cpp">
@@ -152,9 +143,6 @@
     <ClCompile Include="..\..\Src\PauseMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp">
-      <Filter>Archivos de origen\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Countdown.cpp">
       <Filter>Archivos de origen\Components</Filter>
     </ClCompile>
@@ -170,11 +158,32 @@
     <ClCompile Include="..\..\Src\ConfigurationMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OptionsMenu.cpp">
-      <Filter>Archivos de origen\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\FightingState.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\ParticleManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Menu.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\OptionsMenuScreen.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\SoundManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\SongManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\StatsMenu.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\OptionsMenu.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,16 +250,10 @@
     <ClInclude Include="..\..\Src\GhostManager.h">
       <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\ScoreManager.h">
-      <Filter>Archivos de encabezado\Managers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Respawn.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\PlayerAnimController.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\ScoreManager.h">
       <Filter>Archivos de encabezado\Components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Score.h">
@@ -322,11 +325,20 @@
     <ClInclude Include="..\..\Src\FightingState.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Archivos de encabezado</Filter>
+    <ClInclude Include="..\..\Src\ParticleManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="UltimateGhostPunch.rc" />
+    <ClInclude Include="..\..\Src\Menu.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\SoundManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\SongManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\StatsMenu.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
