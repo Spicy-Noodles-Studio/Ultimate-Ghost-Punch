@@ -61,12 +61,12 @@ void Countdown::update(float deltaTime)
 
 	if (countingDown)
 	{
-		if (time >= 1)
-			panel.getChild("Countdown").setText(std::to_string((int)time));
+		if (time + 1 >= 1)
+			panel.getChild("Countdown").setText(std::to_string((int)time + 1));
 		else
 			panel.getChild("Countdown").setText("FIGHT!");
 
-		if (time < 0)
+		if (time + 1 < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
 				players[i]->getComponent<PlayerController>()->setActive(true);
