@@ -71,7 +71,7 @@ bool StatsMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (InputSystem::GetInstance()->getButtonPress(i, "B"))
+		if (InputSystem::GetInstance()->getButtonPress(i, "B") || InputSystem::GetInstance()->getButtonPress(i, "A"))
 			result = true;
 
 		i++;

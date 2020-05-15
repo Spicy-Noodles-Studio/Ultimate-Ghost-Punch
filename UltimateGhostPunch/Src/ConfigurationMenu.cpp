@@ -261,6 +261,10 @@ bool ConfigurationMenu::changeTimeMode(int value)
 	mode = value;
 	settingsPanel.getChild("SettingsBackground").getChild("TimeMode").setText(timeModes[mode]);
 
+	settingsPanel.getChild("SettingsBackground").getChild("Time").setVisible(!mode);
+	settingsPanel.getChild("SettingsBackground").getChild("-TimeButton").setVisible(!mode);
+	settingsPanel.getChild("SettingsBackground").getChild("+TimeButton").setVisible(!mode);
+
 	buttonClick(buttonSound);
 
 	return false;

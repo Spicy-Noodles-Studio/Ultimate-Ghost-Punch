@@ -21,6 +21,8 @@ private:
 	Vector3 direction;
 	State state;
 
+	bool used;
+
 	float duration;
 	float force;
 	float ghostSpeed;
@@ -45,7 +47,10 @@ public:
 
 	bool isPunching() const;
 	bool isAiming() const;
+	bool isUsed() const;
 	bool punchSuccess() const;
+
+
 	void punchSucceeded();
 
 };

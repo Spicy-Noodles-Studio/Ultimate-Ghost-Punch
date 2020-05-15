@@ -162,17 +162,17 @@ void PlayerController::checkInput()
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
 
 			//Charge
-			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
+			if (!ghostPunch->isUsed() && (controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("RB"))
 				ghostPunch->charge();
 
 			//Aim
-			if (controllerIndex == 4)
+			if (!ghostPunch->isUsed() && controllerIndex == 4)
 				ghostPunchMouseAim();
-			else
+			else if(!ghostPunch->isUsed())
 				ghostPunch->aim(horizontal, -vertical);
 
 			//Ghost Punch
-			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
+			if (!ghostPunch->isUsed() && controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonUp("RB"))
 				ghostPunch->ghostPunch();
 		}
 

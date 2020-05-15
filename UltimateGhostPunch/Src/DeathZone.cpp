@@ -49,9 +49,6 @@ void DeathZone::onObjectEnter(GameObject* other)
 			int id = other->getComponent<PlayerIndex>()->getIndex();
 			int h = health->getHealth();
 
-			if (health->isInvencible())
-				health->setInvencible(false);
-
 			health->receiveDamage(fallDamage);
 
 			if (h != health->getHealth() && score != nullptr)

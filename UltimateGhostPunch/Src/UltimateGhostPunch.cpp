@@ -14,7 +14,7 @@
 REGISTER_FACTORY(UltimateGhostPunch);
 
 UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr), anim(nullptr),
-direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghostSpeed(0.0f), chargeSpeedMult(0.0f)
+direction(Vector3::ZERO), state(State::NONE), used(false), duration(0.0f), force(0.0f), ghostSpeed(0.0f), chargeSpeedMult(0.0f)
 {
 
 }
@@ -118,6 +118,8 @@ void UltimateGhostPunch::ghostPunch()
 	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
 
 	state = State::PUNCHING;
+	used = true;
+
 	if (anim != nullptr) anim->punchingGhostAnimation();
 }
 
@@ -140,6 +142,12 @@ bool UltimateGhostPunch::isAiming() const
 {
 	return state == State::CHARGING;
 }
+
+bool UltimateGhostPunch::isUsed() const
+{
+	return used;
+}
+
 bool UltimateGhostPunch::punchSuccess() const
 {
 	return state == State::SUCCESS;
