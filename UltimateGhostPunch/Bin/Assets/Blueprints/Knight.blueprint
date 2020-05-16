@@ -4,12 +4,11 @@
     "Tag": "Player",
     "Components":
     [
-        {
-            "ComponentName": "Transform",
+        "ComponentName": "Transform",
             "ComponentProperties": [
                [ "position", "20 30 0"],
                [ "scale", "0.6 0.6 0.6"],
-               [ "rotation", "0 90 0"]
+               [ "rotation", "0 0 0"]
             ]
         },
         {
@@ -26,27 +25,30 @@
             ]
         },
         {
-            "ComponentName": "PlayerFX"
-        },
-        {
             "ComponentName": "PlayerAnimController",
             "ComponentProperties": [
                [ "runThreshold", "0.5f"],
                [ "fallThreshold", "1.0f"],
                [ "thrownDelay", "0.25f"],
-               ["ghostMesh", "ghost Ghost.mesh"]
+               [ "ghostMesh", "ghost Ghost.mesh"]
             ]
+        },
+        {
+            "ComponentName": "PlayerFX"
+        },
+        {
+            "ComponentName": "ParticleManager"
         },
         {
             "ComponentName": "RigidBody",
             "ComponentProperties":[ 
                [ "shape", "Box"],
                [ "mass", "5"],
-               [ "friction", "0.3"],
+               [ "friction", "0.9"],
                [ "restitution", "0"],
-               [ "damping", "0.6"],
+               [ "damping", "0.5"],
                [ "angularDamping", "0"],
-               [ "gravity", "0 -15 0"],
+               [ "gravity", "0 -10 0"],
                [ "offset", "0 0 0"],
                [ "scale", "2 5.2 2"],
                [ "kinematic", "0"],
@@ -56,12 +58,6 @@
                [ "collisionGroup", "IgnoreRaycast"]
             ]
         },
-        {
-            "ComponentName": "Movement",
-            "ComponentProperties": [
-                ["speed", "75"]
-            ]
-        },
         {  
             "ComponentName": "PlayerIndex",
             "ComponentProperties":[ 
@@ -69,23 +65,15 @@
             ]
         },
         {
+            "ComponentName": "Movement",
+            "ComponentProperties": [
+                ["speed", "75"]
+            ]
+        },
+        {
             "ComponentName": "GhostMovement",
             "ComponentProperties":[ 
                 ["maxSpeed", "5"]
-            ]
-        },
-        {
-            "ComponentName": "Respawn",
-            "ComponentProperties":[ 
-                ["respawnTime", "2"]
-            ]
-        },
-        {
-            "ComponentName": "UltimateGhostPunch",
-            "ComponentProperties": [
-                ["force", "200"],
-                ["duration" , "0.333"],
-                ["chargeSpeedMult" , "0.3"]
             ]
         },
         {
@@ -105,10 +93,23 @@
             ]
 		},
         {
+            "ComponentName": "Respawn",
+            "ComponentProperties":[ 
+                ["respawnTime", "2"]
+            ]
+        },
+        {
+            "ComponentName": "UltimateGhostPunch",
+            "ComponentProperties": [
+                ["force", "200"],
+                ["duration" , "0.333"],
+                ["chargeSpeedMult" , "0.3"]
+            ]
+        },
+        {
             "ComponentName": "GhostManager",
             "ComponentProperties": [
                 ["ghostTime", "10"],
-                ["ghostMesh", "ghost Espada.mesh"],
                 ["ghostScale", "1 1 1"],
                 ["spawnOffset", "0 1.25 0"],
                 ["ghostDamage", "1"],
@@ -120,6 +121,12 @@
         },
         {
             "ComponentName": "PlayerState"
+        },
+        {
+            "ComponentName": "SoundEmitter"
+        },
+        {
+            "ComponentName": "SoundManager"
         }
     ],
     "Children": [
@@ -143,7 +150,7 @@
                 {
                     "ComponentName": "Attack",
                     "ComponentProperties":[
-                        ["quickCooldown", "1.5"],
+                        ["quickCooldown", "0.5"],
                         ["strongCooldown", "2"],
                         ["quickDamage", "1"],
                         ["strongDamage", "2"],
@@ -178,7 +185,7 @@
                 {
                     "ComponentName": "Jump",
                     "ComponentProperties": [
-                        ["maxForce", "90"],
+                        ["maxForce", "75"],
 				        ["jumpDecay", "0.4"],
                         ["coyoteTime", "0.4"]
                     ]       
@@ -244,6 +251,4 @@
                     ]
                 }
             ]
-        }
-    ]
 }
