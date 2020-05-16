@@ -15,13 +15,10 @@ class GameManager : public UserComponent
 private:
 	static GameManager* instance;
 
-	Score scores;
-
 	std::vector<Vector3> playerColours;
 	std::vector<int> playerIndexes;
 	std::vector<int> playerRanking;
 
-	std::vector<Vector3> playerColours;
 	std::vector<GameObject*> knights;
 
 	std::string level;

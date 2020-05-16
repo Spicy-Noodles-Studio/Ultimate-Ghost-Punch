@@ -162,7 +162,7 @@ void AIStateMachine::processActionInput()
 			break;
 		case ActionInput::GHOST_PUNCH:
 			if (ghostPunch != nullptr){
-				ghostPunch->aim(ghostNavigation->getDirection());//Provisional?
+				ghostPunch->aim(ghostNavigation->getDirection().x, ghostNavigation->getDirection().y);//Provisional?
 				ghostPunch->ghostPunch();
 				}
 			break;

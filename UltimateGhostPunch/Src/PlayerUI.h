@@ -20,7 +20,6 @@ public:
 
 	void setVisible(bool visible);
 
-	void setVisible(bool visible);
 private:
 	void createHearts();
 	void updateHearts();

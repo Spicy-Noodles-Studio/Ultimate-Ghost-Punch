@@ -340,5 +340,11 @@
     <ClInclude Include="..\..\Src\StatsMenu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UltimateGhostPunch.rc" />
   </ItemGroup>
 </Project>

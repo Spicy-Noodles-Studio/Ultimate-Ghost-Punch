@@ -309,9 +309,6 @@ void Grab::grabEnemy()
 		enemyBlock->unblock();
 
 	state = GRABBED;
-	auto enemyGrab = enemy->getComponent<Grab>();
-	if (enemyGrab != nullptr) enemyGrab->setState(BEING_GRABBED);
-
 	remain = grabDuration;
 	enemyController = enemy->getComponent<PlayerController>();
 	enemyDiff = enemy->transform->getPosition() - parent->transform->getPosition();

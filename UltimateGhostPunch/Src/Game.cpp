@@ -18,6 +18,7 @@
 #include "Countdown.h"
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
+#include "PlatformGraph.h"
 #include "SongManager.h"
 
 REGISTER_FACTORY(Game);
@@ -268,7 +269,7 @@ void Game::createKnights()
 
 void Game::createAI()
 {
-	int nPlayers = gameManager->getNumPlayers();
+	int nPlayers = gameManager->getPlayerIndexes().size();
 	int nAIPlayers = 1; // MAX_PLAYERS - nPlayers;
 
 	for (int i = 0; i < nAIPlayers; i++)
@@ -366,8 +367,8 @@ void Game::configureLevelCollider(const std::string& name)
 	PlatformGraph* graph = gameObject->getComponent<PlatformGraph>();
 	if (graph != nullptr)
 	{
-		graph->setLoadFileName(GameManager::GetInstance()->getLevel() + ".graph");
-		graph->setSaveFileName(GameManager::GetInstance()->getLevel() + ".graph");
+		graph->setLoadFileName(GameManager::GetInstance()->getLevel().second + ".graph");
+		graph->setSaveFileName(GameManager::GetInstance()->getLevel().second + ".graph");
 	}
 }
 
