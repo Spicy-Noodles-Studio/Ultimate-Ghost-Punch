@@ -138,9 +138,13 @@
         {
             "ComponentName": "Trail",
             "ComponentProperties": [
-                ["trail", "SwordTrail"],
+                ["offset", "-50 100 0"],
+                ["trail", "bone Mano.L"],
                 ["start", "true"],
-                ["colour", "true"]
+                ["colour", "0.8 0.8 0.8"],
+                ["width", "2"],
+                ["alphaChange", "4"],
+                ["colourChange", "1 1 1"]
             ]
         }
     ],
@@ -262,7 +266,7 @@
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": [
                         [ "mesh", "shield Shield.mesh"],
-                        [ "material", "shield Shield"]
+                        [ "material", "shield Neon"]
                     ]
                 }
             ]

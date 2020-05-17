@@ -7,6 +7,8 @@ in mat4 vProjMat;
 
 uniform vec3 cameraPos;
 
+uniform float alpha;
+
 void main()
 {
 	vec3 normal = gl_FrontFacing ? vNormal : -vNormal;
@@ -28,7 +30,7 @@ void main()
 	vec4 bsdf = vec4(1.0, 1.0, 1.0, 0.0);
 
 	/* EMISSION -> EMISSION */
-	vec4 color = vec4(0.06, 0.3, 0.8, 1.0);
+	vec4 color = vec4(0.06, 0.3, 0.8, alpha);
 	float strength = 1.0;
 	vec4 emission = color * strength;
 

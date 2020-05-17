@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
+#include <MeshRenderer.h>
 #include <sstream>
 
 #include "PlayerController.h"
@@ -63,8 +64,10 @@ void Block::update(float deltaTime)
 		}
 	}
 
-	// Shield reduction
-	shield->transform->setScale(Vector3::IDENTITY * blockTime * 2);
+	// Shield scale reduction
+	shield->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4,4,4));
+	// Shield alpha
+	shield->getComponent<MeshRenderer>()->setFpParam(0, "alpha", blockTime/maxBlockTime);
 }
 
 void Block::postUpdate(float deltaTime)
