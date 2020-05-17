@@ -167,10 +167,14 @@ void Grab::grab()
 	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
 	{
 		Grab* enemyGrab = nullptr;
-		std::vector<GameObject*> aux = enemy->findChildrenWithTag("grabSensor");
-		if (aux.size() > 0)
-			enemyGrab = aux[0]->getComponent<Grab>();
-		if (enemy != nullptr && !enemyGrab->isGrabbed() && !enemy->getComponent<Health>()->isInvencible())
+		if (enemy != nullptr) 
+		{
+			std::vector<GameObject*> aux = enemy->findChildrenWithTag("grabSensor");
+			if (aux.size() > 0)
+				enemyGrab = aux[0]->getComponent<Grab>();
+			if (enemyGrab == nullptr) LOG("ERROR: Enemy with no Grab Component\n");
+		}
+		if (enemy != nullptr && enemyGrab != nullptr && !enemyGrab->isGrabbed() && !enemy->getComponent<Health>()->isInvencible())
 			grabEnemy();
 		else
 			grabMissed();
@@ -295,10 +299,10 @@ void Grab::grabEnemy()
 	Block* enemyBlock = nullptr;
 	if (aux.size() > 0)
 		enemyBlock = aux[0]->getComponent<Block>();
-	std::vector<GameObject*> groundSensorChildren = enemy->findChildrenWithTag("grabSensor");
+	std::vector<GameObject*> grabSensorChildren = enemy->findChildrenWithTag("grabSensor");
 	Grab* enemyGrab = nullptr;
-	if (groundSensorChildren.size() > 0)
-		enemyGrab = groundSensorChildren[0]->getComponent<Grab>();
+	if (grabSensorChildren.size() > 0)
+		enemyGrab = grabSensorChildren[0]->getComponent<Grab>();
 
 
 	if (enemyBlock != nullptr && enemyBlock->canBlockGrab())
