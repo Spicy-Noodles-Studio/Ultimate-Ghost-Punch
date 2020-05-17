@@ -1692,7 +1692,7 @@
             {
             "Enabled" = "11:TRUE"
             "PromptEnabled" = "11:TRUE"
-            "PrerequisitesLocation" = "2:2"
+            "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:https://aka.ms/vs/16/release/vc_redist.x64.exe"
                 "Items"
@@ -7398,7 +7398,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Ultimate Ghost Punch"
         "ProductCode" = "8:{BA8ED8F3-6C35-49D3-8CC9-2134996EFB16}"
-        "PackageCode" = "8:{510D74AB-9BF5-4070-B0DA-859F7BCF84F7}"
+        "PackageCode" = "8:{A148B157-14C0-4058-A332-D433556D32F1}"
         "UpgradeCode" = "8:{FA896392-4540-4D49-AA0B-2C4944134651}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

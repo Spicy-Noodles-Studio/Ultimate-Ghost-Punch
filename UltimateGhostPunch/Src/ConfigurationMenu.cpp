@@ -65,6 +65,8 @@ void ConfigurationMenu::start()
 {
 	Menu::start();
 
+	songManager->playMenuSong();
+
 	if (mainCamera != nullptr)
 	{
 		configurationLayout = mainCamera->getComponent<UILayout>();
