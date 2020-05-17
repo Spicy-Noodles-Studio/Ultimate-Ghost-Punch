@@ -58,7 +58,7 @@ void Game::start()
 	createLights();
 	#ifndef RECORD_PATH
 		createAI();
-		gameManager->getScore()->initScore(/*4, gameManager->getPlayerIndexes()*/gameManager->getInitialPlayers());
+		gameManager->getScore()->initScore(/*4, gameManager->getPlayerIndexes()*/gameManager->getInitialPlayers() + 1);
 	#else
 		gameManager->getScore()->initScore(gameManager->getInitialPlayers());
 	#endif
@@ -269,7 +269,7 @@ void Game::createKnights()
 
 void Game::createAI()
 {
-	int nPlayers = gameManager->getPlayerIndexes().size();
+	int nPlayers = gameManager->getInitialPlayers();
 	int nAIPlayers = 1; // MAX_PLAYERS - nPlayers;
 
 	for (int i = 0; i < nAIPlayers; i++)

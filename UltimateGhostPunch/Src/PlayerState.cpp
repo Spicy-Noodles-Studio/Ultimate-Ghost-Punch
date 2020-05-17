@@ -159,6 +159,11 @@ bool PlayerState::isRespawning() const
 	return respawn != nullptr && respawn->isRespawning();
 }
 
+bool PlayerState::isIgnoringInput() const
+{
+	return ignoringInput;
+}
+
 bool PlayerState::hasBlocked() const
 {
 	return block->hasBlocked();
@@ -212,4 +217,9 @@ bool PlayerState::hasKnightDied() const
 bool PlayerState::punchHasSucceeded() const
 {
 	return ghostManager->hasPunchSuccess();
+}
+
+void PlayerState::setIgnoringInput(bool ignoreInput)
+{
+	ignoringInput = ignoreInput;
 }

@@ -4,7 +4,8 @@
     "Tag": "Player",
     "Components":
     [
-        "ComponentName": "Transform",
+        {
+            "ComponentName": "Transform",
             "ComponentProperties": [
                [ "position", "20 30 0"],
                [ "scale", "0.6 0.6 0.6"],
@@ -251,4 +252,6 @@
                     ]
                 }
             ]
+        }
+    ]
 }

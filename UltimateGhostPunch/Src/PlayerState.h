@@ -29,6 +29,8 @@ private:
 	UltimateGhostPunch* ghostPunch;
 	Respawn* respawn;
 
+	bool ignoringInput;
+
 public:
 	PlayerState(GameObject* gameObject);
 	virtual ~PlayerState();
@@ -58,6 +60,7 @@ public:
 	bool punchSucceeded() const;
 	bool isGhost() const;
 	bool isRespawning() const;
+	bool isIgnoringInput() const;
 
 	bool hasBlocked() const;
 	bool hasLanded() const;
@@ -70,6 +73,8 @@ public:
 	bool hasGhostDied() const;
 	bool hasKnightDied() const;
 	bool punchHasSucceeded() const;
+
+	void setIgnoringInput(bool ignoreInput);
 };
 
 #endif

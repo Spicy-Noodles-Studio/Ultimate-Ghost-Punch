@@ -21,6 +21,7 @@
 #include "UltimateGhostPunch.h"
 #include "PlayerAnimController.h"
 #include "GameManager.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(PlayerController);
 
@@ -67,6 +68,7 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
+	if (gameObject->getComponent<PlayerState>()->isIgnoringInput()) return;
 	checkInput();
 }
 
