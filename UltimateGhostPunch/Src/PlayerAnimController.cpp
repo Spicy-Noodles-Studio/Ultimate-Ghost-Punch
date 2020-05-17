@@ -20,12 +20,13 @@
 #include "UltimateGhostPunch.h"
 #include "GhostManager.h"
 #include "GameManager.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(PlayerAnimController);
 
 PlayerAnimController::PlayerAnimController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), mesh(nullptr), body(nullptr), anim(nullptr), jump(nullptr),
 grab(nullptr), block(nullptr), playerFX(nullptr), ghostManag(nullptr), state(IDLE), runThreshold(0.50f), fallThreshold(1.0f), swordState(HAND), delayedAnimations(),
-thrownDelay(0.35f), currentMode(ALIVE), aliveMeshId(""), aliveMeshName(""), ghostMeshId(""), ghostMeshName("")
+thrownDelay(0.35f), currentMode(ALIVE), aliveMeshId(""), aliveMeshName(""), ghostMeshId(""), ghostMeshName(""), playerState(nullptr)
 {
 
 }
@@ -43,6 +44,7 @@ void PlayerAnimController::start()
 	mesh = gameObject->getComponent<MeshRenderer>();
 	ghostManag = gameObject->getComponent<GhostManager>();
 	playerFX = gameObject->getComponent<PlayerFX>();
+	playerState = gameObject->getComponent<PlayerState>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
@@ -70,8 +72,50 @@ void PlayerAnimController::start()
 	}
 }
 
-void PlayerAnimController::update(float deltaTime)
+void PlayerAnimController::preUpdate(float deltaTime)
 {
+	//Do something
+
+	// Run
+	if (playerState->isMoving() && playerState->canMove() && playerState->isGrounded()) {
+		anim->playAnimation("Run");
+		anim->setLoop(true);
+	}
+	// Idle
+	if(!playerState->isMoving() && playerState->canMove() && playerState->isGrounded()){
+		anim->playAnimation("Idle");
+		anim->setLoop(true);
+	}
+	// Dodge
+	if (playerState->isDodging()) {
+		anim->playAnimation("DashFront");
+		anim->setLoop(false);
+	}
+	// Jump started
+	if (playerState->isGrounded() && playerState->isJumping()) {
+		anim->playAnimation("JumpStart");
+		anim->setLoop(false);
+	}
+	// While jumping || TODO: hacer que el cancelado de salto, no sea brusco en la animacion
+	if (!playerState->isGrounded() && playerState->isJumping()) {
+		if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded()) {
+			anim->playAnimation("JumpChange");
+			anim->setLoop(false);
+		}
+	}
+	// Falling
+	if (playerState->isFalling()) {
+		anim->playAnimation("Fall");
+		anim->setLoop(true);
+	}
+	// Landed (depende de que no corten su animacion)
+	if (playerState->hasLanded()) {
+		anim->playAnimation("Land");
+		anim->setLoop(false);
+	}
+	
+
+	/*
 	// Update the current state
 	updateState();
 
@@ -89,7 +133,7 @@ void PlayerAnimController::update(float deltaTime)
 	}
 
 	// Update delayed animations
-	updateDelayedAnimations(deltaTime);
+	updateDelayedAnimations(deltaTime);*/
 }
 
 void PlayerAnimController::handleData(ComponentData* data)

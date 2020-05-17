@@ -37,7 +37,7 @@ void Grab::start()
 	{
 		id = parent->getComponent<PlayerIndex>()->getIndex();
 		controller = parent->getComponent<PlayerController>();
-		myAnim = parent->getComponent<PlayerAnimController>();		 
+		//myAnim = parent->getComponent<PlayerAnimController>();		 
 	}
 
 	score = GameManager::GetInstance()->getScore();
@@ -201,7 +201,7 @@ void Grab::drop()
 
 void Grab::grabMissed()
 {
-	if (myAnim != nullptr) myAnim->grabFailedAnimation();
+	//if (myAnim != nullptr) myAnim->grabFailedAnimation();
 	
 	state = IDLE;
 	missed = true;
@@ -254,12 +254,12 @@ void Grab::resetEnemy()
 		enemyController->setActive(true);
 	}
 
-	if (enemyAnim != nullptr)
-		enemyAnim->thrownAwayAnimation();
+	//if (enemyAnim != nullptr)
+	//	enemyAnim->thrownAwayAnimation();
 
 	//Play throw animation
-	if (myAnim != nullptr)
-		myAnim->throwEnemyAnimation();
+	//if (myAnim != nullptr)
+	//	myAnim->throwEnemyAnimation();
 
 	grabbedPosition = Vector3();
 }
@@ -269,7 +269,7 @@ void Grab::grabEnemy()
 	if (enemy == nullptr || parent == nullptr)
 		return;
 
-	enemyAnim = enemy->getComponent<PlayerAnimController>();
+	//enemyAnim = enemy->getComponent<PlayerAnimController>();
 
 	//Check if we have been blocked
 	std::vector<GameObject*> aux = enemy->findChildrenWithTag("groundSensor");
@@ -291,11 +291,11 @@ void Grab::grabEnemy()
 			if (controller != nullptr)
 				controller->setActive(false); // Freeze our character
 
-			if (enemyAnim != nullptr)
-				enemyAnim->blockedEnemyGrabAnimation();
+			//if (enemyAnim != nullptr)
+			//	enemyAnim->blockedEnemyGrabAnimation();
 
-			if (myAnim != nullptr)
-				myAnim->enemyBlockedMyGrabAnimation();
+			//if (myAnim != nullptr)
+			//	myAnim->enemyBlockedMyGrabAnimation();
 
 			return;
 		}
@@ -328,9 +328,9 @@ void Grab::grabEnemy()
 		enemyRB->setActive(false);
 	}
 
-	if (myAnim != nullptr)
-		myAnim->grabAnimation();
+	//if (myAnim != nullptr)
+		//myAnim->grabAnimation();
 
-	if (enemyAnim != nullptr)
-		enemyAnim->grabbedByEnemyAnimation();
+	//if (enemyAnim != nullptr)
+	//	enemyAnim->grabbedByEnemyAnimation();
 }

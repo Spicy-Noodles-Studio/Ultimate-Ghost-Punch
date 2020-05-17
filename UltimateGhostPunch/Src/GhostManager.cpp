@@ -162,7 +162,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 				UltimateGhostPunch* punch = gameObject->getComponent<UltimateGhostPunch>();
 				if (punch != nullptr && punch->isPunching()) //Succes
 				{
-					anim->punchSuccessAnimation();
+					//anim->punchSuccessAnimation();
 					punch->punchSucceeded();
 					punchSuccess = true;
 				}
@@ -318,8 +318,8 @@ void GhostManager::handlePlayerDeath()
 	{
 		ghost = true;
 
-		if (anim != nullptr)
-			anim->enterMode(PlayerAnimController::GHOST);
+		//if (anim != nullptr)
+		//	anim->enterMode(PlayerAnimController::GHOST);
 	}
 	else
 		deactivatePlayer();

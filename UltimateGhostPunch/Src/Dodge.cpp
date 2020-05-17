@@ -96,8 +96,8 @@ void Dodge::dodge()
 		time = duration;
 
 		//Animation
-		PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->dashAnimation();
+		//PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
+		//if (anim != nullptr) anim->dashAnimation();
 	}
 }
 

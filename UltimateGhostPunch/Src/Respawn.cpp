@@ -70,7 +70,7 @@ void Respawn::spawn(const Vector3& spawnPos)
 {
 	Movement* movement = gameObject->getComponent<Movement>();
 	Health* health = gameObject->getComponent<Health>();
-	PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
+	//PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
 
 	if (movement != nullptr)
 		movement->stop();
@@ -90,8 +90,8 @@ void Respawn::spawn(const Vector3& spawnPos)
 	time = respawnTime;
 	respawning = true;
 
-	if (anim != nullptr)
-		anim->resurrectAnimation();
+	//if (anim != nullptr)
+	//	anim->resurrectAnimation();
 }
 
 bool Respawn::isRespawning()

@@ -14,6 +14,7 @@ class Grab;
 class Block;
 class GhostManager;
 class PlayerFX;
+class PlayerState;
 
 class PlayerAnimController : public UserComponent
 {
@@ -36,6 +37,8 @@ private:
 	GhostManager* ghostManag;
 	// Player FX
 	PlayerFX* playerFX;
+	// PlayerState
+	PlayerState* playerState;
 
 	enum PlayerAnimState
 	{
@@ -89,7 +92,7 @@ public:
 	virtual ~PlayerAnimController();
 
 	virtual void start();
-	virtual void update(float deltaTime);
+	virtual void preUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void jumpAnimation();

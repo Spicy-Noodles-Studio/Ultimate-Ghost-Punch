@@ -114,7 +114,7 @@ void Health::receiveDamage(int damage)
 		}
 
 		hurt = true;
-		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
+		//gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
 }
 

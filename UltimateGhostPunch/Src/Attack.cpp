@@ -211,8 +211,8 @@ void Attack::quickAttack()
 	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->quickAttackAnimation();
+		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+		//if (anim != nullptr) anim->quickAttackAnimation();
 
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
@@ -230,8 +230,8 @@ void Attack::strongAttack()
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
 
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->strongAttackAnimation();
+		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+		//if (anim != nullptr) anim->strongAttackAnimation();
 
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);

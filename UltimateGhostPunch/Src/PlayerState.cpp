@@ -159,6 +159,11 @@ bool PlayerState::isRespawning() const
 	return respawn != nullptr && respawn->isRespawning();
 }
 
+bool PlayerState::isFalling() const
+{
+	return jump->isFalling();
+}
+
 bool PlayerState::hasBlocked() const
 {
 	return block->hasBlocked();

@@ -112,8 +112,8 @@ void Jump::jump()
 	jumping = true;
 	coyoteTimer = 0.0f;
 
-	auto animController = parent->getComponent<PlayerAnimController>();
-	if (animController != nullptr) animController->jumpAnimation();
+	//auto animController = parent->getComponent<PlayerAnimController>();
+	//if (animController != nullptr) animController->jumpAnimation();
 }
 
 void Jump::cancelJump()
@@ -138,17 +138,22 @@ void Jump::setCoyoteTime(float time)
 	coyoteTime = time;
 }
 
-bool Jump::isGrounded()
+bool Jump::isGrounded() const
 {
 	return grounded;
 }
 
-bool Jump::isJumping()
+bool Jump::isJumping() const
 {
 	return jumping;
 }
 
-bool Jump::canJump()
+bool Jump::isFalling() const
+{
+	return rigidBody->getLinearVelocity().y <= -1.0f;
+}
+
+bool Jump::canJump() const
 {
 	return grounded || playersBelow || coyoteTimer > 0.0f;
 }

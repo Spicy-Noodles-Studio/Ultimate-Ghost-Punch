@@ -116,8 +116,8 @@ void Block::block()
 
 		auto anim = parent->getComponent<PlayerAnimController>();
 
-		if(anim != nullptr)
-			anim->blockAnimation();
+		//if(anim != nullptr)
+		//	anim->blockAnimation();
 
 		LOG("BLOCKING\n");
 	}
@@ -149,10 +149,10 @@ bool Block::blockAttack(float damage, Vector3 otherPosition)
 			blocking = false;
 
 		// Attack blocked animation
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
+		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
 
-		if (anim != nullptr)
-			anim->blockedAttackAnimation();
+		//if (anim != nullptr)
+		//	anim->blockedAttackAnimation();
 
 		blocked = true;
 		return true;

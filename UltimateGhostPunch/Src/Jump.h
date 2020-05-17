@@ -39,9 +39,10 @@ public:
 	void setJumpForce(float force);
 	void setCoyoteTime(float time);
 
-	bool isGrounded();
-	bool isJumping();
-	bool canJump();
+	bool isGrounded() const;
+	bool isJumping() const;
+	bool isFalling() const;
+	bool canJump() const;
 
 	bool hasLanded() const;
 };

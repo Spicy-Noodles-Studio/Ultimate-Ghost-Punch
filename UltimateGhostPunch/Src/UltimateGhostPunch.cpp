@@ -86,8 +86,8 @@ void UltimateGhostPunch::charge()
 	if (ghostMovement != nullptr)
 		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
 
-	if (anim != nullptr)
-		anim->chargingGhostAnimation();
+	//if (anim != nullptr)
+		//anim->chargingGhostAnimation();
 }
 
 void UltimateGhostPunch::aim(double x, double y)
@@ -120,7 +120,7 @@ void UltimateGhostPunch::ghostPunch()
 	state = State::PUNCHING;
 	used = true;
 
-	if (anim != nullptr) anim->punchingGhostAnimation();
+	//if (anim != nullptr) anim->punchingGhostAnimation();
 }
 
 const UltimateGhostPunch::State& UltimateGhostPunch::getState()

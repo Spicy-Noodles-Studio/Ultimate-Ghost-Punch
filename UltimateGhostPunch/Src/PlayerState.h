@@ -58,6 +58,7 @@ public:
 	bool punchSucceeded() const;
 	bool isGhost() const;
 	bool isRespawning() const;
+	bool isFalling() const;
 
 	bool hasBlocked() const;
 	bool hasLanded() const;
