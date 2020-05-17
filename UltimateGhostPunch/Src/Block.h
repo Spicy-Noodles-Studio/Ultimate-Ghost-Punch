@@ -20,7 +20,7 @@ private:
 	bool blocking;
 	bool blocked;
 
-	float blockDirection;
+	int blockDirection;
 
 public:
 	Block(GameObject* gameObject);
@@ -35,15 +35,14 @@ public:
 
 	void block();
 	void unblock();
-	bool blockAttack(float damage, Vector3 otherPosition);
+	bool blockAttack(Vector3 otherPosition);
 
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
 
 	bool canBlockGrab() const;
 	bool isBlocking() const;
-	// Return if it has just blocked an attack (only true during current frame)
-	bool hasBlocked() const;
+	bool hasBlocked() const; // Return if it has just blocked an attack (only true during current frame)
 };
 
 #endif

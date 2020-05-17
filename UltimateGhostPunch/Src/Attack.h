@@ -41,15 +41,15 @@ private:
 	AttackType currentAttack;
 	AttackState state;
 
+	GameObject* parent;
 	RigidBody* attackTrigger;
 	Score* score;
 
 	Vector3 quickAttackScale;
 	Vector3 strongAttackScale;
+
 	Vector3 quickAttackOffset;
 	Vector3 strongAttackOffset;
-
-	GameObject* parent;
 
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
@@ -70,8 +70,8 @@ public:
 	void strongAttack();
 
 	bool isAttacking() const;
-	bool isHeavyAttacking() const;
 	bool isQuickAttacking() const;
+	bool isHeavyAttacking() const;
 
 	bool hasHit() const;
 };
