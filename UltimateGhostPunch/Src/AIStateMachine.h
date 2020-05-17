@@ -17,6 +17,7 @@ class GhostManager;
 class Attack;
 class Block;
 class FightingState;
+class PlayerState;
 
 enum class ActionInput {
 	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK, BLOCK, UNBLOCK
@@ -42,6 +43,7 @@ private:
 	GhostManager* ghostManager;
 	Attack* attack;
 	Block* block;
+	PlayerState* playerState;
 
 	/* States */
 	PlatformNavigation* platformNavigation;

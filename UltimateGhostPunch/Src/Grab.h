@@ -29,7 +29,7 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
-	bool dropped, missed;
+	bool dropped, missed, beingGrabbed;
 
 	State state;
 
@@ -67,6 +67,7 @@ public:
 	void grab();
 	void drop();
 	void grabMissed();
+	void setGrabbed(bool grabbed);
 
 	bool isGrabbing() const;
 	bool isGrabbed() const;

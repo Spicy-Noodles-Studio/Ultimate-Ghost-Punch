@@ -17,6 +17,7 @@
 #include "Attack.h"
 #include "FightingState.h"
 #include "Block.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(AIStateMachine);
 
@@ -54,6 +55,7 @@ void AIStateMachine::start()
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	ghostManager = gameObject->getComponent<GhostManager>();
+	playerState = gameObject->getComponent<PlayerState>();
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
@@ -81,6 +83,7 @@ void AIStateMachine::start()
 
 void AIStateMachine::update(float deltaTime)
 {
+	if (playerState->isIgnoringInput()) return;
 	StateMachine::update(deltaTime);
 
 	timerTargetChange += deltaTime;
