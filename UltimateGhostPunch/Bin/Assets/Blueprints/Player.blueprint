@@ -134,6 +134,14 @@
         },
         {
             "ComponentName": "SoundManager"
+        },
+        {
+            "ComponentName": "Trail",
+            "ComponentProperties": [
+                ["trail", "SwordTrail"],
+                ["start", "true"],
+                ["colour", "true"]
+            ]
         }
     ],
     "Children": [

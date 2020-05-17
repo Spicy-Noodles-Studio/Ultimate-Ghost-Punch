@@ -1,0 +1,19 @@
+material Billboard
+ {
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend add
+			depth_write off
+			//diffuse vertexcolour
+
+			texture_unit
+			{
+				texture pluma.png
+				tex_address_mode clamp
+			}
+		}
+	}
+ }
