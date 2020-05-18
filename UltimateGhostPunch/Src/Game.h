@@ -14,6 +14,7 @@ class GameManager;
 class SongManager;
 class UILayout;
 class Countdown;
+class CameraEffects;
 
 class Game : public UserComponent
 {
@@ -33,6 +34,11 @@ private:
 
 	UILayout* gameLayout;
 	Countdown* countdown;
+
+	CameraEffects* cameraEffects;
+	bool fadeIn;
+	bool darkness;
+	bool end;
 
 	UIElement timePanel;
 

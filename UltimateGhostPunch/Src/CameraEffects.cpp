@@ -4,6 +4,7 @@
 #include <InputSystem.h>
 #include <GameObject.h>
 #include <Camera.h>
+#include "WindowManager.h"
 
 REGISTER_FACTORY(CameraEffects);
 
@@ -20,6 +21,8 @@ CameraEffects::~CameraEffects()
 
 void CameraEffects::start()
 {
+	max = WindowManager::GetInstance()->getBrightness();
+	if (max == 0) max = 0.00001;
 	current = max;
 	state = IDLE;
 
@@ -27,11 +30,11 @@ void CameraEffects::start()
 	initialRotation = cam->getRotation();
 }
 
-void CameraEffects::fixedUpdate(float deltaTime)
+void CameraEffects::update(float deltaTime)
 {
 	if (state == FADEOUT)
 	{
-		current -= 0.01;
+		current -= (0.4 * max * deltaTime);
 		if (current < min)
 		{
 			current = min;
@@ -42,7 +45,7 @@ void CameraEffects::fixedUpdate(float deltaTime)
 	}
 	else if (state == FADEIN)
 	{
-		current += 0.01;
+		current += (0.4 * max * deltaTime);
 		if (current > max)
 		{
 			current = max;
@@ -107,6 +110,17 @@ void CameraEffects::fadeIn()
 {
 	if (state == IDLE)
 		state = FADEIN;
+}
+
+void CameraEffects::setDarkness()
+{
+	RenderSystem::GetInstance()->changeParamOfShader("LuminancePS", "brigh", 0);
+	current = 0;
+}
+
+bool CameraEffects::isFading()
+{
+	return state != IDLE;
 }
 
 void CameraEffects::shake(Vector3 rotDir)

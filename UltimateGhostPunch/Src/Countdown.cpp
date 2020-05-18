@@ -104,3 +104,8 @@ bool Countdown::isCounting() const
 {
 	return countingDown;
 }
+
+float Countdown::getRemainingTime()
+{
+	return time;
+}
