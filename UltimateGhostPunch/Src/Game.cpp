@@ -19,6 +19,7 @@
 #include "ConfigurationMenu.h"
 #include "GameManager.h"
 #include "SongManager.h"
+#include "CameraController.h"
 
 REGISTER_FACTORY(Game);
 
@@ -39,8 +40,10 @@ void Game::start()
 	songManager = SongManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr)
+	if (mainCamera != nullptr) {
 		gameLayout = mainCamera->getComponent<UILayout>();
+		setCameraLimits(mainCamera);
+	}
 
 	if (gameLayout != nullptr)
 		timePanel = gameLayout->getRoot().getChild("TimeBackground");
@@ -91,6 +94,21 @@ void Game::playerDie(int index)
 		chooseWinner();
 	else
 		gameManager->setPlayersAlive(nPlayers);
+}
+
+void Game::setCameraLimits(GameObject* mainCamera)
+{
+	CameraController* camController = mainCamera->getComponent<CameraController>();
+	if (gameManager->getLevel().first == "level2") {
+		camController->setMaxZ(60); // Increase max zoom away for largest level
+		camController->setMinY(0);
+		camController->setMaxY(30);
+	}
+	else {
+		camController->setMaxZ(50);
+		camController->setMinY(-10);
+		camController->setMaxY(20);
+	}
 }
 
 void Game::createLevel()
