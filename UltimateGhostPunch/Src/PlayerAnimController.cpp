@@ -74,46 +74,16 @@ void PlayerAnimController::start()
 
 void PlayerAnimController::preUpdate(float deltaTime)
 {
-	//Do something
 
-	// Run
-	if (playerState->isMoving() && playerState->canMove() && playerState->isGrounded()) {
-		anim->playAnimation("Run");
-		anim->setLoop(true);
-	}
-	// Idle
-	if(!playerState->isMoving() && playerState->canMove() && playerState->isGrounded()){
-		anim->playAnimation("Idle");
-		anim->setLoop(true);
-	}
 	// Dodge
 	if (playerState->isDodging()) {
 		anim->playAnimation("DashFront");
 		anim->setLoop(false);
 	}
-	// Jump started
-	if (playerState->isGrounded() && playerState->isJumping()) {
-		anim->playAnimation("JumpStart");
-		anim->setLoop(false);
-	}
-	// While jumping || TODO: hacer que el cancelado de salto, no sea brusco en la animacion
-	if (!playerState->isGrounded() && playerState->isJumping()) {
-		if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded()) {
-			anim->playAnimation("JumpChange");
-			anim->setLoop(false);
-		}
-	}
-	// Falling
-	if (playerState->isFalling()) {
-		anim->playAnimation("Fall");
-		anim->setLoop(true);
-	}
-	// Landed (depende de que no corten su animacion)
-	if (playerState->hasLanded()) {
-		anim->playAnimation("Land");
-		anim->setLoop(false);
-	}
+
+
 	
+	manageAnimations();
 
 	/*
 	// Update the current state
@@ -161,6 +131,176 @@ void PlayerAnimController::handleData(ComponentData* data)
 		}
 	}
 }
+
+void PlayerAnimController::manageAnimations()
+{
+	if (true/*condiciones que determinen si se esta vivo o muerto*/) {
+		manageKnightAnimations();
+	}
+	else {
+		manageGhostAnimations();
+	}
+}
+
+void PlayerAnimController::manageKnightAnimations()
+{
+	if (manageGroundedAnimations());
+	else if (manageAirAnimations());
+}
+
+void PlayerAnimController::manageGhostAnimations()
+{
+}
+
+bool PlayerAnimController::manageGroundedAnimations()
+{
+	bool result = false;
+	if (playerState->isGrounded()) {
+		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		if (result = manageHurtAnimation());
+		else if (result = manageGroundedAttackAnimation());
+		else if (result = manageJumpAnimation());
+		else if (result = manageLandAnimation());
+		else if (result = manageIdleAnimation());
+		else if (result = manageDashAnimation());
+		else if (result = manageRunAnimation());
+	}
+	return result;
+}
+
+bool PlayerAnimController::manageAirAnimations()
+{
+	bool result = false;
+	if (!playerState->isGrounded()) {
+		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		if (result = manageHurtAnimation());
+		else if (result = manageAirAttackAnimation());
+		else if (result = manageDashAnimation());
+		else if (result = manageFallAnimation());
+	}
+	return result;
+}
+
+bool PlayerAnimController::manageJumpAnimation()
+{
+	if (playerState->isJumping()) { // TODO: añadir condicion de "just started jumping" (a veces falla, las particulas tambien)
+		anim->playAnimation("JumpStart");
+		anim->setLoop(false);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageRunAnimation()
+{
+	if (playerState->isMoving() && playerState->canMove()) {
+		anim->playAnimation("Run");
+		anim->setLoop(true);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageIdleAnimation()
+{
+	if (!playerState->isMoving() && playerState->canMove()) {
+		anim->playAnimation("Idle");
+		anim->setLoop(true);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageLandAnimation()
+{
+	if (playerState->hasLanded()) {
+		anim->playAnimation("Land");
+		anim->setLoop(false);
+		return true;
+	}
+
+	// Evita interrupcion de animaciones de menor prioridad
+	return anim->getCurrentAnimation() == "Land" && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageGroundedAttackAnimation()
+{
+	if (playerState->isQuickAttacking()) {
+		anim->playAnimation("AttackA");
+		anim->setLoop(false);
+		return true;
+	}
+	else if (playerState->isHeavyAttacking()) {
+		anim->playAnimation("AttackB");
+		anim->setLoop(false);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageFallAnimation()
+{
+	bool result = false;
+	if (playerState->isFalling()) {
+		// Caer tras un salto (hacemos transicion)
+		if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded()) {
+			anim->playAnimation("JumpChange");
+			anim->setLoop(false);
+			result = true;
+		}
+		else if (anim->getCurrentAnimation() == "JumpChange") {
+			if (anim->hasEnded()) {	// Que la condicion este dentro, evita que se salte la transicion
+				anim->playAnimation("Fall");
+				anim->setLoop(true);
+			}
+			result = true;
+		}
+		// Caer sin mas (tras un dash por ejemplo)
+		else {
+			anim->playAnimation("Fall");
+			anim->setLoop(true);
+			result = true;
+		}
+	}
+	return result;
+}
+
+bool PlayerAnimController::manageAirAttackAnimation()
+{
+	if (playerState->isQuickAttacking()) {
+		anim->playAnimation("AttackAAir");
+		anim->setLoop(false);
+		return true;
+	}
+	else if (playerState->isHeavyAttacking()) {
+		anim->playAnimation("AttackB");
+		anim->setLoop(false);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageDashAnimation()
+{
+	if (playerState->isDodging()) {
+		anim->playAnimation("DashFront");
+		anim->setLoop(false);
+		return true;
+	}
+	// Evitar interrupcion de prioridades menores
+	return anim->getCurrentAnimation() == "DashFront" && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageHurtAnimation()
+{
+	if (playerState->isHurt()) {
+		anim->playAnimation("Hurt");
+		anim->setLoop(false);
+		return true;
+	}
+	return anim->getCurrentAnimation() == "Hurt" && !anim->hasEnded();
+}
+
 
 /******************************
 	ANIMATION METHODS

@@ -95,6 +95,31 @@ public:
 	virtual void preUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+	void manageAnimations();
+
+	void manageKnightAnimations();
+	void manageGhostAnimations();
+
+	bool manageGroundedAnimations();
+	bool manageAirAnimations();
+
+	// GROUNDED ANIMATIONS
+	bool manageJumpAnimation();
+	bool manageRunAnimation();
+	bool manageIdleAnimation();
+	bool manageLandAnimation();
+	bool manageGroundedAttackAnimation();
+
+	// NOT GROUNDED ANIMATIONS
+	bool manageFallAnimation();
+	bool manageAirAttackAnimation();
+
+	// BOTH GROUNDED AND NOT ANIMATIONS
+	bool manageDashAnimation();
+	bool manageHurtAnimation();
+
+
+
 	void jumpAnimation();
 	void dashAnimation();
 	void tauntAnimation();
