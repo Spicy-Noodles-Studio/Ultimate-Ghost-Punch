@@ -117,6 +117,7 @@ public:
 	bool manageGrabRunAnimation();
 	bool manageGrabJumpAnimation();
 	bool manageGrabLandAnimation();
+	bool manageStunnedAnimations();
 
 	// NOT GROUNDED ANIMATIONS
 	bool manageFallAnimation();
@@ -127,7 +128,7 @@ public:
 	bool manageDashAnimation();
 	bool manageGrabDashAnimation();
 	bool manageHurtAnimation();
-
+	bool manageGrabbedAnimations();
 
 
 	void jumpAnimation();
