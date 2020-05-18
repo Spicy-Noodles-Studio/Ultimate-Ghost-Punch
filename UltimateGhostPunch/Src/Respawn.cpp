@@ -34,9 +34,9 @@ void Respawn::update(float deltaTime)
 {
 	if (time > 0)
 		time -= deltaTime;
-	else if (playerController != nullptr && respawning)
+	else if (respawning)
 	{
-		playerController->setActive(true);
+		if (playerController != nullptr)	playerController->setActive(true);
 		respawning = false;
 	}
 }

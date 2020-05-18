@@ -88,7 +88,12 @@ void AIStateMachine::start()
 
 void AIStateMachine::update(float deltaTime)
 {
-	if (playerState->isIgnoringInput()) return;
+	if (playerState->isRespawning())
+	{
+		addActionInput(ActionInput::STOP);
+	}
+
+	if (playerState != nullptr && (playerState->isIgnoringInput() || playerState->isRespawning())) return;
 	StateMachine::update(deltaTime);
 
 	timerTargetChange += deltaTime;

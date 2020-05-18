@@ -15,7 +15,7 @@
 #include "Movement.h"
 #include "PlayerState.h"
 
-FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(45), blockProb_QAR(5), strongAttackProb_SAR(60), seekProb_SAR(38), blockProb_SAR(2), blockSpamTimeMAX(10), grabProb(2), maxQuickAttacks(3), quickAttackCounter(0), lastAction(ActionInput::STOP), dodgeProb(5)
+FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(45), blockProb_QAR(5), strongAttackProb_SAR(60), seekProb_SAR(38), blockProb_SAR(2), blockSpamTimeMAX(10), grabProb(2), maxQuickAttacks(3), quickAttackCounter(0), lastAction(ActionInput::STOP), dodgeProb(5), maxDistForJump(2)
 {
 }
 
@@ -63,7 +63,7 @@ void FightingState::selectAction()
 
 	if (attack != nullptr && attack->isAttacking()) // Wait until attack ends
 	{
-		LOG("ATACANDO...\n");
+		//LOG("ATACANDO...\n");
 		return;
 	}
 
@@ -95,12 +95,16 @@ void FightingState::selectAction()
 
 	if (targetState != nullptr && !targetState->isGrounded() && jump != nullptr) // Check if target is jumping
 	{
-		jump->jump();
-		turnTowardsTarget();
-		ActionInput action = ActionInput::QUICK_ATTACK;
-		stateMachine->addActionInput(action);
-		lastAction = action;
-		return;
+		float distX = abs(target->transform->getPosition().x - character->transform->getPosition().x);
+		if (distX <= maxDistForJump)
+		{
+			jump->jump();
+			turnTowardsTarget();
+			ActionInput action = ActionInput::QUICK_ATTACK;
+			stateMachine->addActionInput(action);
+			lastAction = action;
+			return;
+		}
 	}
 
 	// QUICK ATTACK RANGE

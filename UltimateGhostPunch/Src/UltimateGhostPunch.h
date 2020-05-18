@@ -45,6 +45,7 @@ public:
 
 	bool isPunching() const;
 	bool isAiming() const;
+	bool isUsed() const;
 	bool punchSuccess() const;
 	void punchSucceeded();
 

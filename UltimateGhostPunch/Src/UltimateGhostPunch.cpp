@@ -140,6 +140,10 @@ bool UltimateGhostPunch::isAiming() const
 {
 	return state == State::CHARGING;
 }
+bool UltimateGhostPunch::isUsed() const
+{
+	return state == State::USED || state == State::SUCCESS ||state == State::PUNCHING;
+}
 bool UltimateGhostPunch::punchSuccess() const
 {
 	return state == State::SUCCESS;

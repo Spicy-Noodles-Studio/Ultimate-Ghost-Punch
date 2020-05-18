@@ -51,6 +51,8 @@ private:
 	float blockSpamTime;
 	float unblockTime; // Time until unblock
 
+	float maxDistForJump; // Max distance to target for jump attack
+
 	bool fighting;
 
 	bool enemyInQuickAttackRange();
