@@ -16,11 +16,12 @@ class GhostNavigation;
 class GhostManager;
 class Attack;
 class Block;
+class Grab;
 class FightingState;
 class PlayerState;
 
 enum class ActionInput {
-	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK, BLOCK, UNBLOCK
+	MOVE_RIGHT, MOVE_LEFT, JUMP, CANCEL_JUMP, DODGE, STOP, GHOST_MOVE, GHOST_PUNCH, QUICK_ATTACK, STRONG_ATTACK, BLOCK, UNBLOCK, GRAB, DROP, FACE_RIGHT, FACE_LEFT
 };
 
 class AIStateMachine :	public StateMachine
@@ -43,6 +44,7 @@ private:
 	GhostManager* ghostManager;
 	Attack* attack;
 	Block* block;
+	Grab* grab;
 	PlayerState* playerState;
 
 	/* States */

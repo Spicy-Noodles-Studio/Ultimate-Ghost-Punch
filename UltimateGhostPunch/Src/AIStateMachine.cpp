@@ -12,11 +12,13 @@
 #include "Jump.h"
 #include "Dodge.h"
 #include "GhostManager.h"
+#include "Health.h"
 #include "GhostMovement.h"
 #include "UltimateGhostPunch.h"
 #include "Attack.h"
 #include "FightingState.h"
 #include "Block.h"
+#include "Grab.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(AIStateMachine);
@@ -51,6 +53,9 @@ void AIStateMachine::start()
 		jump = aux[0]->getComponent<Jump>();
 		block = aux[0]->getComponent<Block>();
 	}
+	std::vector<GameObject*> grabSensor = gameObject->findChildrenWithTag("grabSensor");
+	if (grabSensor.size() > 0)
+		grab = grabSensor[0]->getComponent<Grab>();
 	dodge = gameObject->getComponent<Dodge>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
@@ -184,7 +189,26 @@ void AIStateMachine::processActionInput()
 			if (block != nullptr)
 				block->unblock();
 			break;
-
+		case ActionInput::GRAB:
+			if (grab != nullptr)
+				grab->grab();
+			break;
+		case ActionInput::DROP:
+			if (grab != nullptr)
+				grab->drop();
+			break;
+		case ActionInput::FACE_RIGHT:
+			dir = Vector3::RIGHT;
+			if (movement != nullptr)
+				movement->move(dir);
+			dir = Vector3::ZERO;
+			break;
+		case ActionInput::FACE_LEFT:
+			dir = Vector3::NEGATIVE_RIGHT;
+			if (movement != nullptr)
+				movement->move(dir);
+			dir = Vector3::ZERO;
+			break;
 		default:
 			LOG("ActionInput no procesado");
 			break;
@@ -237,10 +261,15 @@ void AIStateMachine::changeTarget()
 	}
 
 	// TODO: de momento es random, cambiar si se quiere
-	int size = knights->size();
+	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
+	std::vector<GameObject*> alive;
+	for (auto p : players) {
+		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
+	}
+	int size = alive.size();
 
 	do {
-		target = knights->at(rand() % size);
+		target = alive.at(rand() % size);
 	} while (target == gameObject);
 
 	// TO STUFF

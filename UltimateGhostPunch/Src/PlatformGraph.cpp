@@ -53,8 +53,8 @@ void PlatformGraph::start()
 {
 	physicsSystem = PhysicsSystem::GetInstance();
 
-	setLoadFileName(GameManager::GetInstance()->getLevel().second + ".graph");
-	setSaveFileName(GameManager::GetInstance()->getLevel().second + ".graph");
+	setLoadFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
+	setSaveFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
 
 	//If the graph was not loaded we create an empty one
 	if (!loadGraph())

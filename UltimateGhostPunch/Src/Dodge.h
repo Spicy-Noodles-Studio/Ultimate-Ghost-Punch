@@ -35,6 +35,7 @@ public:
 	void dodge();
 	void endDodge();
 	bool isDodging();
+	bool isOnCooldown();
 };
 
 #endif

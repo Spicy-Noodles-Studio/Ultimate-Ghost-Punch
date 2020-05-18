@@ -118,3 +118,8 @@ bool Dodge::isDodging()
 {
 	return state == State::DODGING;
 }
+
+bool Dodge::isOnCooldown()
+{
+	return state != IDLE;
+}
