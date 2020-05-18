@@ -1,0 +1,17 @@
+{
+    "ObjectType": "GAMEOBJECT",
+    "ObjectName": "Trail",
+    "Tag": "trail",
+    "Components":
+    [
+        {
+            "ComponentName": "Transform"
+        },
+        {
+            "ComponentName": "Trail",
+            "ComponentProperties":[
+                [ "trail", "node"]
+            ]
+        }
+    ]
+}

@@ -164,6 +164,9 @@
     <ClCompile Include="..\..\Src\OptionsMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\TrailManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h">
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\StatsMenu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\TrailManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

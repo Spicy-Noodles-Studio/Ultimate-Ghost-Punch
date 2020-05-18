@@ -56,6 +56,12 @@ void Block::update(float deltaTime)
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
+
+		// Shield scale reduction
+		shield->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4, 4, 4));
+		// Shield alpha
+		shield->getComponent<MeshRenderer>()->setFpParam(0, "alpha", blockTime / maxBlockTime);
+
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
@@ -63,11 +69,6 @@ void Block::update(float deltaTime)
 			LOG("BLOCK ENDED\n");
 		}
 	}
-
-	// Shield scale reduction
-	shield->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4,4,4));
-	// Shield alpha
-	shield->getComponent<MeshRenderer>()->setFpParam(0, "alpha", blockTime/maxBlockTime);
 }
 
 void Block::postUpdate(float deltaTime)

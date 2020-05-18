@@ -136,16 +136,7 @@
             "ComponentName": "SoundManager"
         },
         {
-            "ComponentName": "Trail",
-            "ComponentProperties": [
-                ["offset", "-50 100 0"],
-                ["trail", "bone Mano.L"],
-                ["start", "true"],
-                ["colour", "0.8 0.8 0.8"],
-                ["width", "2"],
-                ["alphaChange", "4"],
-                ["colourChange", "1 1 1"]
-            ]
+            "ComponentName": "TrailManager"
         }
     ],
     "Children": [
@@ -266,7 +257,7 @@
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": [
                         [ "mesh", "shield Shield.mesh"],
-                        [ "material", "shield Neon"]
+                        [ "material", "shield Shield"]
                     ]
                 }
             ]
