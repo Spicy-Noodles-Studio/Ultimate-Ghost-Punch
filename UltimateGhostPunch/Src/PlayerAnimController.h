@@ -92,7 +92,7 @@ public:
 	virtual ~PlayerAnimController();
 
 	virtual void start();
-	virtual void preUpdate(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void manageAnimations();
@@ -112,13 +112,20 @@ public:
 	bool manageBlockAnimations();
 	bool manageBlockAttackAnimation();
 	bool manageBlockGrabAnimation();
+	bool manageGrabAnimations(); // Solo empezar a agarrar o terminar (fail)
+	bool manageGrabIdleAnimation();
+	bool manageGrabRunAnimation();
+	bool manageGrabJumpAnimation();
+	bool manageGrabLandAnimation();
 
 	// NOT GROUNDED ANIMATIONS
 	bool manageFallAnimation();
+	bool manageGrabFallAnimation();
 	bool manageAirAttackAnimation();
 
 	// BOTH GROUNDED AND NOT ANIMATIONS
 	bool manageDashAnimation();
+	bool manageGrabDashAnimation();
 	bool manageHurtAnimation();
 
 

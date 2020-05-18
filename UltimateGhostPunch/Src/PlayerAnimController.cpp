@@ -72,17 +72,8 @@ void PlayerAnimController::start()
 	}
 }
 
-void PlayerAnimController::preUpdate(float deltaTime)
-{
-
-	// Dodge
-	if (playerState->isDodging()) {
-		anim->playAnimation("DashFront");
-		anim->setLoop(false);
-	}
-
-
-	
+void PlayerAnimController::postUpdate(float deltaTime)
+{	
 	manageAnimations();
 
 	/*
@@ -158,6 +149,7 @@ bool PlayerAnimController::manageGroundedAnimations()
 	if (playerState->isGrounded()) {
 		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
 		if (result = manageHurtAnimation());
+		else if (result = manageGrabAnimations());
 		else if (result = manageBlockAnimations());
 		else if (result = manageGroundedAttackAnimation());
 		else if (result = manageJumpAnimation());
@@ -184,7 +176,9 @@ bool PlayerAnimController::manageAirAnimations()
 
 bool PlayerAnimController::manageJumpAnimation()
 {
-	if (playerState->isJumping()) { // TODO: añadir condicion de "just started jumping" (a veces falla, las particulas tambien)
+	if (playerState->hasJumped()) { 
+		if (manageGrabJumpAnimation()) return true;
+
 		anim->playAnimation("JumpStart");
 		anim->setLoop(false);
 		return true;
@@ -195,6 +189,8 @@ bool PlayerAnimController::manageJumpAnimation()
 bool PlayerAnimController::manageRunAnimation()
 {
 	if (playerState->isMoving() && playerState->canMove()) {
+		if (manageGrabRunAnimation()) return true;
+
 		anim->playAnimation("Run");
 		anim->setLoop(true);
 		return true;
@@ -205,6 +201,8 @@ bool PlayerAnimController::manageRunAnimation()
 bool PlayerAnimController::manageIdleAnimation()
 {
 	if (!playerState->isMoving() && playerState->canMove()) {
+		if (manageGrabIdleAnimation()) return true;
+
 		anim->playAnimation("Idle");
 		anim->setLoop(true);
 		return true;
@@ -215,13 +213,16 @@ bool PlayerAnimController::manageIdleAnimation()
 bool PlayerAnimController::manageLandAnimation()
 {
 	if (playerState->hasLanded()) {
+		if (manageGrabLandAnimation()) return true;
+
 		anim->playAnimation("Land");
 		anim->setLoop(false);
 		return true;
 	}
 
 	// Evita interrupcion de animaciones de menor prioridad
-	return anim->getCurrentAnimation() == "Land" && !anim->hasEnded();
+	std::string animationName = anim->getCurrentAnimation();
+	return (animationName == "Land" || animationName == "LandGrabbing") && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageGroundedAttackAnimation()
@@ -243,9 +244,9 @@ bool PlayerAnimController::manageGroundedAttackAnimation()
 
 bool PlayerAnimController::manageBlockAnimations()
 {
+	std::string currentAnimation = anim->getCurrentAnimation();
 	// Transicion de Empieza bloqueo -> Estar bloqueando
-	if (playerState->isBlocking()) {
-		std::string currentAnimation = anim->getCurrentAnimation();
+	if (playerState->isBlocking() || playerState->hasBlockedGrab()) {
 		bool previouslyBlocking =	currentAnimation == "BlockStart"	||
 									currentAnimation == "BlockHold"		||
 									currentAnimation == "BlockAttack"	||
@@ -270,13 +271,13 @@ bool PlayerAnimController::manageBlockAnimations()
 		return true;
 	}
 	// Si no esta bloqueando, pero lo estaba
-	else if (anim->getCurrentAnimation() == "BlockStart" || anim->getCurrentAnimation() == "BlockHold") {
+	else if (currentAnimation == "BlockStart" || currentAnimation == "BlockHold") {
 		anim->playAnimation("BlockEnd");
 		anim->setLoop(false);
 		return true;
 	}
 
-	return anim->getCurrentAnimation() == "BlockEnd" && !anim->hasEnded();
+	return (currentAnimation == "BlockEnd" || currentAnimation == "Knockback") && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageBlockAttackAnimation()
@@ -292,7 +293,6 @@ bool PlayerAnimController::manageBlockAttackAnimation()
 bool PlayerAnimController::manageBlockGrabAnimation()
 {
 	// Bloquea un agarre
-	// TODO: hacer que PlayerState sepa si ha Stuneado a alguien en el ciclo actual (esto no funciona)
 	if (playerState->hasBlockedGrab()) {
 		LOG("BLOCKED GRAB");
 		anim->playAnimation("Knockback");
@@ -302,29 +302,113 @@ bool PlayerAnimController::manageBlockGrabAnimation()
 	return anim->getCurrentAnimation() == "Knockback" && !anim->hasEnded();
 }
 
+bool PlayerAnimController::manageGrabAnimations()
+{
+	// TODO: ESTO SOLO TIENE SENTIDO SI SE ESTA EN IDLE
+	// TODO: cambiar condiciones a algo mas logico
+	/*if (playerState->hasMissedGrab()) {
+		anim->playAnimation("GrabStart");
+		anim->setLoop(false);
+		return true;
+	}
+	else if (playerState->hasMissedGrab()) {
+		anim->playAnimation("GrabFail");
+		anim->setLoop(false);
+		return true;
+	}
+
+	std::string animationName = anim->getCurrentAnimation();*/
+	return false; // (animationName == "GrabStart" || animationName == "GrabFail") && !anim->hasEnded();;
+}
+
+bool PlayerAnimController::manageGrabIdleAnimation()
+{
+	if (playerState->isGrabbing()) {
+		anim->playAnimation("GrabHold");
+		anim->setLoop(true);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageGrabRunAnimation()
+{
+	if (playerState->isGrabbing()) {
+		anim->playAnimation("RunGrabbing");
+		anim->setLoop(true);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageGrabJumpAnimation()
+{
+	if (playerState->isGrabbing()) {
+		anim->playAnimation("JumpStartGrabbing");
+		anim->setLoop(false);
+		return true;
+	}
+	return false;
+}
+
+bool PlayerAnimController::manageGrabLandAnimation()
+{
+	if (playerState->isGrabbing()) {
+		anim->playAnimation("LandGrabbing");
+		anim->setLoop(false);
+		return true;
+	}
+
+	return false;
+}
+
 bool PlayerAnimController::manageFallAnimation()
 {
 	bool result = false;
 	if (playerState->isFalling()) {
+		if (manageGrabFallAnimation()) return true;
+
 		// Caer tras un salto (hacemos transicion)
 		if (anim->getCurrentAnimation() == "JumpStart" && anim->hasEnded()) {
 			anim->playAnimation("JumpChange");
 			anim->setLoop(false);
-			result = true;
 		}
 		else if (anim->getCurrentAnimation() == "JumpChange") {
 			if (anim->hasEnded()) {	// Que la condicion este dentro, evita que se salte la transicion
 				anim->playAnimation("Fall");
 				anim->setLoop(true);
 			}
-			result = true;
 		}
 		// Caer sin mas (tras un dash por ejemplo)
 		else {
 			anim->playAnimation("Fall");
 			anim->setLoop(true);
-			result = true;
 		}
+		result = true;
+	}
+	return result;
+}
+
+bool PlayerAnimController::manageGrabFallAnimation()
+{
+	bool result = false;
+	if (playerState->isGrabbing()) {
+		// Caer tras un salto (hacemos transicion)
+		if (anim->getCurrentAnimation() == "JumpStartGrabbing" && anim->hasEnded()) {
+			anim->playAnimation("JumpChangeGrabbing");
+			anim->setLoop(false);
+		}
+		else if (anim->getCurrentAnimation() == "JumpChangeGrabbing") {
+			if (anim->hasEnded()) {
+				anim->playAnimation("FallGrabbing");
+				anim->setLoop(true);
+			}
+		}
+		else {
+			anim->playAnimation("FallGrabbing");
+			anim->setLoop(true);
+		}
+		result = true;
 	}
 	return result;
 }
@@ -349,12 +433,25 @@ bool PlayerAnimController::manageAirAttackAnimation()
 bool PlayerAnimController::manageDashAnimation()
 {
 	if (playerState->isDodging()) {
+		if (manageGrabDashAnimation()) return true;
+
 		anim->playAnimation("DashFront");
 		anim->setLoop(false);
 		return true;
 	}
 	// Evitar interrupcion de prioridades menores
-	return anim->getCurrentAnimation() == "DashFront" && !anim->hasEnded();
+	std::string animationName = anim->getCurrentAnimation();
+	return (animationName == "DashFront" || animationName == "DashFrontGrabbing") && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageGrabDashAnimation()
+{
+	if (playerState->isGrabbing()) {
+		anim->playAnimation("DashFrontGrabbing");
+		anim->setLoop(false);
+		return true;
+	}
+	return false;
 }
 
 bool PlayerAnimController::manageHurtAnimation()
