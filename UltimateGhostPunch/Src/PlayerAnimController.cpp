@@ -158,6 +158,7 @@ bool PlayerAnimController::manageGroundedAnimations()
 	if (playerState->isGrounded()) {
 		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
 		if (result = manageHurtAnimation());
+		else if (result = manageBlockAnimations());
 		else if (result = manageGroundedAttackAnimation());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
@@ -235,7 +236,70 @@ bool PlayerAnimController::manageGroundedAttackAnimation()
 		anim->setLoop(false);
 		return true;
 	}
-	return false;
+
+	std::string animationName = anim->getCurrentAnimation();
+	return (animationName == "AttackA" || animationName == "AttackB") && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageBlockAnimations()
+{
+	// Transicion de Empieza bloqueo -> Estar bloqueando
+	if (playerState->isBlocking()) {
+		std::string currentAnimation = anim->getCurrentAnimation();
+		bool previouslyBlocking =	currentAnimation == "BlockStart"	||
+									currentAnimation == "BlockHold"		||
+									currentAnimation == "BlockAttack"	||
+									currentAnimation == "BlockGrab";
+		// ESTOS DOS SON MAS PRIORITARIOS A QUE EMPIEZE LA ANIMACION DE TRANSICION
+		if (manageBlockAttackAnimation()) return true;
+		if (manageBlockGrabAnimation()) return true;
+
+		// TRANSICIONES NORMALES
+		else if (!previouslyBlocking) {
+			anim->playAnimation("BlockStart");
+			anim->setLoop(false);
+		}
+		else if (previouslyBlocking) {
+			//Si era el comienzo, esperamos a que termine
+			if (currentAnimation == "BlockStart" && !anim->hasEnded()) return true;
+
+			anim->playAnimation("BlockHold");
+			anim->setLoop(true);
+		}
+
+		return true;
+	}
+	// Si no esta bloqueando, pero lo estaba
+	else if (anim->getCurrentAnimation() == "BlockStart" || anim->getCurrentAnimation() == "BlockHold") {
+		anim->playAnimation("BlockEnd");
+		anim->setLoop(false);
+		return true;
+	}
+
+	return anim->getCurrentAnimation() == "BlockEnd" && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageBlockAttackAnimation()
+{
+	if (playerState->hasBlocked()) {
+		anim->playAnimation("BlockAttack");
+		anim->setLoop(false);
+		return true;
+	}
+	return anim->getCurrentAnimation() == "BlockAttack" && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageBlockGrabAnimation()
+{
+	// Bloquea un agarre
+	// TODO: hacer que PlayerState sepa si ha Stuneado a alguien en el ciclo actual (esto no funciona)
+	if (playerState->hasBlockedGrab()) {
+		LOG("BLOCKED GRAB");
+		anim->playAnimation("Knockback");
+		anim->setLoop(false);
+		return true;
+	}
+	return anim->getCurrentAnimation() == "Knockback" && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageFallAnimation()
@@ -277,7 +341,9 @@ bool PlayerAnimController::manageAirAttackAnimation()
 		anim->setLoop(false);
 		return true;
 	}
-	return false;
+
+	std::string animationName = anim->getCurrentAnimation();
+	return (animationName == "AttackAAir" || animationName == "AttackB") && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageDashAnimation()

@@ -109,6 +109,9 @@ public:
 	bool manageIdleAnimation();
 	bool manageLandAnimation();
 	bool manageGroundedAttackAnimation();
+	bool manageBlockAnimations();
+	bool manageBlockAttackAnimation();
+	bool manageBlockGrabAnimation();
 
 	// NOT GROUNDED ANIMATIONS
 	bool manageFallAnimation();
