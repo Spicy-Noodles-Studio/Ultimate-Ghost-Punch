@@ -42,6 +42,8 @@ private:
 	int initialTime;
 	bool timeMode;
 
+	float initialBrightness;
+
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -98,6 +100,8 @@ public:
 
 	void pauseAllSounds();
 	void resumeAllSound();
+
+	float getInitialBrightness() const;
 };
 
 #endif

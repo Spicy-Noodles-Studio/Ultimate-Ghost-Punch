@@ -2,6 +2,7 @@
 #include <ComponentRegister.h>
 #include <SoundEmitter.h>
 #include <GameObject.h>
+#include <WindowManager.h>
 
 #include "Timer.h"
 #include "GhostManager.h"
@@ -15,14 +16,17 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5)
 {
-	if (instance == nullptr)
+	if (instance == nullptr) {
 		instance = this;
+		WindowManager::GetInstance()->setBrightness(initialBrightness);
+	}
 	else
 		destroy(gameObject);
 
 	playerIndexes = std::vector<int>(4, -1);
+
 }
 
 GameManager::~GameManager()
@@ -241,4 +245,9 @@ void GameManager::resumeAllSound()
 		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
 		if (emitter != nullptr) emitter->resumeAll();
 	}
+}
+
+float GameManager::getInitialBrightness() const
+{
+	return initialBrightness;
 }
