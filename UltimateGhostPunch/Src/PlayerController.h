@@ -80,9 +80,6 @@ public:
 
 	int getControllerIndex()const;
 	void setControllerIndex(int index);
-
-	bool isGrabed();
-	void setGrabed(bool grabed);
 };
 
 #endif

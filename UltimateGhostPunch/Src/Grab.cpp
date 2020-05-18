@@ -164,7 +164,7 @@ void Grab::grab()
 
 	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
 	{
-		if (enemy != nullptr && !enemy->getComponent<PlayerController>()->isGrabed() && !enemy->getComponent<Health>()->isInvencible())
+		if (enemy != nullptr && !enemy->getComponent<PlayerState>()->isGrabbed() && !enemy->getComponent<Health>()->isInvencible())
 			grabEnemy();
 		else
 			grabMissed();
@@ -244,12 +244,11 @@ void Grab::resetEnemy()
 		enemyRB->setActive(true);
 	}
 
+	PlayerState* enemyState = enemy->getComponent<PlayerState>();
+	if (enemyState != nullptr) enemyState->setThrown();
+
 	//Return control to the enemy
-	if (enemyController != nullptr)
-	{
-		enemyController->setGrabed(false);
-		enemyController->setActive(true);
-	}
+	if (enemyController != nullptr) enemyController->setActive(true);
 
 	//if (enemyAnim != nullptr)
 	//	enemyAnim->thrownAwayAnimation();
@@ -308,15 +307,14 @@ void Grab::grabEnemy()
 
 	state = GRABBED;
 	remain = grabDuration;
+	
+	PlayerState* enemyState = enemy->getComponent<PlayerState>();
+	if (enemyState != nullptr) enemyState->setGrabbed();
+
 	enemyController = enemy->getComponent<PlayerController>();
+	if (enemyController != nullptr) enemyController->setActive(false); //Freeze the enemy
+	
 	enemyDiff = enemy->transform->getPosition() - parent->transform->getPosition();
-
-	if (enemyController != nullptr)
-	{
-		enemyController->setGrabed(true);
-		enemyController->setActive(false); //Freeze the enemy
-	}
-
 	grabbedPosition = parent->transform->getPosition() + Vector3(0, parent->transform->getScale().y * grabVerticalOffset, 0);
 
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();

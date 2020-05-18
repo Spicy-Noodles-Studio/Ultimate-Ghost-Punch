@@ -16,7 +16,7 @@
 REGISTER_FACTORY(PlayerState);
 
 PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr),
-health(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr)
+health(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false)
 {
 
 }
@@ -49,6 +49,12 @@ void PlayerState::start()
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	respawn = gameObject->getComponent<Respawn>();
+}
+
+void PlayerState::postUpdate(float deltaTime)
+{
+	if (taunt > 0)taunt--;
+	if (thrown > 0)thrown--;
 }
 
 bool PlayerState::canAttack() const
@@ -167,6 +173,11 @@ bool PlayerState::isFalling() const
 	return jump != nullptr && jump->isFalling();
 }
 
+bool PlayerState::isGrabbed() const
+{
+	return grabbed;
+}
+
 bool PlayerState::hasBlocked() const
 {
 	return block != nullptr && block->hasBlocked();
@@ -220,4 +231,30 @@ bool PlayerState::hasGhostDied() const
 bool PlayerState::hasKnightDied() const
 {
 	return health != nullptr && !health->isAlive();
+}
+
+bool PlayerState::hasBeenThrown() const
+{
+	return thrown > 0;
+}
+
+bool PlayerState::hasTaunted() const
+{
+	return taunt > 0;
+}
+
+void PlayerState::setGrabbed() 
+{
+	grabbed = true;
+}
+
+void PlayerState::setThrown()
+{
+	grabbed = false;
+	thrown = 2;
+}
+
+void PlayerState::setTaunting()
+{
+	taunt = 2;
 }

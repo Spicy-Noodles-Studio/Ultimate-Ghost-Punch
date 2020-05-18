@@ -60,8 +60,10 @@ void SoundManager::update(float deltaTime)
 
 void SoundManager::playTaunt()
 {
-	if (playerState->canTaunt())
+	if (playerState != nullptr && playerState->canTaunt()) {
 		playSound(getRandomSound(tauntSounds));
+		playerState->setTaunting();
+	}
 }
 
 void SoundManager::manageJumpSound()
@@ -124,7 +126,7 @@ void SoundManager::manageGrabSound()
 
 void SoundManager::manageThrowSound()
 {
-	playSoundInstant(getRandomSound(throwSounds), hasDroppedGrab)
+	playSoundInstant(getRandomSound(throwSounds), hasBeenThrown)
 }
 
 void SoundManager::manageGrabBlockedSound()

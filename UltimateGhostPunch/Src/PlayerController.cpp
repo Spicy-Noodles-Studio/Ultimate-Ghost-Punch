@@ -191,16 +191,6 @@ void PlayerController::setControllerIndex(int index)
 	controllerIndex = index;
 }
 
-bool PlayerController::isGrabed()
-{
-	return grabed;
-}
-
-void PlayerController::setGrabed(bool grabed)
-{
-	this->grabed = grabed;
-}
-
 bool PlayerController::getKeyDown(const std::string& key)
 {
 	return controllerIndex == 4 && inputSystem->getKeyPress(key);

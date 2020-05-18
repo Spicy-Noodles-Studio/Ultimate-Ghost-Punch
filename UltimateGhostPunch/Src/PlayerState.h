@@ -29,11 +29,16 @@ private:
 	UltimateGhostPunch* ghostPunch;
 	Respawn* respawn;
 
+	int thrown;
+	int taunt;
+	bool grabbed;
+
 public:
 	PlayerState(GameObject* gameObject);
 	virtual ~PlayerState();
 
 	virtual void start();
+	virtual void postUpdate(float deltaTime);
 
 	bool canAttack() const;
 	bool canBlock() const;
@@ -59,6 +64,7 @@ public:
 	bool isGhost() const;
 	bool isRespawning() const;
 	bool isFalling() const;
+	bool isGrabbed() const;
 
 	bool hasBlocked() const;
 	bool hasLanded() const;
@@ -71,6 +77,12 @@ public:
 	bool hasPunchSucceeded() const;
 	bool hasGhostDied() const;
 	bool hasKnightDied() const;
+	bool hasBeenThrown() const;
+	bool hasTaunted() const;
+
+	void setGrabbed();
+	void setThrown();
+	void setTaunting();
 };
 
 #endif
