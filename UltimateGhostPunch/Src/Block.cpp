@@ -10,7 +10,7 @@
 
 REGISTER_FACTORY(Block);
 
-Block::Block(GameObject* gameObject) : UserComponent(gameObject), parent(nullptr), grounded(false), blocking(false), blocked(false), maxBlockTime(0.5f), blockTime(0.5f),
+Block::Block(GameObject* gameObject) : UserComponent(gameObject), parent(nullptr), grounded(false), blocking(false), blocked(0), blockedGrab(0), maxBlockTime(0.5f), blockTime(0.5f),
 blockRegenTime(1.5f), blockGrabMargin(0.25f), timeElapsed(0.0f), blockDirection(0)
 {
 
@@ -55,7 +55,7 @@ void Block::update(float deltaTime)
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
-			blocking = false;
+			unblock();
 			LOG("BLOCK ENDED\n");
 		}
 	}
@@ -63,7 +63,8 @@ void Block::update(float deltaTime)
 
 void Block::postUpdate(float deltaTime)
 {
-	blocked = false;
+	if (blocked > 0)blocked--;
+	if (blockedGrab > 0)blockedGrab--;
 }
 
 void Block::handleData(ComponentData* data)
@@ -157,11 +158,17 @@ bool Block::blockAttack(Vector3 otherPosition)
 		//if (anim != nullptr)
 		//	anim->blockedAttackAnimation();
 
-		blocked = true;
+		blocked = 2;
 		return true;
 	}
 
 	return false;
+}
+
+void Block::grabBlocked()
+{
+	blockedGrab = 2;
+	unblock();
 }
 
 bool Block::canBlockGrab() const
@@ -177,4 +184,9 @@ bool Block::isBlocking() const
 bool Block::hasBlocked() const
 {
 	return blocked;
+}
+
+bool Block::hasBlockedGrab() const
+{
+	return blockedGrab;
 }

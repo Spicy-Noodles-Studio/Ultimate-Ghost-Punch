@@ -60,12 +60,13 @@ void SoundManager::update(float deltaTime)
 
 void SoundManager::playTaunt()
 {
-	playSound(getRandomSound(tauntSounds));
+	if (playerState->canTaunt())
+		playSound(getRandomSound(tauntSounds));
 }
 
 void SoundManager::manageJumpSound()
 {
-	playSoundOnce(getRandomSound(jumpSounds), isJumping, jumpStarted);
+	playSoundOnce(getRandomSound(jumpSounds), hasJumped, jumpStarted);
 }
 
 void SoundManager::manageLandSound()

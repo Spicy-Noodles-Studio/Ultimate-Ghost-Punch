@@ -17,7 +17,7 @@ REGISTER_FACTORY(Attack);
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
 										 strongAttackDamage(2), quickAttackDamage(1), strongChargeTime(0.75f), quickChargeTime(0.5f), chargeTime(0), strongAttackCooldown(2.0f),
 										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), attackTrigger(nullptr), score(nullptr), hit(false)
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), attackTrigger(nullptr), score(nullptr), hit(0)
 {
 
 }
@@ -66,7 +66,7 @@ void Attack::update(float deltaTime)
 
 void Attack::postUpdate(float deltaTime)
 {
-	hit = false;
+	if (hit > 0)hit--;
 }
 
 void Attack::handleData(ComponentData* data)
@@ -153,7 +153,7 @@ void Attack::onObjectStay(GameObject* other)
 			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
 			{
 				enemyHealth->receiveDamage(damage);
-				hit = true;
+				hit = 2;
 
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 				if (otherIndex != nullptr)
@@ -258,5 +258,5 @@ bool Attack::isHeavyAttacking() const
 
 bool Attack::hasHit() const
 {
-	return hit;
+	return hit > 0;
 }

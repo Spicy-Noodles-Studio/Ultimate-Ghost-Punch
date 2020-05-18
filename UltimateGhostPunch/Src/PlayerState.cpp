@@ -86,6 +86,12 @@ bool PlayerState::canGhostMove() const
 	return  (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch == nullptr || !ghostPunch->isPunching());
 }
 
+bool PlayerState::canTaunt() const
+{
+	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) && 
+		(attack == nullptr || !attack->isAttacking()) && (grab == nullptr || !grab->isGrabbing()) && (jump == nullptr || jump->isGrounded());
+}
+
 bool PlayerState::isMoving() const
 {
 	return movement != nullptr && movement->isMoving();
@@ -171,6 +177,11 @@ bool PlayerState::hasLanded() const
 	return (ghostManager == nullptr || !ghostManager->isGhost()) && jump != nullptr && jump->hasLanded();
 }
 
+bool PlayerState::hasJumped() const
+{
+	return jump != nullptr && jump->hasJumped();
+}
+
 bool PlayerState::hasHit() const
 {
 	return attack != nullptr && attack->hasHit();
@@ -178,7 +189,7 @@ bool PlayerState::hasHit() const
 
 bool PlayerState::hasBlockedGrab() const
 {
-	return isStunned();
+	return block != nullptr && block->hasBlockedGrab();
 }
 
 bool PlayerState::hasDroppedGrab() const

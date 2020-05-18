@@ -26,7 +26,7 @@ private:
 	float attackDuration; // The time that the attack remains active
 	float activeTime;
 
-	bool hit;
+	int hit;
 
 	enum AttackType
 	{

@@ -19,7 +19,7 @@ REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
 									 grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), controller(nullptr), myAnim(nullptr), enemy(nullptr), enemyController(nullptr), enemyAnim(nullptr),
-									 enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr)
+									 enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr), missed(0), dropped(0)
 {
 
 }
@@ -45,9 +45,6 @@ void Grab::start()
 
 void Grab::update(float deltaTime)
 {
-	missed = false;
-	dropped = false;
-
 	if (remain > 0.0f) remain -= deltaTime;
 	if (grabTimer > 0.0f) grabTimer -= deltaTime;
 
@@ -90,6 +87,12 @@ void Grab::update(float deltaTime)
 	}
 
 	prevOrientation = newOrientation;
+}
+
+void Grab::postUpdate(float deltaTime)
+{
+	if (missed > 0)missed--;
+	if (dropped > 0)dropped--;
 }
 
 void Grab::onObjectStay(GameObject* other)
@@ -192,7 +195,7 @@ void Grab::drop()
 	state = IDLE;
 	grabTimer = cooldown;
 
-	dropped = true;
+	dropped = 2;
 }
 
 void Grab::grabMissed()
@@ -200,7 +203,7 @@ void Grab::grabMissed()
 	//if (myAnim != nullptr) myAnim->grabFailedAnimation();
 	
 	state = IDLE;
-	missed = true;
+	missed = 2;
 }
 
 bool Grab::isGrabbing() const
@@ -220,12 +223,12 @@ bool Grab::isStunned() const
 
 bool Grab::hasMissed() const
 {
-	return missed;
+	return missed > 0;
 }
 
 bool Grab::hasDropped() const
 {
-	return dropped;
+	return dropped > 0;
 }
 
 void Grab::resetEnemy()
@@ -280,6 +283,7 @@ void Grab::grabEnemy()
 		if (dir != enemyDir) // ONLY BLOCK if blocking dir is correct
 		{
 			LOG("GRAB BLOCKED!");
+			enemyBlock->grabBlocked();
 			state = BLOCKED;
 			remain = freezeDuration;
 			if (controller != nullptr)

@@ -18,7 +18,9 @@ private:
 
 	bool grounded;
 	bool blocking;
-	bool blocked;
+
+	int blocked;
+	int blockedGrab;
 
 	int blockDirection;
 
@@ -37,9 +39,12 @@ public:
 	void unblock();
 	bool blockAttack(Vector3 otherPosition);
 
+	void grabBlocked();
+
 	bool canBlockGrab() const;
 	bool isBlocking() const;
 	bool hasBlocked() const; // Return if it has just blocked an attack (only true during current frame)
+	bool hasBlockedGrab() const; // Return if it has just blocked a grab attack (only true during current frame)
 };
 
 #endif

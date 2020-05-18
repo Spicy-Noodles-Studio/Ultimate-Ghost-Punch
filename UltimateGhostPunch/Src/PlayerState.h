@@ -42,6 +42,7 @@ public:
 	bool canMove() const;
 	bool canJump() const;
 	bool canGhostMove() const;
+	bool canTaunt() const;
 
 	bool isMoving() const;
 	bool isJumping() const;
@@ -61,6 +62,7 @@ public:
 
 	bool hasBlocked() const;
 	bool hasLanded() const;
+	bool hasJumped() const;
 	bool hasHit() const;
 	bool hasBlockedGrab() const;
 	bool hasDroppedGrab() const;
