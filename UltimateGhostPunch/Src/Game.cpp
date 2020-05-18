@@ -92,6 +92,8 @@ void Game::update(float deltaTime)
 	}
 
 	if (end && !cameraEffects->isFading()) SceneManager::GetInstance()->changeScene("StatsMenu");
+
+	
 }
 
 void Game::playerDie(int index)
@@ -105,6 +107,11 @@ void Game::playerDie(int index)
 		chooseWinner();
 	else
 		gameManager->setPlayersAlive(nPlayers);
+}
+
+CameraEffects* Game::getCameraEffects()
+{
+	return cameraEffects;
 }
 
 void Game::createLevel()

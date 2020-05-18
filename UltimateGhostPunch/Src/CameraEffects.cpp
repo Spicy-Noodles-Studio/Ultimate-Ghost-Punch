@@ -56,11 +56,12 @@ void CameraEffects::update(float deltaTime)
 	}
 	else if (state == SHAKE)
 	{
-		cam->rotate(rotationDir * dir);
-		moves += dir;
-		time += 20;
 
-		if ((moves >= maxRange && dir > 0) || (moves <= -minRange && dir < 0))
+		cam->rotate(rotationDir * dir * vel * deltaTime);
+		moves += dir*vel*deltaTime;
+		time += deltaTime * 1000;
+
+		if ((moves >= maxRange && dir > 0) || (moves <= minRange && dir < 0))
 			dir *= -1;
 
 		if (time >= duration)

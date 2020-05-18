@@ -77,6 +77,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie(int index);
+	CameraEffects* getCameraEffects();
 };
 
 #endif
