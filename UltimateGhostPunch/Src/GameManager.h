@@ -69,6 +69,8 @@ public:
 
 	std::vector<Vector3>& getPlayerColours();
 	std::vector<GameObject*>& getKnights();
+	// Returns a vector with the player currently active
+	std::vector<GameObject*> getAlivePlayers();
 
 	void emptyKnights();
 

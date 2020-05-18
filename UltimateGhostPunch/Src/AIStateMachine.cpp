@@ -261,12 +261,10 @@ void AIStateMachine::changeTarget()
 	}
 
 	// TODO: de momento es random, cambiar si se quiere
-	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
-	std::vector<GameObject*> alive;
-	for (auto p : players) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
-	}
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 	int size = alive.size();
+	// Check if only the AI is alive
+	if (size <= 1) return;
 
 	do {
 		target = alive.at(rand() % size);

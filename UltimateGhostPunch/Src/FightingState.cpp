@@ -43,6 +43,14 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
+	if (!character->getComponent<Health>()->isAlive())
+		return;
+
+	if (character->getComponent<Health>()->isInvencible())
+		return;
+
+
+
 	if (lastAction == ActionInput::DODGE && !dodgeComp->isDodging()) turnTowardsTarget(); // Turn towards target after dodge
 
 	if (blockComp != nullptr && blockComp->isBlocking())
@@ -145,7 +153,6 @@ void FightingState::quickAttack()
 	}
 	else if(dodgeComp != nullptr && !dodgeComp->isOnCooldown() && pState != nullptr && pState->canDodge())
 	{
-		LOG("QUICK ATTACK CAP REACHED!\n");
 		turnBackOnTarget();
 		dodge();
 	}

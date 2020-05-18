@@ -103,7 +103,7 @@ void CameraController::handleState()
 float CameraController::getMaxDistBetweenPlayers()
 {
 	// Vector with every player alive
-	std::vector<GameObject*> alive = getAlivePlayers();
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 
 	// number of players alive
 	int n = alive.size();
@@ -153,7 +153,7 @@ void CameraController::deactivateSlowMo()
 Vector3 CameraController::getMidPointBetweenPlayers()
 {
 	// Vector with every player alive
-	std::vector<GameObject*> alive = getAlivePlayers();
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 
 	// number of players alive
 	int n = alive.size();
@@ -196,14 +196,4 @@ GameObject* CameraController::someonePunching()
 
 	if (i < n) return players[i];
 	return nullptr;
-}
-
-std::vector<GameObject*> CameraController::getAlivePlayers()
-{
-	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
-	std::vector<GameObject*> alive;
-	for (auto p : players) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
-	}
-	return alive;
 }

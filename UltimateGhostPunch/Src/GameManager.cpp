@@ -5,6 +5,7 @@
 
 #include "Timer.h"
 #include "GhostManager.h"
+#include "Health.h"
 
 REGISTER_FACTORY(GameManager);
 
@@ -123,6 +124,16 @@ std::vector<Vector3>& GameManager::getPlayerColours()
 std::vector<GameObject*>& GameManager::getKnights()
 {
 	return knights;
+}
+
+
+std::vector<GameObject*> GameManager::getAlivePlayers()
+{
+	std::vector<GameObject*> alive;
+	for (GameObject* p : knights) {
+		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
+	}
+	return alive;
 }
 
 void GameManager::emptyKnights()
