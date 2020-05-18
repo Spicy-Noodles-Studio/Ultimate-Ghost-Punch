@@ -8,13 +8,16 @@ in mat4 vProjMat;
 uniform vec3 cameraPos;
 
 uniform float alpha;
+uniform float r;
+uniform float g;
+uniform float b;
 
 void main()
 {
 	vec3 normal = gl_FrontFacing ? vNormal : -vNormal;
 
 	/* LAYER WEIGHT -> FACING */
-	float blend = float(0.5);
+	float blend = float(0.8);
 	vec3 I = cameraPos.xyz - vVertex.xyz;
 	vec3 Iview = (vProjMat[3][3] == 0.0) ? normalize(I) : vec3(0.0, 0.0, -1.0);
 	vec3 N = normalize(normal);
@@ -30,7 +33,7 @@ void main()
 	vec4 bsdf = vec4(1.0, 1.0, 1.0, 0.0);
 
 	/* EMISSION -> EMISSION */
-	vec4 color = vec4(0.06, 0.3, 0.8, alpha);
+	vec4 color = vec4(r, g, b, alpha);
 	float strength = 1.0;
 	vec4 emission = color * strength;
 

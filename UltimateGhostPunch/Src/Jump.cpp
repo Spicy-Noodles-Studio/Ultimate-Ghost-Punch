@@ -11,7 +11,7 @@
 REGISTER_FACTORY(Jump);
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f),
-									 playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr), landed(false)
+playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr), landed(0), jumped(0)
 {
 
 }
@@ -37,7 +37,8 @@ void Jump::update(float deltaTime)
 
 void Jump::postUpdate(float deltaTime)
 {
-	landed = false;
+	if (landed > 0)landed--;;
+	if (jumped > 0)jumped--;
 }
 
 void Jump::onObjectEnter(GameObject* other)
@@ -49,7 +50,7 @@ void Jump::onObjectEnter(GameObject* other)
 	{
 		if (isFloor) {
 			grounded = true;
-			landed = true;
+			landed = 2;
 		}
 
 		coyoteTimer = 0.0f;
@@ -110,10 +111,11 @@ void Jump::jump()
 	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
 	rigidBody->addImpulse(Vector3(0.0, 1.0, 0.0) * jumpForce);
 	jumping = true;
+	jumped = 2;
 	coyoteTimer = 0.0f;
 
-	auto animController = parent->getComponent<PlayerAnimController>();
-	if (animController != nullptr) animController->jumpAnimation();
+	//auto animController = parent->getComponent<PlayerAnimController>();
+	//if (animController != nullptr) animController->jumpAnimation();
 }
 
 void Jump::cancelJump()
@@ -138,22 +140,32 @@ void Jump::setCoyoteTime(float time)
 	coyoteTime = time;
 }
 
-bool Jump::isGrounded()
+bool Jump::isGrounded() const
 {
 	return grounded;
 }
 
-bool Jump::isJumping()
+bool Jump::isJumping() const
 {
 	return jumping;
 }
 
-bool Jump::canJump()
+bool Jump::isFalling() const
+{
+	return rigidBody->getLinearVelocity().y <= -1.0f;
+}
+
+bool Jump::canJump() const
 {
 	return grounded || playersBelow || coyoteTimer > 0.0f;
 }
 
 bool Jump::hasLanded() const
 {
-	return landed;
+	return landed > 0;
+}
+
+bool Jump::hasJumped() const
+{
+	return jumped > 0;
 }

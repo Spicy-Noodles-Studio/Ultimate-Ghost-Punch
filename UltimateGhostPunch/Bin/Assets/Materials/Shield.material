@@ -19,6 +19,9 @@ fragment_program ShieldFS glsl
     default_params {
         param_named_auto cameraPos camera_position
         param_named alpha float 1.0
+        param_named r float 1.0
+        param_named g float 1.0
+        param_named b float 1.0
         //param_named_auto sceneDepth scene_depth_range
     }
 }

@@ -9,13 +9,16 @@ class PlayerState;
 class TrailManager : public UserComponent
 {
 private:
-	Trail* swordTrail;
+	Trail* quickAttackTrail;
+	Trail* heavyAttackTrail;
+	Trail* dashTrail;
+	Trail* thrownTrail;
+	Trail* UGPTrail;
 
 	PlayerState* playerState;
 
-	/* DELAY AND TIMER */
-	float stunDelay;
-	float stunTimer;
+	float time;
+	float thrownTime;
 
 public:
 	TrailManager(GameObject* gameObject);
@@ -25,11 +28,15 @@ public:
 	virtual void preUpdate(float deltaTime);
 
 private:
-	//void createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position = Vector3::ZERO);
+	// Trails creation
+	void createTrail(Trail** trail, const std::string& trailFilename);
 
-	void createSwordTrail();
-
-	void manageSwordTrail();
+	// Trails management
+	void manageQuickAttackTrail();
+	void manageHeavyAttackTrail();
+	void manageDashTrail();
+	void manageThrownTrail(float deltaTime);
+	void manageUGPTrail();
 };
 
 #endif

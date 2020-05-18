@@ -1,0 +1,12 @@
+{
+    "TrailParameters":[
+        ["offset", "4 0 0"],
+        ["trail", "bone Mano.L"],
+        ["length", "8"],
+        ["max", "40"],
+        ["colour", "1 0 0 1"],
+        ["width", "2"],
+        ["colourChange", "1 1 1 2"],
+        ["start", "false"]
+    ]
+}

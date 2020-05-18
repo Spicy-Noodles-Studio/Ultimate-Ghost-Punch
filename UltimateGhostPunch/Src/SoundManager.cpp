@@ -183,7 +183,7 @@ void SoundManager::manageDeathSound()
 
 void SoundManager::managePunchSuccessSound()
 {
-	playSoundOnce("punch", punchSucceeded, punchSuccess);
+	//playSoundOnce("punch", punchSucceeded, punchSuccess);
 }
 
 void SoundManager::playSound(const std::string& sound)

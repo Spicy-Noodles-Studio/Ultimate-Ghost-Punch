@@ -3,13 +3,15 @@
 #include <GameObject.h>
 #include <Trail.h>
 #include <MeshRenderer.h>
+#include <GaiaData.h>
+#include <sstream>
 
 #include "PlayerState.h"
 
 REGISTER_FACTORY(TrailManager);
 
-TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), swordTrail(nullptr),
-stunDelay(0.0f), stunTimer(0.0f)
+TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), quickAttackTrail(nullptr), heavyAttackTrail(nullptr),
+time(0), thrownTime(1)
 {
 
 }
@@ -26,48 +28,107 @@ void TrailManager::start()
 	if (playerState == nullptr)
 		LOG_ERROR("TRAIL MANAGER", "PlayerState component not found");
 
-	createSwordTrail();
+	createTrail(&heavyAttackTrail, "heavyAttackTrail");
+	createTrail(&quickAttackTrail, "quickAttackTrail");
+	createTrail(&dashTrail, "dashTrail");
+	dashTrail->setColour(gameObject->getComponent<MeshRenderer>()->getDiffuse(0), 1);
+	createTrail(&thrownTrail, "thrownTrail");
+	thrownTrail->setColour(gameObject->getComponent<MeshRenderer>()->getDiffuse(0), 1);
+	createTrail(&UGPTrail, "UGPTrail");
 }
 
 void TrailManager::preUpdate(float deltaTime)
 {
-	manageSwordTrail();
+	manageQuickAttackTrail();
+	manageHeavyAttackTrail();
+	manageDashTrail();
+	manageThrownTrail(deltaTime);
+	manageUGPTrail();
 }
 
-void TrailManager::createSwordTrail()
+void TrailManager::createTrail(Trail** trail, const std::string& trailFilename)
 {
-	GameObject* trailGameObject = instantiate("Trail");
-	if (trailGameObject == nullptr)
+	if (*trail != nullptr) return;
+
+	GameObject* trailObject = instantiate("Trail");
+	if (trailObject == nullptr)
 		return;
 
-	gameObject->addChild(trailGameObject);
+	gameObject->addChild(trailObject);
 
-	swordTrail= trailGameObject->getComponent<Trail>();
-	if (swordTrail== nullptr)
+	*trail = trailObject->getComponent<Trail>();
+	if (*trail == nullptr)
 		return;
 
-	swordTrail->setOffset(Vector3(-50, 100, 0));
+	// Set parameters from file
 	MeshRenderer* mesh = gameObject->getComponent<MeshRenderer>();
-	swordTrail->newTrail("Mano.L", mesh);
-	swordTrail->setLength(20);
-	swordTrail->setMax(40);
-	swordTrail->setColour(Vector3(0.8, 0.8, 0.8), 1);
-	swordTrail->setWidth(2);
-	swordTrail->setColourChange(Vector3(1, 1, 1), 2);
+	(*trail)->setMeshRenderer(mesh);
+	(*trail)->configureTrail("./Assets/Trails/" + trailFilename + ".trail");
 }
 
-void TrailManager::manageSwordTrail()
+void TrailManager::manageQuickAttackTrail()
 {
-	if (swordTrail == nullptr) return;
+	if (quickAttackTrail == nullptr) return;
 
-	if (playerState->isHeavyAttacking())
-		swordTrail->start();
+	if (playerState->isQuickAttacking())
+		quickAttackTrail->start();
 	else
-		swordTrail->stop();
+		quickAttackTrail->stop();
+}
 
-	/*
-	particlesObject->transform->setPosition(position);
-	(*emitter)->newEmitter(particleName);*/
+void TrailManager::manageHeavyAttackTrail()
+{
+	if (heavyAttackTrail == nullptr) return;
+
+	if (playerState->isHeavyAttacking()) {
+		if (!heavyAttackTrail->started()) heavyAttackTrail->start();
+	}
+	else {
+		if (heavyAttackTrail->started()) heavyAttackTrail->stop();
+	}
+}
+
+void TrailManager::manageDashTrail()
+{
+	if (dashTrail == nullptr) return;
+
+	if (playerState->isDodging()) {
+		if (!dashTrail->started()) dashTrail->start();
+	}
+	else {
+		if (dashTrail->started()) dashTrail->stop();
+	}
+}
+
+void TrailManager::manageThrownTrail(float deltaTime)
+{
+	if (thrownTrail == nullptr) return;
+
+	if (playerState->hasBeenThrown()) {
+		time = thrownTime;
+		if (!thrownTrail->started()) thrownTrail->start();
+	}
+
+	if (time > 0)
+	{
+		time -= deltaTime;
+	}
+	else if (time <= 0)
+	{
+		if (thrownTrail->started()) thrownTrail->stop();
+	}
+}
+
+void TrailManager::manageUGPTrail()
+{
+	if (UGPTrail == nullptr) return;
+
+	if (playerState->isPunching()) {
+		if (!UGPTrail->started()) UGPTrail->start();
+	}
+	else {
+		if (UGPTrail->started()) UGPTrail->stop();
+	}
 }
 
 /*

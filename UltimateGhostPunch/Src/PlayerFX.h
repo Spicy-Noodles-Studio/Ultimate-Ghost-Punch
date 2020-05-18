@@ -57,6 +57,7 @@ public:
 	void deactivateGhostFX();
 
 	void activateShield();
+	void updateShield(float blockTime, float maxBlockTime);
 	void deactivateShield();
 };
 

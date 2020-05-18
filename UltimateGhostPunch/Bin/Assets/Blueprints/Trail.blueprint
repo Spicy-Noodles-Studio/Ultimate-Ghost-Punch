@@ -8,10 +8,7 @@
             "ComponentName": "Transform"
         },
         {
-            "ComponentName": "Trail",
-            "ComponentProperties":[
-                [ "trail", "node"]
-            ]
+            "ComponentName": "Trail"
         }
     ]
 }
