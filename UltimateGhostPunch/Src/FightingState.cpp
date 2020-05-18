@@ -43,13 +43,13 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
-	if (!character->getComponent<Health>()->isAlive())
+
+	Health* health = character->getComponent<Health>();
+	if (health == nullptr || !health->isAlive())
 		return;
 
-	if (character->getComponent<Health>()->isInvencible())
+	if (health == nullptr || character->getComponent<Health>()->isInvencible())
 		return;
-
-
 
 	if (lastAction == ActionInput::DODGE && !dodgeComp->isDodging()) turnTowardsTarget(); // Turn towards target after dodge
 
@@ -63,9 +63,13 @@ void FightingState::selectAction()
 
 	if (attack != nullptr && attack->isAttacking()) // Wait until attack ends
 	{
-		//LOG("ATACANDO...\n");
+		LOG("ATACANDO...\n");
 		return;
 	}
+
+	// Wait til the AI lands
+	if (!pState->isGrounded() || pState->isJumping())
+		return;
 
 	Health* targetHealth = target->getComponent<Health>();
 	GhostManager* targetGhostManager = target->getComponent<GhostManager>();
@@ -85,6 +89,19 @@ void FightingState::selectAction()
 	}
 
 	int rnd = rand() % 100;
+
+	// AIR COMBAT
+	PlayerState* targetState = target->getComponent<PlayerState>();
+
+	if (targetState != nullptr && !targetState->isGrounded() && jump != nullptr) // Check if target is jumping
+	{
+		jump->jump();
+		turnTowardsTarget();
+		ActionInput action = ActionInput::QUICK_ATTACK;
+		stateMachine->addActionInput(action);
+		lastAction = action;
+		return;
+	}
 
 	// QUICK ATTACK RANGE
 	if (enemyInQuickAttackRange())
@@ -289,7 +306,7 @@ void FightingState::setCharacter(GameObject* character)
 	std::vector<GameObject*> ground = character->findChildrenWithTag("groundSensor");
 	if (ground.size() > 0)
 	{
-		jump = aux[0]->getComponent<Jump>();
+		jump = ground[0]->getComponent<Jump>();
 		blockComp = ground[0]->getComponent<Block>();
 	}
 
