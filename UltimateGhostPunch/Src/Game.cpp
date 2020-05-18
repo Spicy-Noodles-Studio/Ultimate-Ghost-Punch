@@ -397,8 +397,8 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	gameManager->emptyKnights();
 	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
 	songManager->play2DSound("victory4");
 	songManager->pauseSong(gameManager->getSong().first);

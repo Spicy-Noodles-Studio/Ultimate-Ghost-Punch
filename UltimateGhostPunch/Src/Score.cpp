@@ -8,6 +8,11 @@ Score::Score()
 
 Score::~Score()
 {
+	clearScores();
+}
+
+void Score::clearScores()
+{
 	for (auto score : playerScores)
 		delete score;
 
@@ -31,7 +36,7 @@ void Score::initScorePlayer(ScorePlayer* player)
 
 void Score::initScore(int numOfPlayers)
 {
-	playerScores.clear();
+	clearScores();
 	this->numPlayers = numOfPlayers;
 
 	for (int i = 0; i < numOfPlayers; i++)

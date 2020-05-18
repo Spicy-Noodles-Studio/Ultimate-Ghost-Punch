@@ -37,6 +37,8 @@ public:
 	Score();
 	~Score();
 
+	void clearScores();
+
 	void initScore(int numOfPlayers);
 	void attackDone(int playerIndex);
 	void attackHitted(int playerIndex);
