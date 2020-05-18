@@ -125,12 +125,29 @@ void PlayerAnimController::handleData(ComponentData* data)
 
 void PlayerAnimController::manageAnimations()
 {
+	//TODO: cambiar a booleanos para la prioridad
+
 	if (true/*condiciones que determinen si se esta vivo o muerto*/) {
 		manageKnightAnimations();
 	}
 	else {
 		manageGhostAnimations();
 	}
+}
+
+void PlayerAnimController::manageTransitionAnimations()
+{
+	// Comprobar el estado del jugador y comparar con el del mesh
+
+	// Gestionar animaciones
+
+	// PARA KNIGHT
+	// Resucitar
+	// Morir
+	
+	// PARA GHOST
+	// Aparecer
+	// Desaparecer
 }
 
 void PlayerAnimController::manageKnightAnimations()
@@ -152,9 +169,9 @@ bool PlayerAnimController::manageGroundedAnimations()
 		if (result = manageGrabbedAnimations());
 		else if (result = manageStunnedAnimations());
 		else if (result = manageHurtAnimation());
-		else if (result = manageGrabAnimations());
 		else if (result = manageBlockAnimations());
 		else if (result = manageGroundedAttackAnimation());
+		else if (result = manageGrabAnimations());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
 		else if (result = manageIdleAnimation());
@@ -206,6 +223,7 @@ bool PlayerAnimController::manageIdleAnimation()
 {
 	if (!playerState->isMoving() && playerState->canMove()) {
 		if (manageGrabIdleAnimation()) return true;
+		if (manageTauntAnimation()) return true;
 
 		anim->playAnimation("Idle");
 		anim->setLoop(true);
@@ -308,21 +326,42 @@ bool PlayerAnimController::manageBlockGrabAnimation()
 
 bool PlayerAnimController::manageGrabAnimations()
 {
-	// TODO: ESTO SOLO TIENE SENTIDO SI SE ESTA EN IDLE
-	// TODO: cambiar condiciones a algo mas logico
-	/*if (playerState->hasMissedGrab()) {
-		anim->playAnimation("GrabStart");
-		anim->setLoop(false);
-		return true;
+	std::string animationName = anim->getCurrentAnimation();
+
+	bool previouslyGrabbing =	animationName == "GrabHold"				||
+								animationName == "RunGrabbing"			||
+								animationName == "DashFrontGrabbing"	||
+								animationName == "FallGrabbing"			||
+								animationName == "JumpStartGrabbing"	||
+								animationName == "JumpChangeGrabbing"	||
+								animationName == "LandGrabbing";
+
+	if (playerState->isGrabbing() || playerState->hasMissedGrab()) {
+		// TRANSICIONES NORMALES
+		if (!previouslyGrabbing) {
+			if (playerState->hasMissedGrab()) {
+				anim->playAnimation("GrabFail");
+				anim->setLoop(false);
+				return true;
+			}
+			else {
+				if (anim->getCurrentAnimation() == "GrabStart" && anim->hasEnded()) return false;
+
+				anim->playAnimation("GrabStart");
+				anim->setLoop(false);
+				return true;
+			}
+		}
+		return false;
 	}
-	else if (playerState->hasMissedGrab()) {
-		anim->playAnimation("GrabFail");
+	// Si no esta agarrando, pero lo estaba
+	else if (previouslyGrabbing) {
+		anim->playAnimation("Throw");
 		anim->setLoop(false);
 		return true;
 	}
 
-	std::string animationName = anim->getCurrentAnimation();*/
-	return false; // (animationName == "GrabStart" || animationName == "GrabFail") && !anim->hasEnded();;
+	return (animationName == "Throw" || animationName == "GrabFail") && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageGrabIdleAnimation()
@@ -369,7 +408,7 @@ bool PlayerAnimController::manageGrabLandAnimation()
 bool PlayerAnimController::manageStunnedAnimations()
 {
 	std::string animationName = anim->getCurrentAnimation();
-	// Transicion de Empieza bloqueo -> Estar bloqueando
+
 	if (playerState->isStunned()) {
 		bool previouslyStunned =	animationName == "StunnedStart" ||
 									animationName == "StunnedHold" ||
@@ -397,6 +436,17 @@ bool PlayerAnimController::manageStunnedAnimations()
 	}
 
 	return animationName == "StunnedEnd" && !anim->hasEnded();
+}
+
+bool PlayerAnimController::manageTauntAnimation()
+{
+	if (playerState->hasTaunted()) {
+		anim->playAnimation("Taunt");
+		anim->setLoop(false);
+		return true;
+	}
+
+	return anim->getCurrentAnimation() == "Taunt" && !anim->hasEnded();
 }
 
 bool PlayerAnimController::manageFallAnimation()

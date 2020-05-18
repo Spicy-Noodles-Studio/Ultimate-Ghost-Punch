@@ -97,6 +97,7 @@ public:
 
 	void manageAnimations();
 
+	void manageTransitionAnimations();
 	void manageKnightAnimations();
 	void manageGhostAnimations();
 
@@ -118,6 +119,7 @@ public:
 	bool manageGrabJumpAnimation();
 	bool manageGrabLandAnimation();
 	bool manageStunnedAnimations();
+	bool manageTauntAnimation();
 
 	// NOT GROUNDED ANIMATIONS
 	bool manageFallAnimation();
