@@ -7,11 +7,13 @@
 #include "Respawn.h"
 #include "Health.h"
 #include "Score.h"
+#include "Game.h"
 #include "GameManager.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(DeathZone);
 
-DeathZone::DeathZone(GameObject* gameObject) : UserComponent(gameObject), fallDamage(2)
+DeathZone::DeathZone(GameObject* gameObject) : UserComponent(gameObject), fallDamage(2), initialPosition(Vector3::ZERO)
 {
 
 }
@@ -42,25 +44,40 @@ void DeathZone::onObjectEnter(GameObject* other)
 	if (other->getTag() == "Player")
 	{
 		Health* health = other->getComponent<Health>();
-
 		if (health != nullptr)
 		{
-			Score* score = GameManager::GetInstance()->getScore();
-			int id = other->getComponent<PlayerIndex>()->getIndex();
-			int h = health->getHealth();
-
 			health->receiveDamage(fallDamage);
 
-			if (h != health->getHealth() && score != nullptr)
-				score->fall(id);
+			Score* score = GameManager::GetInstance()->getScore();
+			PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
-			if (!health->isAlive() && score != nullptr)
-				score->deathByEnviromentHazard(id);
+			if (score != nullptr && playerIndex != nullptr)
+				score->fall(playerIndex->getIndex());
 
-			Respawn* respawn = other->getComponent<Respawn>();
+			if (!health->isAlive())
+			{
+				GameObject* aux = findGameObjectWithName("Game");
+				if (aux != nullptr)
+				{
+					Game* game = aux->getComponent<Game>();
+					if (game != nullptr && playerIndex != nullptr)
+						initialPosition = game->getPlayerInitialPosition(playerIndex->getIndex());
+				}
 
-			if (respawn != nullptr)
-				respawn->respawn();
+				GhostManager* ghostManager = other->getComponent<GhostManager>();
+				if (ghostManager != nullptr)
+				{
+					ghostManager->setDeathPosition(initialPosition);
+					if (score != nullptr && playerIndex != nullptr)
+						score->deathByEnviromentHazard(playerIndex->getIndex());
+				}
+			}
+			else
+			{
+				Respawn* respawn = other->getComponent<Respawn>();
+				if (respawn != nullptr)
+					respawn->respawn();
+			}
 		}
 	}
 }

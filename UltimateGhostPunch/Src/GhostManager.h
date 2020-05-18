@@ -18,19 +18,16 @@ class PlayerAnimController;
 class GhostManager : public UserComponent
 {
 private:
-	bool ghost;
 	bool used;
-	bool ended;
-	bool deathPositionChanged;
 	bool success;
-	bool ghostDead;
-	bool punchSuccess;
+	bool positionChanged;
 	
 	enum GhostMode
 	{
-		ALIVE, GHOST, DYING
+		ALIVE, GHOST, DYING, DEAD
 	};
 
+	float dyingTime;
 	float ghostTime;
 	float playerGravity;
 
@@ -48,12 +45,12 @@ private:
 	PlayerController* control;
 	PlayerAnimController* anim;
 
-	Vector3 playerColour;
 	Vector3 aliveScale;
 	Vector3 ghostScale;
 
-	Vector3 ghostSpawnOffset;
+	Vector3 playerColour;
 	Vector3 deathPosition;
+	Vector3 spawnOffset;
 
 	GhostMode mode;
 
@@ -63,28 +60,23 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
-	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 
 	bool isGhost() const;
+
 	bool ghostUsed() const;
-	bool ghostEnded() const;
+	bool ghostSuccess() const;
+	bool ghostDeath() const;
 
-	float getGhostTime();
-
-	void activateGhost();
-	void deactivateGhost();
+	float getGhostTime() const;
 
 	void setPlayerColour(const Vector3& colour);
 	void setDeathPosition(const Vector3& position);
 
+	void activateGhost();
+	void deactivateGhost();
 	void deactivatePlayer();
-	void handlePlayerDeath();
-
-	bool ghostSuccess() const;
-	bool ghostDeath() const;
-	bool hasPunchSuccess() const;
 };
 
 #endif

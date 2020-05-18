@@ -15,7 +15,8 @@
 
 REGISTER_FACTORY(PlayerState);
 
-PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr), health(nullptr), ghostManager(nullptr), ghostPunch(nullptr)
+PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr),
+health(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr)
 {
 
 }
@@ -32,7 +33,8 @@ void PlayerState::start()
 		attack = aux[0]->getComponent<Attack>();
 
 	aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0) {
+	if (aux.size() > 0)
+	{
 		block = aux[0]->getComponent<Block>();
 		jump = aux[0]->getComponent<Jump>();
 	}
@@ -126,7 +128,7 @@ bool PlayerState::isDodging() const
 
 bool PlayerState::isHeavyAttacking() const
 {
-	return attack!= nullptr && attack->isHeavyAttacking();
+	return attack != nullptr && attack->isHeavyAttacking();
 }
 
 bool PlayerState::isQuickAttacking() const
@@ -144,11 +146,6 @@ bool PlayerState::isAiming() const
 	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->isAiming());
 }
 
-bool PlayerState::punchSucceeded() const
-{
-	return (ghostPunch != nullptr && ghostPunch->punchSuccess());
-}
-
 bool PlayerState::isGhost() const
 {
 	return (ghostManager != nullptr && ghostManager->isGhost());
@@ -161,12 +158,12 @@ bool PlayerState::isRespawning() const
 
 bool PlayerState::isFalling() const
 {
-	return jump->isFalling();
+	return jump != nullptr && jump->isFalling();
 }
 
 bool PlayerState::hasBlocked() const
 {
-	return block->hasBlocked();
+	return block != nullptr && block->hasBlocked();
 }
 
 bool PlayerState::hasLanded() const
@@ -196,7 +193,7 @@ bool PlayerState::hasMissedGrab() const
 
 bool PlayerState::hasGhostSucceeded() const
 {
-	return ghostManager != nullptr && ghostManager->ghostSuccess() && !punchSucceeded();
+	return ghostManager != nullptr && ghostManager->ghostSuccess() && !hasPunchSucceeded();
 }
 
 bool PlayerState::hasPunchSucceeded() const
@@ -211,10 +208,5 @@ bool PlayerState::hasGhostDied() const
 
 bool PlayerState::hasKnightDied() const
 {
-	return health!= nullptr && !health->isAlive();
-}
-
-bool PlayerState::punchHasSucceeded() const
-{
-	return ghostManager->hasPunchSuccess();
+	return health != nullptr && !health->isAlive();
 }

@@ -703,7 +703,7 @@ void PlayerAnimController::updateNotLoopingState()
 
 	if (anim->getCurrentAnimation() == "Die" && anim->hasEnded())
 	{
-		ghostManag->handlePlayerDeath();//enterMode(GHOST);
+		//ghostManag->handlePlayerDeath();
 		return;
 	}
 

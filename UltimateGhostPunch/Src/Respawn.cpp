@@ -4,10 +4,10 @@
 #include <SoundEmitter.h>
 #include <sstream>
 
+#include "Movement.h"
 #include "PlayerController.h"
 #include "PlayerAnimController.h"
 #include "PlayerFX.h"
-#include "Movement.h"
 #include "Health.h"
 
 REGISTER_FACTORY(Respawn);
@@ -25,7 +25,6 @@ Respawn::~Respawn()
 void Respawn::start()
 {
 	playerController = gameObject->getComponent<PlayerController>();
-
 	initialPos = gameObject->transform->getPosition();
 	time = 0.0f;
 }
@@ -56,11 +55,6 @@ void Respawn::handleData(ComponentData* data)
 	}
 }
 
-float Respawn::getRespawnTime()
-{
-	return respawnTime;
-}
-
 void Respawn::respawn()
 {
 	spawn(initialPos);
@@ -68,23 +62,21 @@ void Respawn::respawn()
 
 void Respawn::spawn(const Vector3& spawnPos)
 {
-	Movement* movement = gameObject->getComponent<Movement>();
-	Health* health = gameObject->getComponent<Health>();
 	//PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
-
+	
+	Movement* movement = gameObject->getComponent<Movement>();
 	if (movement != nullptr)
 		movement->stop();
 
+	if (playerController != nullptr)
+		playerController->setActive(false);
+
+	Health* health = gameObject->getComponent<Health>();
 	if (health != nullptr)
 	{
 		health->setInvencible(true);
 		health->setTime(respawnTime);
 	}
-
-	if (playerController != nullptr)
-		playerController->setActive(false);
-
-	gameObject->getComponent<PlayerFX>()->activateInvencible();
 
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;
@@ -94,7 +86,7 @@ void Respawn::spawn(const Vector3& spawnPos)
 	//	anim->resurrectAnimation();
 }
 
-bool Respawn::isRespawning()
+bool Respawn::isRespawning() const
 {
 	return respawning;
 }

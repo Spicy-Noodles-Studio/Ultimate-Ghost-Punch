@@ -55,7 +55,6 @@ public:
 	bool isQuickAttacking() const;
 	bool isPunching() const;
 	bool isAiming() const;
-	bool punchSucceeded() const;
 	bool isGhost() const;
 	bool isRespawning() const;
 	bool isFalling() const;
@@ -70,7 +69,6 @@ public:
 	bool hasPunchSucceeded() const;
 	bool hasGhostDied() const;
 	bool hasKnightDied() const;
-	bool punchHasSucceeded() const;
 };
 
 #endif

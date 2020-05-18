@@ -4,12 +4,12 @@
 #include <RigidBody.h>
 #include <sstream>
 
-#include "Game.h"
+#include "PlayerIndex.h"
 #include "Health.h"
 #include "Score.h"
-#include "PlayerIndex.h"
-#include "GhostManager.h"
+#include "Game.h"
 #include "GameManager.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(Obstacle);
 
@@ -50,37 +50,33 @@ void Obstacle::onCollisionEnter(GameObject* other)
 		int yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
 
 		// The player receives damage
-		Score* score = GameManager::GetInstance()->getScore();
-
 		Health* health = other->getComponent<Health>();
-		int otherId = other->getComponent<PlayerIndex>()->getIndex();
-
 		if (health == nullptr) return;
 
-		int h = health->getHealth();
 		health->receiveDamage(damage);
 
-		if (score != nullptr && h != health->getHealth())
-			score->damagedBySpike(otherId);
+		Score* score = GameManager::GetInstance()->getScore();
+		PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
-		// If the player has died, add an offset to the respawn position, in case it resurrects
+		if (score != nullptr && playerIndex != nullptr)
+			score->damagedBySpike(playerIndex->getIndex());
+
 		if (!health->isAlive())
 		{
 			GameObject* aux = findGameObjectWithName("Game");
 			if (aux != nullptr)
 			{
 				Game* game = aux->getComponent<Game>();
-				if (game != nullptr)
-					initialPosition = game->getPlayerInitialPosition(otherId);
+				if (game != nullptr && playerIndex != nullptr)
+					initialPosition = game->getPlayerInitialPosition(playerIndex->getIndex());
 			}
 
 			GhostManager* ghostManager = other->getComponent<GhostManager>();
-
 			if (ghostManager != nullptr)
 			{
 				ghostManager->setDeathPosition(initialPosition);
-				if (score != nullptr)
-					score->deathByEnviromentHazard(otherId);
+				if (score != nullptr && playerIndex != nullptr)
+					score->deathByEnviromentHazard(playerIndex->getIndex());
 			}
 		}
 		else

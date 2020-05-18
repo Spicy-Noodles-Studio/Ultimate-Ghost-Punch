@@ -21,9 +21,6 @@ public:
 	void setHealth(int health);
 	void receiveDamage(int damage);
 
-	float getTime();
-	float getInvDamTime();
-
 	void setTime(float time);
 
 	bool isAlive();
@@ -39,7 +36,7 @@ private:
 	int health; // 1 life = 2 health points
 
 	float time;
-	float invencibleDamageTime;
+	float invencibleTime;
 
 	bool alive;
 	bool invencible;

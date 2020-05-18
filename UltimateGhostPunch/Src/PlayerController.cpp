@@ -25,8 +25,8 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
-															 jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
-															 direction(Vector3::ZERO), controllerIndex(1), grabed(false)
+jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
+direction(Vector3::ZERO), controllerIndex(1), grabed(false)
 {
 
 }
@@ -162,17 +162,17 @@ void PlayerController::checkInput()
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
 
 			//Charge
-			if (!ghostPunch->isUsed() && (controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("RB"))
+			if (controllerIndex == 4 && inputSystem->getMouseButtonClick('l') || getButtonDown("RB"))
 				ghostPunch->charge();
 
 			//Aim
-			if (!ghostPunch->isUsed() && controllerIndex == 4)
+			if (controllerIndex == 4)
 				ghostPunchMouseAim();
-			else if(!ghostPunch->isUsed())
+			else
 				ghostPunch->aim(horizontal, -vertical);
 
 			//Ghost Punch
-			if (!ghostPunch->isUsed() && controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonUp("RB"))
+			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonUp("RB"))
 				ghostPunch->ghostPunch();
 		}
 

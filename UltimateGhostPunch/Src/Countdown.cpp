@@ -52,7 +52,9 @@ void Countdown::update(float deltaTime)
 
 		startCounting = true;
 		countingDown = true;
+
 		panel.setVisible(true);
+		panel.setAlwaysOnTop(true);
 
 		last = std::chrono::steady_clock::now();
 
@@ -74,7 +76,9 @@ void Countdown::update(float deltaTime)
 			cameraControl->setActive(true);
 
 			countingDown = false;
+
 			panel.setVisible(false);
+			panel.setAlwaysOnTop(false);
 		}
 
 		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
