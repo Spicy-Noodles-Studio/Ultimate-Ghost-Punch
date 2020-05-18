@@ -1,4 +1,5 @@
 #include "Score.h"
+#include "GameManager.h";
 
 Score::Score()
 {
@@ -7,7 +8,7 @@ Score::Score()
 
 Score::~Score()
 {
-	for (auto score:playerScores)
+	for (auto score : playerScores)
 		delete score;
 
 	playerScores.clear();
@@ -16,16 +17,16 @@ Score::~Score()
 void Score::initScorePlayer(ScorePlayer* player)
 {
 	player->amountOfDamageDealt = 0;
-	player->AmountOfDamageTakenFromSpikes = 0;
-	player->livesStolenAsGhost = 0;
-	player->deathByEnviroment = 0;
+	player->amountOfDamageTakenFromSpikes = 0;
+	player->lifesStolenAsGhost = 0;
+	player->deathsByEnviroment = 0;
 	player->numOfHits = 0;
 	player->numOfKills = 0;
-	player->numOfSuccessfullGrabs = 0;
+	player->numOfSuccessfulGrabs = 0;
 	player->numOfTotalAttacks = 0;
-	player->percertOfHits = 0;
 	player->timesFallen = 0;
-	player->TotalDamgeTaken = 0;
+	player->totalDamageTaken = 0;
+	player->indexesFromEnemiesKilled = std::vector<int>();
 }
 
 void Score::initScore(int numOfPlayers)
@@ -36,120 +37,116 @@ void Score::initScore(int numOfPlayers)
 	for (int i = 0; i < numOfPlayers; i++)
 	{
 		ScorePlayer* score = new ScorePlayer();
-		
+
 		initScorePlayer(score);
 		this->playerScores.push_back(score);
 	}
 }
 
-void Score::attackDone(int playerIndex, bool groundAttack)
+void Score::attackDone(int playerIndex)
 {
-	playerScores.at(playerIndex - 1)->numOfTotalAttacks++;
+	playerScores[playerIndex - 1]->numOfTotalAttacks++;
 }
 
-void Score::receiveHitFrom(int playerIndex, int fromIndex)
+void Score::attackHitted(int playerIndex)
 {
-	playerScores.at(fromIndex - 1)->numOfHits++;
-	playerScores.at(fromIndex - 1)->percertOfHits = playerScores.at(fromIndex-1)->numOfHits / playerScores.at(fromIndex-1)->numOfTotalAttacks * 100;
+	playerScores[playerIndex - 1]->numOfHits++;
 }
 
-void Score::damageRecivedFrom(int playerIndex, int fromIndex, int amount)
+void Score::damageReceivedFrom(int playerIndex, int fromIndex, int amount)
 {
-	playerScores.at(playerIndex - 1)->TotalDamgeTaken+=amount;
-	playerScores.at(fromIndex - 1)->amountOfDamageDealt+=amount;
+	playerScores[playerIndex - 1]->totalDamageTaken += amount;
+	playerScores[fromIndex - 1]->amountOfDamageDealt += amount;
 
 }
 
 void Score::damagedBySpike(int playerIndex)
 {
-	playerScores.at(playerIndex - 1)->TotalDamgeTaken += 2;
-	playerScores.at(playerIndex - 1)->AmountOfDamageTakenFromSpikes += 2;
+	playerScores[playerIndex - 1]->totalDamageTaken += 2;
+	playerScores[playerIndex - 1]->amountOfDamageTakenFromSpikes += 2;
 }
 
 void Score::fall(int playerIndex)
 {
-	playerScores.at(playerIndex - 1)->timesFallen++;
-	playerScores.at(playerIndex - 1)->TotalDamgeTaken += 2;
+	playerScores[playerIndex - 1]->timesFallen++;
+	playerScores[playerIndex - 1]->totalDamageTaken += 2;
 }
 
-void Score::grabbedBy(int playerIndex, int fromIndex)
+void Score::grabHitted(int playerIndex)
 {
-	playerScores.at(fromIndex - 1)->numOfSuccessfullGrabs++;
+	playerScores[playerIndex - 1]->numOfSuccessfulGrabs++;
 }
 
 void Score::lifeStolenBy(int playerIndex, int fromIndex)
 {
-	playerScores.at(playerIndex - 1)->TotalDamgeTaken+=2;
-	playerScores.at(fromIndex - 1)->livesStolenAsGhost = 1;
+	playerScores[playerIndex - 1]->totalDamageTaken += 2;
+	playerScores[fromIndex - 1]->lifesStolenAsGhost = 1;
 }
 
 void Score::killedBy(int playerIndex, int fromIndex)
 {
-	playerScores.at(fromIndex - 1)->numOfKills++;
-	playerScores.at(fromIndex - 1)->indexesFromEnemiesKilled.push_back(playerIndex);
+	playerScores[fromIndex - 1]->numOfKills++;
+	playerScores[fromIndex - 1]->indexesFromEnemiesKilled.push_back(playerIndex);
 }
 
-void Score::deathByEnviromentHazard(int playerIndex)
+void Score::deathByEnviroment(int playerIndex)
 {
-	playerScores.at(playerIndex-1)->deathByEnviroment++;
+	playerScores[playerIndex - 1]->deathsByEnviroment++;
 }
 
-int Score::getPercentOfHits(int playerIndex)
+int Score::getPercentageOfHits(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->percertOfHits;
+	if(playerScores[playerIndex - 1]->numOfTotalAttacks == 0)
+		return 0;
+	return (double)playerScores[playerIndex - 1]->numOfHits  / (double)playerScores[playerIndex - 1]->numOfTotalAttacks * 100;
 }
 
-int Score::getSuccessfullGrabs(int playerIndex)
+int Score::getSuccessfulGrabs(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->numOfSuccessfullGrabs;
+	return playerScores[playerIndex - 1]->numOfSuccessfulGrabs;
 }
 
-int Score::getNumberOfGroundAttacks(int playerIndex)
+int Score::getNumberOfAttacks(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->numOfTotalAttacks;
-}
-
-int Score::getNumberOfAirAttacks(int playerIndex)
-{
-	return playerScores.at(playerIndex - 1)->numOfTotalAttacks;
+	return playerScores[playerIndex - 1]->numOfTotalAttacks;
 }
 
 int Score::getAmountOfDamageDealt(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->amountOfDamageDealt;
+	return playerScores[playerIndex - 1]->amountOfDamageDealt;
 }
 
-int Score::getLifesAsGhost(int playerIndex)
+int Score::getLifesStolen(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->livesStolenAsGhost;
+	return playerScores[playerIndex - 1]->lifesStolenAsGhost;
 }
 
 int Score::getTimesHittedBySpikes(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->AmountOfDamageTakenFromSpikes/2;
+	return playerScores[playerIndex - 1]->amountOfDamageTakenFromSpikes / 2;
 }
 
 int Score::getAmountOfFalls(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->timesFallen;
+	return playerScores[playerIndex - 1]->timesFallen;
 }
 
-int Score::getTotalDamageSuffer(int playerIndex)
+int Score::getTotalDamageReceived(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->TotalDamgeTaken;
+	return playerScores[playerIndex - 1]->totalDamageTaken;
 }
 
 int Score::getNumberOfKills(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->numOfKills;
+	return playerScores[playerIndex - 1]->numOfKills;
 }
 
 int Score::getEnviromentDeaths(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->deathByEnviroment;
+	return playerScores[playerIndex - 1]->deathsByEnviroment;
 }
 
 std::vector<int> Score::getIndexOfPlayersKilled(int playerIndex)
 {
-	return playerScores.at(playerIndex - 1)->indexesFromEnemiesKilled;
+	return playerScores[playerIndex - 1]->indexesFromEnemiesKilled;
 }

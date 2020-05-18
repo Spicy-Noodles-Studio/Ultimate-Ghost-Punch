@@ -149,7 +149,7 @@ void StatsMenu::setDamageReceived(int playerIndex)
 	name = name + "DamageReceived";
 
 	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageSuffer(playerIndex)));
+		panels.at(playerIndex - 1).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageReceived(playerIndex)));
 }
 
 void StatsMenu::setAccuracy(int playerIndex)
@@ -159,7 +159,7 @@ void StatsMenu::setAccuracy(int playerIndex)
 	name = name + "AccuracyPercentage";
 
 	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Accuracy: " + std::to_string(score->getPercentOfHits(playerIndex)) + "%");
+		panels.at(playerIndex - 1).getChild(name).setText("Accuracy: " + std::to_string(score->getPercentageOfHits(playerIndex)) + "%");
 }
 
 void StatsMenu::setTimesFallen(int playerIndex)

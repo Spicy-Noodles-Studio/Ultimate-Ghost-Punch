@@ -147,7 +147,7 @@ void Attack::onObjectStay(GameObject* other)
 		if (aux.size() > 0)
 			enemyBlock = aux[0]->getComponent<Block>();
 
-		if (enemyBlock != nullptr && parent != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition()))
+		if (enemyBlock == nullptr || (parent != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
 		{
 			Health* enemyHealth = other->getComponent<Health>();
 			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
@@ -158,8 +158,8 @@ void Attack::onObjectStay(GameObject* other)
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 				if (otherIndex != nullptr)
 				{
-					score->receiveHitFrom(otherIndex->getIndex(), id);
-					score->damageRecivedFrom(otherIndex->getIndex(), id, damage);
+					score->attackHitted(id);
+					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
 
 					if (!enemyHealth->isAlive())
 						score->killedBy(otherIndex->getIndex(), id);
@@ -187,7 +187,7 @@ void Attack::attack()
 	state = ATTACKING;
 	activeTime = attackDuration;
 	attackTrigger->setActive(true);
-	score->attackDone(id, false);
+	score->attackDone(id);
 	LOG("Attack!\n");
 }
 

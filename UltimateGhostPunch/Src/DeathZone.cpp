@@ -69,7 +69,7 @@ void DeathZone::onObjectEnter(GameObject* other)
 				{
 					ghostManager->setDeathPosition(initialPosition);
 					if (score != nullptr && playerIndex != nullptr)
-						score->deathByEnviromentHazard(playerIndex->getIndex());
+						score->deathByEnviroment(playerIndex->getIndex());
 				}
 			}
 			else

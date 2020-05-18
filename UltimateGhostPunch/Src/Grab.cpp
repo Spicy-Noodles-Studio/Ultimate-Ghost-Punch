@@ -79,12 +79,8 @@ void Grab::update(float deltaTime)
 	}
 
 	if (remain <= 0.0f && state == GRABBED)
-	{
 		drop();
-		enemyController = nullptr;
-		enemy = nullptr;
-		state = IDLE;
-	}
+
 	else if (remain <= 0.0f && state == BLOCKED)
 	{
 		if (controller != nullptr)
@@ -102,7 +98,7 @@ void Grab::onObjectStay(GameObject* other)
 	{
 		GhostManager* enemyGM = other->getComponent<GhostManager>();
 
-		if (enemyGM != nullptr && enemyGM->isGhost())
+		if (enemyGM == nullptr || enemyGM->isGhost())
 		{
 			if (enemy == other)
 				enemy = nullptr;
@@ -118,7 +114,7 @@ void Grab::onObjectEnter(GameObject* other)
 	{
 		GhostManager* enemyGM = other->getComponent<GhostManager>();
 
-		if (enemyGM != nullptr && enemyGM->isGhost())
+		if (enemyGM == nullptr || !enemyGM->isGhost())
 			if (parent != nullptr && other != parent) //If it hits a player different than myself
 				enemy = other;
 	}
@@ -234,8 +230,6 @@ bool Grab::hasDropped() const
 
 void Grab::resetEnemy()
 {
-	grabTimer = cooldown;
-
 	if (enemy == nullptr)
 		return;
 
@@ -303,7 +297,7 @@ void Grab::grabEnemy()
 
 	//Grab the enemy
 	if (score != nullptr)
-		score->grabbedBy(enemy->getComponent<PlayerIndex>()->getIndex(), id);
+		score->grabHitted(id);
 
 	if (enemyBlock != nullptr && enemyBlock->isBlocking())
 		enemyBlock->unblock();
