@@ -111,6 +111,15 @@ void AIStateMachine::fixedUpdate(float deltaTime)
 		movement->move(dir);
 }
 
+void AIStateMachine::onCollisionEnter(GameObject* other)
+{
+	if (other->getTag() == "Player" && other != target)
+	{
+		setTarget(other);
+		startFightingState();
+	}
+}
+
 void AIStateMachine::startPlatformNavigation()
 {
 	currentState = platformNavigation;
@@ -275,18 +284,24 @@ void AIStateMachine::changeTarget()
 		target = alive.at(rand() % size);
 	} while (target == gameObject);
 
+	setTarget(target);
+}
+
+void AIStateMachine::setTarget(GameObject* newTarget)
+{
+	target = newTarget;
 	// TO STUFF
-	if(platformNavigation != nullptr) platformNavigation->setTarget(target);
-	if(ghostNavigation != nullptr) ghostNavigation->setTarget(target);
-	if (fightingState != nullptr) fightingState->setTarget(target);
+	if (platformNavigation != nullptr) platformNavigation->setTarget(newTarget);
+	if (ghostNavigation != nullptr) ghostNavigation->setTarget(newTarget);
+	if (fightingState != nullptr) fightingState->setTarget(newTarget);
 
 	// TODO: cambiar el cambio de estado
 	if (platformGraph != nullptr && platformMovement != nullptr) {
-		int index = platformGraph->getIndex(target->transform->getPosition());		
+		int index = platformGraph->getIndex(newTarget->transform->getPosition());
 		if (index < 0) return;
 		PlatformNode node = platformGraph->getPlatforms()[index];
 		platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
-		platformMovement->setTargetPosition(target->transform->getPosition());
+		platformMovement->setTargetPosition(newTarget->transform->getPosition());
 	}
 }
 

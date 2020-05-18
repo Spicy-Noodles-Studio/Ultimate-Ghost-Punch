@@ -65,6 +65,7 @@ public:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void fixedUpdate(float deltaTime);
+	virtual void onCollisionEnter(GameObject* other);
 
 	void startPlatformNavigation();
 	void startPlatformMovement();
@@ -73,6 +74,7 @@ public:
 	void startFleeingState(GameObject* fleeTarget);
 
 	void changeTarget();
+	void setTarget(GameObject* newTarget);
 
 private:
 	virtual void processActionInput();
