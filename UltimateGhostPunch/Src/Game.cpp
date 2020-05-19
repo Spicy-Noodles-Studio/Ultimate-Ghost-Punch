@@ -82,7 +82,7 @@ void Game::update(float deltaTime)
 		if (timer < 0.0f)
 			timer = 0;
 	}
-	else if (timer == 0) // If its negative it means match its not timed
+	else if (timer == 0 && !end) // If its negative it means match its not timed
 		chooseWinner();
 
 
