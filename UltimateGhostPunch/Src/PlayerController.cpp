@@ -66,7 +66,11 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	if (gameObject->getComponent<PlayerState>()->isIgnoringInput()) return;
+	if (gameObject->getComponent<PlayerState>()->isIgnoringInput()) 
+	{
+		direction = Vector3::ZERO;
+		return; 
+	}
 	checkInput();
 }
 
@@ -94,7 +98,7 @@ void PlayerController::handleData(ComponentData* data)
 void PlayerController::checkInput()
 {
 	//Movement
-	direction = Vector3(0, 0, 0);
+	direction = Vector3::ZERO;
 	direction += Vector3(getHorizontalAxis(), 0, 0);
 
 	//Acctions if the player isn't in ghostManager mode

@@ -15,6 +15,7 @@ class PlayerUI;
 class PlayerController;
 class CameraEffects;
 class Camera;
+class PlayerState;
 
 class GhostManager : public UserComponent
 {
@@ -48,6 +49,7 @@ private:
 	Health* health;
 	PlayerUI* playerUI;
 	PlayerController* control;
+	PlayerState* playerState;
 
 	Camera* cam;
 	CameraEffects* cameraEffects;

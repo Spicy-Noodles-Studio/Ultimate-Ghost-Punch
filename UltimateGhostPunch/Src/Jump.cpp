@@ -143,7 +143,7 @@ bool Jump::isGrounded() const
 	return grounded || playersBelow;
 }
 
-bool Jump::isAbovePlayer()
+bool Jump::isAbovePlayer() const
 {
 	return playersBelow > 0;
 }

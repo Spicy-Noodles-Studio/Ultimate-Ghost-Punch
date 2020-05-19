@@ -51,6 +51,7 @@ void Movement::move(Vector3 dir)
 		//Character rotation
 		if (dir.x != 0)
 			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+
 	}
 }
 
@@ -58,7 +59,7 @@ void Movement::stop()
 {
 	if (rigidBody != nullptr)
 	{
-		rigidBody->setLinearVelocity({0,0,0});
+		rigidBody->setLinearVelocity(Vector3::ZERO);
 		rigidBody->clearForces();
 	}
 }

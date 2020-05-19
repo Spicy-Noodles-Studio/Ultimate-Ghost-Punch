@@ -43,8 +43,6 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
-	if (pState->isStunned())
-		return;//LOG("_-_____---STUNEADO\n");
 	Health* health = character->getComponent<Health>();
 	if (health == nullptr || !health->isAlive())
 		return;
@@ -214,7 +212,7 @@ void FightingState::strongAttack()
 
 void FightingState::block()
 {
-	if (blockComp->canBlock())
+	if (pState != nullptr && pState->canBlock())
 	{
 		ActionInput action = ActionInput::BLOCK;
 		stateMachine->addActionInput(action);
@@ -226,7 +224,7 @@ void FightingState::block()
 	}
 	else
 	{
-		LOG("CANNOT BLOCK -> FLEEING INSTEAD\n");
+		//LOG("CANNOT BLOCK -> FLEEING INSTEAD\n");
 		transitionToFlee();
 	}
 	
@@ -256,7 +254,7 @@ void FightingState::transitionToFlee()
 
 void FightingState::grab()
 {
-	LOG("TRIED TO GRAB!!!\n");
+	//LOG("TRIED TO GRAB!!!\n");
 	ActionInput action = ActionInput::GRAB;
 	stateMachine->addActionInput(action);
 	lastAction = action;

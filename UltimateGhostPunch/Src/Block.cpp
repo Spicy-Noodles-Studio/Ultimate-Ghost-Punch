@@ -105,6 +105,9 @@ void Block::onObjectExit(GameObject* other)
 
 void Block::block()
 {
+	if (parent == nullptr) return;
+	PlayerState* aux = parent->getComponent<PlayerState>();
+
 	if (!blocking && blockTime > 0 && grounded && aux != nullptr && aux->canBlock())
 	{
 		blocking = true;

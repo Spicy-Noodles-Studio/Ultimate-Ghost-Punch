@@ -38,7 +38,6 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
-	bool canBlock();
 	void block();
 	void unblock();
 	bool blockAttack(Vector3 otherPosition);

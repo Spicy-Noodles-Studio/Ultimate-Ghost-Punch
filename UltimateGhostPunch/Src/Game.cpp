@@ -101,7 +101,13 @@ void Game::update(float deltaTime)
 		fadeIn = false;
 	}
 
-	if (end && !cameraEffects->isFading()) SceneManager::GetInstance()->changeScene("StatsMenu");
+	if (end && !cameraEffects->isFading()) 
+	{ 
+		gameManager->pauseAllSounds();
+		songManager->pauseSong(gameManager->getSong().first);
+		gameManager->emptyKnights();
+		SceneManager::GetInstance()->changeScene("StatsMenu"); 
+	}
 
 	
 }
@@ -469,13 +475,7 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	gameManager->pauseAllSounds();
-	gameManager->emptyKnights();
-
-	songManager->play2DSound("victory4");
-	songManager->pauseSong(gameManager->getSong().first);
-
-	
+	songManager->play2DSound("victory4");	
 }
 
 std::pair<std::string, std::string> Game::timeToText()

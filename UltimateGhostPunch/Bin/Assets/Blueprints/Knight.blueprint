@@ -26,13 +26,7 @@
             ]
         },
         {
-            "ComponentName": "PlayerAnimController",
-            "ComponentProperties": [
-               [ "runThreshold", "0.5f"],
-               [ "fallThreshold", "1.0f"],
-               [ "thrownDelay", "0.25f"],
-               [ "ghostMesh", "ghost Ghost.mesh"]
-            ]
+            "ComponentName": "AnimationManager"
         },
         {
             "ComponentName": "PlayerFX"
@@ -128,6 +122,9 @@
         },
         {
             "ComponentName": "SoundManager"
+        },
+        {
+            "ComponentName": "TrailManager"
         }
     ],
     "Children": [
@@ -247,7 +244,7 @@
                 {
                     "ComponentName": "MeshRenderer",
                     "ComponentProperties": [
-                        [ "mesh", "shield Sphere.mesh"],
+                        [ "mesh", "shield Shield.mesh"],
                         [ "material", "shield Shield"]
                     ]
                 }

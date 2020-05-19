@@ -1,6 +1,6 @@
  {
     "ObjectType": "BLUEPRINT",
-    "ObjectName": "Player",
+    "ObjectName": "PlayerAI",
     "Tag": "Player",
     "BlueprintPath": "Knight",
     "Components":

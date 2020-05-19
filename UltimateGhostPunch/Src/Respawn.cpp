@@ -5,13 +5,13 @@
 #include <sstream>
 
 #include "Movement.h"
-#include "PlayerController.h"
+#include "PlayerState.h"
 #include "PlayerFX.h"
 #include "Health.h"
 
 REGISTER_FACTORY(Respawn);
 
-Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerController(nullptr), initialPos(Vector3::ZERO), respawning(false), respawnTime(1.0f), time(0.0f)
+Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerState(nullptr), initialPos(Vector3::ZERO), respawning(false), respawnTime(1.0f), time(0.0f)
 {
 
 }
@@ -23,7 +23,7 @@ Respawn::~Respawn()
 
 void Respawn::start()
 {
-	playerController = gameObject->getComponent<PlayerController>();
+	playerState= gameObject->getComponent<PlayerState>();
 	initialPos = gameObject->transform->getPosition();
 	time = 0.0f;
 }
@@ -34,7 +34,7 @@ void Respawn::update(float deltaTime)
 		time -= deltaTime;
 	else if (respawning)
 	{
-		if (playerController != nullptr)	playerController->setActive(true);
+		if (playerState!= nullptr)	playerState->setIgnoringInput(false);
 		respawning = false;
 	}
 }
@@ -65,8 +65,8 @@ void Respawn::spawn(const Vector3& spawnPos)
 	if (movement != nullptr)
 		movement->stop();
 
-	if (playerController != nullptr)
-		playerController->setActive(false);
+	if (playerState!= nullptr)
+		playerState->setIgnoringInput(true);
 
 	Health* health = gameObject->getComponent<Health>();
 	if (health != nullptr)
