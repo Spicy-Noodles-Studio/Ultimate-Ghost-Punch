@@ -4,6 +4,8 @@
 
 #include <UserComponent.h>
 
+class CameraEffects;
+
 class Health : public UserComponent
 {
 public:
@@ -45,6 +47,8 @@ private:
 	bool invencible;
 
 	bool hurt; // So we can know if it is being damaged
+
+	CameraEffects* cameraEffects;
 };
 
 #endif

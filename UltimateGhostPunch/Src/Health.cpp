@@ -6,10 +6,13 @@
 #include "PlayerAnimController.h"
 #include "Block.h"
 #include "Grab.h"
+#include "CameraEffects.h"
+#include "Camera.h"
+#include "Scene.h"
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false), hurt(false)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false), hurt(false), cameraEffects(nullptr)
 {
 
 }
@@ -22,6 +25,8 @@ Health::~Health()
 void Health::start()
 {
 	maxHealth = health;
+	Camera* cam = gameObject->getScene()->getMainCamera();
+	if (cam != nullptr) cameraEffects = cam->gameObject->getComponent<CameraEffects>();
 }
 
 void Health::update(float deltaTime)
@@ -105,8 +110,10 @@ void Health::receiveDamage(int damage)
 		if (health < 0)
 			health = 0;
 
-		if (health == 0)
+		if (health == 0) {
 			alive = false;
+			cameraEffects->shake(Vector3(1, 1, 0));
+		}
 		else
 		{
 			invencible = true;

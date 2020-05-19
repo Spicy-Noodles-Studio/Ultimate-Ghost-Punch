@@ -90,6 +90,8 @@ void GhostManager::update(float deltaTime)
 			ghost = false;
 			ghostDead = true;
 
+			cameraEffects->shake(Vector3(1, 1, 0));
+
 			if (anim != nullptr)
 				anim->notLoopAnimation("Disappear");
 
