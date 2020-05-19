@@ -57,6 +57,7 @@ private:
 	Vector3 dir;
 	float timeTargetChange;
 	float timerTargetChange;
+	float avoidGhostDist;
 
 public:
 	AIStateMachine(GameObject* gameObject);

@@ -25,7 +25,7 @@ REGISTER_FACTORY(AIStateMachine);
 
 AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
 															ghostMovement(nullptr), ghostPunch(nullptr), platformGraph(nullptr), platformNavigation(nullptr),
-															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr), attack(nullptr)
+															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr), attack(nullptr), avoidGhostDist(5)
 {
 
 }
@@ -146,10 +146,22 @@ void AIStateMachine::startFleeingState(GameObject* fleeTarget)
 	if (fleeTarget == nullptr) fleeTarget = target;
 	if (fleeTarget == nullptr) return;
 	// Fleeing state uses platform Navigation to move to the farthest platform away from the target
-	currentState = platformNavigation;
+	// and platform movement to run away in the current platform
 	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(target->transform->getPosition())];
+	// Fleeing between platforms
 	platformNavigation->setTarget(node);
 	platformNavigation->setFleeing(true);
+	// Fleeing in the same platform
+	platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
+	Vector3 AIpos = gameObject->transform->getPosition();
+	platformMovement->setTargetPosition((fleeTarget->transform->getPosition().x <= AIpos.x) ? 
+		node.getEnd() - Vector3(1,0,0)
+		: node.getBegining() + Vector3(1, 0, 0));
+
+	if (platformGraph->getFurthestIndex(target->transform->getPosition()) == platformGraph->getClosestIndex(AIpos))
+		currentState = platformMovement; // Ghost in the current platform
+	else
+		currentState = platformNavigation; // Ghost in different platform -> go to the farthest
 }
 
 void AIStateMachine::processActionInput()
@@ -310,7 +322,15 @@ void AIStateMachine::updateState()
 	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
 	if (ghostManager != nullptr && !ghostManager->isGhost() && ghost != nullptr)
 	{
-		LOG("HUIR DE GHOST!\n");
+		float ghostDist = (ghost->transform->getPosition() - gameObject->transform->getPosition()).magnitude();
+		if (ghostDist <= avoidGhostDist)
+		{
+			LOG("DODGEADO PUTO\n");
+			jump->jump();
+			fightingState->turnBackOnTarget();
+			addActionInput(ActionInput::DODGE);
+		}
+
 		startFleeingState(ghost);
 		return;
 	}

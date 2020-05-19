@@ -60,6 +60,7 @@ public:
 	int getIndex(const Vector3& pos);
 
 	int getFurthestIndex(const Vector3& pos);
+	int getClosestIndex(const Vector3& pos);
 
 	std::vector<PlatformNode>& getPlatforms();
 };

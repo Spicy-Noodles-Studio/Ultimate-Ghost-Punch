@@ -68,8 +68,6 @@ private:
 	void grab();
 	void drop();
 	void dodge();
-	void turnTowardsTarget();
-	void turnBackOnTarget();
 
 public:
 	FightingState(StateMachine* stateMachine);
@@ -80,6 +78,8 @@ public:
 
 	void setFighting(bool fighting);
 	bool isFighting() const;
+	void turnTowardsTarget();
+	void turnBackOnTarget();
 protected:
 	virtual void update(float deltaTime);
 };

@@ -265,6 +265,26 @@ int PlatformGraph::getFurthestIndex(const Vector3& pos)
 	return index;
 }
 
+int PlatformGraph::getClosestIndex(const Vector3& pos)
+{
+	int index = -1;
+
+	float min = 100000;
+
+	for (int i = 0; i < platforms.size(); i++)
+	{
+		PlatformNode node = platforms[i];
+
+		float aux = getDistance(pos, node);
+
+		if (aux <= min) {
+			min = aux;
+			index = i;
+		}
+	}
+	return index;
+}
+
 std::vector<PlatformNode>& PlatformGraph::getPlatforms()
 {
 	return platforms;
