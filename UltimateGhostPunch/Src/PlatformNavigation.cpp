@@ -210,7 +210,6 @@ void PlatformNavigation::update(float deltaTime)
 		if (path.size() > 0)
 			// Go to next platform
 			moveToStartingPoint(path[0]);
-
 		else if (fleeing)
 		{
 			fleeing = false;

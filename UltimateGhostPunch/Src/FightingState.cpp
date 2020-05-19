@@ -43,7 +43,8 @@ bool FightingState::enemyInStrongAttackRange()
 
 void FightingState::selectAction()
 {
-
+	if (pState->isStunned())
+		return;//LOG("_-_____---STUNEADO\n");
 	Health* health = character->getComponent<Health>();
 	if (health == nullptr || !health->isAlive())
 		return;
@@ -67,8 +68,16 @@ void FightingState::selectAction()
 		return;
 	}
 
+	// If AI is over a player -> jump off
+	if (jump != nullptr && jump->isAbovePlayer())
+	{
+		jump->jump();
+		turnBackOnTarget();
+		stateMachine->addActionInput(ActionInput::DODGE);
+	}
+
 	// Wait til the AI lands
-	if (!pState->isGrounded() || pState->isJumping())
+	if (pState != nullptr && !pState->isGrounded()/* || pState->isJumping()*/)
 		return;
 
 	Health* targetHealth = target->getComponent<Health>();

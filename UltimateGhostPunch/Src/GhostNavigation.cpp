@@ -39,7 +39,6 @@ void GhostNavigation::update(float deltaTime)
 		if (punch != nullptr && !punch->isUsed())
 		{
 			float dist = direction.magnitude();
-			LOG("DIST: %f\n", dist);
 			if (!charging && dist < punchChargeDist)
 			{
 				chargeTime = (rand() % 5) + 1;

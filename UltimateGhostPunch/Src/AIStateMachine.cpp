@@ -81,9 +81,11 @@ void AIStateMachine::start()
 	// Initialize auxiliar variables
 	timeTargetChange = 3.0f; // 5 seconds
 
-	currentState = platformMovement; // By default
+	//currentState = platformMovement; // By default
 
 	changeTarget();
+
+	selectPlatformState();
 }
 
 void AIStateMachine::update(float deltaTime)
@@ -158,10 +160,7 @@ void AIStateMachine::startFleeingState(GameObject* fleeTarget)
 		node.getEnd() - Vector3(1,0,0)
 		: node.getBegining() + Vector3(1, 0, 0));
 
-	if (platformGraph->getFurthestIndex(target->transform->getPosition()) == platformGraph->getClosestIndex(AIpos))
-		currentState = platformMovement; // Ghost in the current platform
-	else
-		currentState = platformNavigation; // Ghost in different platform -> go to the farthest
+	selectPlatformState();
 }
 
 void AIStateMachine::processActionInput()
@@ -292,9 +291,13 @@ void AIStateMachine::changeTarget()
 	// Check if only the AI is alive
 	if (size <= 1) return;
 
-	do {
-		target = alive.at(rand() % size);
-	} while (target == gameObject);
+	int index = rand() % size;
+	target = alive[index];
+	if (target == gameObject)
+	{
+		index = (index + 1) % size;
+		target = alive[index];
+	}
 
 	setTarget(target);
 }
@@ -317,15 +320,24 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 	}
 }
 
+void AIStateMachine::selectPlatformState()
+{
+	if (target == nullptr || platformGraph == nullptr) return;
+	if (platformGraph->getFurthestIndex(target->transform->getPosition()) == platformGraph->getClosestIndex(gameObject->transform->getPosition()))
+		currentState = platformMovement; // Target in the current platform
+	else
+		currentState = platformNavigation; // Target in different platform
+}
+
 void AIStateMachine::updateState()
 {
+	// Enter fleeing mode
 	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
 	if (ghostManager != nullptr && !ghostManager->isGhost() && ghost != nullptr)
 	{
 		float ghostDist = (ghost->transform->getPosition() - gameObject->transform->getPosition()).magnitude();
 		if (ghostDist <= avoidGhostDist)
 		{
-			LOG("DODGEADO PUTO\n");
 			jump->jump();
 			fightingState->turnBackOnTarget();
 			addActionInput(ActionInput::DODGE);
@@ -335,10 +347,12 @@ void AIStateMachine::updateState()
 		return;
 	}
 
+	// Enter / Exit ghost movement
 	if (ghostManager != nullptr) {
 		if (ghostManager->isGhost() && currentState != ghostNavigation)
 			startGhostNavigation();
 		if (!ghostManager->isGhost() && currentState == ghostNavigation)
 			startPlatformNavigation();
 	}
+
 }

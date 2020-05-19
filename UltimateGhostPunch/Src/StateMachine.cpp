@@ -16,7 +16,7 @@ StateMachine::~StateMachine()
 void StateMachine::update(float deltaTime)
 {
 	//Process current state
-	currentState->update(deltaTime);
+	if(currentState != nullptr) currentState->update(deltaTime);
 
 	//Process input
 	processActionInput();

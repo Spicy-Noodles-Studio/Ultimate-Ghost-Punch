@@ -40,6 +40,7 @@ public:
 	void setCoyoteTime(float time);
 
 	bool isGrounded();
+	bool isAbovePlayer();
 	bool isJumping();
 	bool canJump();
 

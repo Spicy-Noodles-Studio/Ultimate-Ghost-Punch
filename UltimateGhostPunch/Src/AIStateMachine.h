@@ -87,6 +87,7 @@ private:
 	void createFightingState();
 
 	/* Funcs */
+	void selectPlatformState();
 	void updateState();
 };
 
