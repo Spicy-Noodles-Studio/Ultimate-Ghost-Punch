@@ -8,7 +8,7 @@
 
 REGISTER_FACTORY(Movement);
 
-Movement::Movement(GameObject* gameObject) : UserComponent(gameObject)
+Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), speed(0)
 {
 
 }

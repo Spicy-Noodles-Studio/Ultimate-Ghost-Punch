@@ -37,7 +37,7 @@ bool OptionsMenu::applyButtonClick()
 
 bool OptionsMenu::restoreButtonClick()
 {
-	brightness = 100;
+	brightness = gameManager->getInitialBrightness();
 	soundVolume = 100;
 	musicVolume = 100;
 
@@ -86,7 +86,7 @@ bool OptionsMenu::changeFullscreen(int value)
 bool OptionsMenu::changeBrightness()
 {
 	brightnessText.setText(std::to_string((int)(brightnessScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
-	renderSystem->changeParamOfShader("LuminancePS", "brigh", brightnessScroll.getScrollPositionScrollBar());
+	renderSystem->changeParamOfShader("LuminancePS", "brigh", brightnessScroll.getScrollPositionScrollBar() + 0.5);
 	windowManager->setBrightness(brightnessScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);

@@ -7,14 +7,14 @@
 class Obstacle : public UserComponent
 {
 private:
-	// Damage dealt to the player that collides with this obstacle
+	// Damage dealt
 	int damage;
 
-	// Strength of the impulse for player that collides
+	// Strength of the impulse
 	float pushStrength;
 
-	// Offset for respawn used if the player dies from the obstacle's damage
-	Vector3 respawnOffset;
+	// Position for respawn used if the player dies
+	Vector3 initialPosition;
 
 public:
 	Obstacle(GameObject* gameObject);

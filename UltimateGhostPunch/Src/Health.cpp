@@ -3,7 +3,6 @@
 #include <GameObject.h>
 #include <sstream>
 
-#include "PlayerAnimController.h"
 #include "Block.h"
 #include "Grab.h"
 #include "CameraEffects.h"
@@ -12,7 +11,7 @@
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false), hurt(false), cameraEffects(nullptr)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleTime(0.5f), alive(true), invencible(false), hurt(false)
 {
 
 }
@@ -57,7 +56,7 @@ void Health::handleData(ComponentData* data)
 		}
 		else if (prop.first == "invDamTime")
 		{
-			setFloat(invencibleDamageTime);
+			setFloat(invencibleTime);
 		}
 		else
 			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
@@ -117,22 +116,11 @@ void Health::receiveDamage(int damage)
 		else
 		{
 			invencible = true;
-			time = invencibleDamageTime;
+			time = invencibleTime;
 		}
 
 		hurt = true;
-		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
-}
-
-float Health::getTime()
-{
-	return time;
-}
-
-float Health::getInvDamTime()
-{
-	return invencibleDamageTime;
 }
 
 void Health::setTime(float time)

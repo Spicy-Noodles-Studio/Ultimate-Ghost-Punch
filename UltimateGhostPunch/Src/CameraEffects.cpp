@@ -22,7 +22,7 @@ CameraEffects::~CameraEffects()
 
 void CameraEffects::start()
 {
-	max = WindowManager::GetInstance()->getBrightness();
+	max = WindowManager::GetInstance()->getBrightness() + 0.5;
 	if (max == 0) max = 0.00001;
 	current = max;
 	state = IDLE;

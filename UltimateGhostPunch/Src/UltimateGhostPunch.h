@@ -6,17 +6,14 @@
 
 class RigidBody;
 class GhostMovement;
-class PlayerAnimController;
 
 class UltimateGhostPunch : public UserComponent
 {
-public:
-	enum class State { NONE, AVAILABLE, CHARGING, PUNCHING, USED, SUCCESS };
-
 private:
+	enum State { NONE, CHARGING, PUNCHING, AVAILABLE, USED, SUCCESS, FAIL };
+
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
-	PlayerAnimController* anim;
 
 	Vector3 direction;
 	State state;
@@ -25,8 +22,8 @@ private:
 	float force;
 	float ghostSpeed;
 
-	// Speed multiplyer for punch charging speed (from 0.0 to 1.0)
-	float chargeSpeedMult;
+	// Speed multiplayer for punch charging speed (from 0.0 to 1.0)
+	float chargeSpeed;
 
 public:
 	UltimateGhostPunch(GameObject* gameObject);
@@ -34,20 +31,20 @@ public:
 
 	virtual void start();
 	virtual void preUpdate(float deltaTime);
+	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void charge();
 	void aim(double x, double y);
+
 	void ghostPunch();
-
-	const State& getState();
-	const Vector3& getDirection();
-
-	bool isPunching() const;
-	bool isAiming() const;
-	bool punchSuccess() const;
 	void punchSucceeded();
 
+	bool isUsed() const;
+	bool isAiming() const;
+	bool isPunching() const;
+	bool punchSuccess() const;
+	bool punchFail() const;
 };
 
 #endif

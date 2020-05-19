@@ -12,17 +12,16 @@ class Score
 	public:
 		int numOfTotalAttacks;
 		int numOfHits;
-		int percertOfHits;
 
-		int numOfSuccessfullGrabs;
+		int numOfSuccessfulGrabs;
 
 		int amountOfDamageDealt;
-		int livesStolenAsGhost;
+		int lifesStolenAsGhost;
 
-		int AmountOfDamageTakenFromSpikes;	
+		int amountOfDamageTakenFromSpikes;	
 		int timesFallen;
-		int TotalDamgeTaken;
-		int deathByEnviroment;
+		int totalDamageTaken;
+		int deathsByEnviroment;
 
 		int numOfKills;
 		std::vector<int> indexesFromEnemiesKilled;
@@ -38,26 +37,27 @@ public:
 	Score();
 	~Score();
 
+	void clearScores();
+
 	void initScore(int numOfPlayers);
-	void attackDone(int playerIndex,bool groundAttack);
-	void receiveHitFrom(int playerIndex, int fromIndex);
-	void damageRecivedFrom(int playerIndex, int fromIndex,int amount);
+	void attackDone(int playerIndex);
+	void attackHitted(int playerIndex);
+	void damageReceivedFrom(int playerIndex, int fromIndex,int amount);
 	void damagedBySpike(int playerIndex);
 	void fall(int playerIndex);
-	void grabbedBy(int playerIndex, int fromIndex);
+	void grabHitted(int playerIndex);
 	void lifeStolenBy(int playerIndex,int fromIndex);
 	void killedBy(int playerIndex, int fromIndex);
-	void deathByEnviromentHazard(int playerIndex);
+	void deathByEnviroment(int playerIndex);
 
-	int getPercentOfHits(int playerIndex);
-	int getSuccessfullGrabs(int playerIndex);
-	int getNumberOfGroundAttacks(int playerIndex);
-	int getNumberOfAirAttacks(int playerIndex);
+	int getPercentageOfHits(int playerIndex);
+	int getSuccessfulGrabs(int playerIndex);
+	int getNumberOfAttacks(int playerIndex);
 	int getAmountOfDamageDealt(int playerIndex);
-	int getLifesAsGhost(int playerIndex);
+	int getLifesStolen(int playerIndex);
 	int getTimesHittedBySpikes(int playerIndex);
 	int getAmountOfFalls(int playerIndex);
-	int getTotalDamageSuffer(int playerIndex);
+	int getTotalDamageReceived(int playerIndex);
 	int getNumberOfKills(int playerIndex);
 	int getEnviromentDeaths(int playerIndex);
 	std::vector<int> getIndexOfPlayersKilled(int playerIndex);

@@ -7,13 +7,12 @@
 
 #include "GameManager.h"
 #include "UltimateGhostPunch.h"
-#include "Health.h"
-#include "GhostManager.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(CameraController);
 
-CameraController::CameraController(GameObject* gameObject) : UserComponent(gameObject), minZ(20), maxZ(100), smoothFactor(0.125f), zoomFactor(1.0f),
-time(0.0f), slowMoTime(0.3f), slowMoDistance(5.0f), slowMoTimeScale(0.3f), slowMoZ(15.0f), state(MIDPOINT), playerPunching(nullptr)
+CameraController::CameraController(GameObject* gameObject) : UserComponent(gameObject), minZ(20), maxZ(100), minX(20), maxX(100), minY(20), maxY(100), 
+smoothFactor(0.125f), zoomFactor(1.0f), time(0.0f), slowMoTime(0.3f), slowMoDistance(5.0f), slowMoTimeScale(0.3f), slowMoZ(15.0f), state(MIDPOINT), playerPunching(nullptr)
 {
 
 }
@@ -262,8 +261,8 @@ std::vector<GameObject*> CameraController::getAlivePlayers()
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
 	std::vector<GameObject*> alive;
 	for (auto p : players) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost() 
-			|| !p->getComponent<GhostManager>()->ghostUsed()) alive.push_back(p);
+		PlayerState* state = p->getComponent<PlayerState>();
+		if (!state->isDead()) alive.push_back(p);
 	}
 	return alive;
 }

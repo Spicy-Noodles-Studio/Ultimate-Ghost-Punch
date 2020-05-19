@@ -18,7 +18,18 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
-	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess, deathStarted, punchSuccess, jumpStarted;
+	bool attackStarted;
+	bool aimStarted;
+	bool ghostStarted;
+	bool grabStarted;
+	bool blockGrabStarted;
+	bool respawnStarted;
+	bool punchStarted; 
+	bool dodgeStarted;
+	bool ghostSuccess; 
+	bool deathStarted;
+	bool punchSuccess;
+	bool jumpStarted;
 
 	std::vector<std::string> hurtSounds;
 	std::vector<std::string> hitSounds;

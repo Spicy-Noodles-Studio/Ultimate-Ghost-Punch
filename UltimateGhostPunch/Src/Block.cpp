@@ -4,7 +4,6 @@
 #include <RigidBody.h>
 #include <sstream>
 
-#include "PlayerAnimController.h"
 #include "PlayerState.h"
 #include "PlayerFX.h"
 
@@ -115,12 +114,7 @@ void Block::block()
 		timeElapsed = 0;
 		blockDirection = parent->transform->getRotation().y;
 
-		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-
-		//if(anim != nullptr)
-		//	anim->blockAnimation();
-
-		
+		PlayerFX* playerFX = parent->getComponent<PlayerFX>();
 
 		if (playerFX != nullptr)
 			playerFX->activateShield();
@@ -153,12 +147,6 @@ bool Block::blockAttack(Vector3 otherPosition)
 
 		if (blockTime <= 0)
 			blocking = false;
-
-		// Attack blocked animation
-		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-
-		//if (anim != nullptr)
-		//	anim->blockedAttackAnimation();
 
 		blocked = 2;
 		return true;

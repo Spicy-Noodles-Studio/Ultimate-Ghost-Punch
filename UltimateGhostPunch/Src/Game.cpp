@@ -82,7 +82,7 @@ void Game::update(float deltaTime)
 		if (timer < 0.0f)
 			timer = 0;
 	}
-	else if (timer == 0) // If its negative it means match its not timed
+	else if (timer == 0 && !end) // If its negative it means match its not timed
 		chooseWinner();
 
 
@@ -112,6 +112,13 @@ void Game::playerDie(int index)
 		gameManager->setPlayersAlive(nPlayers);
 }
 
+Vector3 Game::getPlayerInitialPosition(int player)
+{
+	if (player > 0 && player < playerTransforms.size())
+		return playerTransforms[player - 1].first;
+
+	return Vector3::ZERO;
+}
 CameraEffects* Game::getCameraEffects()
 {
 	return cameraEffects;
@@ -431,8 +438,8 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	gameManager->emptyKnights();
 	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
 	songManager->play2DSound("victory4");
 	songManager->pauseSong(gameManager->getSong().first);

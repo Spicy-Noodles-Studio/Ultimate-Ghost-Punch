@@ -15,6 +15,7 @@ private:
 
 	float respawnTime;
 	float time;
+
 	bool respawning;
 
 public:
@@ -25,12 +26,10 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
-	float getRespawnTime();
-
-	//Spawns in the original position;
-	void respawn();
+	void respawn(); //Spawns in the original position
 	void spawn(const Vector3& spawnPos);
-	bool isRespawning();
+
+	bool isRespawning() const;
 };
 
 #endif

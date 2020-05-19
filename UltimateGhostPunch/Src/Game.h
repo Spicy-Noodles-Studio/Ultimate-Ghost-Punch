@@ -78,6 +78,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie(int index);
+	Vector3 getPlayerInitialPosition(int player);
 	CameraEffects* getCameraEffects();
 };
 
