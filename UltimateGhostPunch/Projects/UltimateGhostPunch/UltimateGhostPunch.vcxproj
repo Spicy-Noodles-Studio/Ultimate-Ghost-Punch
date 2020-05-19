@@ -45,6 +45,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
     <ClCompile Include="..\..\Src\Countdown.cpp" />
+    <ClCompile Include="..\..\Src\CursorGame.cpp" />
+    <ClCompile Include="..\..\Src\CursorMenu.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
@@ -89,6 +91,8 @@
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
     <ClInclude Include="..\..\Src\Countdown.h" />
+    <ClInclude Include="..\..\Src\CursorGame.h" />
+    <ClInclude Include="..\..\Src\CursorMenu.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
     <ClInclude Include="..\..\Src\Grab.h" />

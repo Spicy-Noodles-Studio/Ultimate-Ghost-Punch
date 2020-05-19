@@ -2,6 +2,12 @@
     "SceneName": "StatsMenu",
     "SceneObjects": [
         {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "CursorMenu",
+            "Tag": "cursorMenu",
+            "BlueprintPath": "CursorMenu"
+        },
+        {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "StatsMenu",
             "Tag": "statsMenu",

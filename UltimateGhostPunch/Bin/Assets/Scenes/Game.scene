@@ -2,6 +2,12 @@
     "SceneName": "Game",
     "SceneObjects": [
         {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "CursorGame",
+            "Tag": "cursorGame",
+            "BlueprintPath": "CursorGame"
+        },
+        {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "Game",
             "Tag": "game",
