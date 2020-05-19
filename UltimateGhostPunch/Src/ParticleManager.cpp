@@ -114,7 +114,7 @@ void ParticleManager::manageJumpDust()
 {
 	if (jumpDust == nullptr) return;
 
-	if (playerState->isGrounded() && playerState->isJumping())
+	if ((playerState->isGrounded() && playerState->isJumping()) || playerState->hasJumped())
 		jumpDust->start();
 	else
 		jumpDust->stop();

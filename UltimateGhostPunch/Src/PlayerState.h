@@ -83,6 +83,10 @@ public:
 	bool hasKnightDied() const;
 	bool hasBeenThrown() const;
 	bool hasTaunted() const;
+	bool isResurrecting() const;
+	bool isDying() const;
+	bool isAppearing() const;
+	bool isDisappearing() const;
 
 	void setGrabbed();
 	void setThrown();

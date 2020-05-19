@@ -54,6 +54,14 @@ void GhostMovement::move(Vector3 dir)
 	}
 }
 
+void GhostMovement::stop()
+{
+	if (rigidBody == nullptr) return;
+
+	rigidBody->setLinearVelocity(Vector3::ZERO);
+	rigidBody->clearForces();
+}
+
 void GhostMovement::setSpeed(float speed)
 {
 	maxSpeed = speed;

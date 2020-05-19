@@ -6,7 +6,6 @@
 
 #include "Movement.h"
 #include "PlayerController.h"
-#include "PlayerAnimController.h"
 #include "PlayerFX.h"
 #include "Health.h"
 
@@ -61,9 +60,7 @@ void Respawn::respawn()
 }
 
 void Respawn::spawn(const Vector3& spawnPos)
-{
-	//PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
-	
+{	
 	Movement* movement = gameObject->getComponent<Movement>();
 	if (movement != nullptr)
 		movement->stop();
@@ -81,9 +78,6 @@ void Respawn::spawn(const Vector3& spawnPos)
 	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;
 	respawning = true;
-
-	//if (anim != nullptr)
-	//	anim->resurrectAnimation();
 }
 
 bool Respawn::isRespawning() const

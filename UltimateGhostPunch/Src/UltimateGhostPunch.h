@@ -6,7 +6,6 @@
 
 class RigidBody;
 class GhostMovement;
-class PlayerAnimController;
 
 class UltimateGhostPunch : public UserComponent
 {
@@ -15,7 +14,6 @@ private:
 
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
-	PlayerAnimController* anim;
 
 	Vector3 direction;
 	State state;

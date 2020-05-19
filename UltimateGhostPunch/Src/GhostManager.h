@@ -13,7 +13,6 @@ class GhostMovement;
 class Health;
 class PlayerUI;
 class PlayerController;
-class PlayerAnimController;
 
 class GhostManager : public UserComponent
 {
@@ -24,10 +23,14 @@ private:
 	
 	enum GhostMode
 	{
-		ALIVE, GHOST, DYING, DEAD
+		RESURRECT, ALIVE, DYING, APPEAR, GHOST, DISAPPEAR, DEAD
 	};
 
+	float resurrectTime;
 	float dyingTime;
+	float appearTime;
+	float disappearTime;
+
 	float ghostTime;
 	float playerGravity;
 
@@ -43,7 +46,6 @@ private:
 	Health* health;
 	PlayerUI* playerUI;
 	PlayerController* control;
-	PlayerAnimController* anim;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
@@ -77,6 +79,14 @@ public:
 	void activateGhost();
 	void deactivateGhost();
 	void deactivatePlayer();
+
+	bool isResurrecting() const;
+	bool isDying() const;
+	bool isAppearing() const;
+	bool isDisappearing() const;
+
+private:
+	void handleStates(float deltaTime);
 };
 
 #endif

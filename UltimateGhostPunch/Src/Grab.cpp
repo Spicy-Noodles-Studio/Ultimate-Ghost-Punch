@@ -6,7 +6,6 @@
 #include <sstream>
 
 #include "PlayerController.h"
-#include "PlayerAnimController.h"
 #include "PlayerIndex.h"
 #include "PlayerState.h"
 #include "Score.h"
@@ -18,7 +17,7 @@
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
-									 grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), controller(nullptr), myAnim(nullptr), enemy(nullptr), enemyController(nullptr), enemyAnim(nullptr),
+									 grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), controller(nullptr), enemy(nullptr), enemyController(nullptr),
 									 enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr), missed(0), dropped(0)
 {
 
@@ -36,8 +35,7 @@ void Grab::start()
 	if (parent != nullptr)
 	{
 		id = parent->getComponent<PlayerIndex>()->getIndex();
-		controller = parent->getComponent<PlayerController>();
-		//myAnim = parent->getComponent<PlayerAnimController>();		 
+		controller = parent->getComponent<PlayerController>();	 
 	}
 
 	score = GameManager::GetInstance()->getScore();
@@ -200,8 +198,6 @@ void Grab::drop()
 
 void Grab::grabMissed()
 {
-	//if (myAnim != nullptr) myAnim->grabFailedAnimation();
-	
 	state = IDLE;
 	missed = 2;
 }
@@ -250,13 +246,6 @@ void Grab::resetEnemy()
 	//Return control to the enemy
 	if (enemyController != nullptr) enemyController->setActive(true);
 
-	//if (enemyAnim != nullptr)
-	//	enemyAnim->thrownAwayAnimation();
-
-	//Play throw animation
-	//if (myAnim != nullptr)
-	//	myAnim->throwEnemyAnimation();
-
 	grabbedPosition = Vector3();
 }
 
@@ -264,8 +253,6 @@ void Grab::grabEnemy()
 {
 	if (enemy == nullptr || parent == nullptr)
 		return;
-
-	//enemyAnim = enemy->getComponent<PlayerAnimController>();
 
 	//Check if we have been blocked
 	std::vector<GameObject*> aux = enemy->findChildrenWithTag("groundSensor");
@@ -287,12 +274,6 @@ void Grab::grabEnemy()
 			remain = freezeDuration;
 			if (controller != nullptr)
 				controller->setActive(false); // Freeze our character
-
-			//if (enemyAnim != nullptr)
-			//	enemyAnim->blockedEnemyGrabAnimation();
-
-			//if (myAnim != nullptr)
-			//	myAnim->enemyBlockedMyGrabAnimation();
 
 			return;
 		}
@@ -323,10 +304,4 @@ void Grab::grabEnemy()
 		enemyRB->setTrigger(true);
 		enemyRB->setActive(false);
 	}
-
-	//if (myAnim != nullptr)
-		//myAnim->grabAnimation();
-
-	//if (enemyAnim != nullptr)
-	//	enemyAnim->grabbedByEnemyAnimation();
 }

@@ -255,6 +255,26 @@ bool PlayerState::hasTaunted() const
 	return taunt > 0;
 }
 
+bool PlayerState::isResurrecting() const
+{
+	return ghostManager != nullptr && ghostManager->isResurrecting();
+}
+
+bool PlayerState::isDying() const
+{
+	return ghostManager != nullptr && ghostManager->isDying();
+}
+
+bool PlayerState::isAppearing() const
+{
+	return ghostManager != nullptr && ghostManager->isAppearing();
+}
+
+bool PlayerState::isDisappearing() const
+{
+	return ghostManager != nullptr && ghostManager->isDisappearing();
+}
+
 void PlayerState::setGrabbed() 
 {
 	grabbed = true;

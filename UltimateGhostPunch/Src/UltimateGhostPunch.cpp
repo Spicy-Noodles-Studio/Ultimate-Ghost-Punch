@@ -9,11 +9,10 @@
 
 #include "Health.h"
 #include "GhostMovement.h"
-#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(UltimateGhostPunch);
 
-UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr), anim(nullptr),
+UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr),
 direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghostSpeed(0.0f), chargeSpeed(0.0f)
 {
 
@@ -28,7 +27,6 @@ void UltimateGhostPunch::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
-	anim = gameObject->getComponent<PlayerAnimController>();
 
 	if (ghostMovement != nullptr)
 		ghostSpeed = ghostMovement->getSpeed();
@@ -52,8 +50,6 @@ void UltimateGhostPunch::preUpdate(float deltaTime)
 	else if (duration <= 0)
 	{
 		state = FAIL;
-		//if (anim != nullptr)
-		//	anim->notLoopAnimation("UGPFail");
 	}
 }
 
@@ -94,8 +90,6 @@ void UltimateGhostPunch::charge()
 
 		if (ghostMovement != nullptr)
 			ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
-
-		//if (anim != nullptr) anim->chargingGhostAnimation();
 	}
 }
 
@@ -127,15 +121,11 @@ void UltimateGhostPunch::ghostPunch()
 	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
 
 	state = PUNCHING;
-
-	//if (anim != nullptr) anim->punchingGhostAnimation();
 }
 
 void UltimateGhostPunch::punchSucceeded()
 {
 	state = SUCCESS;
-
-	//if (anim != nullptr) anim->punchSuccessAnimation();
 }
 
 bool UltimateGhostPunch::isUsed() const

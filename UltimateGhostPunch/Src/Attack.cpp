@@ -10,7 +10,6 @@
 #include "Block.h"
 #include "Score.h"
 #include "GameManager.h"
-#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(Attack);
 
@@ -212,9 +211,6 @@ void Attack::quickAttack()
 	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		//if (anim != nullptr) anim->quickAttackAnimation();
-
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
 		charge(quickAttackCooldown, quickChargeTime);
@@ -230,9 +226,6 @@ void Attack::strongAttack()
 	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-		//PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		//if (anim != nullptr) anim->strongAttackAnimation();
-
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
 		charge(strongAttackCooldown, strongChargeTime);

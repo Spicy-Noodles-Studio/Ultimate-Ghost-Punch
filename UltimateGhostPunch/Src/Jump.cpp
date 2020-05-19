@@ -5,7 +5,6 @@
 #include <SoundEmitter.h>
 #include <sstream>
 
-#include "PlayerAnimController.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(Jump);
@@ -56,8 +55,10 @@ void Jump::onObjectEnter(GameObject* other)
 		coyoteTimer = 0.0f;
 		jumping = false; // Cannot be jumping if is on floor
 
-		if (isPlayer)
+		if (isPlayer) {
+			if (!playersBelow) landed = 2;
 			playersBelow++;
+		}
 	}
 }
 
@@ -113,9 +114,6 @@ void Jump::jump()
 	jumping = true;
 	jumped = 2;
 	coyoteTimer = 0.0f;
-
-	//auto animController = parent->getComponent<PlayerAnimController>();
-	//if (animController != nullptr) animController->jumpAnimation();
 }
 
 void Jump::cancelJump()

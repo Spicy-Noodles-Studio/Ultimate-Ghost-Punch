@@ -3,7 +3,6 @@
 #include <GameObject.h>
 #include <sstream>
 
-#include "PlayerAnimController.h"
 #include "Block.h"
 #include "Grab.h"
 
@@ -114,7 +113,6 @@ void Health::receiveDamage(int damage)
 		}
 
 		hurt = true;
-		//gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
 }
 
