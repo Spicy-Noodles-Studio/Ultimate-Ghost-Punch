@@ -14,6 +14,8 @@ class Health;
 class PlayerUI;
 class PlayerController;
 class PlayerAnimController;
+class CameraEffects;
+class Camera;
 
 class GhostManager : public UserComponent
 {
@@ -47,6 +49,9 @@ private:
 	PlayerUI* playerUI;
 	PlayerController* control;
 	PlayerAnimController* anim;
+
+	Camera* cam;
+	CameraEffects* cameraEffects;
 
 	Vector3 playerColour;
 	Vector3 aliveScale;

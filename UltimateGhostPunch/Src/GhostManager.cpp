@@ -17,13 +17,15 @@
 #include "PlayerUI.h"
 #include "Game.h"
 #include "GameManager.h"
+#include "CameraEffects.h"
+#include "Camera.h"
 
 REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), ghost(false), used(false), ended(false), deathPositionChanged(false), success(false), ghostDead(false), punchSuccess(false),
-game(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), movement(nullptr), ghostMovement(nullptr), health(nullptr), playerUI(nullptr), control(nullptr), anim(nullptr),
+game(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), movement(nullptr), ghostMovement(nullptr), health(nullptr), playerUI(nullptr), control(nullptr), anim(nullptr), cameraEffects(nullptr),
 playerColour(Vector3::ZERO), aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), ghostSpawnOffset(Vector3::ZERO), deathPosition(Vector3::ZERO),
-ghostTime(10.0f), playerGravity(-10.0f), ghostDamage(1), resurrectionHealth(2), mode(ALIVE)
+cam(nullptr), ghostTime(10.0f), playerGravity(-10.0f), ghostDamage(1), resurrectionHealth(2), mode(ALIVE)
 {
 
 }
@@ -46,9 +48,15 @@ void GhostManager::start()
 	playerUI = gameObject->getComponent<PlayerUI>();
 	control = gameObject->getComponent<PlayerController>();
 	anim = gameObject->getComponent<PlayerAnimController>();
+	//cam = gameObject->getComponent<Camera>();
+	//cameraEffects = cam->gameObject->getComponent<CameraEffects>();
 
 	GameObject* aux = findGameObjectWithName("Game");
-	if (aux != nullptr) game = aux->getComponent<Game>();
+	if (aux != nullptr) {
+		game = aux->getComponent<Game>();
+		
+		cameraEffects = game->getCameraEffects();
+	}
 
 	// Store some data for player resurrection
 	if (rigidBody != nullptr)
@@ -81,6 +89,8 @@ void GhostManager::update(float deltaTime)
 			ended = true;
 			ghost = false;
 			ghostDead = true;
+
+			cameraEffects->shake(Vector3(1, 1, 0));
 
 			if (anim != nullptr)
 				anim->notLoopAnimation("Disappear");
@@ -165,6 +175,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 					anim->punchSuccessAnimation();
 					punch->punchSucceeded();
 					punchSuccess = true;
+					cameraEffects->shake(Vector3(1,1,0));
 				}
 				else
 					anim->notLoopAnimation("UGPSuccess");
