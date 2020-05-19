@@ -154,7 +154,7 @@ void Attack::onObjectStay(GameObject* other)
 			Health* enemyHealth = other->getComponent<Health>();
 			if(!enemyHealth->isInvencible()) hit = true;
 
-			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()))
+			if(!enemyBlock->blockAttack(/*damage,*/ parent->transform->getPosition()))
 			{
 				score->receiveHitFrom(otherIndex->getIndex(),id );
 				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);

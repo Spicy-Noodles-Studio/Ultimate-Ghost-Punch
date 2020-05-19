@@ -29,7 +29,8 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
-	bool dropped, missed;
+	int dropped;
+	int missed;
 
 	State state;
 
@@ -59,6 +60,8 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
+
 	virtual void onObjectStay(GameObject* other);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
@@ -71,6 +74,7 @@ public:
 	bool isGrabbing() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
+
 	bool hasMissed() const;
 	bool hasDropped() const;
 };
