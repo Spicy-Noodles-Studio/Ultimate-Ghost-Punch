@@ -4,10 +4,13 @@
 
 #include <UserComponent.h>
 
+class PlayerFX;
+
 class Block : public UserComponent
 {
 private:
 	GameObject* parent;
+	PlayerFX* playerFX;
 
 	float maxBlockTime; //Duration of block when started
 	float blockTime; //Remaining time of blocking

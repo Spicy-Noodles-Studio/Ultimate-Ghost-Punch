@@ -82,6 +82,7 @@
     <ClCompile Include="..\..\Src\StatsMenu.cpp" />
     <ClCompile Include="..\..\Src\SongManager.cpp" />
     <ClCompile Include="..\..\Src\SoundManager.cpp" />
+    <ClCompile Include="..\..\Src\TrailManager.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="..\..\Src\StatsMenu.h" />
     <ClInclude Include="..\..\Src\SongManager.h" />
     <ClInclude Include="..\..\Src\SoundManager.h" />
+    <ClInclude Include="..\..\Src\TrailManager.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

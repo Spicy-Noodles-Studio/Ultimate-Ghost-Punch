@@ -51,8 +51,12 @@
                 {
                     "ComponentName": "CameraController",
                     "ComponentProperties": [
-                        ["minZ" , "20"],
+                        ["minZ" , "25"],
                         ["maxZ" , "50"],
+						["minX" , "-20"],
+                        ["maxX" , "20"],
+						["minY" , "-10"],
+                        ["maxY" , "20"],
                         ["zoomFactor" , "2.0f"],
                         ["smoothFactor" , "0.125f"]
                     ]

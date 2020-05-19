@@ -182,7 +182,7 @@ void Grab::drop()
 	Vector3 dir = Vector3(0, 0, 0);
 	dir.x = (parent->transform->getRotation().y >= 0) ? 1 : -1;
 	enemy->transform->setPosition(parent->transform->getPosition() + Vector3((parent->transform->getScale().x / 2) + (dropHorizontalOffset * dir.x), enemy->transform->getPosition().y - parent->transform->getPosition().y, 0));
-	
+
 	RigidBody* enemyRb = enemy->getComponent<RigidBody>();
 	if (enemyRb != nullptr)
 		enemyRb->addImpulse(dir * throwForce);

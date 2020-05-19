@@ -22,15 +22,18 @@ PlayerFX::~PlayerFX()
 
 void PlayerFX::start()
 {
-	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
-	shieldMesh->setVisible(false);
-
 	mesh = gameObject->getComponent<MeshRenderer>();
 	health = gameObject->getComponent<Health>();
 	ghost = gameObject->getComponent<GhostManager>();
 
 	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
 		diffuses.push_back(mesh->getDiffuse(i));
+
+	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
+	shieldMesh->setFpParam(0, "r", diffuses[0].x);
+	shieldMesh->setFpParam(0, "g", diffuses[0].y);
+	shieldMesh->setFpParam(0, "b", diffuses[0].z);
+	shieldMesh->setVisible(false);
 }
 
 void PlayerFX::update(float deltaTime)
@@ -188,6 +191,14 @@ void PlayerFX::activateShield()
 	effect = SHIELD;
 
 	shieldMesh->setVisible(true);
+}
+
+void PlayerFX::updateShield(float blockTime, float maxBlockTime)
+{
+	// Shield scale reduction
+	shieldMesh->gameObject->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4, 4, 4));
+	// Shield alpha
+	shieldMesh->setFpParam(0, "alpha", blockTime / maxBlockTime);
 }
 
 void PlayerFX::deactivateShield()

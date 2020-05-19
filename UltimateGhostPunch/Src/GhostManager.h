@@ -13,6 +13,8 @@ class GhostMovement;
 class Health;
 class PlayerUI;
 class PlayerController;
+class CameraEffects;
+class Camera;
 
 class GhostManager : public UserComponent
 {
@@ -46,6 +48,9 @@ private:
 	Health* health;
 	PlayerUI* playerUI;
 	PlayerController* control;
+
+	Camera* cam;
+	CameraEffects* cameraEffects;
 
 	Vector3 aliveScale;
 	Vector3 ghostScale;
@@ -84,6 +89,7 @@ public:
 	bool isDying() const;
 	bool isAppearing() const;
 	bool isDisappearing() const;
+	bool isDead() const;
 
 private:
 	void handleStates(float deltaTime);

@@ -96,7 +96,7 @@ bool PlayerState::canGhostMove() const
 
 bool PlayerState::canTaunt() const
 {
-	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) && 
+	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) &&
 		(attack == nullptr || !attack->isAttacking()) && (grab == nullptr || !grab->isGrabbing()) && (jump == nullptr || jump->isGrounded());
 }
 
@@ -275,7 +275,12 @@ bool PlayerState::isDisappearing() const
 	return ghostManager != nullptr && ghostManager->isDisappearing();
 }
 
-void PlayerState::setGrabbed() 
+bool PlayerState::isDead() const
+{
+	return ghostManager != nullptr && ghostManager->isDead();
+}
+
+void PlayerState::setGrabbed()
 {
 	grabbed = true;
 }

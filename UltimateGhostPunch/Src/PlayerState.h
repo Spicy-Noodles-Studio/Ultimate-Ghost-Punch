@@ -87,6 +87,7 @@ public:
 	bool isDying() const;
 	bool isAppearing() const;
 	bool isDisappearing() const;
+	bool isDead() const;
 
 	void setGrabbed();
 	void setThrown();

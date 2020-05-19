@@ -14,6 +14,7 @@ class GameManager;
 class SongManager;
 class UILayout;
 class Countdown;
+class CameraEffects;
 
 class Game : public UserComponent
 {
@@ -34,6 +35,11 @@ private:
 	UILayout* gameLayout;
 	Countdown* countdown;
 
+	CameraEffects* cameraEffects;
+	bool fadeIn;
+	bool darkness;
+	bool end;
+
 	UIElement timePanel;
 
 	std::vector<int> playerIndexes;
@@ -49,6 +55,7 @@ private:
 
 	float timer; // If time is -1, then infinite
 
+	void setCameraLimits(GameObject* mainCamera);
 	void createLevel();
 	void createKnights();
 	void createSpikes();
@@ -72,6 +79,7 @@ public:
 
 	void playerDie(int index);
 	Vector3 getPlayerInitialPosition(int player);
+	CameraEffects* getCameraEffects();
 };
 
 #endif
