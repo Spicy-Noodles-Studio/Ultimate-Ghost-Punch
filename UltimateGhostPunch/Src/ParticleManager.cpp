@@ -179,7 +179,7 @@ void ParticleManager::manageSpectreSplash()
 {
 	if (spectreSplash == nullptr) return;
 
-	if (playerState->punchHasSucceeded())
+	if (playerState->hasPunchSucceeded())
 		spectreSplash->start();
 	else
 		spectreSplash->stop();

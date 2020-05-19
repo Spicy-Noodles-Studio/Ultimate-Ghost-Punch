@@ -15,7 +15,8 @@
 
 REGISTER_FACTORY(PlayerState);
 
-PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr), health(nullptr), ghostManager(nullptr), ghostPunch(nullptr)
+PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr),
+health(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false)
 {
 
 }
@@ -32,7 +33,8 @@ void PlayerState::start()
 		attack = aux[0]->getComponent<Attack>();
 
 	aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0) {
+	if (aux.size() > 0)
+	{
 		block = aux[0]->getComponent<Block>();
 		jump = aux[0]->getComponent<Jump>();
 	}
@@ -47,6 +49,12 @@ void PlayerState::start()
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	respawn = gameObject->getComponent<Respawn>();
+}
+
+void PlayerState::postUpdate(float deltaTime)
+{
+	if (taunt > 0)taunt--;
+	if (thrown > 0)thrown--;
 }
 
 bool PlayerState::canAttack() const
@@ -82,6 +90,12 @@ bool PlayerState::canJump() const
 bool PlayerState::canGhostMove() const
 {
 	return  (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch == nullptr || !ghostPunch->isPunching());
+}
+
+bool PlayerState::canTaunt() const
+{
+	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) &&
+		(attack == nullptr || !attack->isAttacking()) && (grab == nullptr || !grab->isGrabbing()) && (jump == nullptr || jump->isGrounded());
 }
 
 bool PlayerState::isMoving() const
@@ -126,7 +140,7 @@ bool PlayerState::isDodging() const
 
 bool PlayerState::isHeavyAttacking() const
 {
-	return attack!= nullptr && attack->isHeavyAttacking();
+	return attack != nullptr && attack->isHeavyAttacking();
 }
 
 bool PlayerState::isQuickAttacking() const
@@ -144,11 +158,6 @@ bool PlayerState::isAiming() const
 	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->isAiming());
 }
 
-bool PlayerState::punchSucceeded() const
-{
-	return (ghostPunch != nullptr && ghostPunch->punchSuccess());
-}
-
 bool PlayerState::isGhost() const
 {
 	return (ghostManager != nullptr && ghostManager->isGhost());
@@ -159,14 +168,29 @@ bool PlayerState::isRespawning() const
 	return respawn != nullptr && respawn->isRespawning();
 }
 
+bool PlayerState::isFalling() const
+{
+	return jump != nullptr && jump->isFalling();
+}
+
+bool PlayerState::isGrabbed() const
+{
+	return grabbed;
+}
+
 bool PlayerState::hasBlocked() const
 {
-	return block->hasBlocked();
+	return block != nullptr && block->hasBlocked();
 }
 
 bool PlayerState::hasLanded() const
 {
 	return (ghostManager == nullptr || !ghostManager->isGhost()) && jump != nullptr && jump->hasLanded();
+}
+
+bool PlayerState::hasJumped() const
+{
+	return jump != nullptr && jump->hasJumped();
 }
 
 bool PlayerState::hasHit() const
@@ -176,7 +200,7 @@ bool PlayerState::hasHit() const
 
 bool PlayerState::hasBlockedGrab() const
 {
-	return isStunned();
+	return block != nullptr && block->hasBlockedGrab();
 }
 
 bool PlayerState::hasDroppedGrab() const
@@ -191,7 +215,7 @@ bool PlayerState::hasMissedGrab() const
 
 bool PlayerState::hasGhostSucceeded() const
 {
-	return ghostManager != nullptr && ghostManager->ghostSuccess() && !punchSucceeded();
+	return ghostManager != nullptr && ghostManager->ghostSuccess() && !hasPunchSucceeded();
 }
 
 bool PlayerState::hasPunchSucceeded() const
@@ -206,10 +230,31 @@ bool PlayerState::hasGhostDied() const
 
 bool PlayerState::hasKnightDied() const
 {
-	return health!= nullptr && !health->isAlive();
+	return health != nullptr && !health->isAlive();
 }
 
-bool PlayerState::punchHasSucceeded() const
+bool PlayerState::hasBeenThrown() const
 {
-	return ghostManager->hasPunchSuccess();
+	return thrown > 0;
+}
+
+bool PlayerState::hasTaunted() const
+{
+	return taunt > 0;
+}
+
+void PlayerState::setGrabbed()
+{
+	grabbed = true;
+}
+
+void PlayerState::setThrown()
+{
+	grabbed = false;
+	thrown = 2;
+}
+
+void PlayerState::setTaunting()
+{
+	taunt = 2;
 }
