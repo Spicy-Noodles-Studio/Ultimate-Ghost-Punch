@@ -102,7 +102,7 @@ void Game::setCameraLimits(GameObject* mainCamera)
 	if (gameManager->getLevel().first == "level2") {
 		camController->setMaxZ(60); // Increase max zoom away for largest level
 		camController->setMinY(0);
-		camController->setMaxY(30);
+		camController->setMaxY(40);
 	}
 	else {
 		camController->setMaxZ(50);
