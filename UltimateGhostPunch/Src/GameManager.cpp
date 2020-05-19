@@ -236,6 +236,23 @@ bool GameManager::isAnyGhost() const
 	return anyGhost;
 }
 
+GameObject* GameManager::getAnyGhost()
+{
+	int i = 0;
+	GameObject* anyGhost = nullptr;
+	while (i < knights.size() && anyGhost == nullptr)
+	{
+		if (knights[i] != nullptr)
+		{
+			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
+			anyGhost = (ghostManager != nullptr && ghostManager->isGhost()) ? knights[i] : nullptr;
+		}
+		i++;
+	}
+
+	return anyGhost;
+}
+
 void GameManager::pauseAllSounds()
 {
 	for (GameObject* knight : knights)

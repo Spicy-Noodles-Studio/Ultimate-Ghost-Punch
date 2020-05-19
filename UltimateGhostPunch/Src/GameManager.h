@@ -97,6 +97,7 @@ public:
 	int getWinner() const;
 
 	bool isAnyGhost() const;
+	GameObject* getAnyGhost();
 
 	void pauseAllSounds();
 	void resumeAllSound();

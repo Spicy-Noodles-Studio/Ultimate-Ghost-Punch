@@ -307,6 +307,14 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 
 void AIStateMachine::updateState()
 {
+	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
+	if (ghostManager != nullptr && !ghostManager->isGhost() && ghost != nullptr)
+	{
+		LOG("HUIR DE GHOST!\n");
+		startFleeingState(ghost);
+		return;
+	}
+
 	if (ghostManager != nullptr) {
 		if (ghostManager->isGhost() && currentState != ghostNavigation)
 			startGhostNavigation();
