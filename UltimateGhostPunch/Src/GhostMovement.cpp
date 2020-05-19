@@ -63,3 +63,9 @@ float GhostMovement::getSpeed() const
 {
 	return maxSpeed;
 }
+
+bool GhostMovement::isGhostMoving() const
+{
+	if (rigidBody == nullptr) return false;
+	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f || std::abs(rigidBody->getLinearVelocity().y) > 0.3f;
+}

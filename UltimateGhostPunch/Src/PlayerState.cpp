@@ -9,6 +9,7 @@
 #include "Movement.h"
 #include "Jump.h"
 #include "Health.h"
+#include "GhostMovement.h"
 #include "UltimateGhostPunch.h"
 #include "GhostManager.h"
 #include "Respawn.h"
@@ -16,7 +17,7 @@
 REGISTER_FACTORY(PlayerState);
 
 PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr),
-health(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false)
+health(nullptr), ghostMovement(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false)
 {
 
 }
@@ -46,6 +47,7 @@ void PlayerState::start()
 	dodge = gameObject->getComponent<Dodge>();
 	movement = gameObject->getComponent<Movement>();
 	health = gameObject->getComponent<Health>();
+	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	respawn = gameObject->getComponent<Respawn>();
@@ -148,6 +150,11 @@ bool PlayerState::isQuickAttacking() const
 	return attack != nullptr && attack->isQuickAttacking();
 }
 
+bool PlayerState::isGhostMoving() const
+{
+	return ghostMovement != nullptr && ghostMovement->isGhostMoving();
+}
+
 bool PlayerState::isPunching() const
 {
 	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->isPunching());
@@ -221,6 +228,11 @@ bool PlayerState::hasGhostSucceeded() const
 bool PlayerState::hasPunchSucceeded() const
 {
 	return ghostPunch != nullptr && ghostPunch->punchSuccess();
+}
+
+bool PlayerState::hasPunchFailed() const
+{
+	return ghostPunch != nullptr && ghostPunch->punchFail();
 }
 
 bool PlayerState::hasGhostDied() const

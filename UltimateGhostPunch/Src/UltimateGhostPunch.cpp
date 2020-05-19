@@ -38,7 +38,7 @@ void UltimateGhostPunch::start()
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
-	if (state == USED || state == SUCCESS)
+	if (state == USED || state == SUCCESS || state == FAIL)
 	{
 		Vector3 rotation = gameObject->transform->getRotation();
 		rotation.z = 0.0;
@@ -49,9 +49,9 @@ void UltimateGhostPunch::preUpdate(float deltaTime)
 	// Update the cooldown
 	if (duration > 0 && state == PUNCHING)
 		duration -= deltaTime;
-	else if (state != USED && duration <= 0)
+	else if (duration <= 0)
 	{
-		state = USED;
+		state = FAIL;
 		//if (anim != nullptr)
 		//	anim->notLoopAnimation("UGPFail");
 	}
@@ -59,7 +59,7 @@ void UltimateGhostPunch::preUpdate(float deltaTime)
 
 void UltimateGhostPunch::postUpdate(float deltaTime)
 {
-	if (state == SUCCESS)
+	if (state == SUCCESS || state == FAIL)
 		state = USED;
 }
 
@@ -140,7 +140,7 @@ void UltimateGhostPunch::punchSucceeded()
 
 bool UltimateGhostPunch::isUsed() const
 {
-	return state == USED || state == SUCCESS;
+	return state == USED;
 }
 
 bool UltimateGhostPunch::isAiming() const
@@ -156,4 +156,9 @@ bool UltimateGhostPunch::isPunching() const
 bool UltimateGhostPunch::punchSuccess() const
 {
 	return state == SUCCESS;
+}
+
+bool UltimateGhostPunch::punchFail() const
+{
+	return state == FAIL;
 }

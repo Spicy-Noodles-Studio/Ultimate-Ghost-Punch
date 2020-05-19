@@ -132,6 +132,13 @@ public:
 	bool manageHurtAnimation();
 	bool manageGrabbedAnimations();
 
+	// GHOST ANIMATION
+	bool manageChargeAnimation();
+	bool managePunchingAnimation();
+	bool managePunchSuccessAnimation();
+	bool managePunchFailAnimation();
+	bool manageGhostMoveAnimation();
+	bool manageGhostIdleAnimation();
 
 	void jumpAnimation();
 	void dashAnimation();

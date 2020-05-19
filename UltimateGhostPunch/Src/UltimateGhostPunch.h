@@ -11,7 +11,7 @@ class PlayerAnimController;
 class UltimateGhostPunch : public UserComponent
 {
 private:
-	enum State { NONE, CHARGING, PUNCHING, AVAILABLE, USED, SUCCESS };
+	enum State { NONE, CHARGING, PUNCHING, AVAILABLE, USED, SUCCESS, FAIL };
 
 	RigidBody* rigidBody;
 	GhostMovement* ghostMovement;
@@ -46,6 +46,7 @@ public:
 	bool isAiming() const;
 	bool isPunching() const;
 	bool punchSuccess() const;
+	bool punchFail() const;
 };
 
 #endif

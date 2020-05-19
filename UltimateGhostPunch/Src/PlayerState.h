@@ -11,6 +11,7 @@ class Grab;
 class Movement;
 class Jump;
 class Health;
+class GhostMovement;
 class GhostManager;
 class UltimateGhostPunch;
 class Respawn;
@@ -25,6 +26,7 @@ private:
 	Movement* movement;
 	Jump* jump;
 	Health* health;
+	GhostMovement* ghostMovement;
 	GhostManager* ghostManager;
 	UltimateGhostPunch* ghostPunch;
 	Respawn* respawn;
@@ -59,6 +61,7 @@ public:
 	bool isDodging() const;
 	bool isHeavyAttacking() const;
 	bool isQuickAttacking() const;
+	bool isGhostMoving() const;
 	bool isPunching() const;
 	bool isAiming() const;
 	bool isGhost() const;
@@ -75,6 +78,7 @@ public:
 	bool hasMissedGrab() const;
 	bool hasGhostSucceeded() const;
 	bool hasPunchSucceeded() const;
+	bool hasPunchFailed() const; 
 	bool hasGhostDied() const;
 	bool hasKnightDied() const;
 	bool hasBeenThrown() const;
