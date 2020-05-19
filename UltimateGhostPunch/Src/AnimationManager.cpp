@@ -2,12 +2,13 @@
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <Animator.h>
+#include <MeshRenderer.h>
 
 #include "PlayerState.h"
 
 REGISTER_FACTORY(AnimationManager);
 
-AnimationManager::AnimationManager(GameObject* gameObject) : UserComponent(gameObject), swordState(HAND), animator(nullptr) ,playerState(nullptr)
+AnimationManager::AnimationManager(GameObject* gameObject) : UserComponent(gameObject), swordState(HAND), animator(nullptr), playerState(nullptr), mesh(nullptr)
 {
 
 }
@@ -21,6 +22,7 @@ void AnimationManager::start()
 {
 	animator = gameObject->getComponent<Animator>();
 	playerState = gameObject->getComponent<PlayerState>();
+	mesh = gameObject->getComponent<MeshRenderer>();
 }
 
 void AnimationManager::postUpdate(float deltaTime)
@@ -30,14 +32,7 @@ void AnimationManager::postUpdate(float deltaTime)
 
 	manageAnimations();
 
-	/*
-	// Update sword position if necessary
-	if (swordState != HAND && state != GRABBING && anim->getCurrentAnimation() != "GrabFail")
-	{
-		// Move sword back to hand
-		mesh->moveEntityToBone("player", "Mano.L", "sword");
-		swordState = HAND;
-	}*/
+	manageSword();
 }
 
 void AnimationManager::manageAnimations()
@@ -45,6 +40,30 @@ void AnimationManager::manageAnimations()
 	if (manageTransitionAnimations());
 	else if (manageKnightAnimations());
 	else if (manageGhostAnimations());
+}
+
+void AnimationManager::manageSword()
+{
+	// Update sword position if necessary
+	if (swordState != HAND && !swordInBack())
+	{
+		// Move sword back to hand
+		mesh->moveEntityToBone("player", "Mano.L", "sword");
+		swordState = HAND;
+	}
+	else if (swordState != SHEATHED && swordInBack()) {
+		// Move sword back to hand
+		mesh->moveEntityToBone("player", "Espalda", "sword");
+		swordState = SHEATHED;
+	}
+}
+
+bool AnimationManager::swordInBack() const
+{
+	std::string currentAnimation = animator != nullptr ? animator->getCurrentAnimation() : "";
+	return currentAnimation == "GrabFail" || currentAnimation == "GrabHold" || currentAnimation == "GrabStart" || currentAnimation == "Throw" ||
+		currentAnimation == "RunGrabbing" || currentAnimation == "DashFrontGrabbing" || currentAnimation == "FallGrabbing" ||
+		currentAnimation == "JumpStartGrabbing" || currentAnimation == "JumpChangeGrabbing" || currentAnimation == "LandGrabbing";
 }
 
 bool AnimationManager::manageTransitionAnimations()
@@ -60,9 +79,9 @@ bool AnimationManager::manageTransitionAnimations()
 bool AnimationManager::manageKnightAnimations()
 {
 	bool result = false;
-	if(playerState->isResurrecting() || playerState->isDying() || !playerState->isGhost())
-	if (result = manageGroundedAnimations());
-	else if (result = manageAirAnimations());
+	if (playerState->isResurrecting() || playerState->isDying() || !playerState->isGhost())
+		if (result = manageGroundedAnimations());
+		else if (result = manageAirAnimations());
 	return result;
 }
 

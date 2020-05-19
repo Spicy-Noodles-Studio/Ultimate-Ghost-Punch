@@ -6,12 +6,14 @@
 
 class Animator;
 class PlayerState;
+class MeshRenderer;
 
 class AnimationManager : public UserComponent
 {
 private:
 	Animator* animator;
 	PlayerState* playerState;
+	MeshRenderer* mesh;
 
 	enum SwordState
 	{
@@ -30,6 +32,9 @@ public:
 
 private:
 	void manageAnimations();
+	void manageSword();
+
+	bool swordInBack() const;
 
 	// MAIN HIERARCHY ANIMATIONS
 	bool manageTransitionAnimations();
