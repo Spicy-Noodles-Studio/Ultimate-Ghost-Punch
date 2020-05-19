@@ -4,16 +4,13 @@
 #include <RigidBody.h>
 #include <sstream>
 
-#include "PlayerController.h"
-#include "PlayerAnimController.h"
 #include "PlayerState.h"
 #include "PlayerFX.h"
-#include "Health.h"
 
 REGISTER_FACTORY(Block);
 
-Block::Block(GameObject* gameObject) : UserComponent(gameObject), grounded(false), blocking(false), blockRegenTime(1.5f), timeElapsed(0.0f), maxBlockTime(0.5f), blockTime(0.5f),
-									   blockGrabMargin(0.25f), blockDirection(0), blocked(false)
+Block::Block(GameObject* gameObject) : UserComponent(gameObject), parent(nullptr), grounded(false), blocking(false), blocked(0), blockedGrab(0), maxBlockTime(0.5f), blockTime(0.5f),
+blockRegenTime(1.5f), blockGrabMargin(0.25f), timeElapsed(0.0f), blockDirection(0)
 {
 
 }
@@ -28,6 +25,7 @@ void Block::start()
 	parent = gameObject->getParent();
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
+	playerFX = parent->getComponent<PlayerFX>();
 }
 
 void Block::update(float deltaTime)
@@ -54,10 +52,11 @@ void Block::update(float deltaTime)
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
+		playerFX->updateShield(blockTime, maxBlockTime);
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
-			blocking = false;
+			unblock();
 			LOG("BLOCK ENDED\n");
 		}
 	}
@@ -65,7 +64,8 @@ void Block::update(float deltaTime)
 
 void Block::postUpdate(float deltaTime)
 {
-	blocked = false;
+	if (blocked > 0)blocked--;
+	if (blockedGrab > 0)blockedGrab--;
 }
 
 void Block::handleData(ComponentData* data)
@@ -103,26 +103,18 @@ void Block::onObjectExit(GameObject* other)
 		grounded = false;
 }
 
-bool Block::canBlock()
-{
-	if (parent == nullptr) return false;
-
-	PlayerState* aux = parent->getComponent<PlayerState>();
-	return !blocking && blockTime > 0 && grounded && aux->canBlock();
-}
-
 void Block::block()
 {
-	if (canBlock())
+	if (!blocking && blockTime > 0 && grounded && aux != nullptr && aux->canBlock())
 	{
 		blocking = true;
 		timeElapsed = 0;
 		blockDirection = parent->transform->getRotation().y;
 
-		auto anim = parent->getComponent<PlayerAnimController>();
+		PlayerFX* playerFX = parent->getComponent<PlayerFX>();
 
-		if(anim != nullptr)
-			anim->blockAnimation();
+		if (playerFX != nullptr)
+			playerFX->activateShield();
 
 		LOG("BLOCKING\n");
 	}
@@ -136,40 +128,27 @@ void Block::unblock()
 
 	if (parent == nullptr) return;
 
-	auto playerFX = parent->getComponent<PlayerFX>();
+	PlayerFX* playerFX = parent->getComponent<PlayerFX>();
 
 	if (playerFX != nullptr)
 		playerFX->deactivateShield();
 }
 
-bool Block::blockAttack(float damage, Vector3 otherPosition)
+bool Block::blockAttack(Vector3 otherPosition)
 {
 	if (parent == nullptr) return false;
 
 	if (blocking && ((blockDirection > 0 && otherPosition.x > parent->transform->getPosition().x) ||
-	   (blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))
+		(blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))
 	{
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
 
-		if (blockTime <= 0) 
+		if (blockTime <= 0)
 			blocking = false;
 
-		// Attack blocked animation
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-
-		if (anim != nullptr)
-			anim->blockedAttackAnimation();
-
-		blocked = true;
+		blocked = 2;
 		return true;
-	}
-	else
-	{
-		Health* health = parent->getComponent<Health>();
-
-		if (health != nullptr)
-			health->receiveDamage(damage);
 	}
 
 	return false;
@@ -183,6 +162,11 @@ float Block::getMaxBlockTime() const
 bool Block::wasGrabBlocked() const
 {
 	return blocking && blockTime > maxBlockTime - blockGrabMargin;
+}
+void Block::grabBlocked()
+{
+	blockedGrab = 2;
+	unblock();
 }
 
 bool Block::canBlockGrab() const
@@ -198,4 +182,9 @@ bool Block::isBlocking() const
 bool Block::hasBlocked() const
 {
 	return blocked;
+}
+
+bool Block::hasBlockedGrab() const
+{
+	return blockedGrab;
 }

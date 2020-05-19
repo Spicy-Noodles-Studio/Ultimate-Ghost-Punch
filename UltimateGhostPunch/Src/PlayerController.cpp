@@ -19,15 +19,14 @@
 #include "GhostMovement.h"
 #include "SoundManager.h"
 #include "UltimateGhostPunch.h"
-#include "PlayerAnimController.h"
 #include "GameManager.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
-															 jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), animController(nullptr),
-															 direction(Vector3::ZERO), controllerIndex(1), grabed(false)
+jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
+direction(Vector3::ZERO), controllerIndex(1), grabed(false)
 {
 
 }
@@ -48,7 +47,6 @@ void PlayerController::start()
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
-	animController = gameObject->getComponent<PlayerAnimController>();
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
@@ -148,7 +146,6 @@ void PlayerController::checkInput()
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK")) {
-			if (animController != nullptr) animController->tauntAnimation();
 			gameObject->getComponent<SoundManager>()->playTaunt();
 		}
 	}
@@ -164,7 +161,7 @@ void PlayerController::checkInput()
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
 
 			//Charge
-			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || (vertical != 0 || horizontal != 0))
+			if (controllerIndex == 4 && inputSystem->getMouseButtonClick('l') || getButtonDown("RB"))
 				ghostPunch->charge();
 
 			//Aim
@@ -174,7 +171,7 @@ void PlayerController::checkInput()
 				ghostPunch->aim(horizontal, -vertical);
 
 			//Ghost Punch
-			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonDown("X"))
+			if (controllerIndex == 4 && inputSystem->getMouseButtonRelease('l') || getButtonUp("RB"))
 				ghostPunch->ghostPunch();
 		}
 
@@ -191,16 +188,6 @@ int PlayerController::getControllerIndex() const
 void PlayerController::setControllerIndex(int index)
 {
 	controllerIndex = index;
-}
-
-bool PlayerController::isGrabed()
-{
-	return grabed;
-}
-
-void PlayerController::setGrabed(bool grabed)
-{
-	this->grabed = grabed;
 }
 
 bool PlayerController::getKeyDown(const std::string& key)

@@ -23,8 +23,11 @@ private:
 	Vector3 shakeDir;
 	Vector3 rotationDir;
 	Vector3 initialRotation;
+	Vector3 initialPosition;
 
-	float dir;
+	float dirX;
+	float dirY;
+	float dirZ;
 	float moves;
 	float time;
 	float vel;
@@ -38,11 +41,13 @@ public:
 	virtual ~CameraEffects();
 
 	virtual void start();
-	virtual void fixedUpdate(float deltaTime);
+	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
 	void fadeOut();
 	void fadeIn();
+	void setDarkness();
+	bool isFading();
 
 	void shake(Vector3 rotDir);
 };

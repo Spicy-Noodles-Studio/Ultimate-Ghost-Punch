@@ -17,7 +17,6 @@ class Health;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
-class PlayerAnimController;
 
 class PlayerController : public UserComponent
 {
@@ -39,7 +38,6 @@ private:
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
-	PlayerAnimController* animController;
 
 	// Input
 	InputSystem* inputSystem;
@@ -80,9 +78,6 @@ public:
 
 	int getControllerIndex()const;
 	void setControllerIndex(int index);
-
-	bool isGrabed();
-	void setGrabed(bool grabed);
 };
 
 #endif

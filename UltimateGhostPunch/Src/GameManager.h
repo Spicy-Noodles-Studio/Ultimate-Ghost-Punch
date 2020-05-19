@@ -41,6 +41,7 @@ private:
 	bool timeMode;
 
 	Score scores;
+	float initialBrightness;
 
 public:
 	GameManager();
@@ -101,6 +102,8 @@ public:
 
 	void pauseAllSounds();
 	void resumeAllSound();
+
+	float getInitialBrightness() const;
 };
 
 #endif

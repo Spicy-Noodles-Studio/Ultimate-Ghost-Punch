@@ -52,7 +52,9 @@ void Countdown::update(float deltaTime)
 
 		startCounting = true;
 		countingDown = true;
+
 		panel.setVisible(true);
+		panel.setAlwaysOnTop(true);
 
 		last = std::chrono::steady_clock::now();
 
@@ -61,12 +63,12 @@ void Countdown::update(float deltaTime)
 
 	if (countingDown)
 	{
-		if (time >= 1)
-			panel.getChild("Countdown").setText(std::to_string((int)time));
+		if (time + 1 >= 1)
+			panel.getChild("Countdown").setText(std::to_string((int)time + 1));
 		else
 			panel.getChild("Countdown").setText("FIGHT!");
 
-		if (time < 0)
+		if (time + 1 < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
 				players[i]->getComponent<PlayerState>()->setIgnoringInput(false);
@@ -74,7 +76,9 @@ void Countdown::update(float deltaTime)
 			cameraControl->setActive(true);
 
 			countingDown = false;
+
 			panel.setVisible(false);
+			panel.setAlwaysOnTop(false);
 		}
 
 		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
@@ -103,4 +107,9 @@ void Countdown::handleData(ComponentData* data)
 bool Countdown::isCounting() const
 {
 	return countingDown;
+}
+
+float Countdown::getRemainingTime()
+{
+	return time;
 }

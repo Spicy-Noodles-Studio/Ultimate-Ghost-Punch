@@ -60,12 +60,15 @@ void SoundManager::update(float deltaTime)
 
 void SoundManager::playTaunt()
 {
-	playSound(getRandomSound(tauntSounds));
+	if (playerState != nullptr && playerState->canTaunt()) {
+		playSound(getRandomSound(tauntSounds));
+		playerState->setTaunting();
+	}
 }
 
 void SoundManager::manageJumpSound()
 {
-	playSoundOnce(getRandomSound(jumpSounds), isJumping, jumpStarted);
+	playSoundOnce(getRandomSound(jumpSounds), hasJumped, jumpStarted);
 }
 
 void SoundManager::manageLandSound()
@@ -123,7 +126,7 @@ void SoundManager::manageGrabSound()
 
 void SoundManager::manageThrowSound()
 {
-	playSoundInstant(getRandomSound(throwSounds), hasDroppedGrab)
+	playSoundInstant(getRandomSound(throwSounds), hasBeenThrown)
 }
 
 void SoundManager::manageGrabBlockedSound()
@@ -183,7 +186,7 @@ void SoundManager::manageDeathSound()
 
 void SoundManager::managePunchSuccessSound()
 {
-	playSoundOnce("punch", punchSucceeded, punchSuccess);
+	playSoundOnce("punch", hasPunchSucceeded, punchSuccess);
 }
 
 void SoundManager::playSound(const std::string& sound)

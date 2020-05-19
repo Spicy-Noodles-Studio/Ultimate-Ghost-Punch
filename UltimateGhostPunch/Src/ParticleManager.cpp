@@ -114,7 +114,7 @@ void ParticleManager::manageJumpDust()
 {
 	if (jumpDust == nullptr) return;
 
-	if (playerState->isGrounded() && playerState->isJumping())
+	if ((playerState->isGrounded() && playerState->isJumping()) || playerState->hasJumped())
 		jumpDust->start();
 	else
 		jumpDust->stop();
@@ -179,7 +179,7 @@ void ParticleManager::manageSpectreSplash()
 {
 	if (spectreSplash == nullptr) return;
 
-	if (playerState->punchHasSucceeded())
+	if (playerState->hasPunchSucceeded())
 		spectreSplash->start();
 	else
 		spectreSplash->stop();

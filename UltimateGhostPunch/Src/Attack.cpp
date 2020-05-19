@@ -10,14 +10,13 @@
 #include "Block.h"
 #include "Score.h"
 #include "GameManager.h"
-#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(Attack);
 
-Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), attackTrigger(nullptr), score(nullptr), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
-										 strongAttackDamage(2), quickAttackDamage(1), chargeTime(0), strongChargeTime(0.75f), quickChargeTime(0.5f), strongAttackCooldown(2.0f),
+Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
+										 strongAttackDamage(2), quickAttackDamage(1), strongChargeTime(0.75f), quickChargeTime(0.5f), chargeTime(0), strongAttackCooldown(2.0f),
 										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), hit(false)
+										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), attackTrigger(nullptr), score(nullptr), hit(0)
 {
 
 }
@@ -30,8 +29,7 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr) 
-		id = parent->getComponent<PlayerIndex>()->getIndex();
+	if (parent != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
@@ -67,7 +65,7 @@ void Attack::update(float deltaTime)
 
 void Attack::postUpdate(float deltaTime)
 {
-	hit = false;
+	if (hit > 0)hit--;
 }
 
 void Attack::handleData(ComponentData* data)
@@ -143,33 +141,35 @@ void Attack::onObjectStay(GameObject* other)
 		}
 
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
-		PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 		Block* enemyBlock = nullptr;
 
 		if (aux.size() > 0)
 			enemyBlock = aux[0]->getComponent<Block>();
 
-		if (enemyBlock != nullptr && parent != nullptr)
+		if (enemyBlock == nullptr || (parent != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
 		{
 			Health* enemyHealth = other->getComponent<Health>();
-			if(!enemyHealth->isInvencible()) hit = true;
-
-			if(!enemyBlock->blockAttack(damage, parent->transform->getPosition()))
+			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
 			{
-				score->receiveHitFrom(otherIndex->getIndex(),id );
-				score->damageRecivedFrom(otherIndex->getIndex(),id, damage);
+				enemyHealth->receiveDamage(damage);
+				hit = 2;
 
-				if (!enemyHealth->isAlive())
-					score->killedBy(otherIndex->getIndex(), id);
+				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
+				if (otherIndex != nullptr)
+				{
+					score->attackHitted(id);
+					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
+
+					if (!enemyHealth->isAlive())
+						score->killedBy(otherIndex->getIndex(), id);
+				}
 			}
-			
-			// Deactivate the trigger until the next attack is used
-			attackTrigger->setActive(false);
-
-			// Reset the current attack state
-			state = NOT_ATTACKING;
-
 		}
+		// Deactivate the trigger until the next attack is used
+		attackTrigger->setActive(false);
+
+		// Reset the current attack state
+		state = NOT_ATTACKING;
 	}
 }
 
@@ -186,7 +186,7 @@ void Attack::attack()
 	state = ATTACKING;
 	activeTime = attackDuration;
 	attackTrigger->setActive(true);
-	score->attackDone(id, false);
+	score->attackDone(id);
 	LOG("Attack!\n");
 }
 
@@ -216,9 +216,6 @@ void Attack::quickAttack()
 	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->quickAttackAnimation();
-
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
 		charge(quickAttackCooldown, quickChargeTime);
@@ -234,10 +231,6 @@ void Attack::strongAttack()
 	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
 	{
-
-		PlayerAnimController* anim = parent->getComponent<PlayerAnimController>();
-		if (anim != nullptr) anim->strongAttackAnimation();
-
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
 		charge(strongAttackCooldown, strongChargeTime);
@@ -283,17 +276,17 @@ bool Attack::isStrongAttackOnRange(GameObject* obj)
 	return isAttackOnRange(obj, strongAttackScale);
 }
 
-bool Attack::isHeavyAttacking() const
-{
-	return isAttacking() && currentAttack == STRONG;
-}
-
 bool Attack::isQuickAttacking() const
 {
 	return isAttacking() && currentAttack == QUICK;
 }
 
+bool Attack::isHeavyAttacking() const
+{
+	return isAttacking() && currentAttack == STRONG;
+}
+
 bool Attack::hasHit() const
 {
-	return hit;
+	return hit > 0;
 }

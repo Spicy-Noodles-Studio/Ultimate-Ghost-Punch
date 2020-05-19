@@ -14,7 +14,7 @@ private:
 	};
 
 	CameraState state;
-	float minZ, maxZ;
+	float minX, maxX, minY, maxY, minZ, maxZ;
 
 	// Cam's Z pos = max dist between players * zoomFactor
 	float zoomFactor;
@@ -39,6 +39,14 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+	void setMinZ(float minZ);
+	void setMaxZ(float maxZ);
+	void setMinX(float minX);
+	void setMaxX(float maxX);
+	void setMinY(float minY);
+	void setMaxY(float maxY);
+
+
 private:
 	void smoothMove();
 	void handleState();
@@ -48,6 +56,9 @@ private:
 
 	// Returns the mid-point between every character on screen
 	Vector3 getMidPointBetweenPlayers();
+
+	// Adjusts mid-point to boundaries and zoom
+	void getMidPointAdjusted(Vector3* midPoint, float zoom);
 
 	// Set the target position specified by the players' mid-point and distance
 	void setTargetToMidPointPlayers();

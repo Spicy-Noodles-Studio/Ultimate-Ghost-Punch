@@ -11,7 +11,7 @@
 
 REGISTER_FACTORY(Movement);
 
-Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), maxVelocity(10.0f), speed(75.0f)
+Movement::Movement(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), speed(0)
 {
 
 }

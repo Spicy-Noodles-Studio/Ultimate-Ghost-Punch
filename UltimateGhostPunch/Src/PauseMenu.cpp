@@ -114,6 +114,7 @@ void PauseMenu::setPaused(bool paused)
 	pauseMenu.setVisible(paused);
 	pauseMenu.setAlwaysOnTop(paused);
 	pausePanel.setVisible(paused);
+	pausePanel.setAlwaysOnTop(paused);
 
 	gameManager->setPaused(paused);
 }

@@ -8,7 +8,6 @@ class GameObject;
 class RigidBody;
 class Score;
 class PlayerController;
-class PlayerAnimController;
 
 class Grab : public UserComponent
 {
@@ -29,17 +28,17 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
-	bool dropped, missed, beingGrabbed;
+	bool beingGrabbed;
+	int dropped;
+	int missed;
 
 	State state;
 
 	GameObject* parent;
 	PlayerController* controller;
-	PlayerAnimController* myAnim;
 
 	GameObject* enemy;
 	PlayerController* enemyController;
-	PlayerAnimController* enemyAnim;
 
 	Score* score;
 
@@ -59,6 +58,8 @@ public:
 
 	virtual void start();
 	virtual void update(float deltaTime);
+	virtual void postUpdate(float deltaTime);
+
 	virtual void onObjectStay(GameObject* other);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
@@ -73,6 +74,7 @@ public:
 	bool isGrabbed() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
+
 	bool hasMissed() const;
 	bool hasDropped() const;
 };

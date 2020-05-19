@@ -1,0 +1,13 @@
+{
+    "TrailParameters":[
+        ["offset", "4 0 0"],
+        ["trail", "node"],
+        ["length", "10"],
+        ["max", "40"],
+        ["colour", "0.8 0.8 0.8 1"],
+        ["width", "1.5"],
+        ["widthChange", "3"],
+        ["colourChange", "1 1 1 2"],
+        ["start", "false"]
+    ]
+}

@@ -20,9 +20,12 @@ public:
 	virtual void handleData(ComponentData* data);
 
 	void move(Vector3 dir);
+	void stop();
 
 	void setSpeed(float speed);
 	float getSpeed() const;
+
+	bool isGhostMoving() const;
 };
 
 #endif

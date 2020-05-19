@@ -42,7 +42,8 @@ void GhostMovement::handleData(ComponentData* data)
 void GhostMovement::move(Vector3 dir)
 {
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
-	if (aux != nullptr && aux->canGhostMove()) {
+	if (aux != nullptr && aux->canGhostMove())
+	{
 		//Character rotation
 		if (dir.x != 0)
 			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
@@ -53,6 +54,14 @@ void GhostMovement::move(Vector3 dir)
 	}
 }
 
+void GhostMovement::stop()
+{
+	if (rigidBody == nullptr) return;
+
+	rigidBody->setLinearVelocity(Vector3::ZERO);
+	rigidBody->clearForces();
+}
+
 void GhostMovement::setSpeed(float speed)
 {
 	maxSpeed = speed;
@@ -61,4 +70,10 @@ void GhostMovement::setSpeed(float speed)
 float GhostMovement::getSpeed() const
 {
 	return maxSpeed;
+}
+
+bool GhostMovement::isGhostMoving() const
+{
+	if (rigidBody == nullptr) return false;
+	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f || std::abs(rigidBody->getLinearVelocity().y) > 0.3f;
 }

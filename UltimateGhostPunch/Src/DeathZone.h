@@ -9,6 +9,8 @@ class DeathZone : public UserComponent
 private:
 	int fallDamage;
 
+	Vector3 initialPosition;
+
 public:
 	DeathZone(GameObject* gameObject);
 	virtual ~DeathZone();

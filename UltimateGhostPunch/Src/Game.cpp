@@ -20,11 +20,13 @@
 #include "GameManager.h"
 #include "PlatformGraph.h"
 #include "SongManager.h"
+#include "CameraEffects.h"
+#include "CameraController.h"
 
 REGISTER_FACTORY(Game);
 
-Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), timePanel(NULL),
-nLights(0), nSpikes(0), winner(-1), timer(-1.0f)
+Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), cameraEffects(nullptr),
+timePanel(NULL), nLights(0), nSpikes(0), winner(-1), timer(-1.0f), fadeIn(true), darkness(false), end(false)
 {
 
 }
@@ -40,13 +42,17 @@ void Game::start()
 	songManager = SongManager::GetInstance();
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr)
+	if (mainCamera != nullptr) {
 		gameLayout = mainCamera->getComponent<UILayout>();
+		setCameraLimits(mainCamera);
+	}
 
 	if (gameLayout != nullptr)
 		timePanel = gameLayout->getRoot().getChild("TimeBackground");
 
 	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
+
+	cameraEffects = mainCamera->getComponent<CameraEffects>();
 
 	playerIndexes = gameManager->getPlayerIndexes();
 	playerColours = gameManager->getPlayerColours();
@@ -83,8 +89,21 @@ void Game::update(float deltaTime)
 		if (timer < 0.0f)
 			timer = 0;
 	}
-	else if (timer == 0) // If its negative it means match its not timed
+	else if (timer == 0 && !end) // If its negative it means match its not timed
 		chooseWinner();
+
+
+	if (!darkness) {
+		cameraEffects->setDarkness();
+		darkness = true;
+	} else if (fadeIn && countdown->getRemainingTime() < 2.6) {
+		cameraEffects->fadeIn();
+		fadeIn = false;
+	}
+
+	if (end && !cameraEffects->isFading()) SceneManager::GetInstance()->changeScene("StatsMenu");
+
+	
 }
 
 void Game::playerDie(int index)
@@ -98,6 +117,33 @@ void Game::playerDie(int index)
 		chooseWinner();
 	else
 		gameManager->setPlayersAlive(nPlayers);
+}
+
+Vector3 Game::getPlayerInitialPosition(int player)
+{
+	if (player > 0 && player < playerTransforms.size())
+		return playerTransforms[player - 1].first;
+
+	return Vector3::ZERO;
+}
+CameraEffects* Game::getCameraEffects()
+{
+	return cameraEffects;
+}
+
+void Game::setCameraLimits(GameObject* mainCamera)
+{
+	CameraController* camController = mainCamera->getComponent<CameraController>();
+	if (gameManager->getLevel().first == "level2") {
+		camController->setMaxZ(60); // Increase max zoom away for largest level
+		camController->setMinY(0);
+		camController->setMaxY(40);
+	}
+	else {
+		camController->setMaxZ(50);
+		camController->setMinY(-10);
+		camController->setMaxY(20);
+	}
 }
 
 void Game::createLevel()
@@ -374,6 +420,9 @@ void Game::configureLevelCollider(const std::string& name)
 
 void Game::chooseWinner()
 {
+	cameraEffects->fadeOut();
+	end = true;
+
 	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	bool tie = false;
@@ -420,13 +469,13 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	gameManager->emptyKnights();
 	gameManager->pauseAllSounds();
+	gameManager->emptyKnights();
 
 	songManager->play2DSound("victory4");
 	songManager->pauseSong(gameManager->getSong().first);
 
-	SceneManager::GetInstance()->changeScene("StatsMenu");
+	
 }
 
 std::pair<std::string, std::string> Game::timeToText()
