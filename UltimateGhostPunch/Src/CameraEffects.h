@@ -23,8 +23,11 @@ private:
 	Vector3 shakeDir;
 	Vector3 rotationDir;
 	Vector3 initialRotation;
+	Vector3 initialPosition;
 
-	float dir;
+	float dirX;
+	float dirY;
+	float dirZ;
 	float moves;
 	float time;
 	float vel;

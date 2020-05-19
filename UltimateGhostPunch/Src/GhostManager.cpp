@@ -173,7 +173,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 					anim->punchSuccessAnimation();
 					punch->punchSucceeded();
 					punchSuccess = true;
-					cameraEffects->shake(Vector3(0,0,1));
+					cameraEffects->shake(Vector3(1,1,0));
 				}
 				else
 					anim->notLoopAnimation("UGPSuccess");

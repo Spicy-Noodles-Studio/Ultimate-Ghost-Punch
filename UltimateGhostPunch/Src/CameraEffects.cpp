@@ -5,11 +5,12 @@
 #include <GameObject.h>
 #include <Camera.h>
 #include "WindowManager.h"
+#include "MathUtils.h"
 
 REGISTER_FACTORY(CameraEffects);
 
 CameraEffects::CameraEffects(GameObject* gameObject) : UserComponent(gameObject), min(0), max(1), current(0), state(IDLE), cam(nullptr), shakeDir(Vector3::ZERO), rotationDir(Vector3::ZERO),
-initialRotation(Vector3::ZERO), dir(1), moves(0), time(0), vel(2), minRange(-5), maxRange(5), duration(2000)
+initialRotation(Vector3::ZERO), dirX(1), dirY(1), dirZ(1), moves(0), time(0), vel(2), minRange(-5), maxRange(5), duration(2000)
 {
 
 }
@@ -28,6 +29,7 @@ void CameraEffects::start()
 
 	cam = gameObject->getComponent<Transform>();
 	initialRotation = cam->getRotation();
+	initialPosition = cam->getPosition();
 }
 
 void CameraEffects::update(float deltaTime)
@@ -57,17 +59,36 @@ void CameraEffects::update(float deltaTime)
 	else if (state == SHAKE)
 	{
 
-		cam->rotate(rotationDir * dir * vel * deltaTime);
-		moves += dir*vel*deltaTime;
+		//cam->rotate(rotationDir * dir * vel * deltaTime);
+		
+		//moves += dir*vel*deltaTime;
 		time += deltaTime * 1000;
 
-		if ((moves >= maxRange && dir > 0) || (moves <= minRange && dir < 0))
-			dir *= -1;
+		float moveX, moveY, moveZ;
+
+		moveX = random() * vel * dirX;
+		moveY = random() * vel * dirY;
+		moveZ = random() * vel * dirZ;
+
+		Vector3 pos = cam->getPosition();
+
+		cam->setPosition(Vector3(pos.x + moveX * rotationDir.x, pos.y + moveY * rotationDir.y, pos.z + moveZ * rotationDir.z));
+
+		Vector3 newPos = cam->getPosition();
+		if ((newPos.x >= initialPosition.x + maxRange && dirX > 0) || (newPos.x <= initialPosition.x + minRange && dirX < 0))
+			dirX *= -1;
+
+		if ((newPos.y >= initialPosition.y + maxRange && dirY > 0) || (newPos.y <= initialPosition.y + minRange && dirY < 0))
+			dirY *= -1;
+
+		if ((newPos.z >= initialPosition.z + maxRange && dirZ > 0) || (newPos.z <= initialPosition.z + minRange && dirZ < 0))
+			dirZ *= -1;
 
 		if (time >= duration)
 		{
 			state = IDLE;
 			cam->setRotation(initialRotation);
+			cam->setPosition(initialPosition);
 			time = 0;
 			moves = 0;
 		}
@@ -138,5 +159,6 @@ void CameraEffects::shake(Vector3 rotDir)
 	{
 		state = SHAKE;
 		rotationDir = rotDir;
+		initialPosition = cam->getPosition();
 	}
 }
