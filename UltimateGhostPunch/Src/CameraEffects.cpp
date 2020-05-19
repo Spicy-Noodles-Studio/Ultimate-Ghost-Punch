@@ -105,12 +105,20 @@ void CameraEffects::fadeOut()
 {
 	if (state == IDLE)
 		state = FADEOUT;
+	else if (state == SHAKE) {
+		state = FADEOUT;
+		cam->setRotation(initialRotation);
+	}
 }
 
 void CameraEffects::fadeIn()
 {
 	if (state == IDLE)
 		state = FADEIN;
+	else if (state == SHAKE) {
+		state = FADEIN;
+		cam->setRotation(initialRotation);
+	}
 }
 
 void CameraEffects::setDarkness()
