@@ -16,7 +16,7 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f)
 {
 	if (instance == nullptr) {
 		instance = this;
