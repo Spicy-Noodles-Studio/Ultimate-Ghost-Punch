@@ -49,6 +49,7 @@ private:
 
 	float timer; // If time is -1, then infinite
 
+	void setCameraLimits(GameObject* mainCamera);
 	void createLevel();
 	void createKnights();
 	void createSpikes();

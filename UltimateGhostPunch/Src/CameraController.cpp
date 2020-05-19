@@ -56,6 +56,22 @@ void CameraController::handleData(ComponentData* data)
 		{
 			setFloat(maxZ);
 		}
+		if (prop.first == "minX")
+		{
+			setFloat(minX);
+		}
+		else if (prop.first == "maxX")
+		{
+			setFloat(maxX);
+		}
+		if (prop.first == "minY")
+		{
+			setFloat(minY);
+		}
+		else if (prop.first == "maxY")
+		{
+			setFloat(maxY);
+		}
 		else if (prop.first == "smoothFactor")
 		{
 			setFloat(smoothFactor);
@@ -83,6 +99,36 @@ void CameraController::handleData(ComponentData* data)
 		else
 			LOG("CAMERA CONTROLLER: Invalid property with name \"%s\"", prop.first.c_str());
 	}
+}
+
+void CameraController::setMinZ(float minZ)
+{
+	this->minZ = minZ;
+}
+
+void CameraController::setMaxZ(float maxZ)
+{
+	this->maxZ = maxZ;
+}
+
+void CameraController::setMinX(float minX)
+{
+	this->minX = minX;
+}
+
+void CameraController::setMaxX(float maxX)
+{
+	this->maxX = maxX;
+}
+
+void CameraController::setMinY(float minY)
+{
+	this->minY = minY;
+}
+
+void CameraController::setMaxY(float maxY)
+{
+	this->maxY = maxY;
 }
 
 void CameraController::smoothMove()
@@ -167,6 +213,16 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 	return Vector3(midX, midY, 0.0f);
 }
 
+void CameraController::getMidPointAdjusted(Vector3* midPoint, float zoom)
+{
+	float zoomMargin = (((zoom - minZ) * (15 - (0))) / (maxZ - minZ)) + 0;
+
+	if (midPoint->x < (minX + zoomMargin)) midPoint->x = minX + zoomMargin;
+	if (midPoint->x > (maxX - zoomMargin)) midPoint->x = maxX - zoomMargin;
+	if (midPoint->y < (minY + zoomMargin)) midPoint->y = minY + zoomMargin;
+	if (midPoint->y > (maxY - zoomMargin)) midPoint->y = maxY - zoomMargin;
+}
+
 void CameraController::setTargetToMidPointPlayers()
 {
 	// Move towards mid-point position
@@ -178,6 +234,9 @@ void CameraController::setTargetToMidPointPlayers()
 	//clamp between minZ and maxZ
 	dist *= zoomFactor;
 	dist = std::min(maxZ, std::max(dist, minZ));
+
+	// Adjust mid-point to boundaries and zoom
+	getMidPointAdjusted(&midPos, dist);
 
 	target = midPos + Vector3(0, 0, dist);
 }
@@ -203,7 +262,8 @@ std::vector<GameObject*> CameraController::getAlivePlayers()
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
 	std::vector<GameObject*> alive;
 	for (auto p : players) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
+		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost() 
+			|| !p->getComponent<GhostManager>()->ghostUsed()) alive.push_back(p);
 	}
 	return alive;
 }
