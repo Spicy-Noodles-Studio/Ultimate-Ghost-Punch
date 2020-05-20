@@ -7,7 +7,7 @@
 #include <GameObject.h>
 #include <UILayout.h>
 
-#include "PlayerController.h"
+#include "PlayerState.h"
 #include "CameraController.h"
 #include "GameManager.h"
 #include "DebugUtils.h"
@@ -46,7 +46,7 @@ void Countdown::update(float deltaTime)
 	if (!startCounting)
 	{
 		for (int i = 0; i < players.size(); i++)
-			players[i]->getComponent<PlayerController>()->setActive(false);
+			players[i]->getComponent<PlayerState>()->setIgnoringInput(true);
 
 		cameraControl->setActive(false);
 
@@ -71,7 +71,7 @@ void Countdown::update(float deltaTime)
 		if (time + 1 < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
-				players[i]->getComponent<PlayerController>()->setActive(true);
+				players[i]->getComponent<PlayerState>()->setIgnoringInput(false);
 
 			cameraControl->setActive(true);
 

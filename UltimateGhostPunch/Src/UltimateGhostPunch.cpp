@@ -142,7 +142,6 @@ bool UltimateGhostPunch::isPunching() const
 {
 	return state == PUNCHING;
 }
-
 bool UltimateGhostPunch::punchSuccess() const
 {
 	return state == SUCCESS;

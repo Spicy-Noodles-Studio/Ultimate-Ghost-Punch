@@ -28,6 +28,7 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
+	bool beingGrabbed;
 	int dropped;
 	int missed;
 
@@ -67,8 +68,10 @@ public:
 	void grab();
 	void drop();
 	void grabMissed();
+	void setGrabbed(bool grabbed);
 
 	bool isGrabbing() const;
+	bool isGrabbed() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
 

@@ -74,8 +74,7 @@ private:
 
 	// Returns the first player punching
 	GameObject* someonePunching();
-	// Returns a vector with the player currently active
-	std::vector<GameObject*> getAlivePlayers();
+	
 };
 
 #endif

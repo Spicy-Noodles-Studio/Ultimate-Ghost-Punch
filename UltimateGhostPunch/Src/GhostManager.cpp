@@ -18,6 +18,7 @@
 #include "GameManager.h"
 #include "CameraEffects.h"
 #include "Camera.h"
+#include "PlayerState.h"
 
 REGISTER_FACTORY(GhostManager);
 
@@ -44,6 +45,7 @@ void GhostManager::start()
 
 	playerUI = gameObject->getComponent<PlayerUI>();
 	control = gameObject->getComponent<PlayerController>();
+	playerState = gameObject->getComponent<PlayerState>();
 
 	GameObject *aux = findGameObjectWithName("Game");
 	if (aux != nullptr)
@@ -155,11 +157,6 @@ bool GhostManager::isGhost() const
 	return mode == GHOST;
 }
 
-bool GhostManager::ghostUsed() const
-{
-	return used;
-}
-
 bool GhostManager::ghostSuccess() const
 {
 	return success;
@@ -175,6 +172,10 @@ float GhostManager::getGhostTime() const
 	return ghostTime;
 }
 
+bool GhostManager::ghostUsed() const
+{
+	return used;
+}
 void GhostManager::setPlayerColour(const Vector3 &colour)
 {
 	playerColour = colour;
@@ -297,6 +298,7 @@ bool GhostManager::isDead() const
 
 void GhostManager::handleStates(float deltaTime)
 {
+	GhostMode aux = mode;
 	if (health != nullptr && !health->isAlive() && mode == ALIVE)
 	{
 		if (!used)
@@ -354,8 +356,8 @@ void GhostManager::handleStates(float deltaTime)
 	bool controllerFreezed = mode == RESURRECT || mode == DYING || mode == APPEAR || mode == DISAPPEAR || mode == DEAD;
 	if (controllerFreezed)
 	{
-		if (control != nullptr)
-			control->setActive(false);
+		if (playerState != nullptr)
+			playerState->setIgnoringInput(true);
 
 		if (ghostMovement != nullptr)
 			ghostMovement->stop();
@@ -363,9 +365,9 @@ void GhostManager::handleStates(float deltaTime)
 		if (movement != nullptr)
 			movement->stop();
 	}
-	else
+	else if(mode != aux)
 	{
-		if (control != nullptr)
-			control->setActive(true);
+		if (playerState != nullptr)
+			playerState->setIgnoringInput(false);
 	}
 }

@@ -204,6 +204,11 @@ void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 	attackTransform->setPosition(offset);
 }
 
+bool Attack::attackOnCD()
+{
+	return (cooldown > 0);
+}
+
 void Attack::quickAttack()
 {
 	if (parent == nullptr) return;
@@ -237,6 +242,38 @@ void Attack::strongAttack()
 bool Attack::isAttacking() const
 {
 	return state == ATTACKING || state == CHARGING;
+}
+
+bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale)
+{
+	Transform* target = obj->transform, * attacker = parent->transform;
+	// Target is in the direction of attack?
+	if (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x))
+		return false; // If not, return false
+
+	Transform* attackTransform = attackTrigger->gameObject->transform;
+
+	// trigger Scale
+	Vector3 triggerScale = scale * attackTransform->getScale();
+	// Distance between attacker and target
+	float distX = abs(target->getPosition().x - attacker->getPosition().x);
+	float distY = abs(target->getPosition().y - attacker->getPosition().y);
+
+	bool inside;
+	// Target is inside sensor?
+	inside = distX <= triggerScale.z && distY <= triggerScale.y;
+
+	return inside;
+}
+
+bool Attack::isQuickAttackOnRange(GameObject* obj)
+{	
+	return isAttackOnRange(obj, quickAttackScale);
+}
+
+bool Attack::isStrongAttackOnRange(GameObject* obj)
+{
+	return isAttackOnRange(obj, strongAttackScale);
 }
 
 bool Attack::isQuickAttacking() const

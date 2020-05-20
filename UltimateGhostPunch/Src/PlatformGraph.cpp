@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "PlatformNode.h"
+#include "GameManager.h"
 
 REGISTER_FACTORY(PlatformGraph);
 
@@ -26,9 +27,19 @@ void PlatformGraph::drawLinks()
 		}
 }
 
-PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3::ZERO), levelEnd(Vector3::ZERO), currentPos(Vector3::ZERO),
-currentPlatformIndex(0), fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(1.0f, 2.0f, 1.0f)),
-fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"), loadFilename(saveFilename)
+float PlatformGraph::getDistance(const Vector3& pos, const PlatformNode& node)
+{
+	Vector3 aux = node.getMiddle();
+
+	float distance = sqrt(pow((aux.x - pos.x),2) + pow((aux.y - pos.y), 2) + pow((aux.z - pos.z), 2));
+
+
+	return distance;
+}
+
+PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3()), levelEnd(Vector3()), currentPos(Vector3()), currentPlatformIndex(0),
+													   fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(0.75f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
+													   loadFilename(saveFilename)
 {
 
 }
@@ -199,6 +210,16 @@ void PlatformGraph::removeLastLink(int platform)
 		platforms[platform].removeLastEdge();
 }
 
+void PlatformGraph::setSaveFileName(std::string name)
+{
+	saveFilename = name;
+}
+
+void PlatformGraph::setLoadFileName(std::string name)
+{
+	 loadFilename = name;
+}
+
 int PlatformGraph::getIndex(const Vector3& pos)
 {
 	int index = -1;
@@ -207,7 +228,8 @@ int PlatformGraph::getIndex(const Vector3& pos)
 	for (int i = 0; i < platforms.size(); i++)
 	{
 		PlatformNode node = platforms[i];
-		if (node.getBegining().x > pos.x + playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x || node.getEnd().y > pos.y + playerCollisionSize.y)
+		if (node.getBegining().x > pos.x + playerCollisionSize.x || node.getEnd().x < pos.x - playerCollisionSize.x ||	// Off limits
+			node.getEnd().y > pos.y + playerCollisionSize.y)	// Height difference in range
 			continue;
 
 		yDiff = pos.y - node.getEnd().y;
@@ -218,4 +240,49 @@ int PlatformGraph::getIndex(const Vector3& pos)
 		}
 	}
 	return index;
+}
+
+int PlatformGraph::getFurthestIndex(const Vector3& pos)
+{
+	int index = -1;
+	
+	float max = -1;
+
+	for (int i = 0; i < platforms.size(); i++)
+	{
+		PlatformNode node = platforms[i];
+
+		float aux = getDistance(pos,node);
+
+		if (aux > max) {
+			max = aux;
+			index = i;
+		}
+	}
+	return index;
+}
+
+int PlatformGraph::getClosestIndex(const Vector3& pos)
+{
+	int index = -1;
+
+	float min = 100000;
+
+	for (int i = 0; i < platforms.size(); i++)
+	{
+		PlatformNode node = platforms[i];
+
+		float aux = getDistance(pos, node);
+
+		if (aux <= min) {
+			min = aux;
+			index = i;
+		}
+	}
+	return index;
+}
+
+std::vector<PlatformNode>& PlatformGraph::getPlatforms()
+{
+	return platforms;
 }

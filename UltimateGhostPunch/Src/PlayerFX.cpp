@@ -165,6 +165,10 @@ void PlayerFX::activateInvencible()
 void PlayerFX::deactivateInvencible()
 {
 	if (mesh == nullptr) return;
+	
+	effect = NONE;
+
+	effect = NONE;
 
 	effect = NONE;
 

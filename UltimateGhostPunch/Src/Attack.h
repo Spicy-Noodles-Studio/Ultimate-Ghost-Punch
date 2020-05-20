@@ -55,6 +55,8 @@ private:
 	void attack();
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
+	bool isAttackOnRange(GameObject* obj, const Vector3& scale);
+	
 
 public:
 	Attack(GameObject* gameObject);
@@ -68,6 +70,10 @@ public:
 
 	void quickAttack();
 	void strongAttack();
+	bool isQuickAttackOnRange(GameObject* obj);
+	bool isStrongAttackOnRange(GameObject* obj);
+
+	bool attackOnCD();
 
 	bool isAttacking() const;
 	bool isQuickAttacking() const;

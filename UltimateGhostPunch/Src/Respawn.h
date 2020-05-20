@@ -5,12 +5,12 @@
 #include <UserComponent.h>
 
 class Movement;
-class PlayerController;
+class PlayerState;
 
 class Respawn : public UserComponent
 {
 private:
-	PlayerController* playerController;
+	PlayerState* playerState;
 	Vector3 initialPos;
 
 	float respawnTime;

@@ -29,7 +29,7 @@
                     "ComponentName": "UILayout",
                     "ComponentProperties": [
                         ["layout" , "ConfigurationMenu.layout"],
-                        ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | PreviewSongButton previewSongButtonClick | StartButton startButtonClick | SettingsButton settingsButtonClick | BackButton backButtonClick"]
+                        ["event" , "-LevelButton -levelButtonClick | +LevelButton +levelButtonClick | -SongButton -songButtonClick | +SongButton +songButtonClick | PreviewSongButton previewSongButtonClick | StartButton startButtonClick | SettingsButton settingsButtonClick | BackButton backButtonClick | Slot1Button slot1ButtonClick | Slot2Button slot2ButtonClick | Slot3Button slot3ButtonClick | Slot4Button slot4ButtonClick"]
                     ]
                 }
             ],
