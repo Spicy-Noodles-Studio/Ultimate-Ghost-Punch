@@ -43,7 +43,7 @@ void CameraEffects::update(float deltaTime)
 			state = IDLE;
 		}
 
-		RenderSystem::GetInstance()->changeParamOfShader("LuminancePS", "brigh", current);
+		RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
 	}
 	else if (state == FADEIN)
 	{
@@ -54,7 +54,7 @@ void CameraEffects::update(float deltaTime)
 			state = IDLE;
 		}
 
-		RenderSystem::GetInstance()->changeParamOfShader("LuminancePS", "brigh", current);
+		RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
 	}
 	else if (state == SHAKE)
 	{
@@ -144,7 +144,7 @@ void CameraEffects::fadeIn()
 
 void CameraEffects::setDarkness()
 {
-	RenderSystem::GetInstance()->changeParamOfShader("LuminancePS", "brigh", 0);
+	RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", 0);
 	current = 0;
 }
 

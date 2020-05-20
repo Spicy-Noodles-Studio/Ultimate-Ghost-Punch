@@ -103,6 +103,8 @@ public:
 	void pauseAllSounds();
 	void resumeAllSound();
 
+	bool playerUsingKeyboard() const;
+
 	float getInitialBrightness() const;
 };
 

@@ -1,4 +1,4 @@
-compositor Luminance { // nombre
+compositor Brightness {
     technique {
         // Temporary Textures for use in subsequent target passes
         // Dimensions based on the physical dimensions of the viewport
@@ -10,8 +10,15 @@ compositor Luminance { // nombre
 
         target_output { // Final render output
             input none // start without initializing
+
+            /*pass render_scene
+            {
+                first_render_queue 0
+                last_render_queue 105
+            }*/
+
             pass render_quad { // Render a fullscreen quad with
-                material LuminancePS // the luminancePS material
+                material Brightness // the Brightness material
                 input 0 RTT0 // texture unit 0 <‐> texture RTT0
             } // para usar la textura en el fragment shader del material
         }

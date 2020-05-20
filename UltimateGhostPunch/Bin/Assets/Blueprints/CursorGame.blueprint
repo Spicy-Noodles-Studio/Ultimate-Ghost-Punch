@@ -1,0 +1,14 @@
+{
+    "ObjectType" : "GAMEOBJECT",
+    "ObjectName": "CursorGame",
+    "Tag": "cursorGame",
+    "Components":
+    [
+        {
+            "ComponentName": "Cursor"
+        },
+        {
+            "ComponentName": "CursorGame"
+        }
+    ]
+}

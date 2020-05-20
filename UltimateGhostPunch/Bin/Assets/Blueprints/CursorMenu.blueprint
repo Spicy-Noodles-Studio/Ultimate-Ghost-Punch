@@ -1,0 +1,14 @@
+{
+    "ObjectType" : "GAMEOBJECT",
+    "ObjectName": "CursorMenu",
+    "Tag": "cursorMenu",
+    "Components":
+    [
+        {
+            "ComponentName": "Cursor"
+        },
+        {
+            "ComponentName": "CursorMenu"
+        }
+    ]
+}

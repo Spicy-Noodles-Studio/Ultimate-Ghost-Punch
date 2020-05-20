@@ -275,6 +275,15 @@ void GameManager::resumeAllSound()
 	}
 }
 
+bool GameManager::playerUsingKeyboard() const
+{
+	for (int a : playerIndexes) { 
+		if (a == 4) 
+			return true; 
+	}
+	return false;
+}
+
 float GameManager::getInitialBrightness() const
 {
 	return initialBrightness;
