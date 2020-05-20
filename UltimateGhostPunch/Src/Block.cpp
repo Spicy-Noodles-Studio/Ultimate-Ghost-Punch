@@ -52,7 +52,7 @@ void Block::update(float deltaTime)
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
-		playerFX->updateShield(blockTime, maxBlockTime);
+		if(playerFX != nullptr) playerFX->updateShield(blockTime, maxBlockTime);
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
@@ -70,6 +70,7 @@ void Block::postUpdate(float deltaTime)
 
 void Block::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -93,31 +94,29 @@ void Block::handleData(ComponentData* data)
 
 void Block::onObjectEnter(GameObject* other)
 {
-	if (other->getTag() == "suelo")
+	if (other != nullptr && other->getTag() == "suelo")
 		grounded = true;
 }
 
 void Block::onObjectExit(GameObject* other)
 {
-	if (other->getTag() == "suelo")
+	if (other != nullptr && other->getTag() == "suelo")
 		grounded = false;
 }
 
 void Block::block()
 {
 	if (parent == nullptr) return;
-	PlayerState* aux = parent->getComponent<PlayerState>();
 
+	PlayerState* aux = parent->getComponent<PlayerState>();
 	if (!blocking && blockTime > 0 && grounded && aux != nullptr && aux->canBlock())
 	{
 		blocking = true;
 		timeElapsed = 0;
-		blockDirection = parent->transform->getRotation().y;
+		if(parent->transform != nullptr) blockDirection = parent->transform->getRotation().y;
 
 		PlayerFX* playerFX = parent->getComponent<PlayerFX>();
-
-		if (playerFX != nullptr)
-			playerFX->activateShield();
+		if (playerFX != nullptr) playerFX->activateShield();
 
 		LOG("BLOCKING\n");
 	}
@@ -133,13 +132,12 @@ void Block::unblock()
 
 	PlayerFX* playerFX = parent->getComponent<PlayerFX>();
 
-	if (playerFX != nullptr)
-		playerFX->deactivateShield();
+	if (playerFX != nullptr) playerFX->deactivateShield();
 }
 
 bool Block::blockAttack(Vector3 otherPosition)
 {
-	if (parent == nullptr) return false;
+	if (parent == nullptr || parent->transform == nullptr) return false;
 
 	if (blocking && ((blockDirection > 0 && otherPosition.x > parent->transform->getPosition().x) ||
 		(blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))
@@ -147,8 +145,7 @@ bool Block::blockAttack(Vector3 otherPosition)
 		blockTime -= 0.25f;
 		LOG("Attack blocked\n");
 
-		if (blockTime <= 0)
-			blocking = false;
+		if (blockTime <= 0) blocking = false;
 
 		blocked = 2;
 		return true;

@@ -43,6 +43,7 @@ void CameraController::update(float deltaTime)
 
 void CameraController::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -132,6 +133,8 @@ void CameraController::setMaxY(float maxY)
 
 void CameraController::smoothMove()
 {
+	if (gameObject->transform == nullptr) return;
+
 	Vector3 lerpDest = gameObject->transform->getPosition();
 	lerpDest.lerp(target, smoothFactor);
 	gameObject->transform->setPosition(lerpDest);
@@ -155,7 +158,7 @@ float CameraController::getMaxDistBetweenPlayers()
 	float maxDist = -1;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			if (i != j) {
+			if (i != j && alive[i]->transform != nullptr && alive[j] != nullptr) {
 				float d = (alive[i]->transform->getPosition() - alive[j]->transform->getPosition()).magnitude();
 				if (d > maxDist) maxDist = d;
 			}
@@ -167,8 +170,7 @@ float CameraController::getMaxDistBetweenPlayers()
 
 void CameraController::setTargetToSlowMo()
 {
-	if (playerPunching == nullptr)
-		return;
+	if (playerPunching == nullptr || playerPunching->transform == nullptr) return;
 
 	Vector3 playerPunchingPos = playerPunching->transform->getPosition();
 	target = { playerPunchingPos.x, playerPunchingPos.y, slowMoZ };
@@ -205,8 +207,10 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 	float midX = 0.0f, midY = 0.0f;
 
 	for (auto a : alive) {
-		midX += a->transform->getPosition().x / n;
-		midY += a->transform->getPosition().y / n;
+		if (a->transform != nullptr) {
+			midX += a->transform->getPosition().x / n;
+			midY += a->transform->getPosition().y / n;
+		}
 	}
 
 	return Vector3(midX, midY, 0.0f);
@@ -249,7 +253,7 @@ GameObject* CameraController::someonePunching()
 	int n = players.size();
 
 	int i = 0;
-	while (i < n && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
+	while (i < n && players[i]->getComponent<UltimateGhostPunch>() != nullptr && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
 		i++;
 
 	if (i < n) return players[i];

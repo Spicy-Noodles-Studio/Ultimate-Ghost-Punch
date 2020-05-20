@@ -32,6 +32,7 @@ void AnimationManager::postUpdate(float deltaTime)
 
 	manageAnimations();
 
+	// Update sword position if necessary
 	manageSword();
 }
 
@@ -44,7 +45,8 @@ void AnimationManager::manageAnimations()
 
 void AnimationManager::manageSword()
 {
-	// Update sword position if necessary
+	if (mesh == nullptr) return;
+
 	if (swordState != HAND && !swordInBack())
 	{
 		// Move sword back to hand

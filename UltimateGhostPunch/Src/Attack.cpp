@@ -56,7 +56,7 @@ void Attack::update(float deltaTime)
 	else if (state == ATTACKING)
 	{
 		// Deactivate the trigger until the next attack is used
-		attackTrigger->setActive(false);
+		if (attackTrigger != nullptr) attackTrigger->setActive(false);
 
 		// Reset the current attack state
 		state = NOT_ATTACKING;
@@ -70,6 +70,7 @@ void Attack::postUpdate(float deltaTime)
 
 void Attack::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -125,7 +126,9 @@ void Attack::handleData(ComponentData* data)
 
 void Attack::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "Player" && parent != nullptr && other != parent && state == ATTACKING) // If it hits a player different than myself
+	if (parent == nullptr || other == nullptr) return;
+
+	if (other->getTag() == "Player" && other != parent && state == ATTACKING) // If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
@@ -146,7 +149,7 @@ void Attack::onObjectStay(GameObject* other)
 		if (aux.size() > 0)
 			enemyBlock = aux[0]->getComponent<Block>();
 
-		if (enemyBlock == nullptr || (parent != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
+		if (enemyBlock == nullptr || (parent->transform != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
 		{
 			Health* enemyHealth = other->getComponent<Health>();
 			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
@@ -155,7 +158,7 @@ void Attack::onObjectStay(GameObject* other)
 				hit = 2;
 
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-				if (otherIndex != nullptr)
+				if (otherIndex != nullptr && score != nullptr)
 				{
 					score->attackHitted(id);
 					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
@@ -166,7 +169,7 @@ void Attack::onObjectStay(GameObject* other)
 			}
 		}
 		// Deactivate the trigger until the next attack is used
-		attackTrigger->setActive(false);
+		if (attackTrigger != nullptr) attackTrigger->setActive(false);
 
 		// Reset the current attack state
 		state = NOT_ATTACKING;
@@ -185,23 +188,25 @@ void Attack::attack()
 {
 	state = ATTACKING;
 	activeTime = attackDuration;
-	attackTrigger->setActive(true);
-	score->attackDone(id);
+	if (attackTrigger != nullptr) attackTrigger->setActive(true);
+	if (score != nullptr) score->attackDone(id);
 	LOG("Attack!\n");
 }
 
 void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
+	if (attackTrigger == nullptr) return;
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// Scale trigger
 	Vector3 scaleRatio = scale;
-	Vector3 currentScale = attackTransform->getScale();
+	Vector3 currentScale = Vector3::ZERO;
+	if (attackTransform != nullptr) currentScale = attackTransform->getScale();
 	attackTrigger->multiplyScale(scaleRatio);
 	scaleRatio *= currentScale;
 
 	// Move an offset
-	attackTransform->setPosition(offset);
+	if (attackTransform != nullptr) attackTransform->setPosition(offset);
 }
 
 bool Attack::attackOnCD()
@@ -246,14 +251,20 @@ bool Attack::isAttacking() const
 
 bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale)
 {
-	Transform* target = obj->transform, * attacker = parent->transform;
+	Transform* target = nullptr;
+	Transform* attacker = nullptr;
+	if (obj != nullptr) target = obj->transform;
+	if(parent != nullptr) attacker = parent->transform;
+
 	// Target is in the direction of attack?
-	if (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x))
+	if (attacker == nullptr || target == nullptr || (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x)))
 		return false; // If not, return false
 
+	if (attackTrigger == nullptr) return false;
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// trigger Scale
+	if (attackTransform == nullptr) return false;
 	Vector3 triggerScale = scale * attackTransform->getScale();
 	// Distance between attacker and target
 	float distX = abs(target->getPosition().x - attacker->getPosition().x);
