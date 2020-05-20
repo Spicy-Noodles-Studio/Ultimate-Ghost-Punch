@@ -185,14 +185,18 @@ void PlatformNavigation::moveToPlatform()
 		while (lastState >= 0 && lastState < states.size() && time >= states[lastState].getTime()) {
 			// Inject input
 			for (Action action : states[lastState].getActions())
+			{
 				stateMachine->addActionInput((ActionInput)action);
+			}
 			lastState++;
 			processed = true;
 		}
 		// Compensate time diference by injecting last state input again (unless was the last one)
 		if (!processed && lastState - 1 >= 0 && lastState < states.size()) {
 			for (Action action : states[lastState - 1].getActions())
+			{
 				stateMachine->addActionInput((ActionInput)action);
+			}
 		}
 	}
 }
