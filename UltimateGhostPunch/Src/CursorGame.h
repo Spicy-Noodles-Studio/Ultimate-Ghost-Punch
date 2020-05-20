@@ -5,6 +5,7 @@
 #include <UserComponent.h>
 
 class InputSystem;
+class InterfaceSystem;
 class Cursor;
 class GameManager;
 
@@ -31,6 +32,7 @@ private:
 
 private:
 	InputSystem* inputSystem;
+	InterfaceSystem* interfaceSystem;
 	Cursor* cursor;
 	GameManager* gameManager;
 

@@ -1,5 +1,6 @@
 #include "CursorGame.h"
 #include <InputSystem.h>
+#include <InterfaceSystem.h>
 #include <GameObject.h>
 #include <Cursor.h>
 
@@ -22,6 +23,7 @@ CursorGame::~CursorGame()
 void CursorGame::start()
 {
 	inputSystem = InputSystem::GetInstance();
+	interfaceSystem = InterfaceSystem::GetInstance();
 	cursor = gameObject->getComponent<Cursor>();
 	gameManager = GameManager::GetInstance();
 
@@ -31,15 +33,24 @@ void CursorGame::start()
 	}
 	cursor->setVisibleOnWindow(false);
 	hideCursor();
+	
+	if (interfaceSystem == nullptr) return;
+	interfaceSystem->setControllerNavigation(false);
 }
 
 void CursorGame::preUpdate(float deltaTime)
 {
 	if (isPaused()) {
+		if(interfaceSystem != nullptr && !interfaceSystem->isControllerNavigationEnabled())
+			interfaceSystem->setControllerNavigation(true);
+
 		if (mouseUsed()) showCursor();
 		else if (controllerUsed() || keyboardUsed()) hideCursor();
 	}
 	else {
+		if(interfaceSystem != nullptr && interfaceSystem->isControllerNavigationEnabled())
+			interfaceSystem->setControllerNavigation(false);
+
 		if (usingMouse()) 
 			showCursor();
 		else 
