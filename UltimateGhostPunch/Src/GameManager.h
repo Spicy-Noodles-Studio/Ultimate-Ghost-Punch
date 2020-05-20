@@ -15,12 +15,10 @@ class GameManager : public UserComponent
 private:
 	static GameManager* instance;
 
-	Score scores;
-
+	std::vector<Vector3> playerColours;
 	std::vector<int> playerIndexes;
 	std::vector<int> playerRanking;
 
-	std::vector<Vector3> playerColours;
 	std::vector<GameObject*> knights;
 
 	std::string level;
@@ -42,6 +40,7 @@ private:
 	int initialTime;
 	bool timeMode;
 
+	Score scores;
 	float initialBrightness;
 
 public:
@@ -71,6 +70,8 @@ public:
 
 	std::vector<Vector3>& getPlayerColours();
 	std::vector<GameObject*>& getKnights();
+	// Returns a vector with the player currently active
+	std::vector<GameObject*> getAlivePlayers();
 
 	void emptyKnights();
 
@@ -97,6 +98,7 @@ public:
 	int getWinner() const;
 
 	bool isAnyGhost() const;
+	GameObject* getAnyGhost();
 
 	void pauseAllSounds();
 	void resumeAllSound();

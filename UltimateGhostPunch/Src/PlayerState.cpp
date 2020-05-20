@@ -175,6 +175,10 @@ bool PlayerState::isRespawning() const
 	return respawn != nullptr && respawn->isRespawning();
 }
 
+bool PlayerState::isIgnoringInput() const
+{
+	return ignoringInput;
+}
 bool PlayerState::isFalling() const
 {
 	return jump != nullptr && jump->isFalling();
@@ -250,6 +254,10 @@ bool PlayerState::hasBeenThrown() const
 	return thrown > 0;
 }
 
+void PlayerState::setIgnoringInput(bool ignoreInput)
+{
+	ignoringInput = ignoreInput;
+}
 bool PlayerState::hasTaunted() const
 {
 	return taunt > 0;

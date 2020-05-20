@@ -46,7 +46,10 @@ void GhostMovement::move(Vector3 dir)
 	{
 		//Character rotation
 		if (dir.x != 0)
-			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+		{
+			double flippedY = (dir.x > 0) ? 1 : -1;
+			gameObject->transform->setRotation({ 0,90 * flippedY,0 });
+		}
 
 		dir *= maxSpeed;
 		if (rigidBody != nullptr)

@@ -42,10 +42,14 @@ public:
 	void unblock();
 	bool blockAttack(Vector3 otherPosition);
 
+	void setMaxBlockTime(float time) { maxBlockTime = time; }
+	float getMaxBlockTime() const;
+	void setBlockRegenTime(int time) { blockRegenTime = time; }
 	void grabBlocked();
 
-	bool canBlockGrab() const;
+	bool wasGrabBlocked() const;
 	bool isBlocking() const;
+	bool canBlockGrab() const;
 	bool hasBlocked() const; // Return if it has just blocked an attack (only true during current frame)
 	bool hasBlockedGrab() const; // Return if it has just blocked a grab attack (only true during current frame)
 };

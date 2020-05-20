@@ -125,6 +125,8 @@ void Block::block()
 
 void Block::unblock()
 {
+	if (!blocking) return;
+
 	blocking = false;
 
 	if (parent == nullptr) return;
@@ -155,6 +157,15 @@ bool Block::blockAttack(Vector3 otherPosition)
 	return false;
 }
 
+float Block::getMaxBlockTime() const
+{
+	return maxBlockTime;
+}
+
+bool Block::wasGrabBlocked() const
+{
+	return blocking && blockTime > maxBlockTime - blockGrabMargin;
+}
 void Block::grabBlocked()
 {
 	blockedGrab = 2;

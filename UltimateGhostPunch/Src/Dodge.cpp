@@ -44,6 +44,7 @@ void Dodge::update(float deltaTime)
 	}
 }
 
+
 void Dodge::handleData(ComponentData* data)
 {
 	for (auto prop : data->getProperties())
@@ -111,4 +112,9 @@ void Dodge::endDodge()
 bool Dodge::isDodging()
 {
 	return state == State::DODGING;
+}
+
+bool Dodge::isOnCooldown()
+{
+	return state != IDLE;
 }

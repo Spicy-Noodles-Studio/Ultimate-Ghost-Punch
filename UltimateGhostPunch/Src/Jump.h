@@ -40,6 +40,7 @@ public:
 	void setJumpForce(float force);
 	void setCoyoteTime(float time);
 
+	bool isAbovePlayer() const;
 	bool isGrounded() const;
 	bool isJumping() const;
 	bool isFalling() const;

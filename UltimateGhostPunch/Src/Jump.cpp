@@ -140,7 +140,12 @@ void Jump::setCoyoteTime(float time)
 
 bool Jump::isGrounded() const
 {
-	return grounded;
+	return grounded || playersBelow;
+}
+
+bool Jump::isAbovePlayer() const
+{
+	return playersBelow > 0;
 }
 
 bool Jump::isJumping() const

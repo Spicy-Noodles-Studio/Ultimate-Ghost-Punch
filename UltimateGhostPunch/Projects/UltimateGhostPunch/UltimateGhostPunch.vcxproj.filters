@@ -27,6 +27,12 @@
     <Filter Include="Archivos de origen\Menus">
       <UniqueIdentifier>{10a5e764-bb44-4321-80ac-7ead5ce194dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de encabezado\IA">
+      <UniqueIdentifier>{ecf870b7-0630-402d-9bb8-99c7c3c70dab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\IA">
+      <UniqueIdentifier>{1179a3b5-00ec-458f-be1f-7313533bb13c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Attack.cpp">
@@ -72,9 +78,6 @@
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\PlatformGraph.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Src\PlatformNode.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\MainMenu.cpp">
@@ -167,6 +170,30 @@
     <ClCompile Include="..\..\Src\TrailManager.cpp">
       <Filter>Archivos de origen\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\AIStateMachine.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\FightingState.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\GhostNavigation.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PlatformMovement.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PlatformNavigation.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\PlatformNode.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\StateAction.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\StateMachine.cpp">
+      <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h">
@@ -212,9 +239,6 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\PlatformGraph.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Src\PlatformNode.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\MainMenu.h">
@@ -303,6 +327,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\TrailManager.h">
       <Filter>Archivos de encabezado\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\AIStateMachine.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\FightingState.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\GhostNavigation.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PlatformMovement.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PlatformNavigation.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\PlatformNode.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\StateAction.h">
+      <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\StateMachine.h">
+      <Filter>Archivos de encabezado\IA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -31,6 +31,7 @@ private:
 	UltimateGhostPunch* ghostPunch;
 	Respawn* respawn;
 
+	bool ignoringInput;
 	int thrown;
 	int taunt;
 	bool grabbed;
@@ -66,6 +67,7 @@ public:
 	bool isAiming() const;
 	bool isGhost() const;
 	bool isRespawning() const;
+	bool isIgnoringInput() const;
 	bool isFalling() const;
 	bool isGrabbed() const;
 
@@ -92,6 +94,7 @@ public:
 	void setGrabbed();
 	void setThrown();
 	void setTaunting();
+	void setIgnoringInput(bool ignoreInput);
 };
 
 #endif

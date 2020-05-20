@@ -16,9 +16,9 @@
 #include "Health.h"
 #include "GhostManager.h"
 #include "Countdown.h"
-#include "ConfigurationMenu.h"
 #include "GameManager.h"
 #include "SongManager.h"
+#include "PlatformGraph.h"
 #include "CameraEffects.h"
 #include "CameraController.h"
 
@@ -62,8 +62,9 @@ void Game::start()
 	createKnights();
 	createLights();
 
-	timer = gameManager->getTime();
 	gameManager->getScore()->initScore(gameManager->getInitialPlayers());
+
+	timer = gameManager->getTime();
 	gameManager->setPaused(false);
 
 	playSong();
@@ -86,17 +87,24 @@ void Game::update(float deltaTime)
 		chooseWinner();
 
 
-	if (!darkness) {
+	if (!darkness)
+	{
 		cameraEffects->setDarkness();
 		darkness = true;
-	} else if (fadeIn && countdown->getRemainingTime() < 2.6) {
+	}
+	else if (fadeIn && countdown->getRemainingTime() < 2.6)
+	{
 		cameraEffects->fadeIn();
 		fadeIn = false;
 	}
 
-	if (end && !cameraEffects->isFading()) SceneManager::GetInstance()->changeScene("StatsMenu");
-
-	
+	if (end && !cameraEffects->isFading())
+	{
+		gameManager->pauseAllSounds();
+		songManager->pauseSong(gameManager->getSong().first);
+		gameManager->emptyKnights();
+		SceneManager::GetInstance()->changeScene("StatsMenu");
+	}
 }
 
 void Game::playerDie(int index)
@@ -119,6 +127,7 @@ Vector3 Game::getPlayerInitialPosition(int player)
 
 	return Vector3::ZERO;
 }
+
 CameraEffects* Game::getCameraEffects()
 {
 	return cameraEffects;
@@ -127,12 +136,14 @@ CameraEffects* Game::getCameraEffects()
 void Game::setCameraLimits(GameObject* mainCamera)
 {
 	CameraController* camController = mainCamera->getComponent<CameraController>();
-	if (gameManager->getLevel().first == "level2") {
+	if (gameManager->getLevel().first == "level2")
+	{
 		camController->setMaxZ(60); // Increase max zoom away for largest level
 		camController->setMinY(0);
 		camController->setMaxY(40);
 	}
-	else {
+	else
+	{
 		camController->setMaxZ(50);
 		camController->setMinY(-10);
 		camController->setMaxY(20);
@@ -282,28 +293,40 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	int nPlayers = gameManager->getInitialPlayers();
-
 	gameManager->emptyKnights();
 
-	for (int i = 0; i < nPlayers; i++)
+	for (int i = 0; i < playerIndexes.size(); i++)
 	{
-		GameObject* knight = instantiate("Player", playerTransforms[i].first);
-		if (knight == nullptr) break;
+		if (playerIndexes[i] != -1)
+		{
+			GameObject* knight = nullptr;
 
-		knight->transform->setRotation(playerTransforms[i].second);
+			if (playerIndexes[i] != 9)
+			{
+				knight = instantiate("Player", playerTransforms[i].first);
+				if (knight == nullptr) break;
 
-		knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
-		knight->getComponent<PlayerIndex>()->setIndex(i + 1);
+				knight->transform->setRotation(playerTransforms[i].second);
+				knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
+			}
+			else
+			{
+				knight = instantiate("EnemyAI", playerTransforms[i].first);
+				if (knight == nullptr) return;
 
-		knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
-		knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
+				knight->transform->setRotation(playerTransforms[i].second);
+			}
+			knight->getComponent<PlayerIndex>()->setIndex(i + 1);
 
-		knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+			knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
+			knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
 
-		knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
+			knight->getComponent<Health>()->setHealth(gameManager->getHealth());
 
-		gameManager->getKnights().push_back(knight);
+			knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
+
+			gameManager->getKnights().push_back(knight);
+		}
 	}
 }
 
@@ -383,8 +406,30 @@ void Game::configureLevelCollider(const std::string& name)
 	meshRenderer->setMesh("levelCollider", name);
 	meshRenderer->attachEntityToNode("levelCollider");
 	meshRenderer->setVisible(false);
+
 	strider->stride("levelCollider");
 	strider->setFriction(0.5f);
+
+	int i = 0;
+	bool ia = false;
+	while (i < playerIndexes.size() && !ia)
+	{
+		if (playerIndexes[i] == 9)
+			ia = true;
+		i++;
+	}
+
+	PlatformGraph* graph = levelCollider->getComponent<PlatformGraph>();
+	if (graph != nullptr)
+	{
+		if (!ia)
+			graph->setActive(false);
+		else
+		{
+			graph->setLoadFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
+			graph->setSaveFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
+		}
+	}
 }
 
 void Game::chooseWinner()
@@ -438,13 +483,7 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	gameManager->pauseAllSounds();
-	gameManager->emptyKnights();
-
 	songManager->play2DSound("victory4");
-	songManager->pauseSong(gameManager->getSong().first);
-
-	
 }
 
 std::pair<std::string, std::string> Game::timeToText()
