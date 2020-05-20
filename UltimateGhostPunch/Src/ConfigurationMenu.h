@@ -55,9 +55,8 @@ private:
 	void initNames();
 	void checkInput();
 
-	void fillSlot(int slotIndex, int deviceIndex);
+	void fillSlot(int index);
 	void clearSlot(int index);
-	void reorderSlots(int index);
 
 	int isIndexConnected(int index);
 
@@ -71,6 +70,8 @@ private:
 	bool previewSong(bool value);
 
 	void stopPreview();
+
+	bool slotButtonClick(int index, std::string name);
 
 	bool startButtonClick();
 	bool settingsButtonClick();

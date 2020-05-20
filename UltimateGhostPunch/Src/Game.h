@@ -60,7 +60,6 @@ private:
 	void createKnights();
 	void createSpikes();
 	void createLights();
-	void createAI();
 
 	void playSong();
 
@@ -79,6 +78,7 @@ public:
 	virtual void update(float deltaTime);
 
 	void playerDie(int index);
+
 	Vector3 getPlayerInitialPosition(int player);
 	CameraEffects* getCameraEffects();
 };

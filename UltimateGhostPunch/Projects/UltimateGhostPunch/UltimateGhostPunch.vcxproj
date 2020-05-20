@@ -139,13 +139,9 @@
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />
     <ClInclude Include="..\..\Src\Jump.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Health.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="UltimateGhostPunch.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

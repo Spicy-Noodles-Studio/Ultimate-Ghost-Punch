@@ -35,6 +35,11 @@ nPlayers(0), health(4), time(60), mode(false), currentLevel(""), currentSong("")
 	interfaceSystem->registerEvent("settingsButtonClick", UIEvent("ButtonClicked", [this]() {return settingsButtonClick(); }));
 	interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 
+	interfaceSystem->registerEvent("slot1ButtonClick", UIEvent("ButtonClicked", [this]() {return slotButtonClick(0, "Slot1"); }));
+	interfaceSystem->registerEvent("slot2ButtonClick", UIEvent("ButtonClicked", [this]() {return slotButtonClick(1, "Slot2"); }));
+	interfaceSystem->registerEvent("slot3ButtonClick", UIEvent("ButtonClicked", [this]() {return slotButtonClick(2, "Slot3"); }));
+	interfaceSystem->registerEvent("slot4ButtonClick", UIEvent("ButtonClicked", [this]() {return slotButtonClick(3, "Slot4"); }));
+
 	timeModes = { "Time", "Infinite" };
 }
 
@@ -59,6 +64,11 @@ ConfigurationMenu::~ConfigurationMenu()
 	interfaceSystem->unregisterEvent("startButtonClick");
 	interfaceSystem->unregisterEvent("settingsButtonClick");
 	interfaceSystem->unregisterEvent("backButtonClick");
+
+	interfaceSystem->unregisterEvent("slot1ButtonClick");
+	interfaceSystem->unregisterEvent("slot2ButtonClick");
+	interfaceSystem->unregisterEvent("slot3ButtonClick");
+	interfaceSystem->unregisterEvent("slot4ButtonClick");
 }
 
 void ConfigurationMenu::start()
@@ -84,7 +94,12 @@ void ConfigurationMenu::start()
 			slots[i] = { indexes[i] , configurationLayout->getRoot().getChild("Slot" + std::to_string(i + 1)) };
 
 			if (indexes[i] != -1)
-				slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
+			{
+				if (indexes[i] == 9)
+					slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("IA");
+				else
+					slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
+			}
 		}
 	}
 
@@ -159,18 +174,27 @@ void ConfigurationMenu::checkInput()
 	int i = 0;
 	while (i < 5 && !pressed)
 	{
-		// Clear or reorder Slots
+		// Fill or clear slots
 		int slotIndex = isIndexConnected(i);
-		bool enterButton = isIndexConnected(i) == -1 && (i < 4 && inputSystem->getButtonPress(i, "X")) || (i == 4 && inputSystem->getKeyPress("SPACE"));
-		bool exitButton = isIndexConnected(i) != -1 && (i < 4 && (inputSystem->getButtonPress(i, "X") || !inputSystem->isControllerConnected(i))) || (i == 4 && inputSystem->getKeyPress("SPACE"));
+		bool enterButton = (i < 4 && inputSystem->getButtonPress(i, "X")) || (i == 4 && inputSystem->getKeyPress("SPACE"));
+		bool exitButton = (i < 4 && (inputSystem->getButtonPress(i, "X") || !inputSystem->isControllerConnected(i))) || (i == 4 && inputSystem->getKeyPress("SPACE"));
 
 		if (nPlayers < 4 && slotIndex == -1 && enterButton)
-			fillSlot(nPlayers, i);
+			fillSlot(i);
 		else if (slotIndex != -1 && exitButton)
-		{
 			clearSlot(slotIndex);
-			reorderSlots(slotIndex);
-		}
+
+		// Fill or clear with IA
+		int enterIASlot = isIndexConnected(-1);
+		bool enterIAButton = (i < 4 && inputSystem->getButtonPress(i, "RB"));
+
+		int exitIASlot = isIndexConnected(9);
+		bool exitIAButton = (i < 4 && inputSystem->getButtonPress(i, "LB"));
+
+		if (nPlayers < 4 && enterIASlot != -1 && enterIAButton)
+			slotButtonClick(enterIASlot, "Slot" + std::to_string(enterIASlot + 1));
+		else if (exitIASlot != -1 && exitIAButton)
+			slotButtonClick(exitIASlot, "Slot" + std::to_string(exitIASlot + 1));
 
 		// Close Settings Panel or back to Main Menu
 		bool escape = i == 4 && inputSystem->getKeyPress("ESCAPE");
@@ -200,43 +224,62 @@ void ConfigurationMenu::checkInput()
 	}
 }
 
-void ConfigurationMenu::fillSlot(int slotIndex, int deviceIndex)
+void ConfigurationMenu::fillSlot(int index)
 {
-	slots[slotIndex].first = deviceIndex;
-	slots[slotIndex].second.getChild("Slot" + std::to_string(slotIndex + 1) + "Text").setText("Player " + std::to_string(slotIndex + 1));
+	int i = 0;
+	bool find = false;
+
+	while (i < slots.size() && !find)
+	{
+		if (slots[i].first == -1)
+		{
+			find = true;
+
+			slots[i].first = index;
+			slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
+			slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Button").setVisible(false);
+		}
+		i++;
+	}
 
 	nPlayers++;
 
 	if (!startButton.isVisible() && nPlayers >= MIN_PLAYERS)
 		startButton.setVisible(true);
+
+	buttonClick(buttonSound);
 }
 
 void ConfigurationMenu::clearSlot(int index)
 {
 	slots[index].first = -1;
 	slots[index].second.getChild("Slot" + std::to_string(index + 1) + "Text").setText("Press SPACE or X");
+	slots[index].second.getChild("Slot" + std::to_string(index + 1) + "Button").setVisible(true);
 
 	nPlayers--;
 
 	if (startButton.isVisible() && nPlayers < MIN_PLAYERS)
 		startButton.setVisible(false);
-}
 
-void ConfigurationMenu::reorderSlots(int index)
-{
-	for (int i = index; i < nPlayers; i++)
-	{
-		fillSlot(i, slots[i + 1].first);
-		clearSlot(i + 1);
-	}
+	buttonClick(buttonSound);
 }
 
 int ConfigurationMenu::isIndexConnected(int index)
 {
 	int i = 0;
-	while (i < nPlayers - 1 && slots[i].first != index) i++;
 
-	if (slots[i].first == index)
+	if (index == 9)
+	{
+		i = slots.size() - 1;
+		while (i >= 0 && slots[i].first != index) i--;
+	}
+	else
+	{
+		i = 0;
+		while (i < slots.size() && slots[i].first != index) i++;
+	}
+
+	if (i < slots.size() && slots[i].first == index)
 		return i;
 
 	return -1;
@@ -358,6 +401,36 @@ void ConfigurationMenu::stopPreview()
 		songManager->resumeMenuSong();
 		songPreview = false;
 	}
+}
+
+bool ConfigurationMenu::slotButtonClick(int index, std::string name)
+{
+	if (slots[index].first == -1)
+	{
+		slots[index].first = 9;
+		slots[index].second.getChild(name + "Text").setText("IA");
+		slots[index].second.getChild(name + "Button").setText("Clear IA");
+
+		nPlayers++;
+
+		if (!startButton.isVisible() && nPlayers >= MIN_PLAYERS)
+			startButton.setVisible(true);
+	}
+	else
+	{
+		slots[index].first = -1;
+		slots[index].second.getChild(name + "Text").setText("Press SPACE or X");
+		slots[index].second.getChild(name + "Button").setText("Insert IA");
+
+		nPlayers--;
+
+		if (startButton.isVisible() && nPlayers < MIN_PLAYERS)
+			startButton.setVisible(false);
+	}
+
+	buttonClick(buttonSound);
+
+	return false;
 }
 
 bool ConfigurationMenu::startButtonClick()
