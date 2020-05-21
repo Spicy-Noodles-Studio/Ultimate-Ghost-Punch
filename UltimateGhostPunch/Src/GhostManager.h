@@ -48,7 +48,6 @@ private:
 	GhostMovement* ghostMovement;
 	Health* health;
 	PlayerUI* playerUI;
-	PlayerController* control;
 	PlayerState* playerState;
 
 	Camera* cam;

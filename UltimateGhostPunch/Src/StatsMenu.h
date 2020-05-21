@@ -2,17 +2,20 @@
 #ifndef STATS_MENU_H
 #define STATS_MENU_H
 
-#include <UserComponent.h>
+#include "Menu.h"
+
 #include <UIElement.h>
 #include <vector>
 #include <string>
 
 class GameManager;
+class Score;
 
-class StatsMenu : public UserComponent
+class StatsMenu : public Menu
 {
 private:
-	GameManager* gameManager;
+	Score* score;
+
 	std::vector<UIElement> texts;
 	std::vector<UIElement> panels;
 

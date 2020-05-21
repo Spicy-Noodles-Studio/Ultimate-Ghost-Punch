@@ -253,7 +253,7 @@ GameObject* CameraController::someonePunching()
 	int n = players.size();
 
 	int i = 0;
-	while (i < n && players[i]->getComponent<UltimateGhostPunch>() != nullptr && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
+	while (i < n && players[i] != nullptr && players[i]->getComponent<UltimateGhostPunch>() != nullptr && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
 		i++;
 
 	if (i < n) return players[i];

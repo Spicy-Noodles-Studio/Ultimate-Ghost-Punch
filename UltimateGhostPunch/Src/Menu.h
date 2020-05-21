@@ -9,6 +9,7 @@ class GameManager;
 class InputSystem;
 class InterfaceSystem;
 class SongManager;
+class SceneManager;
 
 class Menu : public UserComponent
 {
@@ -21,6 +22,7 @@ protected:
 	InputSystem* inputSystem;
 	InterfaceSystem* interfaceSystem;
 	SongManager* songManager;
+	SceneManager* sceneManager;
 
 	virtual void buttonClick(const std::string& sound);
 	virtual bool backButtonClick();

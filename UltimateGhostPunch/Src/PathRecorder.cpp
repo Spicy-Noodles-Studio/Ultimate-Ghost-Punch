@@ -48,16 +48,13 @@ void PathRecorder::start()
 	// TODO: devolver a como estaba antes, esto petaba
 	controllerIndex = 4; // gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
 
-	std::vector<GameObject*> groundSensor = gameObject->findChildrenWithTag("groundSensor");
-	if (groundSensor.size() > 0)
-		jump = groundSensor[0]->getComponent<Jump>();
-	checkNull(jump);
-
 	parent = gameObject->getParent();
 	checkNullAndBreak(parent);
 	
+	jump = gameObject->getComponent<Jump>();
 	health = parent->getComponent<Health>();
 	ghostManager = parent->getComponent<GhostManager>();
+	checkNull(jump);
 	checkNull(health);
 	checkNull(ghostManager);
 }

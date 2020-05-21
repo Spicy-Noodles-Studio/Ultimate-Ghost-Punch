@@ -7,6 +7,7 @@
 #include <UIElement.h>
 
 class UILayout;
+class WindowManager;
 
 class MainMenu : public Menu
 {
@@ -17,6 +18,8 @@ private:
 
 	bool controlsButtonClick();
 	bool creditsButtonClick();
+
+	WindowManager* windowManager;
 
 public:
 	MainMenu(GameObject* gameObject);

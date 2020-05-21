@@ -28,8 +28,10 @@ bool PauseMenu::optionsButtonClick()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	interfaceSystem->clearControllerMenuInput();
-	interfaceSystem->initControllerMenuInput(&optionsMenu);
+	if (interfaceSystem != nullptr) {
+		interfaceSystem->clearControllerMenuInput();
+		interfaceSystem->initControllerMenuInput(&optionsMenu);
+	}
 
 	buttonClick(buttonSound);
 
@@ -38,27 +40,33 @@ bool PauseMenu::optionsButtonClick()
 
 bool PauseMenu::exitButtonClick()
 {
-	gameManager->setPaused(false);
-	gameManager->pauseAllSounds();
-	gameManager->emptyKnights();
-
-	songManager->stopSong(gameManager->getSong().first);
+	if (gameManager != nullptr) {
+		gameManager->setPaused(false);
+		gameManager->pauseAllSounds();
+		gameManager->emptyKnights();
+		if (songManager != nullptr)
+			songManager->stopSong(gameManager->getSong().first);
+	}
 
 	return Menu::backButtonClick();
 }
 
 PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), countdown(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
 {
-	interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
-	interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
-	interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	if (interfaceSystem != nullptr) {
+		interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
+		interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
+		interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	}
 }
 
 PauseMenu::~PauseMenu()
 {
-	interfaceSystem->unregisterEvent("resumeButtonClick");
-	interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
-	interfaceSystem->unregisterEvent("pauseExitButtonClick");
+	if (interfaceSystem != nullptr) {
+		interfaceSystem->unregisterEvent("resumeButtonClick");
+		interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
+		interfaceSystem->unregisterEvent("pauseExitButtonClick");
+	}
 }
 
 void PauseMenu::start()
@@ -76,16 +84,21 @@ void PauseMenu::start()
 	}
 
 	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
-	if (options != nullptr)
-		optionsMenu = options->getComponent<UILayout>()->getRoot();
+	if (options != nullptr) {
+		UILayout* optionsLayout = options->getComponent<UILayout>();
+		if (optionsLayout != nullptr)
+			optionsMenu = optionsLayout->getRoot();
+	}
 
-	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
+	GameObject* countdownObject = findGameObjectWithName("Countdown");
+	if (countdownObject != nullptr)
+		countdown = countdownObject->getComponent<Countdown>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (!countdown->isCounting() && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
-		setPaused(!GameManager::GetInstance()->isPaused());
+	if ( countdown != nullptr && !countdown->isCounting() && gameManager != nullptr &&  inputSystem != nullptr && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+		setPaused(!gameManager->isPaused());
 }
 
 bool PauseMenu::checkControllersInput()
@@ -95,7 +108,7 @@ bool PauseMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
+		if (inputSystem != nullptr && inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
 			result = true;
 
 		i++;
@@ -106,6 +119,8 @@ bool PauseMenu::checkControllersInput()
 
 void PauseMenu::setPaused(bool paused)
 {
+	if (gameManager == nullptr || songManager == nullptr) return;
+
 	if (paused == gameManager->isPaused()) return;
 
 	if (paused)	songManager->pauseSong(gameManager->getSong().first);

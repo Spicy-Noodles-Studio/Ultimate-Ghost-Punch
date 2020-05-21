@@ -49,8 +49,6 @@ private:
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
 	std::vector<LightData> lights; // position, intensity, colour, direction
 
-	int nSpikes;
-	int nLights;
 	int winner;
 
 	float timer; // If time is -1, then infinite

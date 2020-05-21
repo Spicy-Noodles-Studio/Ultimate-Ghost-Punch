@@ -7,10 +7,10 @@
 
 REGISTER_FACTORY(ParticleManager);
 
-ParticleManager::ParticleManager(GameObject* gameObject) :	UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
-															bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
-															spectre(nullptr), spectreSplash(nullptr), playerState(nullptr),
-															stunDelay(0.0f), stunTimer(0.0f)
+ParticleManager::ParticleManager(GameObject* gameObject) : UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
+bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
+spectre(nullptr), spectreSplash(nullptr), playerState(nullptr),
+stunDelay(0.0f), stunTimer(0.0f)
 {
 
 }
@@ -24,8 +24,7 @@ void ParticleManager::start()
 {
 	// PlayerState for info
 	playerState = gameObject->getComponent<PlayerState>();
-	if (playerState == nullptr)
-		LOG_ERROR("PARTICLE MANAGER", "PlayerState component not found");
+	checkNull(playerState);
 
 	/* FLOOR DUST */
 	createParticle(&floorDust, "FloorDust", Vector3::NEGATIVE_UP * 2.5f);
@@ -84,7 +83,7 @@ void ParticleManager::preUpdate(float deltaTime)
 void ParticleManager::createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position)
 {
 	if (*emitter != nullptr) return;
-	
+
 	GameObject* particlesObject = instantiate("ParticleEmitter");
 	if (particlesObject == nullptr)
 		return;
@@ -96,13 +95,14 @@ void ParticleManager::createParticle(ParticleEmitter** emitter, const std::strin
 	if (*emitter == nullptr)
 		return;
 
-	particlesObject->transform->setPosition(position);
+	if (particlesObject->transform != nullptr)
+		particlesObject->transform->setPosition(position);
 	(*emitter)->newEmitter(particleName);
 }
 
 void ParticleManager::manageFloorDust()
 {
-	if (floorDust == nullptr) return;
+	if (floorDust == nullptr || playerState == nullptr) return;
 
 	if (playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
 		floorDust->start();
@@ -112,7 +112,7 @@ void ParticleManager::manageFloorDust()
 
 void ParticleManager::manageJumpDust()
 {
-	if (jumpDust == nullptr) return;
+	if (jumpDust == nullptr || playerState == nullptr) return;
 
 	if ((playerState->isGrounded() && playerState->isJumping()) || playerState->hasJumped())
 		jumpDust->start();
@@ -122,7 +122,7 @@ void ParticleManager::manageJumpDust()
 
 void ParticleManager::manageLandDust()
 {
-	if (landDust == nullptr) return;
+	if (landDust == nullptr || playerState == nullptr) return;
 
 	if (playerState->hasLanded() && playerState->canMove())
 		landDust->start();
@@ -132,7 +132,7 @@ void ParticleManager::manageLandDust()
 
 void ParticleManager::manageBloodSplash()
 {
-	if (bloodSplash == nullptr) return;
+	if (bloodSplash == nullptr || playerState == nullptr) return;
 
 	if (playerState->isHurt())
 		bloodSplash->start();
@@ -142,7 +142,7 @@ void ParticleManager::manageBloodSplash()
 
 void ParticleManager::manageBlockSparks()
 {
-	if (blockSparks == nullptr) return;
+	if (blockSparks == nullptr || playerState == nullptr) return;
 
 	if (playerState->isBlocking() && playerState->hasBlocked())
 		blockSparks->start();
@@ -152,11 +152,11 @@ void ParticleManager::manageBlockSparks()
 
 void ParticleManager::manageStunSparks(float deltaTime)
 {
-	if (stunSparks == nullptr) return;
+	if (stunSparks == nullptr || playerState == nullptr) return;
 
 	if (playerState->isStunned()) {
 		stunTimer -= deltaTime;
-		if(stunTimer <= 0.0f)
+		if (stunTimer <= 0.0f)
 			stunSparks->start();
 	}
 	else {
@@ -167,7 +167,7 @@ void ParticleManager::manageStunSparks(float deltaTime)
 
 void ParticleManager::manageSpectre()
 {
-	if (spectre == nullptr) return;
+	if (spectre == nullptr || playerState == nullptr) return;
 
 	if (playerState->canGhostMove())
 		spectre->start();
@@ -177,7 +177,7 @@ void ParticleManager::manageSpectre()
 
 void ParticleManager::manageSpectreSplash()
 {
-	if (spectreSplash == nullptr) return;
+	if (spectreSplash == nullptr || playerState == nullptr) return;
 
 	if (playerState->hasPunchSucceeded())
 		spectreSplash->start();

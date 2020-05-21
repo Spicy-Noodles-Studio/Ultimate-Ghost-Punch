@@ -46,11 +46,11 @@ void SoundManager::start()
 {
 	// PlayerState for info
 	playerState = gameObject->getComponent<PlayerState>();
-	if (playerState == nullptr)
-		LOG_ERROR("SOUND MANAGER", "PlayerState component not found");
+	checkNull(playerState);
 
 	initSounds();
 	soundEmitter = gameObject->getComponent<SoundEmitter>();
+	checkNull(playerState);
 }
 
 void SoundManager::update(float deltaTime)

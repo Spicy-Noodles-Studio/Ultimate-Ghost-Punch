@@ -10,11 +10,11 @@ REGISTER_FACTORY(SongManager);
 
 SongManager* SongManager::instance = nullptr;
 
-SongManager::SongManager() : UserComponent(nullptr), songPlaying(false)
+SongManager::SongManager() : UserComponent(nullptr), songPlaying(false), soundEmitter(nullptr), gameManager(nullptr)
 {
 }
 
-SongManager::SongManager(GameObject* gameObject) : UserComponent(gameObject), songPlaying(false)
+SongManager::SongManager(GameObject* gameObject) : UserComponent(gameObject), songPlaying(false), soundEmitter(nullptr), gameManager(nullptr)
 {
 	if (instance == nullptr)
 		instance = this;
@@ -37,6 +37,8 @@ void SongManager::start()
 {
 	gameManager = GameManager::GetInstance();
 	soundEmitter = gameObject->getComponent<SoundEmitter>();
+	checkNull(gameManager);
+	checkNull(soundEmitter);
 	dontDestroyOnLoad(gameObject);
 }
 
@@ -100,8 +102,8 @@ void SongManager::play2DSound(const std::string& sound)
 
 void SongManager::ghostSong()
 {
-	if (gameManager->isAnyGhost())
+	if (gameManager != nullptr && soundEmitter != nullptr && gameManager->isAnyGhost())
 		soundEmitter->setPitch(0.65);
-	else
+	else if(soundEmitter !=nullptr)
 		soundEmitter->setPitch(1.0);
 }

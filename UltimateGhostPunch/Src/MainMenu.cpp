@@ -12,62 +12,74 @@ REGISTER_FACTORY(MainMenu);
 
 bool MainMenu::playButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("ConfigurationMenu");
 	buttonClick(buttonSound);
+	if (sceneManager != nullptr)
+		sceneManager->changeScene("ConfigurationMenu");
 	return false;
 }
 
 bool MainMenu::optionsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("OptionsMenu");
 	buttonClick(buttonSound);
+	if (sceneManager != nullptr)
+		sceneManager->changeScene("OptionsMenu");
 	return false;
 }
 
 bool MainMenu::exitButtonClick()
 {
-	WindowManager::GetInstance()->closeWindow();
 	buttonClick(backSound);
+	if (windowManager != nullptr)
+		windowManager->closeWindow();
 	return false;
 }
 
 bool MainMenu::controlsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("ControlsMenu");
 	buttonClick(buttonSound);
+	if (sceneManager != nullptr)
+		sceneManager->changeScene("ControlsMenu");
 	return false;
 }
 
 bool MainMenu::creditsButtonClick()
 {
-	SceneManager::GetInstance()->changeScene("Credits");
 	buttonClick(buttonSound);
+	if (sceneManager != nullptr)
+		sceneManager->changeScene("Credits");
 	return false;
 }
 
 MainMenu::MainMenu(GameObject* gameObject) : Menu(gameObject)
 {
-	interfaceSystem->registerEvent("playButtonClick", UIEvent("ButtonClicked", [this]() {return playButtonClick(); }));
-	interfaceSystem->registerEvent("optionsButtonClick", UIEvent("ButtonClicked", [this]() {return optionsButtonClick(); }));
-	interfaceSystem->registerEvent("exitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	if (interfaceSystem != nullptr) {
+		interfaceSystem->registerEvent("playButtonClick", UIEvent("ButtonClicked", [this]() {return playButtonClick(); }));
+		interfaceSystem->registerEvent("optionsButtonClick", UIEvent("ButtonClicked", [this]() {return optionsButtonClick(); }));
+		interfaceSystem->registerEvent("exitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
 
-	interfaceSystem->registerEvent("controlsButtonClick", UIEvent("ButtonClicked", [this]() {return controlsButtonClick(); }));
-	interfaceSystem->registerEvent("creditsButtonClick", UIEvent("ButtonClicked", [this]() {return creditsButtonClick(); }));
+		interfaceSystem->registerEvent("controlsButtonClick", UIEvent("ButtonClicked", [this]() {return controlsButtonClick(); }));
+		interfaceSystem->registerEvent("creditsButtonClick", UIEvent("ButtonClicked", [this]() {return creditsButtonClick(); }));
+	}
 }
 
 MainMenu::~MainMenu()
 {
-	interfaceSystem->unregisterEvent("playButtonClick");
-	interfaceSystem->unregisterEvent("optionsButtonClick");
-	interfaceSystem->unregisterEvent("exitButtonClick");
+	if (interfaceSystem != nullptr) {
+		interfaceSystem->unregisterEvent("playButtonClick");
+		interfaceSystem->unregisterEvent("optionsButtonClick");
+		interfaceSystem->unregisterEvent("exitButtonClick");
 
-	interfaceSystem->unregisterEvent("controlsButtonClick");
-	interfaceSystem->unregisterEvent("creditsButtonClick");
+		interfaceSystem->unregisterEvent("controlsButtonClick");
+		interfaceSystem->unregisterEvent("creditsButtonClick");
+	}
 }
 
 void MainMenu::start()
 {
 	Menu::start();
 
-	songManager->playMenuSong();
+	windowManager = WindowManager::GetInstance();
+
+	if (songManager != nullptr)
+		songManager->playMenuSong();
 }

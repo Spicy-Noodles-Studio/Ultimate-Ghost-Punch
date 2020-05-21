@@ -4,6 +4,7 @@
 #include <GameObject.h>
 #include <WindowManager.h>
 
+#include "PlayerState.h"
 #include "Timer.h"
 #include "GhostManager.h"
 #include "Health.h"
@@ -135,7 +136,10 @@ std::vector<GameObject*> GameManager::getAlivePlayers()
 {
 	std::vector<GameObject*> alive;
 	for (GameObject* p : knights) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
+		if (p != nullptr) {
+			PlayerState* state = p->getComponent<PlayerState>();
+			if (state != nullptr && !state->isDead()) alive.push_back(p);
+		}
 	}
 	return alive;
 }
@@ -261,8 +265,10 @@ void GameManager::pauseAllSounds()
 {
 	for (GameObject* knight : knights)
 	{
-		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-		if (emitter != nullptr) emitter->pauseAll();
+		if (knight != nullptr) {
+			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+			if (emitter != nullptr) emitter->pauseAll();
+		}
 	}
 }
 
@@ -270,8 +276,10 @@ void GameManager::resumeAllSound()
 {
 	for (GameObject* knight : knights)
 	{
-		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-		if (emitter != nullptr) emitter->resumeAll();
+		if (knight != nullptr) {
+			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+			if (emitter != nullptr) emitter->resumeAll();
+		}
 	}
 }
 
