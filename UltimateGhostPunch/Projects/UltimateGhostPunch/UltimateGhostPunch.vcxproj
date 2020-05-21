@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
+    <ClCompile Include="..\..\Src\ControlsMenu.cpp" />
+    <ClCompile Include="..\..\Src\Credits.cpp" />
     <ClCompile Include="..\..\Src\FightingState.cpp" />
     <ClCompile Include="..\..\Src\GhostNavigation.cpp" />
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
@@ -98,7 +100,9 @@
     <ClInclude Include="..\..\Src\AIStateMachine.h" />
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
+    <ClInclude Include="..\..\Src\ControlsMenu.h" />
     <ClInclude Include="..\..\Src\Countdown.h" />
+    <ClInclude Include="..\..\Src\Credits.h" />
     <ClInclude Include="..\..\Src\CursorGame.h" />
     <ClInclude Include="..\..\Src\CursorMenu.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />

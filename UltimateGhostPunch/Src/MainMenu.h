@@ -11,11 +11,12 @@ class UILayout;
 class MainMenu : public Menu
 {
 private:
-	InputSystem* inputSystem;
-
 	bool playButtonClick();
 	bool optionsButtonClick();
 	bool exitButtonClick();
+
+	bool controlsButtonClick();
+	bool creditsButtonClick();
 
 public:
 	MainMenu(GameObject* gameObject);

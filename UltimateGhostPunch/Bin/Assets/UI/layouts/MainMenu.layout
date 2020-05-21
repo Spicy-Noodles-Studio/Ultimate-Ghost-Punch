@@ -35,7 +35,7 @@
                 <Property name="Text" value="OPTIONS" />
                 <Property name="UpButton" value="PlayButton" />
                 <Property name="DownButton" value="OptionsButton" />
-                <Property name="LeftButton" value="OptionsButton" />
+                <Property name="LeftButton" value="ControlsButton" />
                 <Property name="RightButton" value="ExitButton" />
                 <Property name="Font" value="Sans" />
             </Window>
@@ -47,7 +47,29 @@
                 <Property name="UpButton" value="PlayButton" />
                 <Property name="DownButton" value="ExitButton" />
                 <Property name="LeftButton" value="OptionsButton" />
-                <Property name="RightButton" value="ExitButton" />
+                <Property name="RightButton" value="CreditsButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # CONTROLS
+            <Window type="TaharezLook/Button" name="ControlsButton" >
+                <Property name="Area" value="{{0.05,0},{0.8,0},{0.2,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="CONTROLS" />
+                <Property name="UpButton" value="PlayButton" />
+                <Property name="DownButton" value="ControlsButton" />
+                <Property name="LeftButton" value="ControlsButton" />
+                <Property name="RightButton" value="OptionsButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # CREDITS
+            <Window type="TaharezLook/Button" name="CreditsButton" >
+                <Property name="Area" value="{{0.8,0},{0.8,0},{0.95,0},{0.9,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="CREDITS" />
+                <Property name="UpButton" value="PlayButton" />
+                <Property name="DownButton" value="CreditsButton" />
+                <Property name="LeftButton" value="ExitButton" />
+                <Property name="RightButton" value="CreditsButton" />
                 <Property name="Font" value="Sans" />
             </Window>
             # INFO TEXT
