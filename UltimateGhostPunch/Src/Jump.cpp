@@ -42,8 +42,8 @@ void Jump::postUpdate(float deltaTime)
 
 void Jump::onObjectEnter(GameObject* other)
 {
-	bool isFloor = other->getTag() == "suelo";
-	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
+	bool isFloor = other != nullptr && other->getTag() == "suelo";
+	bool isPlayer = other != nullptr && other->getTag() == "Player" && parent != nullptr && other != parent;
 
 	if (isFloor || isPlayer)
 	{
@@ -64,8 +64,8 @@ void Jump::onObjectEnter(GameObject* other)
 
 void Jump::onObjectExit(GameObject* other)
 {
-	bool isFloor = other->getTag() == "suelo";
-	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
+	bool isFloor = other != nullptr && other->getTag() == "suelo";
+	bool isPlayer = other != nullptr && other->getTag() == "Player" && parent != nullptr && other != parent;
 
 	if (isFloor || isPlayer)
 	{
@@ -82,6 +82,7 @@ void Jump::onObjectExit(GameObject* other)
 
 void Jump::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -106,7 +107,7 @@ void Jump::jump()
 	if (parent == nullptr) return;
 	PlayerState* aux = parent->getComponent<PlayerState>();
 
-	if (jumping || !canJump() || (aux != nullptr && !aux->canJump())) return;
+	if (jumping || !canJump() || rigidBody == nullptr || (aux != nullptr && !aux->canJump())) return;
 
 	// Cancel vertical velocity so impulse doesnt lose strenght
 	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
@@ -118,7 +119,7 @@ void Jump::jump()
 
 void Jump::cancelJump()
 {
-	if (!jumping) return;
+	if (!jumping || rigidBody == nullptr) return;
 	Vector3 velocity = rigidBody->getLinearVelocity();
 
 	if (velocity.y < 0.0) return; // Is falling
@@ -155,7 +156,7 @@ bool Jump::isJumping() const
 
 bool Jump::isFalling() const
 {
-	return rigidBody->getLinearVelocity().y <= -1.0f;
+	return rigidBody != nullptr && rigidBody->getLinearVelocity().y <= -1.0f;
 }
 
 bool Jump::canJump() const

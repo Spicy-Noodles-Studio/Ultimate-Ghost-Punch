@@ -26,6 +26,7 @@ void GhostMovement::start()
 
 void GhostMovement::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -48,12 +49,11 @@ void GhostMovement::move(Vector3 dir)
 		if (dir.x != 0)
 		{
 			double flippedY = (dir.x > 0) ? 1 : -1;
-			gameObject->transform->setRotation({ 0,90 * flippedY,0 });
+			if(gameObject->transform != nullptr) gameObject->transform->setRotation({ 0,90 * flippedY,0 });
 		}
 
 		dir *= maxSpeed;
-		if (rigidBody != nullptr)
-			rigidBody->setLinearVelocity(dir);
+		if (rigidBody != nullptr) rigidBody->setLinearVelocity(dir);
 	}
 }
 

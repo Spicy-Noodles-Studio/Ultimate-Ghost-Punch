@@ -25,6 +25,7 @@ DeathZone::~DeathZone()
 
 void DeathZone::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -41,7 +42,7 @@ void DeathZone::handleData(ComponentData* data)
 void DeathZone::onObjectEnter(GameObject* other)
 {
 	//If a player gets inside it recives damage and respawns
-	if (other->getTag() == "Player")
+	if (other != nullptr && other->getTag() == "Player")
 	{
 		Health* health = other->getComponent<Health>();
 		if (health != nullptr)

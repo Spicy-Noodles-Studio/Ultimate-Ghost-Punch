@@ -19,11 +19,13 @@ void PlatformGraph::drawLinks()
 		{
 			std::vector<State> states = n.getStates();
 
-			for (int i = 0; i < states.size() - 1; i++)
-				physicsSystem->drawLine(states[i].getPos(), states[i + 1].getPos(), { 0,1,0 });
+			if (physicsSystem != nullptr) {
+				for (int i = 0; i < states.size() - 1; i++)
+					physicsSystem->drawLine(states[i].getPos(), states[i + 1].getPos(), { 0,1,0 });
 
-			if (states.size() > 0)
-				physicsSystem->drawLine(states[states.size() - 1].getPos(), n.getEndPos(), { 0,0,1 });
+				if (states.size() > 0)
+					physicsSystem->drawLine(states[states.size() - 1].getPos(), n.getEndPos(), { 0,0,1 });
+			}
 		}
 }
 
@@ -32,7 +34,6 @@ float PlatformGraph::getDistance(const Vector3& pos, const PlatformNode& node)
 	Vector3 aux = node.getMiddle();
 
 	float distance = sqrt(pow((aux.x - pos.x),2) + pow((aux.y - pos.y), 2) + pow((aux.z - pos.z), 2));
-
 
 	return distance;
 }
@@ -70,6 +71,7 @@ void PlatformGraph::update(float deltaTime)
 
 void PlatformGraph::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -100,12 +102,12 @@ void PlatformGraph::createNodes()
 	std::vector<RaycastHit> hits;
 	while (currentPos.x < levelEnd.x)
 	{
-		hits = physicsSystem->raycastAll({ currentPos.x,levelStart.y,0 }, { currentPos.x,levelEnd.y,0 });
+		if(physicsSystem != nullptr) hits = physicsSystem->raycastAll({ currentPos.x,levelStart.y,0 }, { currentPos.x,levelEnd.y,0 });
 		std::map<float, int> newPlatforms;
 
 		for (RaycastHit hit : hits)
 		{
-			if (hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
+			if (hit.transform != nullptr && hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
 			{
 				auto it = lastPlatforms.find(hit.point.y);
 
@@ -139,10 +141,10 @@ void PlatformGraph::createLinks()
 	{
 		Vector3 raycastLeft = node.getBegining() - fallOffset, raycastRight = node.getEnd() + fallOffset;
 
-		if (!physicsSystem->raycast(node.getBegining() + Vector3(0, 0.5f, 0), Vector3::NEGATIVE_RIGHT, playerCollisionSize.x, hit))
+		if (physicsSystem != nullptr && !physicsSystem->raycast(node.getBegining() + Vector3(0, 0.5f, 0), Vector3::NEGATIVE_RIGHT, playerCollisionSize.x, hit))
 			if (physicsSystem->raycast(raycastLeft, { raycastLeft.x, levelEnd.y,0 }, hit));
 
-		if (!physicsSystem->raycast(node.getEnd() + Vector3(0, 0.5f, 0), Vector3::RIGHT, playerCollisionSize.x, hit))
+		if (physicsSystem != nullptr && !physicsSystem->raycast(node.getEnd() + Vector3(0, 0.5f, 0), Vector3::RIGHT, playerCollisionSize.x, hit))
 			if (physicsSystem->raycast(raycastRight, { raycastRight.x, levelEnd.y,0 }, hit));
 	}
 }

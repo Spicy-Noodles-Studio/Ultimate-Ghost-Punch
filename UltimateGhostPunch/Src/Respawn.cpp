@@ -23,9 +23,10 @@ Respawn::~Respawn()
 
 void Respawn::start()
 {
-	playerState= gameObject->getComponent<PlayerState>();
-	initialPos = gameObject->transform->getPosition();
 	time = 0.0f;
+	playerState= gameObject->getComponent<PlayerState>();
+	if (gameObject->transform != nullptr)
+		initialPos = gameObject->transform->getPosition();
 }
 
 void Respawn::update(float deltaTime)
@@ -34,13 +35,14 @@ void Respawn::update(float deltaTime)
 		time -= deltaTime;
 	else if (respawning)
 	{
-		if (playerState!= nullptr)	playerState->setIgnoringInput(false);
+		if (playerState != nullptr)	playerState->setIgnoringInput(false);
 		respawning = false;
 	}
 }
 
 void Respawn::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -75,7 +77,9 @@ void Respawn::spawn(const Vector3& spawnPos)
 		health->setTime(respawnTime);
 	}
 
-	gameObject->transform->setPosition(spawnPos);
+	if(gameObject->transform != nullptr)
+		gameObject->transform->setPosition(spawnPos);
+
 	time = respawnTime;
 	respawning = true;
 }

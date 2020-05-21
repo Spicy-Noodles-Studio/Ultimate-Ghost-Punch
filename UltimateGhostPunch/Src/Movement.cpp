@@ -28,6 +28,7 @@ void Movement::start()
 
 void Movement::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -49,9 +50,8 @@ void Movement::move(Vector3 dir)
 			rigidBody->addForce(dir * speed);
 
 		//Character rotation
-		if (dir.x != 0)
+		if (dir.x != 0 && gameObject->transform)
 			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
-
 	}
 }
 

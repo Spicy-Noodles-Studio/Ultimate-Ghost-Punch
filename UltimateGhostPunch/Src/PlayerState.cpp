@@ -17,7 +17,7 @@
 REGISTER_FACTORY(PlayerState);
 
 PlayerState::PlayerState(GameObject* gameObject) : UserComponent(gameObject), attack(nullptr), block(nullptr), dodge(nullptr), grab(nullptr), movement(nullptr), jump(nullptr),
-health(nullptr), ghostMovement(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false)
+health(nullptr), ghostMovement(nullptr), ghostManager(nullptr), ghostPunch(nullptr), respawn(nullptr), thrown(0), taunt(0), grabbed(false), ignoringInput(false)
 {
 
 }

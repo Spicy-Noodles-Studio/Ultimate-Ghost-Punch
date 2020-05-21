@@ -26,14 +26,19 @@ void PlayerFX::start()
 	health = gameObject->getComponent<Health>();
 	ghost = gameObject->getComponent<GhostManager>();
 
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
-		diffuses.push_back(mesh->getDiffuse(i));
+	if (mesh != nullptr)
+		for (int i = 0; i < mesh->getSubentitiesSize(); i++)
+			diffuses.push_back(mesh->getDiffuse(i));
 
-	shieldMesh = gameObject->findChildrenWithTag("shield")[0]->getComponent<MeshRenderer>();
-	shieldMesh->setFpParam(0, "r", diffuses[0].x);
-	shieldMesh->setFpParam(0, "g", diffuses[0].y);
-	shieldMesh->setFpParam(0, "b", diffuses[0].z);
-	shieldMesh->setVisible(false);
+	std::vector<GameObject*> shieldObject = gameObject->findChildrenWithTag("shield");
+	if(shieldObject.size() > 0)
+	shieldMesh = shieldObject[0]->getComponent<MeshRenderer>();
+	if (shieldMesh != nullptr && diffuses.size() > 0) {
+		shieldMesh->setFpParam(0, "r", diffuses[0].x);
+		shieldMesh->setFpParam(0, "g", diffuses[0].y);
+		shieldMesh->setFpParam(0, "b", diffuses[0].z);
+		shieldMesh->setVisible(false);
+	}
 }
 
 void PlayerFX::update(float deltaTime)
@@ -45,6 +50,7 @@ void PlayerFX::update(float deltaTime)
 
 void PlayerFX::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -78,7 +84,7 @@ void PlayerFX::updateHurtFX(float deltaTime)
 
 void PlayerFX::updateInvencibleFX(float deltaTime)
 {
-	if (health->isInvencible())
+	if (health != nullptr && health->isInvencible())
 	{
 		effect = INVENCIBLE;
 
@@ -107,7 +113,7 @@ void PlayerFX::updateInvencibleFX(float deltaTime)
 
 void PlayerFX::updateGhostFX(float deltaTime)
 {
-	if (ghost->isGhost() && ghost->getGhostTime() < ghostFXTime)
+	if (ghost != nullptr && ghost->isGhost() && ghost->getGhostTime() < ghostFXTime)
 	{
 		effect = GHOST;
 
@@ -150,7 +156,7 @@ void PlayerFX::deactivateHurt()
 
 	effect = NONE;
 
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
+	for (int i = 0; i < mesh->getSubentitiesSize() && i < diffuses.size(); i++)
 		mesh->setDiffuse(i, diffuses[i], 1);
 }
 
@@ -168,11 +174,7 @@ void PlayerFX::deactivateInvencible()
 	
 	effect = NONE;
 
-	effect = NONE;
-
-	effect = NONE;
-
-	for (int i = 0; i < mesh->getSubentitiesSize(); i++)
+	for (int i = 0; i < mesh->getSubentitiesSize() && i < diffuses.size(); i++)
 		mesh->setDiffuse(i, diffuses[i], 1);
 }
 
@@ -191,7 +193,7 @@ void PlayerFX::deactivateGhostFX()
 
 void PlayerFX::activateShield()
 {
-	if (mesh == nullptr) return;
+	if (shieldMesh == nullptr) return;
 	effect = SHIELD;
 
 	shieldMesh->setVisible(true);
@@ -200,14 +202,15 @@ void PlayerFX::activateShield()
 void PlayerFX::updateShield(float blockTime, float maxBlockTime)
 {
 	// Shield scale reduction
-	shieldMesh->gameObject->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4, 4, 4));
+	if(shieldMesh->gameObject->transform != nullptr)
+		shieldMesh->gameObject->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4, 4, 4));
 	// Shield alpha
 	shieldMesh->setFpParam(0, "alpha", blockTime / maxBlockTime);
 }
 
 void PlayerFX::deactivateShield()
 {
-	if (mesh == nullptr) return;
+	if (shieldMesh == nullptr) return;
 	effect = NONE;
 
 	shieldMesh->setVisible(false);

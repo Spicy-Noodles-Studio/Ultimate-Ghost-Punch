@@ -66,7 +66,7 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	if (gameObject->getComponent<PlayerState>()->isIgnoringInput()) 
+	if (gameObject->getComponent<PlayerState>() != nullptr && gameObject->getComponent<PlayerState>()->isIgnoringInput())
 	{
 		direction = Vector3::ZERO;
 		return; 
@@ -82,6 +82,7 @@ void PlayerController::fixedUpdate(float deltaTime)
 
 void PlayerController::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -97,6 +98,7 @@ void PlayerController::handleData(ComponentData* data)
 
 void PlayerController::checkInput()
 {
+	if (inputSystem == nullptr) return;
 	//Movement
 	direction = Vector3::ZERO;
 	direction += Vector3(getHorizontalAxis(), 0, 0);
@@ -150,7 +152,8 @@ void PlayerController::checkInput()
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK")) {
-			gameObject->getComponent<SoundManager>()->playTaunt();
+			if(gameObject->getComponent<SoundManager>() != nullptr)
+				gameObject->getComponent<SoundManager>()->playTaunt();
 		}
 	}
 
@@ -275,6 +278,8 @@ int PlayerController::getVerticalAxis()
 void PlayerController::ghostPunchMouseAim()
 {
 	std::pair<int, int> mousePos = inputSystem->getMousePosition();
-	Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
-	ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
+	if (gameObject->getScene()->getMainCamera() != nullptr && gameObject->transform != nullptr && ghostPunch != nullptr) {
+		Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
+		ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
+	}
 }

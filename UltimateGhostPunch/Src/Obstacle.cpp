@@ -25,6 +25,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::handleData(ComponentData* data)
 {
+	if(data == nullptr)
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -44,11 +45,13 @@ void Obstacle::handleData(ComponentData* data)
 
 void Obstacle::onCollisionEnter(GameObject* other)
 {
-	if (other->getTag() == "Player")
+	if (other != nullptr && other->getTag() == "Player")
 	{
-		int xDir = other->transform->getPosition().x < gameObject->transform->getPosition().x ? -1 : 1; // PLAYER --> OBSTACLE
-		int yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
-
+		int xDir = 0, yDir = 0;
+		if (other->transform != nullptr && gameObject->transform != nullptr) {
+			xDir = other->transform->getPosition().x < gameObject->transform->getPosition().x ? -1 : 1; // PLAYER --> OBSTACLE
+			yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
+		}
 		// The player receives damage
 		Health* health = other->getComponent<Health>();
 		if (health == nullptr) return;

@@ -24,18 +24,16 @@ Health::~Health()
 void Health::start()
 {
 	maxHealth = health;
-	Camera* cam = gameObject->getScene()->getMainCamera();
-	if (cam != nullptr) cameraEffects = cam->gameObject->getComponent<CameraEffects>();
+	Camera* mainCamera = gameObject->getScene()->getMainCamera();
+	if (mainCamera != nullptr) cameraEffects = mainCamera->gameObject->getComponent<CameraEffects>();
 }
 
 void Health::update(float deltaTime)
 {
 	if (invencible)
 	{
-		if (time > 0.0f)
-			time -= deltaTime;
-		else
-			invencible = false;
+		if (time > 0.0f) time -= deltaTime;
+		else invencible = false;
 	}
 }
 
@@ -46,6 +44,7 @@ void Health::postUpdate(float deltaTime)
 
 void Health::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -111,7 +110,7 @@ void Health::receiveDamage(int damage)
 
 		if (health == 0) {
 			alive = false;
-			cameraEffects->shake(Vector3(1, 1, 0));
+			if(cameraEffects != nullptr) cameraEffects->shake(Vector3(1, 1, 0));
 		}
 		else
 		{

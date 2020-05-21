@@ -45,18 +45,12 @@ void PlayerUI::start()
 
 	// Get camera
 	GameObject* cameraObject = findGameObjectWithName("MainCamera");
-
-	if (cameraObject != nullptr)
-		mainCamera = cameraObject->getComponent<Camera>();
-
-	if (mainCamera == nullptr)
-		LOG("Camera component not found");
-
-	// Get player layout
 	UILayout* cameraLayout = nullptr;
 
-	if (cameraObject != nullptr)
+	if (cameraObject != nullptr) {
+		mainCamera = cameraObject->getComponent<Camera>();
 		cameraLayout = cameraObject->getComponent<UILayout>();
+	}
 
 	// Get UI elements for PlayerIndicator and PlayerStatsPanel
 	if (cameraLayout != nullptr)
@@ -64,6 +58,9 @@ void PlayerUI::start()
 		playerHUD = cameraLayout->getRoot().getChild(name + "Background");
 		playerIndicator = cameraLayout->getRoot().getChild(name + "Indicator");
 	}
+
+	if (mainCamera == nullptr)
+		LOG("Camera component not found");
 
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);
@@ -84,8 +81,7 @@ void PlayerUI::update(float deltaTime)
 
 void PlayerUI::createHearts()
 {
-	if (health == nullptr)
-		return;
+	if (health == nullptr) return;
 
 	float posX = 0.05f;
 	float posY = 0.65f;
@@ -120,8 +116,7 @@ void PlayerUI::updateHearts()
 
 void PlayerUI::createGhost()
 {
-	if (ghostManager == nullptr)
-		return;
+	if (ghostManager == nullptr) return;
 
 	// Create ghost
 	UIElement ghost = playerHUD.createChild("TaharezLook/StaticImage", name + "Ghost");
@@ -143,8 +138,7 @@ void PlayerUI::updateGhost()
 
 void PlayerUI::updateIndicator()
 {
-	if (mainCamera == nullptr)
-		return;
+	if (mainCamera == nullptr || gameObject->transform != nullptr) return;
 
 	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());
 

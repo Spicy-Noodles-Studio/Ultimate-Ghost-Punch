@@ -38,12 +38,14 @@ void LoadingScreen::start()
 	sceneToLoad = "NO SCENE";
 	loadDelay = 1.0f;
 	currentDelay = 0;
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (mainCamera != nullptr && mainCamera->getComponent<UILayout>() != nullptr) {
+		UIElement root = mainCamera->getComponent<UILayout>()->getRoot();
+		UIElement tipsText = root.getChild("Tips");
 
-	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
-	UIElement tipsText = root.getChild("Tips");
-
-	tipsText.setText(getRandomTip());
-	tipsText.setProperty("HorzFormatting", "WordWrapCentred");
+		tipsText.setText(getRandomTip());
+		tipsText.setProperty("HorzFormatting", "WordWrapCentred");
+	}
 }
 
 void LoadingScreen::update(float deltaTime)
@@ -63,6 +65,7 @@ void LoadingScreen::update(float deltaTime)
 void LoadingScreen::handleData(ComponentData* data)
 {
 	int i = 1;
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);

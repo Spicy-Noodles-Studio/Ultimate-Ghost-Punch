@@ -7,7 +7,6 @@
 class GameObject;
 class RigidBody;
 class Score;
-class PlayerController;
 
 class Grab : public UserComponent
 {
@@ -28,17 +27,14 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
-	bool beingGrabbed;
 	int dropped;
 	int missed;
 
 	State state;
 
 	GameObject* parent;
-	PlayerController* controller;
 
 	GameObject* enemy;
-	PlayerController* enemyController;
 
 	Score* score;
 
@@ -71,7 +67,6 @@ public:
 	void setGrabbed(bool grabbed);
 
 	bool isGrabbing() const;
-	bool isGrabbed() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
 

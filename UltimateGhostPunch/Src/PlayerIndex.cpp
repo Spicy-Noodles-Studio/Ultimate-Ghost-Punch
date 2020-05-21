@@ -17,6 +17,7 @@ PlayerIndex::~PlayerIndex()
 
 void PlayerIndex::handleData(ComponentData* data)
 {
+	if(data == nullptr)
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);

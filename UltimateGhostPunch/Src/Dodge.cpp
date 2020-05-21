@@ -23,16 +23,14 @@ void Dodge::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
 
-	if (rigidBody != nullptr)
-		playerGravity = rigidBody->getGravity();
+	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity();
 }
 
 void Dodge::update(float deltaTime)
 {
 	if (state != State::IDLE)
 	{
-		if (time > 0.0f)
-			time -= deltaTime;
+		if (time > 0.0f) time -= deltaTime;
 
 		if (time <= 0.0f)
 		{
@@ -47,29 +45,26 @@ void Dodge::update(float deltaTime)
 
 void Dodge::handleData(ComponentData* data)
 {
+	if (data == nullptr) return;
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "force")
 		{
-			if (!(ss >> force))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(force);
 		}
 		else if (prop.first == "cooldown")
 		{
-			if (!(ss >> cooldown))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(cooldown);
 		}
 		else if (prop.first == "duration")
 		{
-			if (!(ss >> duration))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(duration);
 		}
 		else if (prop.first == "atenuation")
 		{
-			if (!(ss >> atenuation))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(atenuation);
 		}
 		else
 			LOG("DODGE: Invalid property name %s", prop.first.c_str());
@@ -83,7 +78,7 @@ void Dodge::dodge()
 	if (state == State::IDLE && aux->canDodge())
 	{
 		Vector3 dir = Vector3::ZERO;
-		dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
+		if(gameObject->transform != nullptr) dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
 
 		if (rigidBody != nullptr)
 		{

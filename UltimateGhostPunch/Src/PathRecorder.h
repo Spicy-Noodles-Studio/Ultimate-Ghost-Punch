@@ -25,6 +25,8 @@ private:
 	Jump* jump;
 	GhostManager* ghostManager;
 
+	GameObject* parent;
+
 	std::vector<State> states;
 	std::stack<int> lastPlatform;
 
