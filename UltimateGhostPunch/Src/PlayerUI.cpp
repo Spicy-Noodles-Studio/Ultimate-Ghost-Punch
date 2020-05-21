@@ -25,23 +25,17 @@ void PlayerUI::start()
 {
 	// Initialize name to search through layout
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
-
 	if (playerIndex != nullptr)
 		name = "Player" + std::to_string(playerIndex->getIndex());
-	else
-		LOG("PlayerIndex not found. Cannot get player index");
+	checkNull(playerIndex)
 
 	// Get health component to update stats
 	health = gameObject->getComponent<Health>();
-
-	if (health == nullptr)
-		LOG("Health component not found");
+	checkNull(health);
 
 	//Get ghostManager component to update status
 	ghostManager = gameObject->getComponent<GhostManager>();
-
-	if (ghostManager == nullptr)
-		LOG("Ghost Manager component not found");
+	checkNull(ghostManager)
 
 	// Get camera
 	GameObject* cameraObject = findGameObjectWithName("MainCamera");
@@ -49,7 +43,7 @@ void PlayerUI::start()
 
 	if (cameraObject != nullptr) {
 		mainCamera = cameraObject->getComponent<Camera>();
-		cameraLayout = cameraObject->getComponent<UILayout>();
+		if(cameraObject != nullptr) cameraLayout = cameraObject->getComponent<UILayout>();
 	}
 
 	// Get UI elements for PlayerIndicator and PlayerStatsPanel
@@ -59,8 +53,8 @@ void PlayerUI::start()
 		playerIndicator = cameraLayout->getRoot().getChild(name + "Indicator");
 	}
 
-	if (mainCamera == nullptr)
-		LOG("Camera component not found");
+	checkNull(mainCamera);
+	checkNull(cameraLayout);
 
 	playerHUD.setVisible(true);
 	playerIndicator.setVisible(true);

@@ -22,6 +22,7 @@ GhostMovement::~GhostMovement()
 void GhostMovement::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNull(rigidBody);
 }
 
 void GhostMovement::handleData(ComponentData* data)

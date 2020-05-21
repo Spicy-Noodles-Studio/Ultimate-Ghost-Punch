@@ -25,6 +25,7 @@ void Respawn::start()
 {
 	time = 0.0f;
 	playerState= gameObject->getComponent<PlayerState>();
+	checkNull(playerState);
 	if (gameObject->transform != nullptr)
 		initialPos = gameObject->transform->getPosition();
 }

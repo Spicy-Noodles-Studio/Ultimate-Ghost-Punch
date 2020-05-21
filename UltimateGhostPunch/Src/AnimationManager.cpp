@@ -23,6 +23,10 @@ void AnimationManager::start()
 	animator = gameObject->getComponent<Animator>();
 	playerState = gameObject->getComponent<PlayerState>();
 	mesh = gameObject->getComponent<MeshRenderer>();
+
+	checkNull(animator);
+	checkNull(playerState);
+	checkNull(mesh);
 }
 
 void AnimationManager::postUpdate(float deltaTime)

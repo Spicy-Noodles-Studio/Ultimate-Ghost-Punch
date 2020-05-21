@@ -28,10 +28,9 @@ void CameraEffects::start()
 	state = IDLE;
 
 	mainCamera = gameObject->getComponent<Transform>();
-	if (mainCamera != nullptr) {
-		initialRotation = mainCamera->getRotation();
-		initialPosition = mainCamera->getPosition();
-	}
+	checkNullAndBreak(mainCamera);
+	initialRotation = mainCamera->getRotation();
+	initialPosition = mainCamera->getPosition();
 }
 
 void CameraEffects::update(float deltaTime)
@@ -67,9 +66,9 @@ void CameraEffects::update(float deltaTime)
 		moveX = random() * vel * dirX;
 		moveY = random() * vel * dirY;
 		moveZ = random() * vel * dirZ;
-		
+
 		if (mainCamera == nullptr) return;
-		
+
 		Vector3 pos = mainCamera->getPosition();
 		mainCamera->setPosition(Vector3(pos.x + moveX * rotationDir.x, pos.y + moveY * rotationDir.y, pos.z + moveZ * rotationDir.z));
 		Vector3 newPos = mainCamera->getPosition();
@@ -128,7 +127,7 @@ void CameraEffects::fadeOut()
 		state = FADEOUT;
 	else if (state == SHAKE) {
 		state = FADEOUT;
-		if(mainCamera != nullptr) mainCamera->setRotation(initialRotation);
+		if (mainCamera != nullptr) mainCamera->setRotation(initialRotation);
 	}
 }
 
@@ -138,7 +137,7 @@ void CameraEffects::fadeIn()
 		state = FADEIN;
 	else if (state == SHAKE) {
 		state = FADEIN;
-		if(mainCamera != nullptr) mainCamera->setRotation(initialRotation);
+		if (mainCamera != nullptr) mainCamera->setRotation(initialRotation);
 	}
 }
 
@@ -159,6 +158,6 @@ void CameraEffects::shake(Vector3 rotDir)
 	{
 		state = SHAKE;
 		rotationDir = rotDir;
-		if(mainCamera != nullptr) initialPosition = mainCamera->getPosition();
+		if (mainCamera != nullptr) initialPosition = mainCamera->getPosition();
 	}
 }

@@ -23,9 +23,12 @@ Block::~Block()
 void Block::start()
 {
 	parent = gameObject->getParent();
+	if(parent != nullptr) playerFX = parent->getComponent<PlayerFX>();
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
-	playerFX = parent->getComponent<PlayerFX>();
+
+	checkNull(parent)
+	checkNull(playerFX)
 }
 
 void Block::update(float deltaTime)
@@ -52,7 +55,7 @@ void Block::update(float deltaTime)
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
-		if(playerFX != nullptr) playerFX->updateShield(blockTime, maxBlockTime);
+		if (playerFX != nullptr) playerFX->updateShield(blockTime, maxBlockTime);
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
@@ -113,7 +116,7 @@ void Block::block()
 	{
 		blocking = true;
 		timeElapsed = 0;
-		if(parent->transform != nullptr) blockDirection = parent->transform->getRotation().y;
+		if (parent->transform != nullptr) blockDirection = parent->transform->getRotation().y;
 
 		PlayerFX* playerFX = parent->getComponent<PlayerFX>();
 		if (playerFX != nullptr) playerFX->activateShield();

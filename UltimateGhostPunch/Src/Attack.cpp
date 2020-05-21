@@ -29,10 +29,15 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+	if (parent != nullptr && parent->getComponent<PlayerIndex>() != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+
+	checkNull(parent);
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	score = GameManager::GetInstance()->getScore();
+
+	checkNull(attackTrigger);
+	checkNull(score);
 
 	// Deactivate the trigger until the attack is used
 	if (attackTrigger != nullptr) attackTrigger->setActive(false);

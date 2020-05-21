@@ -31,10 +31,12 @@ Grab::~Grab()
 void Grab::start()
 {
 	parent = gameObject->getParent();
-
-	if (parent != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
-
 	score = GameManager::GetInstance()->getScore();
+
+	checkNull(score);
+	checkNullAndBreak(parent);
+	id = parent->getComponent<PlayerIndex>()->getIndex();
+
 }
 
 void Grab::update(float deltaTime)

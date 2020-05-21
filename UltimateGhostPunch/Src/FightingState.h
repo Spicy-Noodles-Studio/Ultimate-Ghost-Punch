@@ -23,7 +23,7 @@ private:
 	Grab* grabComp;
 	Dodge* dodgeComp;
 	Movement* movement;
-	PlayerState* pState;
+	PlayerState* playerState;
 
 	ActionInput lastAction;
 

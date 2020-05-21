@@ -23,9 +23,9 @@
 
 REGISTER_FACTORY(AIStateMachine);
 
-AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr),
-															ghostMovement(nullptr), ghostPunch(nullptr), platformGraph(nullptr), platformNavigation(nullptr),
-															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), knights(nullptr), attack(nullptr), avoidGhostDist(5)
+AIStateMachine::AIStateMachine(GameObject* gameObject) :	StateMachine(gameObject), target(nullptr), movement(nullptr), jump(nullptr), dodge(nullptr), block(nullptr), grab(nullptr), playerState(nullptr),
+															ghostMovement(nullptr), ghostPunch(nullptr), platformGraph(nullptr), platformNavigation(nullptr), fightingState(nullptr),
+															platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), attack(nullptr), avoidGhostDist(5), timerTargetChange(0), timeTargetChange(0)
 {
 
 }
@@ -37,35 +37,46 @@ AIStateMachine::~AIStateMachine()
 
 void AIStateMachine::start()
 {
-	/* GET ALL KNIGHTS */
-	knights = &GameManager::GetInstance()->getKnights();
-
 	/* GET GRAPH INFO */
 	GameObject* level = findGameObjectWithName("LevelCollider");
-	if (level != nullptr) {
+	if (level != nullptr) 
 		platformGraph = level->getComponent<PlatformGraph>();
-	}
+	checkNull(platformGraph);
+
 	/* GET COMPONENTS */
-	movement = gameObject->getComponent<Movement>();
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
 	{
 		jump = aux[0]->getComponent<Jump>();
 		block = aux[0]->getComponent<Block>();
 	}
+	checkNull(jump);
+	checkNull(block);
+
 	std::vector<GameObject*> grabSensor = gameObject->findChildrenWithTag("grabSensor");
 	if (grabSensor.size() > 0)
 		grab = grabSensor[0]->getComponent<Grab>();
+	checkNull(grab);
+
+	movement = gameObject->getComponent<Movement>();
 	dodge = gameObject->getComponent<Dodge>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	playerState = gameObject->getComponent<PlayerState>();
 
+	checkNull(movement);
+	checkNull(dodge);
+	checkNull(ghostMovement);
+	checkNull(ghostPunch);
+	checkNull(ghostManager);
+	checkNull(playerState);
+
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
-	// Create states here
+	checkNull(attack);
+
 	/* PLATFORM NAVIGATION STATE */
 	createPlatformNavigation();
 
@@ -81,8 +92,6 @@ void AIStateMachine::start()
 	// Initialize auxiliar variables
 	timeTargetChange = 3.0f; // 5 seconds
 
-	//currentState = platformMovement; // By default
-
 	changeTarget();
 
 	selectPlatformState();
@@ -90,10 +99,8 @@ void AIStateMachine::start()
 
 void AIStateMachine::update(float deltaTime)
 {
-	if (playerState->isRespawning())
-	{
+	if (playerState != nullptr && playerState->isRespawning())
 		addActionInput(ActionInput::STOP);
-	}
 
 	if (playerState != nullptr && (playerState->isIgnoringInput() || playerState->isRespawning())) return;
 	StateMachine::update(deltaTime);
@@ -115,7 +122,7 @@ void AIStateMachine::fixedUpdate(float deltaTime)
 
 void AIStateMachine::onCollisionEnter(GameObject* other)
 {
-	if (other->getTag() == "Player" && other != target)
+	if (other != nullptr && other->getTag() == "Player" && other != target)
 	{
 		setTarget(other);
 		startFightingState();
@@ -124,29 +131,34 @@ void AIStateMachine::onCollisionEnter(GameObject* other)
 
 void AIStateMachine::startPlatformNavigation()
 {
-	currentState = platformNavigation;
+	if (platformNavigation != nullptr)
+		currentState = platformNavigation;
 }
 
 void AIStateMachine::startPlatformMovement()
 {
-	currentState = platformMovement;
+	if (platformMovement != nullptr)
+		currentState = platformMovement;
 }
 
 void AIStateMachine::startGhostNavigation()
 {
-	currentState = ghostNavigation;
+	if (ghostNavigation != nullptr)
+		currentState = ghostNavigation;
 }
 
 void AIStateMachine::startFightingState()
 {
-	currentState = fightingState;
-	fightingState->setFighting(true);
+	if (fightingState != nullptr) {
+		currentState = fightingState;
+		fightingState->setFighting(true);
+	}
 }
 
 void AIStateMachine::startFleeingState(GameObject* fleeTarget)
 {
 	if (fleeTarget == nullptr) fleeTarget = target;
-	if (fleeTarget == nullptr) return;
+	if (fleeTarget == nullptr || platformGraph == nullptr || platformMovement == nullptr || platformNavigation == nullptr ||target == nullptr || target->transform == nullptr) return;
 	// Fleeing state uses platform Navigation to move to the farthest platform away from the target
 	// and platform movement to run away in the current platform
 	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(target->transform->getPosition())];
@@ -197,14 +209,14 @@ void AIStateMachine::processActionInput()
 			if (ghostPunch != nullptr){
 				ghostPunch->aim(ghostNavigation->getDirection().x, ghostNavigation->getDirection().y);//Provisional?
 				ghostPunch->ghostPunch();
-				}
+			}
 			break;
 			/* ATTACK */
 		case ActionInput::QUICK_ATTACK:
-			if (attack != nullptr && !attack->attackOnCD() && !attack->isAttacking()) attack->quickAttack();
+			if (attack != nullptr) attack->quickAttack();
 			break;
 		case ActionInput::STRONG_ATTACK:
-			if (attack != nullptr && !attack->attackOnCD() && !attack->isAttacking()) attack->strongAttack();
+			if (attack != nullptr) attack->strongAttack();
 			break;
 		case ActionInput::BLOCK:
 			if (block != nullptr) 
@@ -244,10 +256,9 @@ void AIStateMachine::processActionInput()
 void AIStateMachine::createPlatformNavigation()
 {
 	platformNavigation = new PlatformNavigation(this);
-	addStateAction(platformNavigation);
+	checkNullAndBreak(platformNavigation);
 
-	/* ADD MORE DATA IF NEEDED */
-	/* GRAPH DATA */
+	addStateAction(platformNavigation);
 	platformNavigation->setPlatformGraph(platformGraph);
 	platformNavigation->setCharacter(gameObject);
 }
@@ -255,8 +266,9 @@ void AIStateMachine::createPlatformNavigation()
 void AIStateMachine::createPlatformMovement()
 {
 	platformMovement = new PlatformMovement(this);
+	checkNullAndBreak(platformMovement);
+	
 	addStateAction(platformMovement);
-
 	platformMovement->setPlatformGraph(platformGraph);
 	platformMovement->setTargetPosition(Vector3::ZERO);
 	platformMovement->setCharacter(gameObject);
@@ -265,25 +277,25 @@ void AIStateMachine::createPlatformMovement()
 void AIStateMachine::createGhostNavigation()
 {
 	ghostNavigation = new GhostNavigation(this);
-	addStateAction(ghostNavigation);
+	checkNullAndBreak(ghostNavigation)
 
+	addStateAction(ghostNavigation);
 	ghostNavigation->setCharacter(gameObject);
 }
 
 void AIStateMachine::createFightingState()
 {
 	fightingState = new FightingState(this);
-	addStateAction(fightingState);
+	checkNullAndBreak(fightingState)
 
+	addStateAction(fightingState);
 	fightingState->setCharacter(gameObject);
 }
 
 void AIStateMachine::changeTarget()
 {
-	if (fightingState->isFighting() || (currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
-	{
+	if (fightingState != nullptr && fightingState->isFighting() || (currentState != nullptr && platformNavigation!= nullptr && currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
 		return;
-	}
 
 	// TODO: de momento es random, cambiar si se quiere
 	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
@@ -304,6 +316,8 @@ void AIStateMachine::changeTarget()
 
 void AIStateMachine::setTarget(GameObject* newTarget)
 {
+	checkNullAndBreak(newTarget);
+
 	target = newTarget;
 	// TO STUFF
 	if (platformNavigation != nullptr) platformNavigation->setTarget(newTarget);
@@ -311,7 +325,7 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 	if (fightingState != nullptr) fightingState->setTarget(newTarget);
 
 	// TODO: cambiar el cambio de estado
-	if (platformGraph != nullptr && platformMovement != nullptr) {
+	if (platformGraph != nullptr && platformMovement != nullptr && newTarget->transform != nullptr) {
 		int index = platformGraph->getIndex(newTarget->transform->getPosition());
 		if (index < 0) return;
 		PlatformNode node = platformGraph->getPlatforms()[index];
@@ -322,7 +336,7 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 
 void AIStateMachine::selectPlatformState()
 {
-	if (target == nullptr || platformGraph == nullptr) return;
+	if (target == nullptr || platformGraph == nullptr || target->transform == nullptr) return;
 	if (platformGraph->getFurthestIndex(target->transform->getPosition()) == platformGraph->getClosestIndex(gameObject->transform->getPosition()))
 		currentState = platformMovement; // Target in the current platform
 	else
@@ -333,13 +347,13 @@ void AIStateMachine::updateState()
 {
 	// Enter fleeing mode
 	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
-	if (ghostManager != nullptr && !ghostManager->isGhost() && ghost != nullptr)
+	if (ghostManager != nullptr && !ghostManager->isGhost() && ghost != nullptr && ghost->transform != nullptr && gameObject->transform != nullptr)
 	{
 		float ghostDist = (ghost->transform->getPosition() - gameObject->transform->getPosition()).magnitude();
 		if (ghostDist <= avoidGhostDist)
 		{
-			jump->jump();
-			fightingState->turnBackOnTarget();
+			if(jump!=nullptr) jump->jump();
+			if(fightingState != nullptr) fightingState->turnBackOnTarget();
 			addActionInput(ActionInput::DODGE);
 		}
 
@@ -348,7 +362,7 @@ void AIStateMachine::updateState()
 	}
 
 	// Enter / Exit ghost movement
-	if (ghostManager != nullptr) {
+	if (ghostManager != nullptr && currentState != nullptr) {
 		if (ghostManager->isGhost() && currentState != ghostNavigation)
 			startGhostNavigation();
 		if (!ghostManager->isGhost() && currentState == ghostNavigation)

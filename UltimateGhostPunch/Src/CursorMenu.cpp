@@ -21,10 +21,8 @@ void CursorMenu::start()
 	inputSystem = InputSystem::GetInstance();
 	cursor = gameObject->getComponent<Cursor>();
 
-	if (cursor == nullptr) {
-		LOG("Cursor not found");
-		return;
-	}
+	checkNull(inputSystem);
+	checkNullAndBreak(cursor);
 	cursor->setVisibleOnWindow(false);
 }
 

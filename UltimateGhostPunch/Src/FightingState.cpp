@@ -33,38 +33,32 @@ void FightingState::update(float deltaTime)
 
 bool FightingState::enemyInQuickAttackRange()
 {
-	return attack->isQuickAttackOnRange(target);
+	return attack != nullptr && attack->isQuickAttackOnRange(target);
 }
 
 bool FightingState::enemyInStrongAttackRange()
 {
-	return attack->isStrongAttackOnRange(target);
+	return attack != nullptr && attack->isStrongAttackOnRange(target);
 }
 
 void FightingState::selectAction()
 {
+	if (character == nullptr) return;
+
 	Health* health = character->getComponent<Health>();
-	if (health == nullptr || !health->isAlive())
-		return;
+	if (health == nullptr || !health->isAlive() || health->isInvencible()) return;
 
-	if (health == nullptr || character->getComponent<Health>()->isInvencible())
-		return;
-
-	if (lastAction == ActionInput::DODGE && !dodgeComp->isDodging()) turnTowardsTarget(); // Turn towards target after dodge
+	if (lastAction == ActionInput::DODGE && dodgeComp != nullptr && !dodgeComp->isDodging()) turnTowardsTarget(); // Turn towards target after dodge
 
 	if (blockComp != nullptr && blockComp->isBlocking())
 	{
-		if (unblockTime <= 0)
-			unblock();
+		if (unblockTime <= 0) unblock();
 		
 		return;
 	}
 
 	if (attack != nullptr && attack->isAttacking()) // Wait until attack ends
-	{
-		//LOG("ATACANDO...\n");
 		return;
-	}
 
 	// If AI is over a player -> jump off
 	if (jump != nullptr && jump->isAbovePlayer())
@@ -75,64 +69,55 @@ void FightingState::selectAction()
 	}
 
 	// Wait til the AI lands
-	if (pState != nullptr && !pState->isGrounded()/* || pState->isJumping()*/)
+	if (playerState != nullptr && !playerState->isGrounded()/* || pState->isJumping()*/)
 		return;
+
+	if (target == nullptr)return;
 
 	Health* targetHealth = target->getComponent<Health>();
 	GhostManager* targetGhostManager = target->getComponent<GhostManager>();
 
 	if (targetHealth != nullptr && targetGhostManager != nullptr && (!targetHealth->isAlive() && !targetGhostManager->ghostUsed()) || targetGhostManager->isGhost()) // Flee if target is entering ghost mode
 	{
-		//LOG("FLEEING FROM TARGET...\n");
 		transitionToFlee();
 		return;
 	}
 	
 	if (targetHealth != nullptr && !targetHealth->isAlive()) // Change target if target is dead
 	{
-		//LOG("QUICK ATTACK...\n");
 		transitionToPlatformNav();
 		return;
 	}
 
-	int rnd = rand() % 100;
 
 	// AIR COMBAT
 	PlayerState* targetState = target->getComponent<PlayerState>();
 
-	if (targetState != nullptr && !targetState->isGrounded() && jump != nullptr) // Check if target is jumping
+	if (targetState != nullptr && !targetState->isGrounded() && target->transform != nullptr && character->transform != nullptr) // Check if target is jumping
 	{
 		float distX = abs(target->transform->getPosition().x - character->transform->getPosition().x);
 		if (distX <= maxDistForJump)
 		{
-			jump->jump();
+			if(jump != nullptr) jump->jump();
 			turnTowardsTarget();
 			ActionInput action = ActionInput::QUICK_ATTACK;
-			stateMachine->addActionInput(action);
+			if(stateMachine != nullptr) stateMachine->addActionInput(action);
 			lastAction = action;
 			return;
 		}
 	}
 
+	int rnd = rand() % 100;
 	// QUICK ATTACK RANGE
 	if (enemyInQuickAttackRange())
 	{
 		if (rnd < quickAttackProb_QAR)								// Action: Quick Attack
-		{
-			//LOG("QUICK ATTACK...\n");
 			quickAttack();
-		}
 		else if (rnd < quickAttackProb_QAR + strongAttackProb_QAR)	// Action: Strong Attack
-		{
-			//LOG("STRONG ATTACK...\n");
 			strongAttack();
-		}
 		else														// Action: Try to shield
-		{
-			//LOG("USING SHIELD...\n");
 			if(blockSpamTime <= 0)
-				block();
-		}
+				block(); 
 		return;
 	}
 
@@ -140,20 +125,13 @@ void FightingState::selectAction()
 	if (enemyInStrongAttackRange())
 	{
 		if (rnd < strongAttackProb_SAR)					// Action: Strong Attack
-		{
-			//LOG("STRONG ATTACK (SAR)...\n");
 			strongAttack();
-		}
 		else if (rnd < strongAttackProb_SAR + seekProb_SAR)					// Action: Transition to seek
-		{
-			//LOG("GETTING CLOSER...\n");
 			transitionToPlatformNav();
-		}
 		else											// Action: Try to shield
-		{
-			//LOG("USING SHIELD (SAR)...\n");
-			block();
-		}
+			if (blockSpamTime <= 0)
+				block();
+
 		return;
 	}
 
@@ -166,20 +144,21 @@ void FightingState::selectAction()
 
 void FightingState::quickAttack()
 {
+	if (stateMachine == nullptr) return;
+
 	ActionInput action = ActionInput::QUICK_ATTACK;
 	if (lastAction != action) quickAttackCounter = 0;
 
 	if (!attack->attackOnCD())
-	{
 		quickAttackCounter++;
-	}
+
 	// Max. consecutive quick attacks reached?
 	if (quickAttackCounter < 3)
 	{
 		stateMachine->addActionInput(action);
 		lastAction = action;
 	}
-	else if(dodgeComp != nullptr && !dodgeComp->isOnCooldown() && pState != nullptr && pState->canDodge())
+	else if(dodgeComp != nullptr && !dodgeComp->isOnCooldown() && playerState != nullptr && playerState->canDodge())
 	{
 		turnBackOnTarget();
 		dodge();
@@ -189,7 +168,9 @@ void FightingState::quickAttack()
 
 void FightingState::strongAttack()
 {
-	if (!attack->attackOnCD())
+	if (stateMachine == nullptr) return;
+
+	if (attack != nullptr && !attack->attackOnCD())
 	{
 		ActionInput action = ActionInput::STRONG_ATTACK;
 		stateMachine->addActionInput(action);
@@ -201,7 +182,7 @@ void FightingState::strongAttack()
 		int rnd = rand() % 100;
 		if(rnd < grabProb)
 			grab();
-		else if(rnd  < dodgeProb + grabProb && dodgeComp != nullptr && !dodgeComp->isOnCooldown() && pState != nullptr && pState->canDodge() && lastAction != ActionInput::QUICK_ATTACK) // Don't dodge after a quick attack and check cooldown
+		else if(rnd  < dodgeProb + grabProb && dodgeComp != nullptr && !dodgeComp->isOnCooldown() && playerState != nullptr && playerState->canDodge() && lastAction != ActionInput::QUICK_ATTACK) // Don't dodge after a quick attack and check cooldown
 		{
 			turnBackOnTarget();
 			dodge();
@@ -212,7 +193,9 @@ void FightingState::strongAttack()
 
 void FightingState::block()
 {
-	if (pState != nullptr && pState->canBlock())
+	if (stateMachine == nullptr) return;
+
+	if (blockComp != nullptr && playerState != nullptr && playerState->canBlock())
 	{
 		ActionInput action = ActionInput::BLOCK;
 		stateMachine->addActionInput(action);
@@ -223,15 +206,14 @@ void FightingState::block()
 		lastAction = action;
 	}
 	else
-	{
-		//LOG("CANNOT BLOCK -> FLEEING INSTEAD\n");
 		transitionToFlee();
-	}
 	
 }
 
 void FightingState::unblock()
 {
+	if (stateMachine == nullptr) return;
+
 	ActionInput action = ActionInput::UNBLOCK;
 	stateMachine->addActionInput(action);
 	lastAction = action;
@@ -239,22 +221,27 @@ void FightingState::unblock()
 
 void FightingState::transitionToPlatformNav()
 {
-	blockComp->unblock();
 	fighting = false;
+	if(blockComp != nullptr) blockComp->unblock();
+
+	if (stateMachine == nullptr) return;
 	((AIStateMachine*)stateMachine)->changeTarget();
 	((AIStateMachine*)stateMachine)->startPlatformNavigation();
 }
 
 void FightingState::transitionToFlee()
 {
-	blockComp->unblock();
 	fighting = false;
+	if(blockComp != nullptr) blockComp->unblock();
+
+	if (stateMachine == nullptr) return;
 	((AIStateMachine*)stateMachine)->startFleeingState(target);
 }
 
 void FightingState::grab()
 {
-	//LOG("TRIED TO GRAB!!!\n");
+	if (stateMachine == nullptr) return;
+
 	ActionInput action = ActionInput::GRAB;
 	stateMachine->addActionInput(action);
 	lastAction = action;
@@ -262,6 +249,8 @@ void FightingState::grab()
 
 void FightingState::drop()
 {
+	if (stateMachine == nullptr) return;
+
 	ActionInput action = ActionInput::DROP;
 	stateMachine->addActionInput(action);
 	lastAction = action;
@@ -269,68 +258,70 @@ void FightingState::drop()
 
 void FightingState::dodge()
 {
+	if (stateMachine == nullptr) return;
+
 	ActionInput action = ActionInput::DODGE;
 	stateMachine->addActionInput(action);
 	lastAction = action;
-	//LOG("DODGING!\n");
 }
 
 void FightingState::turnTowardsTarget()
 {
-	Vector3 dir;
-	int x = character->transform->getPosition().x, targetX = target->transform->getPosition().x;
-	if (x <= targetX) // (AI) --- (TARGET) ---
-		dir = Vector3::RIGHT;
-	else              //      --- (TARGET) --- (AI)
-		dir = Vector3::NEGATIVE_RIGHT;
+	if (character->transform == nullptr || target->transform == nullptr) return;
 
-	if (movement != nullptr)
-		movement->move(dir);
+	int x = character->transform->getPosition().x, targetX = target->transform->getPosition().x;
+	Vector3 dir = x <= targetX ? dir = Vector3::RIGHT : Vector3::NEGATIVE_RIGHT;
+
+	if (movement != nullptr) movement->move(dir);
 }
 
 void FightingState::turnBackOnTarget()
 {
-	Vector3 dir;
-	int x = character->transform->getPosition().x, targetX = target->transform->getPosition().x;
-	if (x <= targetX) // (AI) --- (TARGET) ---
-		dir = Vector3::NEGATIVE_RIGHT;
-	else              //      --- (TARGET) --- (AI)
-		dir = Vector3::RIGHT;
+	if (character->transform == nullptr || target->transform == nullptr) return;
 
-	if (movement != nullptr)
-		movement->move(dir);
+	int x = character->transform->getPosition().x, targetX = target->transform->getPosition().x;
+	Vector3 dir = x <= targetX ? Vector3::NEGATIVE_RIGHT : Vector3::RIGHT;
+
+	if (movement != nullptr) movement->move(dir);
 }
 
 void FightingState::setTarget(GameObject* target)
 {
+	checkNullAndBreak(target);
 	this->target = target;
 }
 
 void FightingState::setCharacter(GameObject* character)
 {
+	checkNullAndBreak(character);
 	this->character = character;
 
 	auto aux = character->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
-	
+	checkNull(attack);
+
 	std::vector<GameObject*> ground = character->findChildrenWithTag("groundSensor");
 	if (ground.size() > 0)
 	{
 		jump = ground[0]->getComponent<Jump>();
 		blockComp = ground[0]->getComponent<Block>();
 	}
+	checkNull(jump);
+	checkNull(blockComp);
 
 	std::vector<GameObject*> grabSensor = character->findChildrenWithTag("grabSensor");
 	if (grabSensor.size() > 0)
-	{
 		grabComp = grabSensor[0]->getComponent<Grab>();
-	}
+	checkNull(grabComp);
 
 	dodgeComp = character->getComponent<Dodge>();
 	movement = character->getComponent<Movement>();
-	pState = character->getComponent<PlayerState>();
-	if (pState == nullptr) LOG("Error: AI has no PlayerState\n");
+	playerState = character->getComponent<PlayerState>();
+	
+	checkNull(dodgeComp);
+	checkNull(movement);
+	checkNull(playerState);
 
 	lastAction = ActionInput::STOP;
 }

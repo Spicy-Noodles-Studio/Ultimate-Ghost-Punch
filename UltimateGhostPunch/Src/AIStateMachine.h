@@ -28,7 +28,6 @@ class AIStateMachine :	public StateMachine
 {
 public:
 private:
-	std::vector<GameObject*>* knights;
 	/* Knight it would be focused */
 	GameObject* target;
 

@@ -39,6 +39,9 @@ void Countdown::start()
 	}
 
 	players = GameManager::GetInstance()->getKnights();
+
+	checkNull(mainCamera);
+	checkNull(cameraControl);
 }
 
 void Countdown::update(float deltaTime)

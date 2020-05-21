@@ -27,14 +27,14 @@ void CursorGame::start()
 	cursor = gameObject->getComponent<Cursor>();
 	gameManager = GameManager::GetInstance();
 
-	if (cursor == nullptr) {
-		LOG("Cursor not found");
-		return;
-	}
+	checkNull(inputSystem);
+	checkNull(gameManager);
+	checkNullAndBreak(cursor);
 	cursor->setVisibleOnWindow(false);
 	hideCursor();
 	
-	if (interfaceSystem == nullptr) return;
+
+	checkNullAndBreak(interfaceSystem);
 	interfaceSystem->setControllerNavigation(false);
 }
 

@@ -53,6 +53,7 @@ PlatformGraph::~PlatformGraph()
 void PlatformGraph::start()
 {
 	physicsSystem = PhysicsSystem::GetInstance();
+	checkNull(physicsSystem);
 
 	//If the graph was not loaded we create an empty one
 	if (!loadGraph())

@@ -22,8 +22,9 @@ Dodge::~Dodge()
 void Dodge::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNullAndBreak(rigidBody);
 
-	if (rigidBody != nullptr) playerGravity = rigidBody->getGravity();
+	playerGravity = rigidBody->getGravity();
 }
 
 void Dodge::update(float deltaTime)

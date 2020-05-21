@@ -16,11 +16,13 @@ GhostNavigation::~GhostNavigation()
 
 void GhostNavigation::setTarget(GameObject* target)
 {
+	checkNullAndBreak(target);
 	this->target = target;
 }
 
 void GhostNavigation::setCharacter(GameObject* character)
 {
+	checkNullAndBreak(character);
 	this->character = character;
 	punch = character->getComponent<UltimateGhostPunch>();
 }
@@ -32,9 +34,9 @@ Vector3 GhostNavigation::getDirection() const
 
 void GhostNavigation::update(float deltaTime)
 {
-	if (charging)
-		chargeTime -= deltaTime;
-	if (target != nullptr) {
+	if (charging) chargeTime -= deltaTime;
+
+	if (target != nullptr && target->transform != nullptr && character != nullptr && character->transform != nullptr) {
 		direction = target->transform->getPosition() - character->transform->getPosition();
 		if (punch != nullptr && !punch->isUsed())
 		{
@@ -56,6 +58,6 @@ void GhostNavigation::update(float deltaTime)
 		}
 		
 		direction.normalize();	
-		stateMachine->addActionInput(ActionInput::GHOST_MOVE);
+		if(stateMachine != nullptr) stateMachine->addActionInput(ActionInput::GHOST_MOVE);
 	}
 }

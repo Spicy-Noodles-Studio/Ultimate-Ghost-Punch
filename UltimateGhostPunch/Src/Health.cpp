@@ -25,7 +25,10 @@ void Health::start()
 {
 	maxHealth = health;
 	Camera* mainCamera = gameObject->getScene()->getMainCamera();
-	if (mainCamera != nullptr) cameraEffects = mainCamera->gameObject->getComponent<CameraEffects>();
+	checkNullAndBreak(mainCamera);
+
+	cameraEffects = mainCamera->gameObject->getComponent<CameraEffects>();
+	checkNull(cameraEffects);
 }
 
 void Health::update(float deltaTime)

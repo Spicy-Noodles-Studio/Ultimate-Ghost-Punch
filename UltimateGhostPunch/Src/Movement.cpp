@@ -24,6 +24,7 @@ Movement::~Movement()
 void Movement::start()
 {
 	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNull(rigidBody);
 }
 
 void Movement::handleData(ComponentData* data)

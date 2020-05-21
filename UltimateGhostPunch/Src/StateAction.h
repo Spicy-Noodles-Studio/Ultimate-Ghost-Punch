@@ -2,6 +2,8 @@
 #ifndef STATE_ACTION_H
 #define STATE_ACTION_H
 
+#include <ErrorManagement.h>
+
 class StateMachine;
 
 class StateAction {

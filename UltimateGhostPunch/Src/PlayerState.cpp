@@ -32,6 +32,7 @@ void PlayerState::start()
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
+	checkNull(attack);
 
 	aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
@@ -39,10 +40,13 @@ void PlayerState::start()
 		block = aux[0]->getComponent<Block>();
 		jump = aux[0]->getComponent<Jump>();
 	}
+	checkNull(block);
+	checkNull(jump);
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
 	if (aux.size() > 0)
 		grab = aux[0]->getComponent<Grab>();
+	checkNull(grab);
 
 	dodge = gameObject->getComponent<Dodge>();
 	movement = gameObject->getComponent<Movement>();
@@ -51,6 +55,14 @@ void PlayerState::start()
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
 	respawn = gameObject->getComponent<Respawn>();
+
+	checkNull(dodge);
+	checkNull(movement);
+	checkNull(health);
+	checkNull(ghostMovement);
+	checkNull(ghostManager);
+	checkNull(ghostPunch);
+	checkNull(respawn);
 }
 
 void PlayerState::postUpdate(float deltaTime)

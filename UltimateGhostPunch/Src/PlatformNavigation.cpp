@@ -20,18 +20,21 @@ PlatformNavigation::~PlatformNavigation()
 
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
 {
+	checkNullAndBreak(platformGraph);
 	this->platformGraph = platformGraph;
 }
 
 void PlatformNavigation::setCharacter(GameObject* character)
 {
-	if (character == nullptr) return;
+	checkNullAndBreak(character);
+
 	std::vector<GameObject*> gameObjects = character->findChildrenWithTag("groundSensor");
 	if (!gameObjects.size()) return;
 	this->character = gameObjects[0];
 
 	// Inicial target should be current platform
-	setTarget(this->character->transform->getPosition());
+	if (this->character != nullptr && this->character->transform != nullptr)
+		setTarget(this->character->transform->getPosition());
 }
 
 void PlatformNavigation::setTarget(const Vector3& position)
@@ -48,7 +51,9 @@ void PlatformNavigation::setTarget(const Vector3& position)
 
 void PlatformNavigation::setTarget(GameObject* target)
 {
-	if (target == nullptr) return;
+	checkNullAndBreak(target);
+	checkNullAndBreak(target->transform);
+
 	targetObject = target;
 	setTarget(target->transform->getPosition());
 }
@@ -60,7 +65,7 @@ void PlatformNavigation::setTarget(const PlatformNode& node)
 
 bool PlatformNavigation::hasArrived() const
 {
-	if (character == nullptr || platformGraph == nullptr) return false;
+	if (character == nullptr || character->transform == nullptr || platformGraph == nullptr) return false;
 
 	return target.getIndex() == platformGraph->getIndex(character->transform->getWorldPosition());
 }
@@ -78,7 +83,7 @@ bool PlatformNavigation::isFleeing() const
 std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 {
 	std::vector<PathNode> path;
-	if (platformGraph == nullptr || character == nullptr)
+	if (platformGraph == nullptr || character == nullptr || character->transform == nullptr)
 		return path; // Empty
 
 	std::vector<PlatformNode>& graph = platformGraph->getPlatforms();
@@ -134,7 +139,7 @@ std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 
 void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 {
-	if (character == nullptr) return;
+	if (character == nullptr || character->transform == nullptr) return;
 
 	Vector3 startPos = node.platform.getEdge(node.index).getIniPos(), characterPos = character->transform->getWorldPosition();
 
@@ -150,12 +155,13 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 		time = 0.0f;
 
 		//Set rigidbody to link´s inicial state
-		if (character->getParent() != nullptr) {
-			character->getParent()->transform->setRotation({ 0, 90.0 * linkInUse.getDirection(),0 });
-			RigidBody* rb = character->getParent()->getComponent<RigidBody>();
+		GameObject* parent = character->getParent();
+		if (parent != nullptr && parent ->transform != nullptr) {
+			parent->transform->setRotation({ 0, 90.0 * linkInUse.getDirection(),0 });
+			RigidBody* rb = parent->getComponent<RigidBody>();
 			if (rb != nullptr) {
-				rb->setLinearVelocity(linkInUse.getStartVelocity());
 				rb->clearForces();
+				rb->setLinearVelocity(linkInUse.getStartVelocity());
 				rb->addForce(linkInUse.getStartForce());
 			}
 		}
@@ -163,40 +169,40 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 	}
 
 	ActionInput action = (startPos.x < characterPos.x) ? ActionInput::MOVE_LEFT : ActionInput::MOVE_RIGHT;
-	stateMachine->addActionInput(action);
+	if(stateMachine != nullptr)stateMachine->addActionInput(action);
 }
 
 void PlatformNavigation::moveToPlatform()
 {
+	if (character == nullptr) return;
 	// If arrived to end of link, reset
-	if (linkInUse.getDuration() < time || (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.1) {
+	if (linkInUse.getDuration() < time || (character->transform != nullptr && (character->transform->getWorldPosition() - linkInUse.getEndPos()).magnitude() < 0.1)) {
 		movingThroughLink = false;
 		time = 0.0f;
 		lastState = 0;
-		if (platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
+		if (platformGraph != nullptr && stateMachine != nullptr && platformGraph->getIndex(linkInUse.getEndPos()) == target.getIndex())
 			((AIStateMachine*)stateMachine)->startPlatformMovement();
 		return;
 	}
 
-	Vector3 vel = character->getComponent<RigidBody>()->getLinearVelocity();
+	RigidBody* rb = character->getComponent<RigidBody>();
+	Vector3 vel = rb != nullptr ? rb->getLinearVelocity() : Vector3::ZERO;
 	std::vector<State> states = linkInUse.getStates();
 	if (states.size() > 0) {
 		bool processed = false;
 		while (lastState >= 0 && lastState < states.size() && time >= states[lastState].getTime()) {
 			// Inject input
 			for (Action action : states[lastState].getActions())
-			{
-				stateMachine->addActionInput((ActionInput)action);
-			}
+				if (stateMachine != nullptr)
+					stateMachine->addActionInput((ActionInput)action);
 			lastState++;
 			processed = true;
 		}
 		// Compensate time diference by injecting last state input again (unless was the last one)
 		if (!processed && lastState - 1 >= 0 && lastState < states.size()) {
 			for (Action action : states[lastState - 1].getActions())
-			{
-				stateMachine->addActionInput((ActionInput)action);
-			}
+				if (stateMachine != nullptr)
+					stateMachine->addActionInput((ActionInput)action);
 		}
 	}
 }
@@ -214,6 +220,7 @@ void PlatformNavigation::update(float deltaTime)
 		if (path.size() > 0)
 			// Go to next platform
 			moveToStartingPoint(path[0]);
+		if (stateMachine == nullptr) return;
 		else if (fleeing)
 		{
 			fleeing = false;

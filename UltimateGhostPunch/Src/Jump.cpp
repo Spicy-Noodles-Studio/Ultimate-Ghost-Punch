@@ -22,9 +22,12 @@ Jump::~Jump()
 
 void Jump::start()
 {
-	parent = gameObject->getParent();
-	if (parent != nullptr) rigidBody = parent->getComponent<RigidBody>();
 	landed = false;
+	parent = gameObject->getParent();
+	checkNullAndBreak(parent);
+	
+	rigidBody = parent->getComponent<RigidBody>();
+	checkNull(rigidBody);
 }
 
 void Jump::update(float deltaTime)

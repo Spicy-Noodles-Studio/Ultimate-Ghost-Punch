@@ -17,7 +17,7 @@ PlatformMovement::~PlatformMovement()
 
 void PlatformMovement::update(float deltaTime)
 {
-	if (character == nullptr) return;
+	if (stateMachine == nullptr || character == nullptr && character->transform == nullptr) return;
 	Vector3 currentPosition = character->transform->getPosition();
 
 	double limitOffset = 1.0, targetOffset = 2.0; // Tolerancia alta para cuando el target sea la posicion de un enemigo
@@ -46,11 +46,13 @@ void PlatformMovement::update(float deltaTime)
 
 void PlatformMovement::setPlatformGraph(PlatformGraph* platformGraph)
 {
+	checkNullAndBreak(platformGraph)
 	this->platformGraph = platformGraph;
 }
 
 void PlatformMovement::setCharacter(GameObject* character)
 {
+	checkNullAndBreak(character)
 	this->character = character;
 }
 
@@ -67,5 +69,5 @@ void PlatformMovement::setLimits(float left, float right)
 
 bool PlatformMovement::differentPlatforms()
 {
-	return platformGraph != nullptr && platformGraph->getIndex(targetPosition) != platformGraph->getIndex(character->transform->getPosition());
+	return platformGraph != nullptr && character->transform != nullptr && platformGraph->getIndex(targetPosition) != platformGraph->getIndex(character->transform->getPosition());
 }

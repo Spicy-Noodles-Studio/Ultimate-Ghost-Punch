@@ -39,29 +39,40 @@ PlayerController::~PlayerController()
 void PlayerController::start()
 {
 	inputSystem = InputSystem::GetInstance();
+	checkNull(inputSystem);
 
 	movement = gameObject->getComponent<Movement>();
 	health = gameObject->getComponent<Health>();
 	dodge = gameObject->getComponent<Dodge>();
+	checkNull(movement);
+	checkNull(health);
+	checkNull(dodge);
 
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 	ghostManager = gameObject->getComponent<GhostManager>();
 	ghostPunch = gameObject->getComponent<UltimateGhostPunch>();
+	checkNull(ghostMovement);
+	checkNull(ghostManager);
+	checkNull(ghostPunch);
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 	if (aux.size() > 0)
 		jump = aux[0]->getComponent<Jump>();
+	checkNull(jump);
 
 	if (aux.size() > 0)
 		block = aux[0]->getComponent<Block>();
+	checkNull(block);
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
 	if (aux.size() > 0)
 		attack = aux[0]->getComponent<Attack>();
+	checkNull(attack);
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
 	if (aux.size() > 0)
 		grab = aux[0]->getComponent<Grab>();
+	checkNull(grab);
 }
 
 void PlayerController::update(float deltaTime)

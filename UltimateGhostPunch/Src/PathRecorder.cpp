@@ -17,9 +17,9 @@
 REGISTER_FACTORY(PathRecorder);
 
 PathRecorder::PathRecorder(GameObject* gameObject) : UserComponent(gameObject), recording(false), graph(nullptr), inputSystem(nullptr), ghostManager(nullptr), health(nullptr),
-													 jump(nullptr), parent(nullptr), controllerIndex(-1), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()), 
-													 currentPlatform(-1), actions(std::vector<Action>()), time(0.0f), startVelocity(Vector3::ZERO), iniPos(Vector3::ZERO), 
-													 startForce(Vector3::ZERO), startDirection(-1)
+jump(nullptr), parent(nullptr), controllerIndex(-1), frame(-1), lastPlatform(std::stack<int>()), states(std::vector<State>()),
+currentPlatform(-1), actions(std::vector<Action>()), time(0.0f), startVelocity(Vector3::ZERO), iniPos(Vector3::ZERO),
+startForce(Vector3::ZERO), startDirection(-1)
 {
 
 }
@@ -40,20 +40,26 @@ void PathRecorder::start()
 
 	GameObject* aux = findGameObjectWithName("LevelCollider");
 	if (aux != nullptr) graph = aux->getComponent<PlatformGraph>();
+	checkNull(graph);
 
 	inputSystem = InputSystem::GetInstance();
-	
-	parent = gameObject->getParent();
-	if (parent != nullptr) {
-		health = parent->getComponent<Health>();
-		ghostManager = parent->getComponent<GhostManager>();
-	}
+	checkNull(inputSystem);
+
 	// TODO: devolver a como estaba antes, esto petaba
 	controllerIndex = 4; // gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
 
-	std::vector<GameObject*> v = gameObject->findChildrenWithTag("groundSensor");
-	if (v.size() > 0)
-		jump = v[0]->getComponent<Jump>();
+	std::vector<GameObject*> groundSensor = gameObject->findChildrenWithTag("groundSensor");
+	if (groundSensor.size() > 0)
+		jump = groundSensor[0]->getComponent<Jump>();
+	checkNull(jump);
+
+	parent = gameObject->getParent();
+	checkNullAndBreak(parent);
+	
+	health = parent->getComponent<Health>();
+	ghostManager = parent->getComponent<GhostManager>();
+	checkNull(health);
+	checkNull(ghostManager);
 }
 
 void PathRecorder::update(float deltaTime)
@@ -124,7 +130,7 @@ void PathRecorder::onObjectEnter(GameObject* other)
 {
 	if (controllerIndex == 4 && other != nullptr && other->getTag() == "suelo" && recording)
 	{
-		Vector3 endPos = gameObject->transform != nullptr ? gameObject->transform->getWorldPosition(): Vector3::ZERO;
+		Vector3 endPos = gameObject->transform != nullptr ? gameObject->transform->getWorldPosition() : Vector3::ZERO;
 
 		if (currentPlatform != -1)
 			lastPlatform.push(currentPlatform);
@@ -132,7 +138,7 @@ void PathRecorder::onObjectEnter(GameObject* other)
 		if (graph != nullptr)
 			currentPlatform = graph->getIndex(endPos);
 
-		if (currentPlatform != -1) {			
+		if (currentPlatform != -1) {
 			NavigationLink navLink = NavigationLink(states, iniPos, endPos, startVelocity, startForce, frame, time, currentPlatform, startDirection);
 			if (!lastPlatform.empty() && graph != nullptr) {
 				graph->addLinkToPlatform(lastPlatform.top(), navLink);

@@ -25,13 +25,15 @@ UltimateGhostPunch::~UltimateGhostPunch()
 
 void UltimateGhostPunch::start()
 {
+	state = AVAILABLE;
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
+	checkNull(rigidBody);
+	checkNullAndBreak(ghostMovement);
+	
+	ghostSpeed = ghostMovement->getSpeed();
 
-	if (ghostMovement != nullptr)
-		ghostSpeed = ghostMovement->getSpeed();
-
-	state = AVAILABLE;
 }
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
