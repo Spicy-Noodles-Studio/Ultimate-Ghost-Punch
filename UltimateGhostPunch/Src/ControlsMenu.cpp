@@ -36,7 +36,7 @@ ControlsMenu::ControlsMenu(GameObject* gameObject) : Menu(gameObject)
 
 	keyboard = { "KEYBOARD\n\n", "A/D\n\n", "Left Click\n\n", "Right Click\n\n", "SPACE/W\n\n", "E\n\n", "S\n\n", "Shift + A/D\n\n", "Aim with mouse + Left Click" };
 
-	controller = { "CONTROLLER\n\n", "Left Joystick/Pads\n\n", "X\n\n", "Y\n\n", "A/UP\n\n", "LB\n\n", "B\n\n", "RB\n\n", "Aim with Right Joystick + X" };
+	controller = { "CONTROLLER\n\n", "Left Joystick/Pads\n\n", "X\n\n", "Y\n\n", "A/UP\n\n", "LB\n\n", "B\n\n", "RB\n\n", "Aim with Right Joystick + RB" };
 }
 
 ControlsMenu::~ControlsMenu()
