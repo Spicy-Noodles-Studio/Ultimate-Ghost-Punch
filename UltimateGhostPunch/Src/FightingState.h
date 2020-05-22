@@ -69,6 +69,9 @@ private:
 	void drop();
 	void dodge();
 
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	FightingState(StateMachine* stateMachine);
 	virtual ~FightingState();
@@ -80,7 +83,5 @@ public:
 	bool isFighting() const;
 	void turnTowardsTarget();
 	void turnBackOnTarget();
-protected:
-	virtual void update(float deltaTime);
 };
 

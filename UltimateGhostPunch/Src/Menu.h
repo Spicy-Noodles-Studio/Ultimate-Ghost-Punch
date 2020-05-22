@@ -27,11 +27,12 @@ protected:
 	virtual void buttonClick(const std::string& sound);
 	virtual bool backButtonClick();
 
+protected:
+	virtual void start();
+
 public:
 	Menu(GameObject* gameObject);
 	~Menu();
-
-	virtual void start();
 };
 
 #endif

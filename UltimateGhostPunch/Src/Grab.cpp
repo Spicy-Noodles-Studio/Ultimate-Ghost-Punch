@@ -35,7 +35,10 @@ void Grab::start()
 
 	checkNull(score);
 	checkNullAndBreak(parent);
-	id = parent->getComponent<PlayerIndex>()->getIndex();
+	PlayerIndex* index = parent->getComponent<PlayerIndex>();
+
+	checkNullAndBreak(index);
+	id = index->getIndex();
 
 }
 

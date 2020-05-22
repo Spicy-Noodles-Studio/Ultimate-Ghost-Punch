@@ -39,14 +39,15 @@ private:
 	void eraseLastLink();
 	void eraseRecordedLinks();
 
-public:
-	PathRecorder(GameObject* gameObject);
-	virtual ~PathRecorder();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
+
+public:
+	PathRecorder(GameObject* gameObject);
+	virtual ~PathRecorder();
 
 	void saveState(const std::vector<Action>& actions);
 	

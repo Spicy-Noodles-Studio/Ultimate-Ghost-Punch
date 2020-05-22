@@ -24,14 +24,14 @@ private:
 	bool startCounting;
 	bool countingDown;
 
-public:
-	Countdown(GameObject* gameObject);
-	virtual ~Countdown();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+public:
+	Countdown(GameObject* gameObject);
+	virtual ~Countdown();
 	bool hasStarted() const;
 	bool isCounting() const;
 

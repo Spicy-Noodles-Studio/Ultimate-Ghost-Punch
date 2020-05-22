@@ -14,12 +14,14 @@ private:
 
 	bool checkControllersInput();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	Credits(GameObject* gameObject);
 	virtual ~Credits();
 
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

@@ -14,12 +14,13 @@ private:
 
 	bool checkControllersInput();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	LogoScreen(GameObject* gameObject);
 	virtual ~LogoScreen();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

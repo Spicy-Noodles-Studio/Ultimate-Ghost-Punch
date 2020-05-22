@@ -23,12 +23,13 @@ private:
 
 	bool checkControllersInput();
 	
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	PauseMenu(GameObject* gameObject);
 	virtual ~PauseMenu();
-
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
 
 	// opens the Pause Menu and pauses the game
 	void setPaused(bool paused);

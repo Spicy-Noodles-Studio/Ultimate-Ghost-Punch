@@ -64,14 +64,16 @@ private:
 
 	void ghostPunchMouseAim();
 
-public:
-	PlayerController(GameObject* gameObject);
-	virtual ~PlayerController();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void fixedUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	PlayerController(GameObject* gameObject);
+	virtual ~PlayerController();
+
 
 	// Manages player's input and generates a movement direction
 	void checkInput();

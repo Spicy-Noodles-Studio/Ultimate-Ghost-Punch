@@ -63,12 +63,12 @@ protected:
 
 	bool checkControllersInput();
 
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	OptionsMenu(GameObject* gameObject);
 	virtual ~OptionsMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

@@ -13,11 +13,13 @@ protected:
 	std::vector<ActionInput> actionInputs; // Input del jugador (puede ser varios)
 	std::vector<StateAction*> stateActions; // Los estados
 	StateAction* currentState;
+
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	StateMachine(GameObject* gameObject);
 	virtual ~StateMachine();
-
-	virtual void update(float deltaTime);
 
 	void addStateAction(StateAction* stateAction);
 	void addActionInput(ActionInput input);

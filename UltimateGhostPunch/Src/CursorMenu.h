@@ -13,6 +13,7 @@ public:
 	CursorMenu(GameObject* gameObject);
 	virtual ~CursorMenu();
 
+protected:
 	void start();
 	void preUpdate(float deltaTime);
 

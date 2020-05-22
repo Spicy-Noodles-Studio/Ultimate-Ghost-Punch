@@ -16,12 +16,13 @@ private:
 
 	bool checkControllersInput();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	ControlsMenu(GameObject* gameObject);
 	virtual ~ControlsMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

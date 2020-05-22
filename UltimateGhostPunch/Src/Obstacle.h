@@ -16,12 +16,14 @@ private:
 	// Position for respawn used if the player dies
 	Vector3 initialPosition;
 
+protected:
+	virtual void handleData(ComponentData* data);
+	virtual void onCollisionEnter(GameObject* other);
+
 public:
 	Obstacle(GameObject* gameObject);
 	virtual ~Obstacle();
 
-	virtual void handleData(ComponentData* data);
-	virtual void onCollisionEnter(GameObject* other);
 };
 
 #endif

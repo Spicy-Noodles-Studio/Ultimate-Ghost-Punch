@@ -68,12 +68,13 @@ private:
 
 	std::pair<std::string, std::string> timeToText();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	Game(GameObject* gameObject);
 	virtual ~Game();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 
 	void playerDie(int index);
 

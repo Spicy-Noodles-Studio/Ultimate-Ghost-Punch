@@ -21,11 +21,13 @@ private:
 
 	WindowManager* windowManager;
 
+protected:
+	virtual void start();
+
 public:
 	MainMenu(GameObject* gameObject);
 	virtual ~MainMenu();
 
-	virtual void start();
 };
 
 #endif

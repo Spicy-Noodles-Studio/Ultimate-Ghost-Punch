@@ -36,12 +36,13 @@ private:
 	int taunt;
 	bool grabbed;
 
+protected:
+	virtual void start();
+	virtual void postUpdate(float deltaTime);
+
 public:
 	PlayerState(GameObject* gameObject);
 	virtual ~PlayerState();
-
-	virtual void start();
-	virtual void postUpdate(float deltaTime);
 
 	bool canAttack() const;
 	bool canBlock() const;

@@ -35,12 +35,13 @@ private:
 
 	bool checkControllersInput();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	StatsMenu(GameObject* gameObject);
 	virtual ~StatsMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

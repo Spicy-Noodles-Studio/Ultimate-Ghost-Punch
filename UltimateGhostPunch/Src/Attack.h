@@ -57,15 +57,17 @@ private:
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
 	bool isAttackOnRange(GameObject* obj, const Vector3& scale) const;
 
-public:
-	Attack(GameObject* gameObject);
-	virtual ~Attack();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
+
+public:
+	Attack(GameObject* gameObject);
+	virtual ~Attack();
+
 
 	void quickAttack();
 	void strongAttack();

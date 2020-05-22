@@ -16,6 +16,9 @@ public:
 		int index;
 	};
 
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	PlatformNavigation(StateMachine* stateMachine);
 	~PlatformNavigation();
@@ -38,9 +41,6 @@ private:
 
 	void moveToStartingPoint(const PathNode& node);
 	void moveToPlatform();
-
-protected:
-	virtual void update(float deltaTime);
 
 private:
 	/* GRAPH INFO */

@@ -77,12 +77,13 @@ private:
 	bool settingsButtonClick();
 	virtual bool backButtonClick();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	ConfigurationMenu(GameObject* gameObject);
 	virtual ~ConfigurationMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

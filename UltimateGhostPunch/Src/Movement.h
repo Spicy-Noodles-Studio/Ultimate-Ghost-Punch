@@ -12,12 +12,13 @@ private:
 	RigidBody* rigidBody;
 	float speed, maxVelocity;
 
+protected:
+	virtual void start();
+	virtual void handleData(ComponentData* data);
+
 public:
 	Movement(GameObject* gameObject);
 	virtual ~Movement();
-
-	virtual void start();
-	virtual void handleData(ComponentData* data);
 
 	void move(Vector3 dir);
 	void stop(); // Stops the object's physic body's movement and clear its forces

@@ -22,6 +22,7 @@ public:
 
 	Vector3 getDirection() const;
 	UltimateGhostPunch* punch;
+
 protected:
 	virtual void update(float deltaTime);
 

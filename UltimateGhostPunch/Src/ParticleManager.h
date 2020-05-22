@@ -28,12 +28,13 @@ private:
 	float stunDelay;
 	float stunTimer;
 
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	ParticleManager(GameObject* gameObject);
 	virtual ~ParticleManager();
-
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
 
 private:
 	/* CREATE CHILDREN */

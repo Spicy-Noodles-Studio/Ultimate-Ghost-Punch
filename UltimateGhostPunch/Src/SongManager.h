@@ -18,6 +18,10 @@ private:
 	bool songPlaying;
 	std::string menuMusic = "cycles";
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	SongManager();
 	SongManager(GameObject* gameObject);
@@ -25,8 +29,6 @@ public:
 
 	static SongManager* GetInstance();
 
-	virtual void start();
-	virtual void update(float deltaTime);
 	void playMenuSong();
 	void stopMenuSong();
 	void pauseMenuSong();

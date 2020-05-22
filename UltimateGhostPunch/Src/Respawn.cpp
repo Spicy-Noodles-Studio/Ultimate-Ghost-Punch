@@ -40,7 +40,7 @@ void Respawn::update(float deltaTime)
 		respawning = false;
 	}
 
-	if (gameObject->transform->getPosition().y < -20)
+	if (gameObject->transform != nullptr && gameObject->transform->getPosition().y < -20)
 		respawn();
 }
 

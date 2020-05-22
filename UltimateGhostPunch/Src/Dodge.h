@@ -24,13 +24,14 @@ private:
 	float duration;
 	float atenuation;
 
-public:
-	Dodge(GameObject* gameObject);
-	virtual ~Dodge();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	Dodge(GameObject* gameObject);
+	virtual ~Dodge();
 
 	void dodge();
 	void endDodge();

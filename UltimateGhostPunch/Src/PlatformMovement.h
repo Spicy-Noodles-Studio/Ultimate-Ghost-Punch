@@ -19,11 +19,13 @@ private:
 	float leftLimit;
 	float rightLimit;
 
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	PlatformMovement(StateMachine* stateMachine);
 	~PlatformMovement();
 
-	virtual void update(float deltaTime);
 
 	void setPlatformGraph(PlatformGraph* platformGraph);
 	void setCharacter(GameObject* character);

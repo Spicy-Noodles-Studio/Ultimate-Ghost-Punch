@@ -62,14 +62,15 @@ private:
 
 	GhostMode mode;
 
-public:
-	GhostManager(GameObject* gameObject);
-	virtual ~GhostManager();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
+
+public:
+	GhostManager(GameObject* gameObject);
+	virtual ~GhostManager();
 
 	bool isGhost() const;
 

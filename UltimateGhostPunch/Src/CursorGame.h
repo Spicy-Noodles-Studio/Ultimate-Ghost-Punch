@@ -15,6 +15,7 @@ public:
 	CursorGame(GameObject* gameObject);
 	virtual ~CursorGame();
 
+protected:
 	void start();
 	void preUpdate(float deltaTime);
 

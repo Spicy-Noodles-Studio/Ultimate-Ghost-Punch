@@ -37,12 +37,13 @@ private:
 	std::vector<std::string> jumpSounds;
 	std::vector<std::string> throwSounds;
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	SoundManager(GameObject* gameObject);
 	virtual ~SoundManager();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 
 	void playTaunt();
 	

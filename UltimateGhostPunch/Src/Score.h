@@ -32,6 +32,7 @@ private:
 	std::vector<ScorePlayer*> playerScores;
 
 	void initScorePlayer(ScorePlayer* player);
+	bool correctIndex(int index);
 
 public:
 	Score();

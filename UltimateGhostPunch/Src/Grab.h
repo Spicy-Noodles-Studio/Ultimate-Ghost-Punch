@@ -48,10 +48,7 @@ private:
 	void resetEnemy();
 	void grabEnemy();
 
-public:
-	Grab(GameObject* gameObject);
-	virtual ~Grab();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
@@ -60,6 +57,11 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 	virtual void handleData(ComponentData* data);
+
+public:
+	Grab(GameObject* gameObject);
+	virtual ~Grab();
+
 
 	void grab();
 	void drop();

@@ -32,14 +32,14 @@ private:
 	float maxRange;
 	float duration;
 
-public: 
-	CameraEffects(GameObject* gameObject);
-	virtual ~CameraEffects();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+public: 
+	CameraEffects(GameObject* gameObject);
+	virtual ~CameraEffects();
 	void fadeOut();
 	void fadeIn();
 	void setDarkness();

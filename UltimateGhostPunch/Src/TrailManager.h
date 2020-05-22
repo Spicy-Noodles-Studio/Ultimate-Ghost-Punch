@@ -20,12 +20,13 @@ private:
 	float time;
 	float thrownTime;
 
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	TrailManager(GameObject* gameObject);
 	virtual ~TrailManager();
-
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
 
 private:
 	// Trails creation

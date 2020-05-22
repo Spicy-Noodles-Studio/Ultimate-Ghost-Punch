@@ -9,11 +9,12 @@ class PlayerIndex : public UserComponent
 private:
 	int index;
 
+protected:
+	virtual void handleData(ComponentData* data);
+
 public:
 	PlayerIndex(GameObject* gameObject);
 	virtual ~PlayerIndex();
-
-	virtual void handleData(ComponentData* data);
 
 	int getIndex();
 	void setIndex(int ind);

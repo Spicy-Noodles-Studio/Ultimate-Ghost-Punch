@@ -43,6 +43,9 @@ private:
 	Score scores;
 	float initialBrightness;
 
+protected:
+	virtual void start();
+
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -50,8 +53,6 @@ public:
 	virtual ~GameManager();
 
 	static GameManager* GetInstance();
-
-	virtual void start();
 
 	void setPaused(bool setPaused);
 	bool isPaused() const;
