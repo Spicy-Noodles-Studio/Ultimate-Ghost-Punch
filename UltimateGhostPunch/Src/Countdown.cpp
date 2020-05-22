@@ -22,7 +22,7 @@ Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), panel(
 
 Countdown::~Countdown()
 {
-	
+
 }
 
 void Countdown::start()
@@ -33,7 +33,7 @@ void Countdown::start()
 	{
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 		cameraControl = mainCamera->getComponent<CameraController>();
-		
+
 		if (cameraLayout != nullptr)
 			panel = cameraLayout->getRoot().getChild("CountdownBackground");
 	}
@@ -107,12 +107,17 @@ void Countdown::handleData(ComponentData* data)
 	}
 }
 
+bool Countdown::hasStarted() const
+{
+	return startCounting;
+}
+
 bool Countdown::isCounting() const
 {
 	return countingDown;
 }
 
-float Countdown::getRemainingTime()
+float Countdown::getRemainingTime() const
 {
 	return time;
 }

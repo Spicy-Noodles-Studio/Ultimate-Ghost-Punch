@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Block.h"
+#include "Attack.h"
 #include "Grab.h"
 #include "CameraEffects.h"
 #include "Camera.h"
@@ -90,9 +91,18 @@ void Health::receiveDamage(int damage)
 		if (aux.size() > 0)
 		{
 			block = aux[0]->getComponent<Block>();
-
 			if (block != nullptr && block->isBlocking())
 				block->unblock();
+		}
+
+		aux = gameObject->findChildrenWithTag("attackSensor");
+		Attack* attack = nullptr;
+
+		if (aux.size() > 0)
+		{
+			attack = aux[0]->getComponent<Attack>();
+			if (attack != nullptr && attack->isAttacking())
+				attack->stop();
 		}
 
 		aux = gameObject->findChildrenWithTag("grabSensor");
@@ -101,7 +111,6 @@ void Health::receiveDamage(int damage)
 		if (aux.size() > 0)
 		{
 			grab = aux[0]->getComponent<Grab>();
-
 			if (grab != nullptr && grab->isGrabbing())
 				grab->drop();
 		}
@@ -113,7 +122,7 @@ void Health::receiveDamage(int damage)
 
 		if (health == 0) {
 			alive = false;
-			if(cameraEffects != nullptr) cameraEffects->shake(Vector3(1, 1, 0));
+			if (cameraEffects != nullptr) cameraEffects->shake(Vector3(1, 1, 0));
 		}
 		else
 		{

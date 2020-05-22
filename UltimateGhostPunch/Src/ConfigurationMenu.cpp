@@ -108,7 +108,10 @@ void ConfigurationMenu::start()
 					if (indexes[i] == 9)
 						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("IA");
 					else
+					{
 						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
+						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Button").setVisible(false);
+					}
 				}
 			}
 		}
@@ -402,7 +405,7 @@ bool ConfigurationMenu::changeSong(int value)
 
 bool ConfigurationMenu::previewSong(bool value)
 {
-	if (value && songManager != nullptr )
+	if (value && songManager != nullptr)
 	{
 		songManager->pauseMenuSong();
 		songManager->playSong(songNames[currentSong]);

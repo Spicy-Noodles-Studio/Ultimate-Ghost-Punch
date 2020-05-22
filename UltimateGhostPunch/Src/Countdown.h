@@ -32,8 +32,10 @@ public:
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+	bool hasStarted() const;
 	bool isCounting() const;
-	float getRemainingTime();
+
+	float getRemainingTime() const;
 };
 
 #endif

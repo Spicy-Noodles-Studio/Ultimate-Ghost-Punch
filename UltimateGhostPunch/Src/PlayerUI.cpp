@@ -27,7 +27,7 @@ void PlayerUI::start()
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
 	if (playerIndex != nullptr)
 		name = "Player" + std::to_string(playerIndex->getIndex());
-	checkNull(playerIndex)
+	checkNull(playerIndex);
 
 	// Get health component to update stats
 	health = gameObject->getComponent<Health>();
@@ -35,15 +35,17 @@ void PlayerUI::start()
 
 	//Get ghostManager component to update status
 	ghostManager = gameObject->getComponent<GhostManager>();
-	checkNull(ghostManager)
+	checkNull(ghostManager);
 
 	// Get camera
 	GameObject* cameraObject = findGameObjectWithName("MainCamera");
 	UILayout* cameraLayout = nullptr;
 
-	if (cameraObject != nullptr) {
+	if (cameraObject != nullptr)
+	{
 		mainCamera = cameraObject->getComponent<Camera>();
-		if(cameraObject != nullptr) cameraLayout = cameraObject->getComponent<UILayout>();
+		if (cameraObject != nullptr)
+			cameraLayout = cameraObject->getComponent<UILayout>();
 	}
 
 	// Get UI elements for PlayerIndicator and PlayerStatsPanel
@@ -132,7 +134,7 @@ void PlayerUI::updateGhost()
 
 void PlayerUI::updateIndicator()
 {
-	if (mainCamera == nullptr || gameObject->transform != nullptr) return;
+	if (mainCamera == nullptr || gameObject->transform == nullptr) return;
 
 	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());
 

@@ -24,7 +24,7 @@ Respawn::~Respawn()
 void Respawn::start()
 {
 	time = 0.0f;
-	playerState= gameObject->getComponent<PlayerState>();
+	playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);
 	if (gameObject->transform != nullptr)
 		initialPos = gameObject->transform->getPosition();
@@ -39,6 +39,9 @@ void Respawn::update(float deltaTime)
 		if (playerState != nullptr)	playerState->setIgnoringInput(false);
 		respawning = false;
 	}
+
+	if (gameObject->transform->getPosition().y < -20)
+		respawn();
 }
 
 void Respawn::handleData(ComponentData* data)
@@ -63,12 +66,12 @@ void Respawn::respawn()
 }
 
 void Respawn::spawn(const Vector3& spawnPos)
-{	
+{
 	Movement* movement = gameObject->getComponent<Movement>();
 	if (movement != nullptr)
 		movement->stop();
 
-	if (playerState!= nullptr)
+	if (playerState != nullptr)
 		playerState->setIgnoringInput(true);
 
 	Health* health = gameObject->getComponent<Health>();
@@ -78,7 +81,7 @@ void Respawn::spawn(const Vector3& spawnPos)
 		health->setTime(respawnTime);
 	}
 
-	if(gameObject->transform != nullptr)
+	if (gameObject->transform != nullptr)
 		gameObject->transform->setPosition(spawnPos);
 
 	time = respawnTime;
