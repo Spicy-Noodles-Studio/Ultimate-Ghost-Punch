@@ -3,10 +3,6 @@
 #define CAMERAEFFECTS_H
 
 #include <UserComponent.h>
-#include <Ogre.h>
-#include <OgreTextureUnitState.h>
-#include <OgreMaterial.h>
-#include <OgreMaterialManager.h>
 
 class Transform;
 
