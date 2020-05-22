@@ -206,6 +206,9 @@
     <ClCompile Include="..\..\Src\ControlsMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\LogoScreen.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Attack.h">
@@ -374,6 +377,9 @@
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\ControlsMenu.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\LogoScreen.h">
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
   </ItemGroup>
