@@ -470,9 +470,7 @@ bool ConfigurationMenu::startButtonClick()
 	stopPreview();
 	songManager->stopMenuSong();
 
-	gameManager->setPlayersAlive(nPlayers);
 	gameManager->setInitialPlayers(nPlayers);
-	gameManager->initPlayerRanking(nPlayers);
 
 	std::vector<int> indexes;
 	for (int i = 0; i < 4; i++)

@@ -25,7 +25,7 @@
 REGISTER_FACTORY(Game);
 
 Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), cameraEffects(nullptr),
-timePanel(NULL), winner(-1), timer(-1.0f), fadeIn(true), darkness(false), end(false)
+timePanel(NULL), players(0), winner(-1), timer(-1.0f), fadeIn(true), darkness(false), end(false)
 {
 
 }
@@ -115,17 +115,12 @@ void Game::update(float deltaTime)
 	}
 }
 
-void Game::playerDie(int index)
+void Game::playerDeath()
 {
-	checkNullAndBreak(gameManager);
+	players--;
 
-	int nPlayers = gameManager->getPlayersAlive();
-	gameManager->setPlayerRanking(index, nPlayers);
-
-	nPlayers--;
-
-	if (nPlayers <= 1) chooseWinner();
-	else gameManager->setPlayersAlive(nPlayers);
+	if (players <= 1)
+		chooseWinner();
 }
 
 Vector3 Game::getPlayerInitialPosition(int player)
@@ -307,12 +302,13 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	if(notNull(gameManager)) gameManager->emptyKnights();
+	if (notNull(gameManager)) gameManager->emptyKnights();
 
 	for (int i = 0; i < playerIndexes.size(); i++)
 	{
 		if (playerIndexes[i] != -1)
 		{
+			players++;
 			GameObject* knight = nullptr;
 
 			if (playerIndexes[i] != 9 && i < playerTransforms.size())
@@ -333,7 +329,7 @@ void Game::createKnights()
 
 			checkNullAndBreak(knight);
 			PlayerIndex* index = knight->getComponent<PlayerIndex>();
-			if(notNull(index)) index->setIndex(i + 1);
+			if (notNull(index)) index->setIndex(i + 1);
 
 			if (i < playerColours.size()) {
 				MeshRenderer* mesh = knight->getComponent<MeshRenderer>();
@@ -385,15 +381,15 @@ void Game::createLights()
 				lightComp->setIntensity(lights[i].intensity);
 				lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 			}
-			if(light->transform) light->transform->setDirection(lights[i].direction);
+			if (light->transform) light->transform->setDirection(lights[i].direction);
 		}
 	}
 }
 
 void Game::playSong()
 {
-	if(notNull(songManager) && notNull(gameManager))
-	songManager->playSong(gameManager->getSong().first);
+	if (notNull(songManager) && notNull(gameManager))
+		songManager->playSong(gameManager->getSong().first);
 }
 
 void Game::configureLevelRender(const std::string& name)
@@ -448,60 +444,54 @@ void Game::configureLevelCollider(const std::string& name)
 	}
 }
 
-void Game::chooseWinner()
+void Game::setRanking()
 {
-	if(notNull(cameraEffects)) cameraEffects->fadeOut();
-	end = true;
-
 	checkNullAndBreak(gameManager);
-	std::vector<GameObject*> knights =  gameManager->getKnights();
-
-	bool tie = false;
-	int majorHealth = 0;
-	int majorIndex = 0;
-	int tieIndex = 0;
+	std::vector<GameObject*> knights = gameManager->getKnights();
 
 	for (int i = 0; i < knights.size(); i++)
 	{
-		if (notNull(knights[i])) continue;
-
 		Health* health = knights[i]->getComponent<Health>();
-		if (notNull(health)) continue;
+		if (notNull(health))
+			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
+	}
 
-		if (health->isAlive())
-		{
-			if (health->getHealth() > majorHealth)
-			{
-				majorHealth = health->getHealth();
-				majorIndex = i;
-				tie = false;
-			}
-			else if (health->getHealth() == majorHealth)
-			{
-				tieIndex = i;
-				tie = true;
-			}
-		}
+	std::priority_queue<ii, std::vector<ii>, Less> aux = gameManager->getRanking();
+
+	int cont = 0;
+	bool tie = false;
+	ii last = ii(0, 0);
+
+	while (!aux.empty())
+	{
+		ii info = aux.top();
+		aux.pop();
+
+		if (info.second != 0 && info.second == last.second)
+			tie = true;
+		else
+			cont++;
+
+		gameManager->setPlayerRanking(info.first, cont);
+		last = info;
 	}
 
 	if (tie)
-	{
-		for (int i = 0; i < knights.size(); i++)
-		{
-			if (i == majorIndex || i == tieIndex)
-				gameManager->setPlayerRanking(i + 1, 1);
-			else
-				gameManager->setPlayerRanking(i + 1, gameManager->getPlayerRanking(i + 1) - 1);
-		}
 		gameManager->setWinner(-1);
-	}
 	else
-	{
-		gameManager->setPlayerRanking(majorIndex + 1, 1);
-		gameManager->setWinner(majorIndex + 1);
-	}
+		gameManager->setWinner(gameManager->getRanking().top().first);
+}
 
-	if(notNull(songManager)) songManager->play2DSound("victory4");
+void Game::chooseWinner()
+{
+	end = true;
+	setRanking();
+
+	if (notNull(cameraEffects))
+		cameraEffects->fadeOut();
+
+	if (notNull(songManager))
+		songManager->play2DSound("victory4");
 }
 
 std::pair<std::string, std::string> Game::timeToText()

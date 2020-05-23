@@ -28,7 +28,7 @@ GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), le
 		destroy(gameObject);
 
 	playerIndexes = std::vector<int>(4, -1);
-
+	playerRanking = std::vector<int>(4, 0);
 }
 
 GameManager::~GameManager()
@@ -49,29 +49,6 @@ void GameManager::start()
 	dontDestroyOnLoad(gameObject);
 }
 
-void GameManager::setPaused(bool setPaused)
-{
-	if (paused == setPaused) return;
-
-	paused = setPaused;
-
-	checkNullAndBreak(Timer::GetInstance());
-
-	if (paused) {
-		pauseAllSounds();
-		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	}
-	else {
-		resumeAllSound();
-		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
-	}
-}
-
-bool GameManager::isPaused() const
-{
-	return paused;
-}
-
 Score* GameManager::getScore()
 {
 	return &scores;
@@ -80,23 +57,11 @@ Score* GameManager::getScore()
 void GameManager::setPlayerIndexes(std::vector<int>& playerIndexes)
 {
 	this->playerIndexes = playerIndexes;
-
-	initialPlayers = 0;
-	for (int i = 0; i < playerIndexes.size(); i++)
-	{
-		if (playerIndexes[i] != -1)
-			initialPlayers++;
-	}
 }
 
 std::vector<int>& GameManager::getPlayerIndexes()
 {
 	return playerIndexes;
-}
-
-void GameManager::initPlayerRanking(int tam)
-{
-	playerRanking = std::vector<int>(tam, 0);
 }
 
 void GameManager::setPlayerRanking(int index, int rank)
@@ -113,14 +78,9 @@ int GameManager::getPlayerRanking(int index) const
 	return -1;
 }
 
-void GameManager::setInitialPlayers(int players)
+std::priority_queue<ii, std::vector<ii>, Less>& GameManager::getRanking()
 {
-	initialPlayers = players;
-}
-
-int GameManager::getInitialPlayers() const
-{
-	return initialPlayers;
+	return ranking;
 }
 
 std::vector<Vector3>& GameManager::getPlayerColours()
@@ -131,19 +91,6 @@ std::vector<Vector3>& GameManager::getPlayerColours()
 std::vector<GameObject*>& GameManager::getKnights()
 {
 	return knights;
-}
-
-
-std::vector<GameObject*> GameManager::getAlivePlayers()
-{
-	std::vector<GameObject*> alive;
-	for (GameObject* p : knights) {
-		if (notNull(p)) {
-			PlayerState* state = p->getComponent<PlayerState>();
-			if (notNull(state) && !state->isDead()) alive.push_back(p);
-		}
-	}
-	return alive;
 }
 
 void GameManager::emptyKnights()
@@ -171,6 +118,49 @@ void GameManager::setSong(std::string song, std::string name)
 std::pair<std::string, std::string> GameManager::getSong() const
 {
 	return std::pair<std::string, std::string>(song, songName);
+}
+
+void GameManager::setInitialPlayers(int players)
+{
+	initialPlayers = players;
+}
+
+int GameManager::getInitialPlayers() const
+{
+	return initialPlayers;
+}
+
+void GameManager::setWinner(int winner)
+{
+	this->winner = winner;
+}
+
+int GameManager::getWinner() const
+{
+	return winner;
+}
+
+void GameManager::setPaused(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	checkNullAndBreak(Timer::GetInstance());
+
+	if (paused) {
+		pauseAllSounds();
+		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+	}
+	else {
+		resumeAllSound();
+		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+	}
+}
+
+bool GameManager::isPaused() const
+{
+	return paused;
 }
 
 void GameManager::setHealth(int health)
@@ -209,24 +199,9 @@ bool GameManager::getTimeMode() const
 	return timeMode;
 }
 
-void GameManager::setPlayersAlive(int players)
+float GameManager::getInitialBrightness() const
 {
-	playersAlive = players;
-}
-
-int GameManager::getPlayersAlive() const
-{
-	return playersAlive;
-}
-
-void GameManager::setWinner(int winner)
-{
-	this->winner = winner;
-}
-
-int GameManager::getWinner() const
-{
-	return winner;
+	return initialBrightness;
 }
 
 bool GameManager::isAnyGhost() const
@@ -263,6 +238,19 @@ GameObject* GameManager::getAnyGhost()
 	return anyGhost;
 }
 
+std::vector<GameObject*> GameManager::getAlivePlayers()
+{
+	std::vector<GameObject*> alive;
+	for (GameObject* p : knights)
+	{
+		if (notNull(p)) {
+			PlayerState* state = p->getComponent<PlayerState>();
+			if (notNull(state) && !state->isDead()) alive.push_back(p);
+		}
+	}
+	return alive;
+}
+
 void GameManager::pauseAllSounds()
 {
 	for (GameObject* knight : knights)
@@ -292,9 +280,4 @@ bool GameManager::playerUsingKeyboard() const
 			return true;
 	}
 	return false;
-}
-
-float GameManager::getInitialBrightness() const
-{
-	return initialBrightness;
 }

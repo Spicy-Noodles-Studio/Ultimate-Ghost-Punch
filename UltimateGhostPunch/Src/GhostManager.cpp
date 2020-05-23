@@ -291,10 +291,8 @@ void GhostManager::deactivatePlayer()
 	if (notNull(soundManager))
 		soundManager->stopAll();
 
-	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
-
-	if (notNull(playerIndex) && notNull(game))
-		game->playerDie(playerIndex->getIndex());
+	if (notNull(game))
+		game->playerDeath();
 
 	gameObject->setActive(false);
 }

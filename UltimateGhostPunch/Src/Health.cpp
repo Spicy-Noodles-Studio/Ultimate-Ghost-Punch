@@ -1,18 +1,18 @@
 #include "Health.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <Camera.h>
+#include <Scene.h>
 #include <sstream>
 
 #include "Block.h"
 #include "Attack.h"
 #include "Grab.h"
 #include "CameraEffects.h"
-#include "Camera.h"
-#include "Scene.h"
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleTime(0.5f), alive(true), invencible(false), hurt(false)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleTime(0.5f), alive(true), invencible(false), hurt(false), cameraEffects(nullptr)
 {
 
 }
@@ -120,7 +120,8 @@ void Health::receiveDamage(int damage)
 		if (health < 0)
 			health = 0;
 
-		if (health == 0) {
+		if (health == 0)
+		{
 			alive = false;
 			if (notNull(cameraEffects)) cameraEffects->shake(Vector3(1, 1, 0));
 		}
