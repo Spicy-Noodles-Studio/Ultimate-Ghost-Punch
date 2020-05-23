@@ -21,7 +21,7 @@ public:
 	virtual ~Movement();
 
 	void move(Vector3 dir);
-	void stop(); // Stops the object's physic body's movement and clear its forces
+	void stop(); // Stops the object's physic body movement and clear its forces
 
 	void setSpeed(float speed);
 	float getSpeed() const;

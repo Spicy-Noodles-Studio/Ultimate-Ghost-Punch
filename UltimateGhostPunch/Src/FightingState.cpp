@@ -1,9 +1,9 @@
 #include "FightingState.h"
+
 #include <time.h>
 #include <MathUtils.h>
 
 #include "GameObject.h"
-
 #include "AIStateMachine.h"
 #include "Attack.h"
 #include "Health.h"

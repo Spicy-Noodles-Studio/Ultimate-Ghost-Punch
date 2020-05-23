@@ -1,6 +1,6 @@
 #pragma once
-#ifndef CAMERAEFFECTS_H
-#define CAMERAEFFECTS_H
+#ifndef CAMERA_EFFECTS_H
+#define CAMERA_EFFECTS_H
 
 #include <UserComponent.h>
 

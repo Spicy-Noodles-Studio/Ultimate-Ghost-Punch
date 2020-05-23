@@ -154,7 +154,7 @@ float CameraController::getMaxDistBetweenPlayers()
 	checkNullAndBreak(GameManager::GetInstance(), 0);
 	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 
-	// number of players alive
+	// Number of players alive
 	int n = alive.size();
 	float maxDist = -1;
 	for (int i = 0; i < n; i++) {
@@ -210,7 +210,7 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 	// Vector with every player alive
 	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 
-	// number of players alive
+	// Number of players alive
 	int n = alive.size();
 	float midX = 0.0f, midY = 0.0f;
 
@@ -242,7 +242,7 @@ void CameraController::setTargetToMidPointPlayers()
 	// Zoom in/out
 	float dist = getMaxDistBetweenPlayers();
 
-	//clamp between minZ and maxZ
+	//Clamp between minZ and maxZ
 	dist *= zoomFactor;
 	dist = std::min(maxZ, std::max(dist, minZ));
 
@@ -259,7 +259,7 @@ GameObject* CameraController::someonePunching()
 
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
 
-	// number of players
+	// Number of players
 	int n = players.size();
 
 	int i = 0;

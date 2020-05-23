@@ -28,7 +28,7 @@ class AIStateMachine :	public StateMachine
 {
 public:
 private:
-	/* Knight it would be focused */
+	/* Knight it will be focused on */
 	GameObject* target;
 
 	/* GRAPH INFO */

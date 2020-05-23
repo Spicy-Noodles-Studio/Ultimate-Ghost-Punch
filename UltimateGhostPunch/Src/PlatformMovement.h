@@ -14,7 +14,7 @@ class PlatformMovement : public StateAction
 {
 private:
 	PlatformGraph* platformGraph;
-	GameObject* character;	// Object been controlled
+	GameObject* character;	// Object being controlled
 	Vector3 targetPosition;	// Considering only X axis
 	float leftLimit;
 	float rightLimit;

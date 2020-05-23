@@ -10,8 +10,8 @@ enum class ActionInput;
 class StateMachine : public UserComponent
 {
 protected:
-	std::vector<ActionInput> actionInputs; // Input del jugador (puede ser varios)
-	std::vector<StateAction*> stateActions; // Los estados
+	std::vector<ActionInput> actionInputs; // Input to simulate
+	std::vector<StateAction*> stateActions; // AI different states
 	StateAction* currentState;
 
 protected:

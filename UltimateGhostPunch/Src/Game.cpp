@@ -1,4 +1,5 @@
 #include "Game.h"
+
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
@@ -172,13 +173,13 @@ void Game::createLevel()
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
 
-	// Configuramos el mesh visual
+	// Configuration of the visual mesh
 	configureLevelRender(renderName);
 
-	// Configuramos el mesh de colision
+	//  Configuration of the collision mesh
 	configureLevelCollider(colliderName);
 
-	// read player initial transforms
+	// Read player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
 	for (int i = 0; i < playerData.size(); i++)
 	{
@@ -202,7 +203,7 @@ void Game::createLevel()
 		playerTransforms.push_back({ pos, rot });
 	}
 
-	// read spikes transforms
+	// Read spikes transforms
 	GaiaData spikesData = levelData.find("SpikesTransforms");
 	for (int i = 0; i < spikesData.size(); i++)
 	{
@@ -226,7 +227,7 @@ void Game::createLevel()
 		spikesTransforms.push_back({ pos, rot });
 	}
 
-	// read lights data
+	// Read lights data
 	GaiaData lightsData = levelData.find("Lights");
 	for (int i = 0; i < lightsData.size(); i++)
 	{

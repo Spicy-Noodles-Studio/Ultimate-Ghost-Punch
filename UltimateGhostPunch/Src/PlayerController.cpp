@@ -1,13 +1,12 @@
 #include "PlayerController.h"
+
 #include <ComponentRegister.h>
 #include <InputSystem.h>
 #include <GameObject.h>
-#include <Scene.h>
 #include <Camera.h>
-#include <Light.h>
+#include <Scene.h>
 #include <sstream>
 
-#include "PlayerUI.h"
 #include "Movement.h"
 #include "Attack.h"
 #include "Dodge.h"
@@ -16,17 +15,16 @@
 #include "Block.h"
 #include "Health.h"
 #include "GhostManager.h"
-#include "GhostMovement.h"
 #include "SoundManager.h"
+#include "GhostMovement.h"
 #include "UltimateGhostPunch.h"
-#include "GameManager.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
 jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
-direction(Vector3::ZERO), controllerIndex(1), grabed(false)
+direction(Vector3::ZERO), controllerIndex(1)
 {
 
 }

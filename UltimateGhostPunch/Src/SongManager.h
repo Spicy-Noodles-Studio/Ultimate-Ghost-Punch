@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SONGMANAGER_H
-#define SONGMANAGER_H
+#ifndef SONG_MANAGER_H
+#define SONG_MANAGER_H
 
 #include <UserComponent.h>
 

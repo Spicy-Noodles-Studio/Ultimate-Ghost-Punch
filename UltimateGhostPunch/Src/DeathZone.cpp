@@ -50,7 +50,7 @@ void DeathZone::onObjectEnter(GameObject* other)
 			health->receiveDamage(fallDamage);
 
 			Score* score = nullptr;
-			if(notNull(GameManager::GetInstance())) GameManager::GetInstance()->getScore();
+			if(notNull(GameManager::GetInstance())) score = GameManager::GetInstance()->getScore();
 			PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
 			if (notNull(score) && notNull(playerIndex))

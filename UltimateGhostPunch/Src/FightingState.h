@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef FIGHTING_STATE_H
+#define FIGHTING_STATE_H
+
 #include "StateAction.h"
 #include "AIStateMachine.h"
 
@@ -15,7 +19,7 @@ class FightingState :
 	public StateAction
 {
 private:
-	GameObject* target; // Object attacking
+	GameObject* target; // Object the character attacks
 	GameObject* character;	// Object being controlled
 	Attack* attack;
 	Block* blockComp;
@@ -85,3 +89,4 @@ public:
 	void turnBackOnTarget();
 };
 
+#endif 

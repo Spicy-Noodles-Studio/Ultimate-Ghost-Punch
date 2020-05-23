@@ -23,7 +23,6 @@ class PlayerController : public UserComponent
 private:
 	Vector3 direction;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
-	bool grabed; // Cambiar de sitio
 
 	// Components
 	PlayerIndex* playerIndex;

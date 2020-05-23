@@ -1,4 +1,5 @@
 #include "ConfigurationMenu.h"
+
 #include <ComponentRegister.h>
 #include <InterfaceSystem.h>
 #include <InputSystem.h>

@@ -1,11 +1,8 @@
 #include "LoadingScreen.h"
+
 #include <ComponentRegister.h>
-#include <InterfaceSystem.h>
 #include <SceneManager.h>
-#include <WindowManager.h>
 #include <GameObject.h>
-#include <RigidBody.h>
-#include <Camera.h>
 #include <UILayout.h>
 #include <time.h>
 

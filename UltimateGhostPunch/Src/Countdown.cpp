@@ -1,9 +1,5 @@
 #include "Countdown.h"
 #include <ComponentRegister.h>
-#include <InterfaceSystem.h>
-#include <RenderSystem.h>
-#include <SceneManager.h>
-#include <WindowManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
 
@@ -38,7 +34,8 @@ void Countdown::start()
 			panel = cameraLayout->getRoot().getChild("CountdownBackground");
 	}
 
-	players = GameManager::GetInstance()->getKnights();
+	if (notNull(GameManager::GetInstance()))
+		players = GameManager::GetInstance()->getKnights();
 
 	checkNull(cameraControl);
 }
@@ -76,9 +73,11 @@ void Countdown::update(float deltaTime)
 		if (time + 1 < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
-				players[i]->getComponent<PlayerState>()->setIgnoringInput(false);
+				if (notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()))
+					players[i]->getComponent<PlayerState>()->setIgnoringInput(false);
 
-			cameraControl->setActive(true);
+			if (notNull(cameraControl))
+				cameraControl->setActive(true);
 
 			countingDown = false;
 
@@ -96,6 +95,7 @@ void Countdown::update(float deltaTime)
 
 void Countdown::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);

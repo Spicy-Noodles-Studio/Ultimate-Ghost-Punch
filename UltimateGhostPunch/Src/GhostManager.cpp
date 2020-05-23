@@ -1,4 +1,5 @@
 #include "GhostManager.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <MeshRenderer.h>

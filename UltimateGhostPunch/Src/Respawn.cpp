@@ -1,12 +1,11 @@
 #include "Respawn.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "Movement.h"
 #include "PlayerState.h"
-#include "PlayerFX.h"
 #include "Health.h"
 
 REGISTER_FACTORY(Respawn);
