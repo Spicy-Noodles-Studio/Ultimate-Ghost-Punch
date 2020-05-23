@@ -8,8 +8,7 @@
 REGISTER_FACTORY(ParticleManager);
 
 ParticleManager::ParticleManager(GameObject* gameObject) : UserComponent(gameObject), floorDust(nullptr), jumpDust(nullptr), landDust(nullptr),
-bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr),
-spectre(nullptr), spectreSplash(nullptr), playerState(nullptr),
+bloodSplash(nullptr), blockSparks(nullptr), stunSparks(nullptr), spectre(nullptr), spectreSplash(nullptr), playerState(nullptr),
 stunDelay(0.0f), stunTimer(0.0f)
 {
 
@@ -18,6 +17,33 @@ stunDelay(0.0f), stunTimer(0.0f)
 ParticleManager::~ParticleManager()
 {
 
+}
+
+void ParticleManager::stopAll()
+{
+	if (notNull(floorDust))
+		floorDust->stop();
+
+	if (notNull(jumpDust))
+		jumpDust->stop();
+
+	if (notNull(landDust))
+		landDust->stop();
+
+	if (notNull(bloodSplash))
+		bloodSplash->stop();
+
+	if (notNull(blockSparks))
+		blockSparks->stop();
+
+	if (notNull(stunSparks))
+		stunSparks->stop();
+
+	if (notNull(spectre))
+		spectre->stop();
+
+	if (notNull(spectreSplash))
+		spectreSplash->stop();
 }
 
 void ParticleManager::start()
@@ -50,7 +76,6 @@ void ParticleManager::start()
 
 	/* SPECTRE SPLASH */
 	createParticle(&spectreSplash, "SpectreSplash");
-
 }
 
 void ParticleManager::preUpdate(float deltaTime)
@@ -95,6 +120,7 @@ void ParticleManager::createParticle(ParticleEmitter** emitter, const std::strin
 
 	if (notNull(particlesObject->transform))
 		particlesObject->transform->setPosition(position);
+
 	(*emitter)->newEmitter(particleName);
 }
 
@@ -158,12 +184,14 @@ void ParticleManager::manageStunSparks(float deltaTime)
 	checkNullAndBreak(playerState);
 	checkNullAndBreak(stunSparks);
 
-	if (playerState->isStunned()) {
+	if (playerState->isStunned())
+	{
 		stunTimer -= deltaTime;
 		if (stunTimer <= 0.0f)
 			stunSparks->start();
 	}
-	else {
+	else
+	{
 		stunSparks->stop();
 		stunTimer = stunDelay;
 	}

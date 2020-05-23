@@ -13,7 +13,7 @@
 REGISTER_FACTORY(ConfigurationMenu);
 
 ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configurationLayout(nullptr), startButton(NULL), settingsPanel(NULL),
-nPlayers(0), health(4), time(60), mode(false), currentLevel(""), currentSong(""), previewTime(50), timer(0), songPreview(false)
+nPlayers(0), health(0), time(60), mode(false), currentLevel(""), currentSong(""), previewTime(50), timer(0), songPreview(false)
 {
 	if (notNull(interfaceSystem)) {
 		interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-CHANGE_HEALTH); }));
@@ -117,9 +117,10 @@ void ConfigurationMenu::start()
 		}
 	}
 
-	if (notNull(gameManager)) {
+	if (notNull(gameManager))
+	{
 		nPlayers = gameManager->getInitialPlayers();
-		health = gameManager->getHealth();
+		health = gameManager->getHealth() / 2;
 		mode = gameManager->getTimeMode();
 		time = gameManager->getInitialTime();
 	}
@@ -479,7 +480,7 @@ bool ConfigurationMenu::startButtonClick()
 
 	gameManager->setPlayerIndexes(indexes);
 
-	gameManager->setHealth(health);
+	gameManager->setHealth(health * 2);
 	gameManager->setTimeMode(mode);
 
 	gameManager->setLevel(levelNames[currentLevel], currentLevel);

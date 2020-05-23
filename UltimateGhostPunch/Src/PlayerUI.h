@@ -20,10 +20,10 @@ public:
 	virtual ~PlayerUI();
 
 	void setVisible(bool visible);
+	void updateHearts();
 
 private:
 	void createHearts();
-	void updateHearts();
 
 	void createGhost();
 	void updateGhost();

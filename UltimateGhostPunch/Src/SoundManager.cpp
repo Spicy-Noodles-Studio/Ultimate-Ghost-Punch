@@ -31,8 +31,8 @@ else\
 	stopSound(sound);
 
 SoundManager::SoundManager(GameObject* gameObject) : UserComponent(gameObject), soundEmitter(nullptr), playerState(nullptr), attackStarted(false), ghostStarted(false), blockGrabStarted(false), jumpStarted(true),
-													 aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false), deathStarted(false), punchSuccess(false),
-													 jumpSounds(std::vector<std::string>()), tauntSounds(std::vector<std::string>()), throwSounds(std::vector<std::string>()), hurtSounds(std::vector<std::string>()), hitSounds(std::vector<std::string>())
+aimStarted(false), grabStarted(false), respawnStarted(false), punchStarted(false), dodgeStarted(false), ghostSuccess(false), deathStarted(false), punchSuccess(false),
+jumpSounds(std::vector<std::string>()), tauntSounds(std::vector<std::string>()), throwSounds(std::vector<std::string>()), hurtSounds(std::vector<std::string>()), hitSounds(std::vector<std::string>())
 {
 
 }
@@ -66,6 +66,12 @@ void SoundManager::playTaunt()
 	}
 }
 
+void SoundManager::stopAll()
+{
+	if (notNull(soundEmitter))
+		soundEmitter->stopAll();
+}
+
 void SoundManager::manageJumpSound()
 {
 	playSoundOnce(getRandomSound(jumpSounds), hasJumped, jumpStarted);
@@ -86,7 +92,7 @@ void SoundManager::manageWalkSound()
 
 void SoundManager::manageGhostMoveSound()
 {
-	playSoundRepeatedly("heartBeat", isGhost)	
+	playSoundRepeatedly("heartBeat", isGhost)
 }
 
 void SoundManager::manageHurtSound()
@@ -111,7 +117,7 @@ void SoundManager::manageAttackHitSound()
 
 void SoundManager::manageAttackBlockedSound()
 {
-	playSoundInstant2("block",isBlocking, hasBlocked)
+	playSoundInstant2("block", isBlocking, hasBlocked)
 }
 
 void SoundManager::manageGrabMissSound()
@@ -121,7 +127,7 @@ void SoundManager::manageGrabMissSound()
 
 void SoundManager::manageGrabSound()
 {
-	playSoundOnce("grab",isGrabbing, grabStarted)
+	playSoundOnce("grab", isGrabbing, grabStarted)
 }
 
 void SoundManager::manageThrowSound()
@@ -136,7 +142,7 @@ void SoundManager::manageGrabBlockedSound()
 
 void SoundManager::manageDodgeSound()
 {
-	playSoundOnce("dash",isDodging,dodgeStarted)
+	playSoundOnce("dash", isDodging, dodgeStarted)
 }
 
 void SoundManager::manageStunSound()
@@ -156,12 +162,12 @@ void SoundManager::manageUGPAimSound()
 
 void SoundManager::manageUGPSound()
 {
-	playSoundOnce("ugp",isPunching, punchStarted)
+	playSoundOnce("ugp", isPunching, punchStarted)
 }
 
 void SoundManager::manageGhostDieSound()
 {
-	playSoundInstant("noo",hasGhostDied)
+	playSoundInstant("noo", hasGhostDied)
 }
 
 void SoundManager::manageGhostSuccessSound()
@@ -171,12 +177,12 @@ void SoundManager::manageGhostSuccessSound()
 
 void SoundManager::manageGhostSound()
 {
-	playSoundOnce("ghostSee",isGhost,ghostStarted)
+	playSoundOnce("ghostSee", isGhost, ghostStarted)
 }
 
 void SoundManager::manageRespawnSound()
 {
-	playSoundOnce("respawn",isRespawning,respawnStarted)
+	playSoundOnce("respawn", isRespawning, respawnStarted)
 }
 
 void SoundManager::manageDeathSound()
@@ -203,9 +209,9 @@ void SoundManager::initSounds()
 {
 	hurtSounds = { "hurt1", "hurt2" ,"hurt3" ,"hurt4" };
 	tauntSounds = { "taunt1", "taunt2", "taunt3" };
-	jumpSounds = { "jump1", "jump2" ,"jump3"};
-	throwSounds = { "throw1", "throw2" ,"throw3"};
-	hitSounds = { "hit1", "hit2" ,"hit3"};
+	jumpSounds = { "jump1", "jump2" ,"jump3" };
+	throwSounds = { "throw1", "throw2" ,"throw3" };
+	hitSounds = { "hit1", "hit2" ,"hit3" };
 }
 
 void SoundManager::manageSounds()
@@ -240,4 +246,3 @@ std::string SoundManager::getRandomSound(const std::vector<std::string>& sounds)
 {
 	return sounds[random(0, sounds.size())];
 }
-

@@ -18,7 +18,7 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(6), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f)
 {
 	if (instance == nullptr) {
 		instance = this;
@@ -287,9 +287,9 @@ void GameManager::resumeAllSound()
 
 bool GameManager::playerUsingKeyboard() const
 {
-	for (int a : playerIndexes) { 
-		if (a == 4) 
-			return true; 
+	for (int a : playerIndexes) {
+		if (a == 4)
+			return true;
 	}
 	return false;
 }

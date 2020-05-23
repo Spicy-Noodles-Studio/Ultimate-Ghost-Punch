@@ -3,6 +3,7 @@
 #include <GameObject.h>
 #include <MeshRenderer.h>
 #include <RigidBody.h>
+#include <Camera.h>
 #include <sstream>
 
 #include "Movement.h"
@@ -11,19 +12,20 @@
 #include "Respawn.h"
 #include "Score.h"
 #include "UltimateGhostPunch.h"
+#include "PlayerState.h"
 #include "PlayerIndex.h"
 #include "PlayerUI.h"
 #include "Game.h"
 #include "GameManager.h"
+#include "ParticleManager.h"
+#include "SoundManager.h"
 #include "CameraEffects.h"
-#include "Camera.h"
-#include "PlayerState.h"
 
 REGISTER_FACTORY(GhostManager);
 
 GhostManager::GhostManager(GameObject* gameObject) : UserComponent(gameObject), used(false), success(false), positionChanged(false), cam(nullptr), cameraEffects(nullptr),
 game(nullptr), transform(nullptr), meshRenderer(nullptr), rigidBody(nullptr), movement(nullptr), ghostMovement(nullptr), health(nullptr), playerUI(nullptr), playerState(nullptr),
-aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), playerColour(Vector3::ZERO), deathPosition(Vector3::ZERO), spawnOffset(Vector3::ZERO), 
+aliveScale(Vector3::ZERO), ghostScale(Vector3::ZERO), playerColour(Vector3::ZERO), deathPosition(Vector3::ZERO), spawnOffset(Vector3::ZERO),
 resurrectTime(2.0f), dyingTime(1.0f), appearTime(1.0f), disappearTime(0.8f), ghostTime(10), playerGravity(-10), ghostDamage(1), resurrectionHealth(2), mode(ALIVE)
 {
 }
@@ -134,7 +136,7 @@ void GhostManager::onObjectEnter(GameObject* other)
 		{
 			otherHealth->receiveDamage(ghostDamage);
 
-			
+
 			Score* score = notNull(GameManager::GetInstance()) ? GameManager::GetInstance()->getScore() : nullptr;
 			if (notNull(score))
 			{
@@ -274,7 +276,20 @@ void GhostManager::deactivatePlayer()
 		meshRenderer->setVisible(false);
 
 	if (notNull(playerUI))
+	{
 		playerUI->setVisible(false);
+		playerUI->updateHearts();
+	}
+
+	ParticleManager* particleManager = gameObject->getComponent<ParticleManager>();
+
+	if (notNull(particleManager))
+		particleManager->stopAll();
+
+	SoundManager* soundManager = gameObject->getComponent<SoundManager>();
+
+	if (notNull(soundManager))
+		soundManager->stopAll();
 
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
 

@@ -133,7 +133,7 @@ void CameraController::setMaxY(float maxY)
 
 void CameraController::smoothMove()
 {
-	if (notNull(gameObject->transform)) return;
+	checkNullAndBreak(gameObject->transform);
 
 	Vector3 lerpDest = gameObject->transform->getPosition();
 	lerpDest.lerp(target, smoothFactor);
@@ -267,5 +267,6 @@ GameObject* CameraController::someonePunching()
 		i++;
 
 	if (i < n) return players[i];
+
 	return nullptr;
 }
