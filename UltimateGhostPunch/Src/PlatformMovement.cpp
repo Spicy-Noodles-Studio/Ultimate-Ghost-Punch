@@ -13,7 +13,8 @@ PlatformMovement::PlatformMovement(StateMachine* stateMachine) : StateAction(sta
 
 PlatformMovement::~PlatformMovement()
 {
-
+	platformGraph = nullptr;
+	character = nullptr;
 }
 
 void PlatformMovement::update(float deltaTime)

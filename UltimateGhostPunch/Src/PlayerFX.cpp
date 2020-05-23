@@ -18,7 +18,12 @@ time(0), hurtTime(0.5f), invencibleFrec(0.1f), frecuency(invencibleFrec), ghostF
 
 PlayerFX::~PlayerFX()
 {
+	shieldMesh = nullptr;
+	mesh = nullptr;
+	health = nullptr;
+	ghost = nullptr;
 
+	diffuses.clear();
 }
 
 void PlayerFX::start()

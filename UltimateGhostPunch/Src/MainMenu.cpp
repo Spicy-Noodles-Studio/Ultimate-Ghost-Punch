@@ -73,6 +73,8 @@ MainMenu::~MainMenu()
 		interfaceSystem->unregisterEvent("controlsButtonClick");
 		interfaceSystem->unregisterEvent("creditsButtonClick");
 	}
+
+	windowManager = nullptr;
 }
 
 void MainMenu::start()

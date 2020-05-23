@@ -17,7 +17,7 @@ initialRotation(Vector3::ZERO), dirX(1), dirY(1), dirZ(1), moves(0), time(0), ve
 
 CameraEffects::~CameraEffects()
 {
-
+	mainCamera = nullptr;
 }
 
 void CameraEffects::start()

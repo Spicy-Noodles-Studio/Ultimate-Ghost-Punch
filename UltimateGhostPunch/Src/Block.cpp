@@ -17,7 +17,8 @@ blockRegenTime(1.5f), blockGrabMargin(0.25f), timeElapsed(0.0f), blockDirection(
 
 Block::~Block()
 {
-
+	parent = nullptr;
+	playerFX = nullptr;
 }
 
 void Block::start()

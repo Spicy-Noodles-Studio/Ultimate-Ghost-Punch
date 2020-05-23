@@ -12,6 +12,8 @@ GhostNavigation::GhostNavigation(StateMachine* stateMachine) : StateAction(state
 
 GhostNavigation::~GhostNavigation()
 {
+	target = nullptr;
+	character = nullptr;
 }
 
 void GhostNavigation::setTarget(GameObject* target)

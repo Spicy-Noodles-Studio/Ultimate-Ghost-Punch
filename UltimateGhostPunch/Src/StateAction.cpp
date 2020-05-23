@@ -7,5 +7,5 @@ StateAction::StateAction(StateMachine* stateMachine) : stateMachine(stateMachine
 
 StateAction::~StateAction()
 {
-
+	stateMachine = nullptr;
 }

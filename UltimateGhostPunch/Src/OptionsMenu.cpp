@@ -168,6 +168,14 @@ OptionsMenu::~OptionsMenu()
 		interfaceSystem->unregisterEvent("restoreButtonClick");
 		interfaceSystem->unregisterEvent("backButtonClick");
 	}
+
+	renderSystem = nullptr;
+	soundSystem = nullptr;
+	windowManager = nullptr;
+
+	resolutionNames.clear();
+	resolutions.clear();
+	screenNames.clear();
 }
 
 void OptionsMenu::start()

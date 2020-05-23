@@ -39,7 +39,7 @@ float PlatformGraph::getDistance(const Vector3& pos, const PlatformNode& node)
 	return distance;
 }
 
-PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3()), levelEnd(Vector3()), currentPos(Vector3()), currentPlatformIndex(0),
+PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3::ZERO), levelEnd(Vector3::ZERO), currentPos(Vector3::ZERO), currentPlatformIndex(0),
 fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(0.75f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
 loadFilename(saveFilename)
 {
@@ -48,7 +48,9 @@ loadFilename(saveFilename)
 
 PlatformGraph::~PlatformGraph()
 {
-
+	physicsSystem = nullptr;
+	platforms.clear();
+	lastPlatforms.clear();
 }
 
 void PlatformGraph::start()

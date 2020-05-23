@@ -40,7 +40,14 @@ jumpSounds(std::vector<std::string>()), tauntSounds(std::vector<std::string>()),
 
 SoundManager::~SoundManager()
 {
+	soundEmitter = nullptr;
+	playerState = nullptr;
 
+	hurtSounds.clear();
+	hitSounds.clear();
+	tauntSounds.clear();
+	jumpSounds.clear();
+	throwSounds.clear();
 }
 
 void SoundManager::start()

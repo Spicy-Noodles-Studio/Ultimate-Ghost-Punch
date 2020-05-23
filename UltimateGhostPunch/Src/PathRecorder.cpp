@@ -26,7 +26,15 @@ startForce(Vector3::ZERO), startDirection(-1)
 
 PathRecorder::~PathRecorder()
 {
+	graph = nullptr;
+	inputSystem = nullptr;
+	ghostManager = nullptr;
+	health = nullptr;
+	jump = nullptr;
+	parent = nullptr;
 
+	states.clear();
+	actions.clear();
 }
 
 void PathRecorder::start()

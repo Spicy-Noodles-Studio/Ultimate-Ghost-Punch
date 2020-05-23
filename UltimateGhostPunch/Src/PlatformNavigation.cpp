@@ -7,15 +7,17 @@
 #include "AIStateMachine.h"
 #include "Movement.h"
 
-PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), movingThroughLink(false),
-linkInUse(NavigationLink()), time(0.0f), lastState(-1)
+PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), targetObject(nullptr), movingThroughLink(false), fleeing(false),
+linkInUse(NavigationLink()), time(0.0f), lastState(-1), target(PlatformNode())
 {
 
 }
 
 PlatformNavigation::~PlatformNavigation()
 {
-
+	platformGraph = nullptr;
+	character = nullptr;
+	targetObject = nullptr;
 }
 
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)

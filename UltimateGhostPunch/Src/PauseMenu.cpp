@@ -68,6 +68,8 @@ PauseMenu::~PauseMenu()
 		interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
 		interfaceSystem->unregisterEvent("pauseExitButtonClick");
 	}
+
+	countdown = nullptr;
 }
 
 void PauseMenu::start()

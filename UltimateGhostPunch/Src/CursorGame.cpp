@@ -10,14 +10,17 @@
 
 REGISTER_FACTORY(CursorGame);
 
-CursorGame::CursorGame(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), cursor(nullptr), gameManager(nullptr)
+CursorGame::CursorGame(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), cursor(nullptr), gameManager(nullptr), interfaceSystem(nullptr)
 {
 
 }
 
 CursorGame::~CursorGame()
 {
-
+	inputSystem = nullptr;
+	cursor = nullptr;
+	gameManager = nullptr;
+	interfaceSystem = nullptr;
 }
 
 void CursorGame::start()

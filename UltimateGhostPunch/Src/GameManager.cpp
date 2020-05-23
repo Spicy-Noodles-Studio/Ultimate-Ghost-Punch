@@ -36,6 +36,8 @@ GameManager::~GameManager()
 {
 	if (instance == this)
 		instance = nullptr;
+
+	knights.clear();
 }
 
 GameManager* GameManager::GetInstance()

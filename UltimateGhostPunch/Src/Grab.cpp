@@ -15,15 +15,17 @@
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
-grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), enemy(nullptr), enemyDiff(Vector3::ZERO), enemyFollowing(false),
-grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr), missed(0), dropped(0)
+grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), enemy(nullptr), score(nullptr), enemyDiff(Vector3::ZERO), enemyFollowing(false),
+grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), missed(0), dropped(0)
 {
 
 }
 
 Grab::~Grab()
 {
-
+	parent = nullptr;
+	enemy = nullptr;
+	score = nullptr;
 }
 
 void Grab::start()

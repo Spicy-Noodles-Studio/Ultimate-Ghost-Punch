@@ -18,6 +18,12 @@ Menu::Menu(GameObject* gameObject) : UserComponent(gameObject), songManager(null
 
 Menu::~Menu()
 {
+	inputSystem = nullptr;
+	gameManager = nullptr;
+	songManager = nullptr;
+	sceneManager = nullptr;
+	mainCamera = nullptr;
+	interfaceSystem = nullptr;
 }
 
 void Menu::start()

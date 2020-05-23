@@ -33,7 +33,17 @@ timePanel(NULL), players(0), winner(-1), timer(-1.0f), fadeIn(true), darkness(fa
 
 Game::~Game()
 {
+	gameManager = nullptr;
+	songManager = nullptr;
+	gameLayout = nullptr;
+	countdown = nullptr;
+	cameraEffects = nullptr;
 
+	playerColours.clear();
+	playerIndexes.clear();
+	lights.clear();
+	playerTransforms.clear();
+	spikesTransforms.clear();
 }
 
 void Game::start()

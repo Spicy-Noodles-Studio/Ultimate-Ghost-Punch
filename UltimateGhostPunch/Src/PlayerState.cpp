@@ -25,7 +25,17 @@ health(nullptr), ghostMovement(nullptr), ghostManager(nullptr), ghostPunch(nullp
 
 PlayerState::~PlayerState()
 {
-
+	attack = nullptr;
+	block = nullptr;
+	dodge = nullptr;
+	grab = nullptr;
+	jump = nullptr;
+	health = nullptr;
+	respawn = nullptr;
+	movement = nullptr;
+	ghostPunch = nullptr;
+	ghostManager = nullptr;
+	ghostMovement = nullptr;
 }
 
 void PlayerState::start()

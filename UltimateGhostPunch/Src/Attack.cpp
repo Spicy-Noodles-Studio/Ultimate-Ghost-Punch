@@ -23,7 +23,9 @@ quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), pare
 
 Attack::~Attack()
 {
-
+	parent = nullptr;
+	attackTrigger = nullptr;
+	score = nullptr;
 }
 
 void Attack::start()

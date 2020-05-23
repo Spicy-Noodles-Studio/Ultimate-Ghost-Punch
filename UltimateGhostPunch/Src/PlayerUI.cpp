@@ -19,7 +19,11 @@ health(nullptr), ghostManager(nullptr), mainCamera(nullptr), name(""), isVisible
 
 PlayerUI::~PlayerUI()
 {
-
+	playerIndicator = nullptr;
+	playerHUD = nullptr;
+	health = nullptr;
+	mainCamera = nullptr;
+	ghostManager = nullptr;
 }
 
 void PlayerUI::start()

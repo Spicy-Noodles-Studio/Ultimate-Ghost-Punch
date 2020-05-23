@@ -14,7 +14,7 @@
 REGISTER_FACTORY(ConfigurationMenu);
 
 ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configurationLayout(nullptr), startButton(NULL), settingsPanel(NULL),
-nPlayers(0), health(0), time(60), mode(false), currentLevel(""), currentSong(""), previewTime(50), timer(0), songPreview(false)
+nPlayers(0), health(0), time(60), mode(false), currentLevel(""), currentSong(""), previewTime(50), timer(0), songPreview(false), slots(), timeModes(), levelNames(), songNames()
 {
 	if (notNull(interfaceSystem)) {
 		interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-CHANGE_HEALTH); }));
@@ -74,6 +74,13 @@ ConfigurationMenu::~ConfigurationMenu()
 		interfaceSystem->unregisterEvent("slot3ButtonClick");
 		interfaceSystem->unregisterEvent("slot4ButtonClick");
 	}
+
+	configurationLayout = nullptr;
+
+	slots.clear();
+	timeModes.clear();
+	levelNames.clear();
+	songNames.clear();
 }
 
 void ConfigurationMenu::start()

@@ -15,6 +15,7 @@ GhostMovement::GhostMovement(GameObject* gameObject) :UserComponent(gameObject),
 
 GhostMovement::~GhostMovement()
 {
+	rigidBody = nullptr;
 }
 
 void GhostMovement::start()

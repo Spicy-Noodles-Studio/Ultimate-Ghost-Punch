@@ -33,6 +33,18 @@ resurrectTime(2.0f), dyingTime(1.0f), appearTime(1.0f), disappearTime(0.8f), gho
 
 GhostManager::~GhostManager()
 {
+	cam = nullptr;
+	game = nullptr;
+	transform = nullptr;
+	cameraEffects = nullptr;
+	meshRenderer = nullptr;
+	rigidBody = nullptr;
+	cam = nullptr;
+	movement = nullptr;
+	ghostMovement = nullptr;
+	health = nullptr;
+	playerUI = nullptr;
+	playerState = nullptr;
 }
 
 void GhostManager::start()

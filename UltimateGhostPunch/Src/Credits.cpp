@@ -33,7 +33,7 @@ Credits::Credits(GameObject* gameObject) : Menu(gameObject)
 
 Credits::~Credits()
 {
-
+	names.clear();
 }
 
 void Credits::start()

@@ -14,6 +14,8 @@ CursorMenu::CursorMenu(GameObject* gameObject) : UserComponent(gameObject), inpu
 
 CursorMenu::~CursorMenu()
 {
+	inputSystem = nullptr;
+	cursor = nullptr;
 }
 
 void CursorMenu::start()

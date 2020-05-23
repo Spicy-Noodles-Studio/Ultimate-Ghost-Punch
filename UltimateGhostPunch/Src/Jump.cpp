@@ -17,7 +17,8 @@ playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nul
 
 Jump::~Jump()
 {
-
+	rigidBody = nullptr;
+	parent = nullptr;
 }
 
 void Jump::start()

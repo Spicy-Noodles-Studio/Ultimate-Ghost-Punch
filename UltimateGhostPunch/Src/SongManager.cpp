@@ -26,6 +26,9 @@ SongManager::~SongManager()
 {
 	if (instance == this)
 		instance = nullptr;
+
+	soundEmitter = nullptr;
+	gameManager = nullptr;
 }
 
 SongManager* SongManager::GetInstance()

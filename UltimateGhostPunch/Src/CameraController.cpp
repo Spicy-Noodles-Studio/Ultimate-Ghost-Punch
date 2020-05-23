@@ -19,7 +19,7 @@ smoothFactor(0.125f), zoomFactor(1.0f), time(0.0f), slowMoTime(0.3f), slowMoDist
 
 CameraController::~CameraController()
 {
-
+	playerPunching = nullptr;
 }
 
 void CameraController::preUpdate(float deltaTime)

@@ -17,7 +17,15 @@ stunDelay(0.0f), stunTimer(0.0f)
 
 ParticleManager::~ParticleManager()
 {
-
+	floorDust = nullptr;
+	jumpDust = nullptr;
+	landDust = nullptr;
+	bloodSplash = nullptr;
+	blockSparks = nullptr;
+	stunSparks = nullptr;
+	spectre = nullptr;
+	spectreSplash = nullptr;
+	playerState = nullptr;
 }
 
 void ParticleManager::stopAll()

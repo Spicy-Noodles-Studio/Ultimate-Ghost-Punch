@@ -16,7 +16,9 @@ AnimationManager::AnimationManager(GameObject* gameObject) : UserComponent(gameO
 
 AnimationManager::~AnimationManager()
 {
-
+	animator = nullptr;
+	playerState = nullptr;
+	mesh = nullptr;
 }
 
 void AnimationManager::start()

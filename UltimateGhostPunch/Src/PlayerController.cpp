@@ -31,7 +31,18 @@ direction(Vector3::ZERO), controllerIndex(1)
 
 PlayerController::~PlayerController()
 {
-
+	inputSystem = nullptr;
+	playerIndex = nullptr;
+	movement = nullptr;
+	attack = nullptr;
+	dodge = nullptr;
+	jump = nullptr;
+	grab = nullptr;
+	block = nullptr;
+	health = nullptr;
+	ghostPunch = nullptr;
+	ghostManager = nullptr;
+	ghostMovement = nullptr;
 }
 
 void PlayerController::start()

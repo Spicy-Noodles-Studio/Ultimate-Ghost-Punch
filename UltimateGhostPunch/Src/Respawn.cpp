@@ -17,7 +17,7 @@ Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerStat
 
 Respawn::~Respawn()
 {
-
+	playerState = nullptr;
 }
 
 void Respawn::start()

@@ -16,7 +16,7 @@ Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject), rigidBody(null
 
 Dodge::~Dodge()
 {
-
+	rigidBody = nullptr;
 }
 
 void Dodge::start()

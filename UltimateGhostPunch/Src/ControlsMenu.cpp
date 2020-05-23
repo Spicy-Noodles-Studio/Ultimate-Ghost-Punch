@@ -43,6 +43,10 @@ ControlsMenu::~ControlsMenu()
 {
 	if (notNull(interfaceSystem))
 		interfaceSystem->unregisterEvent("backButtonClick");
+
+	actions.clear();
+	keyboard.clear();
+	controller.clear();
 }
 
 void ControlsMenu::start()

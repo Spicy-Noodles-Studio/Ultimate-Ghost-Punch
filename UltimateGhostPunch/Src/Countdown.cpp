@@ -18,7 +18,8 @@ Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), panel(
 
 Countdown::~Countdown()
 {
-
+	cameraControl = nullptr;
+	players.clear();
 }
 
 void Countdown::start()

@@ -21,7 +21,10 @@ StatsMenu::StatsMenu(GameObject* gameObject) : Menu(gameObject), texts(), panels
 
 StatsMenu::~StatsMenu()
 {
+	score = nullptr;
 
+	texts.clear();
+	panels.clear();
 }
 
 void StatsMenu::start()

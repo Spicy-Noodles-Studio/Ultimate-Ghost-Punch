@@ -27,7 +27,7 @@ LoadingScreen::LoadingScreen(GameObject* gameObject) : UserComponent(gameObject)
 
 LoadingScreen::~LoadingScreen()
 {
-
+	tipsVector.clear();
 }
 
 void LoadingScreen::start()

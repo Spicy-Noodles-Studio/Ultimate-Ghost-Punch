@@ -23,6 +23,15 @@ attack(nullptr), blockComp(nullptr), character(nullptr), dodgeComp(nullptr), fig
 
 FightingState::~FightingState()
 {
+	target = nullptr;
+	attack = nullptr;
+	blockComp = nullptr;
+	character = nullptr;
+	playerState = nullptr;
+	dodgeComp = nullptr;
+	movement = nullptr;
+	grabComp = nullptr;
+	jump = nullptr;
 }
 
 void FightingState::update(float deltaTime)

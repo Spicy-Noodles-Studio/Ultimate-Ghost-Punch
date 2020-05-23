@@ -21,7 +21,8 @@ direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghost
 
 UltimateGhostPunch::~UltimateGhostPunch()
 {
-
+	rigidBody = nullptr;
+	ghostMovement = nullptr;
 }
 
 void UltimateGhostPunch::start()

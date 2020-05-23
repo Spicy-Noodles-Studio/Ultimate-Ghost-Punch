@@ -33,7 +33,22 @@ platformMovement(nullptr), ghostNavigation(nullptr), ghostManager(nullptr), atta
 
 AIStateMachine::~AIStateMachine()
 {
-
+	grab = nullptr;
+	jump = nullptr;
+	dodge = nullptr;
+	block = nullptr;
+	target = nullptr;
+	movement = nullptr;
+	ghostPunch = nullptr;
+	playerState = nullptr;
+	ghostMovement = nullptr;
+	platformGraph = nullptr;
+	fightingState = nullptr;
+	platformNavigation = nullptr;
+	platformMovement = nullptr;
+	ghostNavigation = nullptr;
+	ghostManager = nullptr;
+	attack = nullptr;
 }
 
 void AIStateMachine::start()

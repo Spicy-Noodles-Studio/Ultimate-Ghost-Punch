@@ -42,6 +42,8 @@ OptionsMenuScreen::~OptionsMenuScreen()
 {
 	if (notNull(interfaceSystem))
 		interfaceSystem->unregisterEvent("backToMenuButtonClick");
+
+	screen = nullptr;
 }
 
 void OptionsMenuScreen::start()

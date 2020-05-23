@@ -20,7 +20,7 @@ Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4)
 
 Health::~Health()
 {
-
+	cameraEffects = nullptr;
 }
 
 void Health::start()

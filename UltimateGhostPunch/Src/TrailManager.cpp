@@ -11,7 +11,7 @@
 
 REGISTER_FACTORY(TrailManager);
 
-TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), quickAttackTrail(nullptr), heavyAttackTrail(nullptr),
+TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), quickAttackTrail(nullptr), heavyAttackTrail(nullptr), dashTrail(nullptr), thrownTrail(nullptr), UGPTrail(nullptr), playerState(nullptr),
 time(0), thrownTime(1)
 {
 
@@ -19,7 +19,12 @@ time(0), thrownTime(1)
 
 TrailManager::~TrailManager()
 {
-
+	quickAttackTrail = nullptr;
+	heavyAttackTrail = nullptr;
+	dashTrail = nullptr;
+	thrownTrail = nullptr;
+	UGPTrail = nullptr;
+	playerState = nullptr;
 }
 
 void TrailManager::start()

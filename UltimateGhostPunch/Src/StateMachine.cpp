@@ -2,7 +2,7 @@
 
 #include "StateAction.h"
 
-StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) , currentState(nullptr)
+StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) , currentState(nullptr),stateActions(), actionInputs()
 {
 
 }
@@ -13,6 +13,8 @@ StateMachine::~StateMachine()
 		delete state;
 	stateActions.clear();
 	actionInputs.clear();
+	
+	currentState = nullptr;
 }
 
 void StateMachine::update(float deltaTime)
