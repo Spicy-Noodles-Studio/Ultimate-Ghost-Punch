@@ -46,7 +46,7 @@ void Dodge::update(float deltaTime)
 
 void Dodge::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -76,12 +76,12 @@ void Dodge::dodge()
 {
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 
-	if (state == State::IDLE && aux->canDodge())
+	if (state == State::IDLE && notNull(aux) && aux->canDodge())
 	{
 		Vector3 dir = Vector3::ZERO;
-		if(gameObject->transform != nullptr) dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
+		if (notNull(gameObject->transform)) dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
 
-		if (rigidBody != nullptr)
+		if (notNull(rigidBody))
 		{
 			rigidBody->setGravity({ 0,0,0 });
 			rigidBody->setLinearVelocity({ 0,0,0 });
@@ -98,7 +98,7 @@ void Dodge::endDodge()
 	state = State::CD;
 	time = cooldown;
 
-	if (rigidBody != nullptr)
+	if (notNull(rigidBody))
 	{
 		rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * atenuation);
 		rigidBody->setGravity(playerGravity);

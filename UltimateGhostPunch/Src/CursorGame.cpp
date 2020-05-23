@@ -29,11 +29,12 @@ void CursorGame::start()
 
 	checkNull(inputSystem);
 	checkNull(gameManager);
-	checkNullAndBreak(cursor);
-	cursor->setVisibleOnWindow(false);
-	hideCursor();
-	
 
+	if (notNull(cursor)) {
+		cursor->setVisibleOnWindow(false);
+		hideCursor();
+	}
+	
 	checkNullAndBreak(interfaceSystem);
 	interfaceSystem->setControllerNavigation(false);
 }
@@ -41,14 +42,14 @@ void CursorGame::start()
 void CursorGame::preUpdate(float deltaTime)
 {
 	if (isPaused()) {
-		if(interfaceSystem != nullptr && !interfaceSystem->isControllerNavigationEnabled())
+		if(notNull(interfaceSystem) && !interfaceSystem->isControllerNavigationEnabled())
 			interfaceSystem->setControllerNavigation(true);
 
 		if (mouseUsed()) showCursor();
 		else if (controllerUsed() || keyboardUsed()) hideCursor();
 	}
 	else {
-		if(interfaceSystem != nullptr && interfaceSystem->isControllerNavigationEnabled())
+		if(notNull(interfaceSystem) && interfaceSystem->isControllerNavigationEnabled())
 			interfaceSystem->setControllerNavigation(false);
 
 		if (usingMouse()) 
@@ -60,45 +61,44 @@ void CursorGame::preUpdate(float deltaTime)
 
 bool CursorGame::isPaused() const
 {
-	if (gameManager == nullptr) return false;
+	checkNullAndBreak(gameManager, false);
 	return gameManager->isPaused();
 }
 
 bool CursorGame::mouseUsed() const
 {
-	if (inputSystem == nullptr) return false;
-
+	checkNullAndBreak(inputSystem, false);
 	return inputSystem->isMouseUsed();
 }
 
 bool CursorGame::keyboardUsed() const
 {
-	if (inputSystem == nullptr) return false;
+	checkNullAndBreak(inputSystem, false);
 
 	return inputSystem->isKeyboardUsed();
 }
 
 bool CursorGame::controllerUsed() const
 {
-	if (inputSystem == nullptr) return false;
+	checkNullAndBreak(inputSystem, false);
 
 	return inputSystem->isControllerUsed();
 }
 
 bool CursorGame::usingMouse() const
 {
-	if (gameManager == nullptr) return false;
+	checkNullAndBreak(gameManager, false);
 	return gameManager->playerUsingKeyboard();
 }
 
 void CursorGame::hideCursor()
 {
-	if (cursor == nullptr) return;
+	checkNullAndBreak(cursor);
 	cursor->setSpriteVisible(false);
 }
 
 void CursorGame::showCursor()
 {
-	if (cursor == nullptr) return;
+	checkNullAndBreak(cursor);
 	cursor->setSpriteVisible(true);
 }

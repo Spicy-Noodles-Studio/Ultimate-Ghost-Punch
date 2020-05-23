@@ -25,10 +25,10 @@ Health::~Health()
 void Health::start()
 {
 	maxHealth = health;
-	Camera* mainCamera = gameObject->getScene()->getMainCamera();
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 	checkNullAndBreak(mainCamera);
 
-	cameraEffects = mainCamera->gameObject->getComponent<CameraEffects>();
+	cameraEffects = mainCamera->getComponent<CameraEffects>();
 	checkNull(cameraEffects);
 }
 
@@ -48,7 +48,7 @@ void Health::postUpdate(float deltaTime)
 
 void Health::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -91,7 +91,7 @@ void Health::receiveDamage(int damage)
 		if (aux.size() > 0)
 		{
 			block = aux[0]->getComponent<Block>();
-			if (block != nullptr && block->isBlocking())
+			if (notNull(block) && block->isBlocking())
 				block->unblock();
 		}
 
@@ -101,7 +101,7 @@ void Health::receiveDamage(int damage)
 		if (aux.size() > 0)
 		{
 			attack = aux[0]->getComponent<Attack>();
-			if (attack != nullptr && attack->isAttacking())
+			if (notNull(attack) && attack->isAttacking())
 				attack->stop();
 		}
 
@@ -111,7 +111,7 @@ void Health::receiveDamage(int damage)
 		if (aux.size() > 0)
 		{
 			grab = aux[0]->getComponent<Grab>();
-			if (grab != nullptr && grab->isGrabbing())
+			if (notNull(grab) && grab->isGrabbing())
 				grab->drop();
 		}
 
@@ -122,7 +122,7 @@ void Health::receiveDamage(int damage)
 
 		if (health == 0) {
 			alive = false;
-			if (cameraEffects != nullptr) cameraEffects->shake(Vector3(1, 1, 0));
+			if (notNull(cameraEffects)) cameraEffects->shake(Vector3(1, 1, 0));
 		}
 		else
 		{

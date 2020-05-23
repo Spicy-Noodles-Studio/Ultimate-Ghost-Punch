@@ -19,7 +19,7 @@ void PlatformGraph::drawLinks()
 		{
 			std::vector<State> states = n.getStates();
 
-			if (physicsSystem != nullptr) {
+			if (notNull(physicsSystem)) {
 				for (int i = 0; i < states.size() - 1; i++)
 					physicsSystem->drawLine(states[i].getPos(), states[i + 1].getPos(), { 0,1,0 });
 
@@ -33,14 +33,14 @@ float PlatformGraph::getDistance(const Vector3& pos, const PlatformNode& node)
 {
 	Vector3 aux = node.getMiddle();
 
-	float distance = sqrt(pow((aux.x - pos.x),2) + pow((aux.y - pos.y), 2) + pow((aux.z - pos.z), 2));
+	float distance = sqrt(pow((aux.x - pos.x), 2) + pow((aux.y - pos.y), 2) + pow((aux.z - pos.z), 2));
 
 	return distance;
 }
 
 PlatformGraph::PlatformGraph(GameObject* gameObject) : UserComponent(gameObject), physicsSystem(nullptr), levelStart(Vector3()), levelEnd(Vector3()), currentPos(Vector3()), currentPlatformIndex(0),
-													   fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(0.75f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
-													   loadFilename(saveFilename)
+fallOffset(Vector3(1.0f, 0.0f, 0.0f)), playerCollisionSize(Vector3(0.75f, 2.0f, 1.0f)), fileRoute("./Assets/Levels/"), saveFilename("PlatformsGraph.graph"),
+loadFilename(saveFilename)
 {
 
 }
@@ -72,7 +72,7 @@ void PlatformGraph::update(float deltaTime)
 
 void PlatformGraph::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -103,12 +103,12 @@ void PlatformGraph::createNodes()
 	std::vector<RaycastHit> hits;
 	while (currentPos.x < levelEnd.x)
 	{
-		if(physicsSystem != nullptr) hits = physicsSystem->raycastAll({ currentPos.x,levelStart.y,0 }, { currentPos.x,levelEnd.y,0 });
+		if (notNull(physicsSystem)) hits = physicsSystem->raycastAll({ currentPos.x,levelStart.y,0 }, { currentPos.x,levelEnd.y,0 });
 		std::map<float, int> newPlatforms;
 
 		for (RaycastHit hit : hits)
 		{
-			if (hit.transform != nullptr && hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
+			if (notNull(hit.transform) && hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
 			{
 				auto it = lastPlatforms.find(hit.point.y);
 
@@ -116,7 +116,8 @@ void PlatformGraph::createNodes()
 				if (it != lastPlatforms.end())
 				{
 					newPlatforms[hit.point.y] = (*it).second;
-					platforms[(*it).second].setEnd(hit.point);
+					if ((*it).second < platforms.size() && (*it).second >= 0)
+						platforms[(*it).second].setEnd(hit.point);
 				}
 				//If its a new platform
 				else
@@ -132,21 +133,6 @@ void PlatformGraph::createNodes()
 		lastPlatforms.clear();
 		lastPlatforms = newPlatforms;
 		currentPos.x += 0.25f;
-	}
-}
-
-void PlatformGraph::createLinks()
-{
-	RaycastHit hit;
-	for (PlatformNode node : platforms)
-	{
-		Vector3 raycastLeft = node.getBegining() - fallOffset, raycastRight = node.getEnd() + fallOffset;
-
-		if (physicsSystem != nullptr && !physicsSystem->raycast(node.getBegining() + Vector3(0, 0.5f, 0), Vector3::NEGATIVE_RIGHT, playerCollisionSize.x, hit))
-			if (physicsSystem->raycast(raycastLeft, { raycastLeft.x, levelEnd.y,0 }, hit));
-
-		if (physicsSystem != nullptr && !physicsSystem->raycast(node.getEnd() + Vector3(0, 0.5f, 0), Vector3::RIGHT, playerCollisionSize.x, hit))
-			if (physicsSystem->raycast(raycastRight, { raycastRight.x, levelEnd.y,0 }, hit));
 	}
 }
 
@@ -183,7 +169,8 @@ bool PlatformGraph::loadGraph()
 	{
 		PlatformNode node;
 		node.loadPlatform((*it));
-		platforms[node.getIndex()] = node;
+		if (node.getIndex() < platforms.size() && node.getIndex() >= 0)
+			platforms[node.getIndex()] = node;
 	}
 
 	return true;
@@ -220,7 +207,7 @@ void PlatformGraph::setSaveFileName(std::string name)
 
 void PlatformGraph::setLoadFileName(std::string name)
 {
-	 loadFilename = name;
+	loadFilename = name;
 }
 
 int PlatformGraph::getIndex(const Vector3& pos)
@@ -248,14 +235,14 @@ int PlatformGraph::getIndex(const Vector3& pos)
 int PlatformGraph::getFurthestIndex(const Vector3& pos)
 {
 	int index = -1;
-	
+
 	float max = -1;
 
 	for (int i = 0; i < platforms.size(); i++)
 	{
 		PlatformNode node = platforms[i];
 
-		float aux = getDistance(pos,node);
+		float aux = getDistance(pos, node);
 
 		if (aux > max) {
 			max = aux;

@@ -25,7 +25,7 @@ DeathZone::~DeathZone()
 
 void DeathZone::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -42,41 +42,42 @@ void DeathZone::handleData(ComponentData* data)
 void DeathZone::onObjectEnter(GameObject* other)
 {
 	//If a player gets inside it recives damage and respawns
-	if (other != nullptr && other->getTag() == "Player")
+	if (notNull(other) && other->getTag() == "Player")
 	{
 		Health* health = other->getComponent<Health>();
-		if (health != nullptr)
+		if (notNull(health))
 		{
 			health->receiveDamage(fallDamage);
 
-			Score* score = GameManager::GetInstance()->getScore();
+			Score* score = nullptr;
+			if(notNull(GameManager::GetInstance())) GameManager::GetInstance()->getScore();
 			PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
-			if (score != nullptr && playerIndex != nullptr)
+			if (notNull(score) && notNull(playerIndex))
 				score->fall(playerIndex->getIndex());
 
 			if (!health->isAlive())
 			{
 				GameObject* aux = findGameObjectWithName("Game");
-				if (aux != nullptr)
+				if (notNull(aux))
 				{
 					Game* game = aux->getComponent<Game>();
-					if (game != nullptr && playerIndex != nullptr)
+					if (notNull(game) && notNull(playerIndex))
 						initialPosition = game->getPlayerInitialPosition(playerIndex->getIndex());
 				}
 
 				GhostManager* ghostManager = other->getComponent<GhostManager>();
-				if (ghostManager != nullptr)
+				if (notNull(ghostManager))
 				{
 					ghostManager->setDeathPosition(initialPosition);
-					if (score != nullptr && playerIndex != nullptr)
+					if (notNull(score) && notNull(playerIndex))
 						score->deathByEnviroment(playerIndex->getIndex());
 				}
 			}
 			else
 			{
 				Respawn* respawn = other->getComponent<Respawn>();
-				if (respawn != nullptr)
+				if (notNull(respawn))
 					respawn->respawn();
 			}
 		}

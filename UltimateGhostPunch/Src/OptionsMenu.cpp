@@ -18,7 +18,7 @@ REGISTER_FACTORY(OptionsMenu);
 
 bool OptionsMenu::applyButtonClick()
 {
-	if (windowManager == nullptr) return false;
+	checkNullAndBreak(windowManager, false);
 	windowManager->setFullscreen(false);
 
 	if (currentResolution != resolution && resolution >= 0 && resolution < resolutions.size())
@@ -38,7 +38,7 @@ bool OptionsMenu::applyButtonClick()
 
 bool OptionsMenu::restoreButtonClick()
 {
-	if (gameManager != nullptr)
+	if (notNull(gameManager))
 		brightness = gameManager->getInitialBrightness();
 	soundVolume = 100;
 	musicVolume = 100;
@@ -89,7 +89,7 @@ bool OptionsMenu::changeBrightness()
 {
 	brightnessText.setText(std::to_string((int)(brightnessScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
 	renderSystem->changeParamOfShader("Brightness", "bright", brightnessScroll.getScrollPositionScrollBar() + 0.5);
-	if (windowManager != nullptr) windowManager->setBrightness(brightnessScroll.getScrollPositionScrollBar());
+	if (notNull(windowManager)) windowManager->setBrightness(brightnessScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
 
@@ -99,7 +99,7 @@ bool OptionsMenu::changeBrightness()
 bool OptionsMenu::changeSoundVolume()
 {
 	soundText.setText(std::to_string((int)(soundScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
-	if (soundSystem != nullptr) soundSystem->setSoundEffectsVolume(soundScroll.getScrollPositionScrollBar());
+	if (notNull(soundSystem)) soundSystem->setSoundEffectsVolume(soundScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
 
@@ -109,7 +109,7 @@ bool OptionsMenu::changeSoundVolume()
 bool OptionsMenu::changeMusicVolume()
 {
 	musicText.setText(std::to_string((int)(musicScroll.getScrollPositionScrollBar() * MAX_VALUE + 0.5)));
-	if (soundSystem != nullptr) soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
+	if (notNull(soundSystem)) soundSystem->setMusicVolume(musicScroll.getScrollPositionScrollBar());
 
 	buttonClick(buttonSound);
 
@@ -127,7 +127,7 @@ renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr), resolutionT
 	checkNull(soundSystem);
 	checkNull(windowManager);
 
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->registerEvent("-resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(-1); }));
 		interfaceSystem->registerEvent("+resolutionButtonClick", UIEvent("ButtonClicked", [this]() {return changeResolution(+1); }));
 
@@ -143,7 +143,7 @@ renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr), resolutionT
 		interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 	}
 
-	if (windowManager != nullptr) {
+	if (notNull(windowManager)) {
 		resolutionNames = windowManager->getAvailableResolutionsStrings();
 		screenNames = { "Windowed", "Fullscreen" };
 		resolutions = windowManager->getAvailableResolutionsForWindow();
@@ -152,7 +152,7 @@ renderSystem(nullptr), soundSystem(nullptr), windowManager(nullptr), resolutionT
 
 OptionsMenu::~OptionsMenu()
 {
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->unregisterEvent("-resolutionButtonClick");
 		interfaceSystem->unregisterEvent("+resolutionButtonClick");
 
@@ -173,10 +173,10 @@ void OptionsMenu::start()
 {
 	Menu::start();
 
-	if (mainCamera == nullptr) return;
+	checkNullAndBreak(mainCamera);
 
 	UILayout* layout = mainCamera->getComponent<UILayout>();
-	if (layout != nullptr)
+	if (notNull(layout))
 		root = layout->getRoot().getChild("OptionsBackground");
 	root.setVisible(true);
 
@@ -193,13 +193,13 @@ void OptionsMenu::start()
 	soundText = root.getChild("SoundVolume");
 	musicText = root.getChild("MusicVolume");
 
-	if (windowManager != nullptr) {
+	if (notNull(windowManager)) {
 		brightness = windowManager->getBrightness();
 		fullscreen = windowManager->getFullscreen();
 		resolution = windowManager->getActualResolutionId();
 	}
 
-	if (soundSystem != nullptr) {
+	if (notNull(soundSystem)) {
 		musicVolume = soundSystem->getMusicVolume();
 		soundVolume = soundSystem->getSoundVolume();
 	}
@@ -217,8 +217,8 @@ void OptionsMenu::start()
 
 void OptionsMenu::update(float deltaTime)
 {
-	if (((inputSystem != nullptr && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput()) &&  
-		sceneManager != nullptr && sceneManager->getCurrentScene() != nullptr && sceneManager->getCurrentScene()->getName() == "OptionsMenu")
+	if (((notNull(inputSystem) && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput()) &&
+		notNull(sceneManager) && notNull(sceneManager->getCurrentScene()) && sceneManager->getCurrentScene()->getName() == "OptionsMenu")
 		backButtonClick();
 }
 
@@ -229,7 +229,7 @@ bool OptionsMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem != nullptr && inputSystem->getButtonPress(i, "B"))
+		if (notNull(inputSystem) && inputSystem->getButtonPress(i, "B"))
 			result = true;
 
 		i++;

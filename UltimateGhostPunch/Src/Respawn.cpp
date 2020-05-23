@@ -26,8 +26,9 @@ void Respawn::start()
 	time = 0.0f;
 	playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);
-	if (gameObject->transform != nullptr)
-		initialPos = gameObject->transform->getPosition();
+
+	checkNullAndBreak(gameObject->transform);
+	initialPos = gameObject->transform->getPosition();
 }
 
 void Respawn::update(float deltaTime)
@@ -36,17 +37,17 @@ void Respawn::update(float deltaTime)
 		time -= deltaTime;
 	else if (respawning)
 	{
-		if (playerState != nullptr)	playerState->setIgnoringInput(false);
+		if (notNull(playerState)) playerState->setIgnoringInput(false);
 		respawning = false;
 	}
 
-	if (gameObject->transform != nullptr && gameObject->transform->getPosition().y < -20)
+	if (notNull(gameObject->transform) && gameObject->transform->getPosition().y < -20)
 		respawn();
 }
 
 void Respawn::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -68,20 +69,20 @@ void Respawn::respawn()
 void Respawn::spawn(const Vector3& spawnPos)
 {
 	Movement* movement = gameObject->getComponent<Movement>();
-	if (movement != nullptr)
+	if (notNull(movement))
 		movement->stop();
 
-	if (playerState != nullptr)
+	if (notNull(playerState))
 		playerState->setIgnoringInput(true);
 
 	Health* health = gameObject->getComponent<Health>();
-	if (health != nullptr)
+	if (notNull(health))
 	{
 		health->setInvencible(true);
 		health->setTime(respawnTime);
 	}
 
-	if (gameObject->transform != nullptr)
+	if (notNull(gameObject->transform))
 		gameObject->transform->setPosition(spawnPos);
 
 	time = respawnTime;

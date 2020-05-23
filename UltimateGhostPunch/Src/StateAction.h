@@ -13,7 +13,7 @@ protected:
 
 public:
 	StateAction(StateMachine* stateMachine);
-	~StateAction();
+	virtual ~StateAction();
 
 	/* My State Machine pointer
 		Each StateAction will inject its input through stateMachine pointer	*/

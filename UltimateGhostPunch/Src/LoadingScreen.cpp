@@ -39,7 +39,7 @@ void LoadingScreen::start()
 	loadDelay = 1.0f;
 	currentDelay = 0;
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr && mainCamera->getComponent<UILayout>() != nullptr) {
+	if (notNull(mainCamera) && notNull(mainCamera->getComponent<UILayout>())) {
 		UIElement root = mainCamera->getComponent<UILayout>()->getRoot();
 		UIElement tipsText = root.getChild("Tips");
 
@@ -50,10 +50,10 @@ void LoadingScreen::start()
 
 void LoadingScreen::update(float deltaTime)
 {
-	if(sceneToLoad == "NO SCENE")
+	if (sceneToLoad == "NO SCENE")
 		currentDelay += deltaTime;
 
-	if (currentDelay > loadDelay)
+	if (notNull(SceneManager::GetInstance()) && currentDelay > loadDelay)
 	{
 		sceneToLoad = SceneManager::GetInstance()->getSceneToLoad();
 
@@ -65,7 +65,7 @@ void LoadingScreen::update(float deltaTime)
 void LoadingScreen::handleData(ComponentData* data)
 {
 	int i = 1;
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);

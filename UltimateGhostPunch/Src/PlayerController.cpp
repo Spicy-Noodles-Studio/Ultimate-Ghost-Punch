@@ -77,23 +77,23 @@ void PlayerController::start()
 
 void PlayerController::update(float deltaTime)
 {
-	if (gameObject->getComponent<PlayerState>() != nullptr && gameObject->getComponent<PlayerState>()->isIgnoringInput())
+	if (notNull(gameObject->getComponent<PlayerState>()) && gameObject->getComponent<PlayerState>()->isIgnoringInput())
 	{
 		direction = Vector3::ZERO;
-		return; 
+		return;
 	}
 	checkInput();
 }
 
 void PlayerController::fixedUpdate(float deltaTime)
 {
-	if (movement != nullptr)
+	if (notNull(movement))
 		movement->move(direction);
 }
 
 void PlayerController::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -109,16 +109,17 @@ void PlayerController::handleData(ComponentData* data)
 
 void PlayerController::checkInput()
 {
-	if (inputSystem == nullptr) return;
+	checkNullAndBreak(inputSystem);
+
 	//Movement
 	direction = Vector3::ZERO;
 	direction += Vector3(getHorizontalAxis(), 0, 0);
 
 	//Acctions if the player isn't in ghostManager mode
-	if (ghostManager == nullptr || !ghostManager->isGhost())
+	if (!notNull(ghostManager) || !ghostManager->isGhost())
 	{
 		//Attack
-		if (attack != nullptr)
+		if (notNull(attack))
 		{
 			//Quick attack
 			if ((controllerIndex == 4 && inputSystem->getMouseButtonClick('l')) || getButtonDown("X"))
@@ -129,12 +130,12 @@ void PlayerController::checkInput()
 		}
 
 		//Dodge
-		if (dodge != nullptr)
+		if (notNull(dodge))
 			if (getKeyDown("LEFT SHIFT") || getButtonDown("RB"))
 				dodge->dodge();
 
 		//Jump
-		if (jump != nullptr)
+		if (notNull(jump))
 		{
 			if (getKey("Space") || getButton("A"))
 				jump->jump();
@@ -143,7 +144,7 @@ void PlayerController::checkInput()
 		}
 
 		//Grab
-		if (grab != nullptr)
+		if (notNull(grab))
 		{
 			if (getKey("E") || getButton("LB"))
 				grab->grab();
@@ -152,7 +153,7 @@ void PlayerController::checkInput()
 		}
 
 		//Block
-		if (block != nullptr)
+		if (notNull(block))
 		{
 			if (getKeyDown("S") || getButtonDown("B"))
 				block->block();
@@ -163,18 +164,18 @@ void PlayerController::checkInput()
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK")) {
-			if(gameObject->getComponent<SoundManager>() != nullptr)
+			if (notNull(gameObject->getComponent<SoundManager>()))
 				gameObject->getComponent<SoundManager>()->playTaunt();
 		}
 	}
 
 	//Actions if the player is in ghost mode
-	else if (ghostManager != nullptr && ghostManager->isGhost())
+	else if (notNull(ghostManager) && ghostManager->isGhost())
 	{
 		direction += Vector3(0, getVerticalAxis(), 0);
 
 		//GhostPunch
-		if (ghostPunch != nullptr)
+		if (notNull(ghostPunch))
 		{
 			int horizontal = getControllerHorizontalRightAxis(), vertical = getControllerVerticalRightAxis();
 
@@ -194,7 +195,7 @@ void PlayerController::checkInput()
 		}
 
 		//Ghost Movement
-		if (ghostMovement != nullptr) ghostMovement->move(direction);
+		if (notNull(ghostMovement)) ghostMovement->move(direction);
 	}
 }
 
@@ -210,59 +211,59 @@ void PlayerController::setControllerIndex(int index)
 
 bool PlayerController::getKeyDown(const std::string& key)
 {
-	return controllerIndex == 4 && inputSystem->getKeyPress(key);
+	return controllerIndex == 4 && notNull(inputSystem) && inputSystem->getKeyPress(key);
 }
 
 bool PlayerController::getKeyUp(const std::string& key)
 {
-	return controllerIndex == 4 && inputSystem->getKeyRelease(key);
+	return controllerIndex == 4 && notNull(inputSystem) && inputSystem->getKeyRelease(key);
 }
 
 bool PlayerController::getKey(const std::string& key)
 {
-	return controllerIndex == 4 && inputSystem->isKeyPressed(key);
+	return controllerIndex == 4 && notNull(inputSystem) && inputSystem->isKeyPressed(key);
 }
 
 bool PlayerController::getButtonDown(const std::string& button)
 {
-	return controllerIndex < 4 && inputSystem->getButtonPress(controllerIndex, button);
+	return controllerIndex < 4 && notNull(inputSystem) && inputSystem->getButtonPress(controllerIndex, button);
 }
 
 bool PlayerController::getButtonUp(const std::string& button)
 {
-	return controllerIndex < 4 && inputSystem->getButtonRelease(controllerIndex, button);
+	return controllerIndex < 4 && notNull(inputSystem) && inputSystem->getButtonRelease(controllerIndex, button);
 }
 
 bool PlayerController::getButton(const std::string& button)
 {
-	return controllerIndex < 4 && inputSystem->isButtonPressed(controllerIndex, button);
+	return controllerIndex < 4 && notNull(inputSystem) && inputSystem->isButtonPressed(controllerIndex, button);
 }
 
 int PlayerController::getControllerHorizontalLeftAxis()
 {
 	if (controllerIndex < 4)
-		return inputSystem->getLeftJoystick(controllerIndex).first;
+		return notNull(inputSystem) && inputSystem->getLeftJoystick(controllerIndex).first;
 	else return 0;
 }
 
 int PlayerController::getControllerHorizontalRightAxis()
 {
 	if (controllerIndex < 4)
-		return inputSystem->getRightJoystick(controllerIndex).first;
+		return notNull(inputSystem) && inputSystem->getRightJoystick(controllerIndex).first;
 	else return 0;
 }
 
 int PlayerController::getControllerVerticalLeftAxis()
 {
 	if (controllerIndex < 4)
-		return inputSystem->getLeftJoystick(controllerIndex).second;
+		return notNull(inputSystem) && inputSystem->getLeftJoystick(controllerIndex).second;
 	else return 0;
 }
 
 int PlayerController::getControllerVerticalRightAxis()
 {
 	if (controllerIndex < 4)
-		return inputSystem->getRightJoystick(controllerIndex).second;
+		return notNull(inputSystem) && inputSystem->getRightJoystick(controllerIndex).second;
 	else return 0;
 }
 
@@ -288,8 +289,10 @@ int PlayerController::getVerticalAxis()
 
 void PlayerController::ghostPunchMouseAim()
 {
+	checkNullAndBreak(inputSystem);
+
 	std::pair<int, int> mousePos = inputSystem->getMousePosition();
-	if (gameObject->getScene()->getMainCamera() != nullptr && gameObject->transform != nullptr && ghostPunch != nullptr) {
+	if (notNull(gameObject->getScene()) && notNull(gameObject->getScene()->getMainCamera()) && notNull(gameObject->transform) && notNull(ghostPunch)) {
 		Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
 		ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
 	}

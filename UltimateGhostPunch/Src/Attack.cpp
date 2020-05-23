@@ -29,18 +29,18 @@ Attack::~Attack()
 void Attack::start()
 {
 	parent = gameObject->getParent();
-	if (parent != nullptr && parent->getComponent<PlayerIndex>() != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
-
-	checkNull(parent);
+	if (notNull(parent) && notNull(parent->getComponent<PlayerIndex>()))
+		id = parent->getComponent<PlayerIndex>()->getIndex();
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
-	score = GameManager::GetInstance()->getScore();
+	if (notNull(GameManager::GetInstance()))
+		score = GameManager::GetInstance()->getScore();
 
-	checkNull(attackTrigger);
 	checkNull(score);
+	checkNullAndBreak(attackTrigger);
 
 	// Deactivate the trigger until the attack is used
-	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	attackTrigger->setActive(false);
 }
 
 void Attack::update(float deltaTime)
@@ -69,7 +69,7 @@ void Attack::postUpdate(float deltaTime)
 
 void Attack::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -125,9 +125,9 @@ void Attack::handleData(ComponentData* data)
 
 void Attack::onObjectStay(GameObject* other)
 {
-	if (parent == nullptr || other == nullptr) return;
+	checkNullAndBreak(other);
 
-	if (other->getTag() == "Player" && other != parent && state == ATTACKING) // If it hits a player different than myself
+	if (other->getTag() == "Player" && parent != nullptr && other != parent && state == ATTACKING) // If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
 		float damage = 0;
@@ -148,16 +148,17 @@ void Attack::onObjectStay(GameObject* other)
 		if (aux.size() > 0)
 			enemyBlock = aux[0]->getComponent<Block>();
 
-		if (enemyBlock == nullptr || (parent->transform != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
+		if (!notNull(enemyBlock) || !notNull(parent->transform) || !enemyBlock->blockAttack(parent->transform->getPosition()))
 		{
 			Health* enemyHealth = other->getComponent<Health>();
-			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
+
+			if (notNull(enemyHealth) && !enemyHealth->isInvencible())
 			{
 				enemyHealth->receiveDamage(damage);
 				hit = 2;
 
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-				if (otherIndex != nullptr && score != nullptr)
+				if (notNull(otherIndex) && score != nullptr)
 				{
 					score->attackHitted(id);
 					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
@@ -183,25 +184,26 @@ void Attack::attack()
 {
 	state = ATTACKING;
 	activeTime = attackDuration;
-	if (attackTrigger != nullptr) attackTrigger->setActive(true);
-	if (score != nullptr) score->attackDone(id);
+	if (notNull(attackTrigger)) attackTrigger->setActive(true);
+	if (notNull(score)) score->attackDone(id);
 	LOG("Attack!\n");
 }
 
 void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
-	if (attackTrigger == nullptr) return;
+	checkNullAndBreak(attackTrigger);
+
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// Scale trigger
 	Vector3 scaleRatio = scale;
 	Vector3 currentScale = Vector3::ZERO;
-	if (attackTransform != nullptr) currentScale = attackTransform->getScale();
+	if (notNull(attackTransform)) currentScale = attackTransform->getScale();
 	attackTrigger->multiplyScale(scaleRatio);
 	scaleRatio *= currentScale;
 
 	// Move an offset
-	if (attackTransform != nullptr) attackTransform->setPosition(offset);
+	if (notNull(attackTransform)) attackTransform->setPosition(offset);
 }
 
 bool Attack::attackOnCD() const
@@ -211,10 +213,10 @@ bool Attack::attackOnCD() const
 
 void Attack::quickAttack()
 {
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 
 	PlayerState* aux = parent->getComponent<PlayerState>();
-	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
+	if (cooldown <= 0.0f && notNull(aux) && aux->canAttack())
 	{
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
@@ -226,10 +228,10 @@ void Attack::quickAttack()
 
 void Attack::strongAttack()
 {
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 
 	PlayerState* aux = parent->getComponent<PlayerState>();
-	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
+	if (cooldown <= 0.0f && notNull(aux) && aux->canAttack())
 	{
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
@@ -242,7 +244,7 @@ void Attack::strongAttack()
 void Attack::stop()
 {
 	// Deactivate the trigger until the next attack is used
-	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	if (notNull(attackTrigger)) attackTrigger->setActive(false);
 
 	// Reset the current attack state
 	state = NOT_ATTACKING;
@@ -257,18 +259,20 @@ bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale) const
 {
 	Transform* target = nullptr;
 	Transform* attacker = nullptr;
-	if (obj != nullptr) target = obj->transform;
-	if (parent != nullptr) attacker = parent->transform;
+	if (notNull(obj)) target = obj->transform;
+	if (notNull(parent)) attacker = parent->transform;
 
 	// Target is in the direction of attack?
-	if (attacker == nullptr || target == nullptr || (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x)))
+	checkNullAndBreak(target, false);
+	checkNullAndBreak(attacker, false);
+	if (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x))
 		return false; // If not, return false
 
-	if (attackTrigger == nullptr) return false;
+	checkNullAndBreak(attackTrigger, false);
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// trigger Scale
-	if (attackTransform == nullptr) return false;
+	checkNullAndBreak(attackTransform, false);
 	Vector3 triggerScale = scale * attackTransform->getScale();
 	// Distance between attacker and target
 	float distX = abs(target->getPosition().x - attacker->getPosition().x);

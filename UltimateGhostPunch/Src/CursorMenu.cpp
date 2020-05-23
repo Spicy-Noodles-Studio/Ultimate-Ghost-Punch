@@ -34,33 +34,33 @@ void CursorMenu::preUpdate(float deltaTime)
 
 bool CursorMenu::mouseUsed() const
 {
-	if (inputSystem == nullptr) return false;
+	checkNullAndBreak(inputSystem, false);
 
 	return inputSystem->isMouseUsed();
 }
 
 bool CursorMenu::keyboardUsed() const
 {
-	if (inputSystem == nullptr) return false;
+	checkNullAndBreak(inputSystem, false);
 
 	return inputSystem->isKeyboardUsed();
 }
 
 bool CursorMenu::controllerUsed() const
 {
-	if (inputSystem == nullptr) return false;
+	checkNullAndBreak(inputSystem, false);
 
 	return inputSystem->isControllerUsed();
 }
 
 void CursorMenu::hideCursor()
 {
-	if (cursor == nullptr) return;
+	checkNullAndBreak(cursor);
 	cursor->setSpriteVisible(false);
 }
 
 void CursorMenu::showCursor()
 {
-	if (cursor == nullptr) return;
+	checkNullAndBreak(cursor);
 	cursor->setSpriteVisible(true);
 }

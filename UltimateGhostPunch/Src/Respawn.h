@@ -25,7 +25,7 @@ protected:
 
 public:
 	Respawn(GameObject* gameObject);
-	~Respawn();
+	virtual ~Respawn();
 	void respawn(); //Spawns in the original position
 	void spawn(const Vector3& spawnPos);
 

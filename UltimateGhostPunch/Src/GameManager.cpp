@@ -55,6 +55,8 @@ void GameManager::setPaused(bool setPaused)
 
 	paused = setPaused;
 
+	checkNullAndBreak(Timer::GetInstance());
+
 	if (paused) {
 		pauseAllSounds();
 		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
@@ -136,9 +138,9 @@ std::vector<GameObject*> GameManager::getAlivePlayers()
 {
 	std::vector<GameObject*> alive;
 	for (GameObject* p : knights) {
-		if (p != nullptr) {
+		if (notNull(p)) {
 			PlayerState* state = p->getComponent<PlayerState>();
-			if (state != nullptr && !state->isDead()) alive.push_back(p);
+			if (notNull(state) && !state->isDead()) alive.push_back(p);
 		}
 	}
 	return alive;
@@ -233,10 +235,10 @@ bool GameManager::isAnyGhost() const
 	bool anyGhost = false;
 	while (i < knights.size() && !anyGhost)
 	{
-		if (knights[i] != nullptr)
+		if (notNull(knights[i]))
 		{
 			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
-			anyGhost = ghostManager != nullptr && ghostManager->isGhost();
+			anyGhost = notNull(ghostManager) && ghostManager->isGhost();
 		}
 		i++;
 	}
@@ -250,10 +252,10 @@ GameObject* GameManager::getAnyGhost()
 	GameObject* anyGhost = nullptr;
 	while (i < knights.size() && anyGhost == nullptr)
 	{
-		if (knights[i] != nullptr)
+		if (notNull(knights[i]))
 		{
 			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
-			anyGhost = (ghostManager != nullptr && ghostManager->isGhost()) ? knights[i] : nullptr;
+			anyGhost = (notNull(ghostManager) && ghostManager->isGhost()) ? knights[i] : nullptr;
 		}
 		i++;
 	}
@@ -265,9 +267,9 @@ void GameManager::pauseAllSounds()
 {
 	for (GameObject* knight : knights)
 	{
-		if (knight != nullptr) {
+		if (notNull(knight)) {
 			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-			if (emitter != nullptr) emitter->pauseAll();
+			if (notNull(emitter)) emitter->pauseAll();
 		}
 	}
 }
@@ -276,9 +278,9 @@ void GameManager::resumeAllSound()
 {
 	for (GameObject* knight : knights)
 	{
-		if (knight != nullptr) {
+		if (notNull(knight)) {
 			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-			if (emitter != nullptr) emitter->resumeAll();
+			if (notNull(emitter)) emitter->resumeAll();
 		}
 	}
 }

@@ -28,15 +28,15 @@ void TrailManager::start()
 	checkNull(playerState);
 
 	MeshRenderer* mesh = gameObject->getComponent<MeshRenderer>();
-	Vector3 diffuse = (mesh != nullptr) ? mesh->getDiffuse(0) : Vector3::ZERO;
+	Vector3 diffuse = (notNull(mesh)) ? mesh->getDiffuse(0) : Vector3::ZERO;
 
 	createTrail(&heavyAttackTrail, "heavyAttackTrail");
 	createTrail(&quickAttackTrail, "quickAttackTrail");
 	createTrail(&dashTrail, "dashTrail");
-	if (dashTrail != nullptr) dashTrail->setColour(diffuse, 1);
+	if (notNull(dashTrail)) dashTrail->setColour(diffuse, 1);
 
 	createTrail(&thrownTrail, "thrownTrail");
-	if (thrownTrail != nullptr)thrownTrail->setColour(diffuse, 1);
+	if (notNull(thrownTrail))thrownTrail->setColour(diffuse, 1);
 
 	createTrail(&UGPTrail, "UGPTrail");
 }
@@ -51,29 +51,28 @@ void TrailManager::preUpdate(float deltaTime)
 }
 
 void TrailManager::createTrail(Trail** trail, const std::string& trailFilename)
-{
+{	
 	if (*trail != nullptr) return;
 
 	GameObject* trailObject = instantiate("Trail");
-	if (trailObject == nullptr)
-		return;
+	checkNullAndBreak(trailObject);
 
 	gameObject->addChild(trailObject);
 
 	*trail = trailObject->getComponent<Trail>();
-	if (*trail == nullptr)
-		return;
+	checkNullAndBreak(*trail);
 
 	// Set parameters from file
 	MeshRenderer* mesh = gameObject->getComponent<MeshRenderer>();
-	if (mesh != nullptr)
+	if (notNull(mesh))
 		(*trail)->setMeshRenderer(mesh);
 	(*trail)->configureTrail("./Assets/Trails/" + trailFilename + ".trail");
 }
 
 void TrailManager::manageQuickAttackTrail()
 {
-	if (quickAttackTrail == nullptr || playerState == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(quickAttackTrail);
 
 	if (playerState->isQuickAttacking())
 		quickAttackTrail->start();
@@ -83,7 +82,8 @@ void TrailManager::manageQuickAttackTrail()
 
 void TrailManager::manageHeavyAttackTrail()
 {
-	if (heavyAttackTrail == nullptr || playerState == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(heavyAttackTrail);
 
 	if (playerState->isHeavyAttacking()) {
 		if (!heavyAttackTrail->started()) heavyAttackTrail->start();
@@ -94,7 +94,8 @@ void TrailManager::manageHeavyAttackTrail()
 
 void TrailManager::manageDashTrail()
 {
-	if (dashTrail == nullptr || playerState == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(dashTrail);
 
 	if (playerState->isDodging()) {
 		if (!dashTrail->started()) dashTrail->start();
@@ -105,7 +106,8 @@ void TrailManager::manageDashTrail()
 
 void TrailManager::manageThrownTrail(float deltaTime)
 {
-	if (thrownTrail == nullptr || playerState == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(thrownTrail);
 
 	if (playerState->hasBeenThrown()) {
 		time = thrownTime;
@@ -121,7 +123,8 @@ void TrailManager::manageThrownTrail(float deltaTime)
 
 void TrailManager::manageUGPTrail()
 {
-	if (UGPTrail == nullptr || playerState == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(UGPTrail);
 
 	if (playerState->isPunching()) {
 		if (!UGPTrail->started()) UGPTrail->start();

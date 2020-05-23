@@ -29,7 +29,7 @@ void Movement::start()
 
 void Movement::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -46,19 +46,19 @@ void Movement::handleData(ComponentData* data)
 void Movement::move(Vector3 dir)
 {
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
-	if (aux != nullptr && aux->canMove()) {
-		if (rigidBody != nullptr)
+	if (notNull(aux) && aux->canMove()) {
+		if (notNull(rigidBody))
 			rigidBody->addForce(dir * speed);
 
 		//Character rotation
-		if (dir.x != 0 && gameObject->transform)
+		if (dir.x != 0 && notNull(gameObject->transform))
 			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
 	}
 }
 
 void Movement::stop()
 {
-	if (rigidBody != nullptr)
+	if (notNull(rigidBody))
 	{
 		rigidBody->setLinearVelocity(Vector3::ZERO);
 		rigidBody->clearForces();
@@ -77,6 +77,6 @@ float Movement::getSpeed() const
 
 bool Movement::isMoving() const
 {
-	if (rigidBody == nullptr) return false;
+	checkNullAndBreak(rigidBody, false);
 	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f;
 }

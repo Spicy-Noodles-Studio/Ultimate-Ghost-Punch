@@ -9,23 +9,23 @@
 REGISTER_FACTORY(SoundManager);
 
 #define playSoundInstant( sound, condition)\
-if (playerState != nullptr && playerState->condition())\
+if (notNull(playerState) && playerState->condition())\
 playSound(sound);
 
 #define playSoundInstant2( sound, condition1, condition2)\
-if (playerState != nullptr && playerState->condition1() && playerState->condition2())\
+if (notNull(playerState) && playerState->condition1() && playerState->condition2())\
 playSound(sound);
 
 #define playSoundOnce(sound, condition, boolean)\
-if (playerState != nullptr && playerState->condition() && !boolean) {\
+if (notNull(playerState) && playerState->condition() && !boolean) {\
 	playSound(sound);\
 	boolean = true;\
 }\
-else if (playerState != nullptr && !playerState->condition())\
+else if (notNull(playerState) && !playerState->condition())\
 	boolean = false;
 
 #define playSoundRepeatedly(sound, condition)\
-if (playerState != nullptr && playerState->condition())\
+if (notNull(playerState) && playerState->condition())\
 	playSound(sound);\
 else\
 	stopSound(sound);
@@ -60,7 +60,7 @@ void SoundManager::update(float deltaTime)
 
 void SoundManager::playTaunt()
 {
-	if (playerState != nullptr && playerState->canTaunt()) {
+	if (notNull(playerState) && playerState->canTaunt()) {
 		playSound(getRandomSound(tauntSounds));
 		playerState->setTaunting();
 	}
@@ -78,7 +78,7 @@ void SoundManager::manageLandSound()
 
 void SoundManager::manageWalkSound()
 {
-	if (playerState != nullptr && playerState->isGrounded() && playerState->isMoving() && playerState->canMove()) 
+	if (notNull(playerState) && playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
 		playSound("run");
 	else
 		stopSound("run");
@@ -191,12 +191,12 @@ void SoundManager::managePunchSuccessSound()
 
 void SoundManager::playSound(const std::string& sound)
 {
-	if (soundEmitter != nullptr && !soundEmitter->isPlaying(sound)) soundEmitter->playSound(sound);
+	if (notNull(soundEmitter) && !soundEmitter->isPlaying(sound)) soundEmitter->playSound(sound);
 }
 
 void SoundManager::stopSound(const std::string& sound)
 {
-	if (soundEmitter != nullptr && soundEmitter->isPlaying(sound)) soundEmitter->stop(sound);
+	if (notNull(soundEmitter) && soundEmitter->isPlaying(sound)) soundEmitter->stop(sound);
 }
 
 void SoundManager::initSounds()

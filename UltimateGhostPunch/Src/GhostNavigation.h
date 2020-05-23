@@ -15,7 +15,7 @@ class GhostNavigation : public StateAction
 {
 public:
 	GhostNavigation(StateMachine* stateMachine);
-	~GhostNavigation();
+	virtual ~GhostNavigation();
 
 	void setTarget(GameObject* target);
 	void setCharacter(GameObject* charcacter);

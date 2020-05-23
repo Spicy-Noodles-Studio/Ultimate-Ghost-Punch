@@ -15,7 +15,7 @@ bool Credits::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem != nullptr && inputSystem->getButtonPress(i, "B"))
+		if (notNull(inputSystem) && inputSystem->getButtonPress(i, "B"))
 			result = true;
 
 		i++;
@@ -40,10 +40,10 @@ void Credits::start()
 	Menu::start();
 
 	GameObject* camera = findGameObjectWithName("MainCamera");
-	if (camera != nullptr)
+	if (notNull(camera))
 	{
 		UILayout* layout = camera->getComponent<UILayout>();
-		if (layout != nullptr)
+		if (notNull(layout))
 		{
 			std::string aux = "";
 			for (int i = 0; i < names.size(); i++)
@@ -56,6 +56,6 @@ void Credits::start()
 
 void Credits::update(float deltaTime)
 {
-	if ((inputSystem != nullptr && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput())
+	if ((notNull(inputSystem) && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput())
 		backButtonClick();
 }

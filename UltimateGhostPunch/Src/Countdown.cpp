@@ -29,18 +29,17 @@ void Countdown::start()
 {
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 
-	if (mainCamera != nullptr)
+	if (notNull(mainCamera))
 	{
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 		cameraControl = mainCamera->getComponent<CameraController>();
 
-		if (cameraLayout != nullptr)
+		if (notNull(cameraLayout))
 			panel = cameraLayout->getRoot().getChild("CountdownBackground");
 	}
 
 	players = GameManager::GetInstance()->getKnights();
 
-	checkNull(mainCamera);
 	checkNull(cameraControl);
 }
 
@@ -49,9 +48,11 @@ void Countdown::update(float deltaTime)
 	if (!startCounting)
 	{
 		for (int i = 0; i < players.size(); i++)
-			players[i]->getComponent<PlayerState>()->setIgnoringInput(true);
+			if (notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()))
+				players[i]->getComponent<PlayerState>()->setIgnoringInput(true);
 
-		cameraControl->setActive(false);
+		if (notNull(cameraControl))
+			cameraControl->setActive(false);
 
 		startCounting = true;
 		countingDown = true;
@@ -61,7 +62,8 @@ void Countdown::update(float deltaTime)
 
 		last = std::chrono::steady_clock::now();
 
-		SongManager::GetInstance()->play2DSound("countdown");
+		if (notNull(SongManager::GetInstance()))
+			SongManager::GetInstance()->play2DSound("countdown");
 	}
 
 	if (countingDown)

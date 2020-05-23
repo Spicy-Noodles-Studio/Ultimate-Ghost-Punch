@@ -9,7 +9,7 @@
 
 REGISTER_FACTORY(Block);
 
-Block::Block(GameObject* gameObject) : UserComponent(gameObject), parent(nullptr), grounded(false), blocking(false), blocked(0), blockedGrab(0), maxBlockTime(0.5f), blockTime(0.5f),
+Block::Block(GameObject* gameObject) : UserComponent(gameObject), parent(nullptr), playerFX(nullptr), grounded(false), blocking(false), blocked(0), blockedGrab(0), maxBlockTime(0.5f), blockTime(0.5f),
 blockRegenTime(1.5f), blockGrabMargin(0.25f), timeElapsed(0.0f), blockDirection(0)
 {
 
@@ -23,11 +23,11 @@ Block::~Block()
 void Block::start()
 {
 	parent = gameObject->getParent();
-	if(parent != nullptr) playerFX = parent->getComponent<PlayerFX>();
+	if(notNull(parent)) playerFX = parent->getComponent<PlayerFX>();
+
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
 
-	checkNull(parent)
 	checkNull(playerFX)
 }
 
@@ -55,7 +55,7 @@ void Block::update(float deltaTime)
 	else if (blocking && blockTime > 0 && grounded)
 	{
 		blockTime -= deltaTime;
-		if (playerFX != nullptr) playerFX->updateShield(blockTime, maxBlockTime);
+		if (notNull(playerFX)) playerFX->updateShield(blockTime, maxBlockTime);
 		if (blockTime <= 0)
 		{
 			blockTime = 0;
@@ -73,7 +73,7 @@ void Block::postUpdate(float deltaTime)
 
 void Block::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -97,29 +97,28 @@ void Block::handleData(ComponentData* data)
 
 void Block::onObjectEnter(GameObject* other)
 {
-	if (other != nullptr && other->getTag() == "suelo")
+	if (notNull(other) && other->getTag() == "suelo")
 		grounded = true;
 }
 
 void Block::onObjectExit(GameObject* other)
 {
-	if (other != nullptr && other->getTag() == "suelo")
+	if (notNull(other) && other->getTag() == "suelo")
 		grounded = false;
 }
 
 void Block::block()
 {
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 
 	PlayerState* aux = parent->getComponent<PlayerState>();
-	if (!blocking && blockTime > 0 && grounded && aux != nullptr && aux->canBlock())
+	if (!blocking && blockTime > 0 && grounded && notNull(aux) && aux->canBlock())
 	{
 		blocking = true;
 		timeElapsed = 0;
-		if (parent->transform != nullptr) blockDirection = parent->transform->getRotation().y;
+		if (notNull(parent->transform)) blockDirection = parent->transform->getRotation().y;
 
-		PlayerFX* playerFX = parent->getComponent<PlayerFX>();
-		if (playerFX != nullptr) playerFX->activateShield();
+		if (notNull(playerFX)) playerFX->activateShield();
 
 		LOG("BLOCKING\n");
 	}
@@ -131,16 +130,15 @@ void Block::unblock()
 
 	blocking = false;
 
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 
-	PlayerFX* playerFX = parent->getComponent<PlayerFX>();
-
-	if (playerFX != nullptr) playerFX->deactivateShield();
+	if (notNull(playerFX)) playerFX->deactivateShield();
 }
 
 bool Block::blockAttack(Vector3 otherPosition)
 {
-	if (parent == nullptr || parent->transform == nullptr) return false;
+	checkNullAndBreak(parent, false);
+	checkNullAndBreak(parent->transform, false);
 
 	if (blocking && ((blockDirection > 0 && otherPosition.x > parent->transform->getPosition().x) ||
 		(blockDirection < 0 && otherPosition.x < parent->transform->getPosition().x)))

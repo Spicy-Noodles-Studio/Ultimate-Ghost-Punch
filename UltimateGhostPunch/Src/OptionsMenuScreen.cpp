@@ -20,7 +20,7 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 	root.setVisible(false);
 	root.setEnabled(false);
 
-	if (interfaceSystem != nullptr)
+	if (notNull(interfaceSystem))
 		interfaceSystem->clearControllerMenuInput();
 
 	pauseMenu.setAlwaysOnTop(true);
@@ -33,13 +33,13 @@ bool OptionsMenuScreen::backToMenuButtonClick()
 
 OptionsMenuScreen::OptionsMenuScreen(GameObject* gameObject) : OptionsMenu(gameObject), screen(nullptr), pauseMenu(NULL), optionsMenu(NULL)
 {
-	if (interfaceSystem != nullptr)
+	if (notNull(interfaceSystem))
 		interfaceSystem->registerEvent("backToMenuButtonClick", UIEvent("ButtonClicked", [this]() {return backToMenuButtonClick(); }));
 }
 
 OptionsMenuScreen::~OptionsMenuScreen()
 {
-	if (interfaceSystem != nullptr)
+	if (notNull(interfaceSystem))
 		interfaceSystem->unregisterEvent("backToMenuButtonClick");
 }
 
@@ -48,10 +48,11 @@ void OptionsMenuScreen::start()
 	Menu::start();
 
 	screen = findGameObjectWithName("OptionsMenuScreen");
-	if (mainCamera == nullptr || screen == nullptr) return;
+	checkNullAndBreak(mainCamera);
+	checkNullAndBreak(screen);
 
 	UILayout* layout = screen->getComponent<UILayout>();
-	if(layout != nullptr) root = layout->getRoot();
+	if(notNull(layout)) root = layout->getRoot();
 
 	optionsMenu = root.getChild("OptionsBackground");
 	optionsMenu.setVisible(true);
@@ -61,7 +62,7 @@ void OptionsMenuScreen::start()
 
 	UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 
-	if (cameraLayout != nullptr)
+	if (notNull(cameraLayout))
 		pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 
 	applyButton = optionsMenu.getChild("ApplyButton");
@@ -77,13 +78,13 @@ void OptionsMenuScreen::start()
 	soundText = optionsMenu.getChild("SoundVolume");
 	musicText = optionsMenu.getChild("MusicVolume");
 
-	if (windowManager != nullptr) {
+	if (notNull(windowManager)) {
 		brightness = windowManager->getBrightness();
 		fullscreen = windowManager->getFullscreen();
 		resolution = windowManager->getActualResolutionId();
 	}
 
-	if (soundSystem != nullptr) {
+	if (notNull(soundSystem)) {
 		soundVolume = soundSystem->getSoundVolume();
 		musicVolume = soundSystem->getMusicVolume();
 	}
@@ -101,6 +102,6 @@ void OptionsMenuScreen::start()
 
 void OptionsMenuScreen::preUpdate(float deltaTime)
 {
-	if (inputSystem != nullptr && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && root.isVisible())
+	if (notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && root.isVisible())
 		backToMenuButtonClick();
 }

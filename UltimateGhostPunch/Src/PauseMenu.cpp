@@ -28,7 +28,7 @@ bool PauseMenu::optionsButtonClick()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->clearControllerMenuInput();
 		interfaceSystem->initControllerMenuInput(&optionsMenu);
 	}
@@ -40,11 +40,11 @@ bool PauseMenu::optionsButtonClick()
 
 bool PauseMenu::exitButtonClick()
 {
-	if (gameManager != nullptr) {
+	if (notNull(gameManager)) {
 		gameManager->setPaused(false);
 		gameManager->pauseAllSounds();
 		gameManager->emptyKnights();
-		if (songManager != nullptr)
+		if (notNull(songManager))
 			songManager->stopSong(gameManager->getSong().first);
 	}
 
@@ -53,7 +53,7 @@ bool PauseMenu::exitButtonClick()
 
 PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), countdown(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
 {
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
 		interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
 		interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
@@ -62,7 +62,7 @@ PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), countdown(nullp
 
 PauseMenu::~PauseMenu()
 {
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->unregisterEvent("resumeButtonClick");
 		interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
 		interfaceSystem->unregisterEvent("pauseExitButtonClick");
@@ -73,10 +73,10 @@ void PauseMenu::start()
 {
 	Menu::start();
 
-	if (mainCamera != nullptr)
+	if (notNull(mainCamera))
 	{
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
-		if (cameraLayout != nullptr)
+		if (notNull(cameraLayout))
 		{
 			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 			pausePanel = cameraLayout->getRoot().getChild("Pause");
@@ -84,20 +84,20 @@ void PauseMenu::start()
 	}
 
 	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
-	if (options != nullptr) {
+	if (notNull(options)) {
 		UILayout* optionsLayout = options->getComponent<UILayout>();
-		if (optionsLayout != nullptr)
+		if (notNull(optionsLayout))
 			optionsMenu = optionsLayout->getRoot();
 	}
 
 	GameObject* countdownObject = findGameObjectWithName("Countdown");
-	if (countdownObject != nullptr)
+	if (notNull(countdownObject))
 		countdown = countdownObject->getComponent<Countdown>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (countdown != nullptr && countdown->hasStarted() && !countdown->isCounting() && gameManager != nullptr && inputSystem != nullptr && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
 		setPaused(!gameManager->isPaused());
 }
 
@@ -108,7 +108,7 @@ bool PauseMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem != nullptr && inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
+		if (notNull(inputSystem) && inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
 			result = true;
 
 		i++;
@@ -119,7 +119,8 @@ bool PauseMenu::checkControllersInput()
 
 void PauseMenu::setPaused(bool paused)
 {
-	if (gameManager == nullptr || songManager == nullptr) return;
+	checkNullAndBreak(gameManager);
+	checkNullAndBreak(songManager);
 
 	if (paused == gameManager->isPaused()) return;
 

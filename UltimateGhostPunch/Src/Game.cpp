@@ -43,28 +43,25 @@ void Game::start()
 	checkNull(songManager);
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr) {
+	if (notNull(mainCamera)) {
 		setCameraLimits(mainCamera);
 		cameraEffects = mainCamera->getComponent<CameraEffects>();
 		gameLayout = mainCamera->getComponent<UILayout>();
-		if (gameLayout != nullptr)
+		if (notNull(gameLayout))
 			timePanel = gameLayout->getRoot().getChild("TimeBackground");
 	}
-	checkNull(mainCamera);
-	checkNull(gameLayout);
 	checkNull(cameraEffects);
 
 	GameObject* countdownObject = findGameObjectWithName("Countdown");
-	if (countdownObject != nullptr) countdown = countdownObject->getComponent<Countdown>();
+	if (notNull(countdownObject)) countdown = countdownObject->getComponent<Countdown>();
 	checkNull(countdown);
 
-	if (gameManager != nullptr) {
+	if (notNull(gameManager)) {
 		playerIndexes = gameManager->getPlayerIndexes();
 		playerColours = gameManager->getPlayerColours();
 
 		Score* score = gameManager->getScore();
-		if (score != nullptr) score->initScore(gameManager->getInitialPlayers());
-		checkNull(score);
+		if (notNull(score)) score->initScore(gameManager->getInitialPlayers());
 
 		timer = gameManager->getTime();
 		gameManager->setPaused(false);
@@ -81,7 +78,7 @@ void Game::start()
 
 void Game::update(float deltaTime)
 {
-	if (countdown != nullptr && !countdown->isCounting() && timer > 0)
+	if (notNull(countdown) && !countdown->isCounting() && timer > 0)
 	{
 		if (!timePanel.isVisible())
 			timePanel.setVisible(true);
@@ -97,29 +94,31 @@ void Game::update(float deltaTime)
 
 	if (!darkness)
 	{
-		if (cameraEffects != nullptr) cameraEffects->setDarkness();
+		if (notNull(cameraEffects)) cameraEffects->setDarkness();
 		darkness = true;
 	}
-	else if (fadeIn && countdown != nullptr && countdown->getRemainingTime() < 2.6)
+	else if (fadeIn && notNull(countdown) && countdown->getRemainingTime() < 2.6)
 	{
-		if (cameraEffects != nullptr) cameraEffects->fadeIn();
+		if (notNull(cameraEffects)) cameraEffects->fadeIn();
 		fadeIn = false;
 	}
 
-	if (end && cameraEffects != nullptr && !cameraEffects->isFading())
+	if (end && notNull(cameraEffects) && !cameraEffects->isFading())
 	{
-		if (gameManager != nullptr) {
-			if (songManager != nullptr) songManager->pauseSong(gameManager->getSong().first);
+		if (notNull(gameManager)) {
+			if (notNull(songManager)) songManager->pauseSong(gameManager->getSong().first);
 			gameManager->pauseAllSounds();
 			gameManager->emptyKnights();
 		}
-		SceneManager::GetInstance()->changeScene("StatsMenu");
+		if (notNull(SceneManager::GetInstance()))
+			SceneManager::GetInstance()->changeScene("StatsMenu");
 	}
 }
 
 void Game::playerDie(int index)
 {
-	if (gameManager == nullptr) return;
+	checkNullAndBreak(gameManager);
+
 	int nPlayers = gameManager->getPlayersAlive();
 	gameManager->setPlayerRanking(index, nPlayers);
 
@@ -144,7 +143,8 @@ CameraEffects* Game::getCameraEffects()
 
 void Game::setCameraLimits(GameObject* mainCamera)
 {
-	if (mainCamera == nullptr || gameManager == nullptr) return;
+	if (notNull(mainCamera) || notNull(gameManager)) return;
+
 	CameraController* camController = mainCamera->getComponent<CameraController>();
 	checkNullAndBreak(camController);
 
@@ -164,6 +164,8 @@ void Game::setCameraLimits(GameObject* mainCamera)
 
 void Game::createLevel()
 {
+	checkNullAndBreak(gameManager);
+
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + gameManager->getLevel().first + ".level");
 
@@ -290,13 +292,13 @@ void Game::createLevel()
 
 		// Create Particle Emitter through blueprint
 		GameObject* particlesObject = instantiate("ParticleEmitter");
-		if (particlesObject == nullptr || particlesObject->transform == nullptr) continue;
+		if (!notNull(particlesObject) || !notNull(particlesObject->transform)) continue;
 
 		levelParticles->addChild(particlesObject);
 		particlesObject->transform->setPosition(position);
 
 		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
-		if (particleEmitter == nullptr) continue;
+		if (!notNull(particleEmitter)) continue;
 
 		particleEmitter->newEmitter(name);
 		particleEmitter->start();
@@ -305,7 +307,7 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	if(gameManager!=nullptr) gameManager->emptyKnights();
+	if(notNull(gameManager)) gameManager->emptyKnights();
 
 	for (int i = 0; i < playerIndexes.size(); i++)
 	{
@@ -316,7 +318,7 @@ void Game::createKnights()
 			if (playerIndexes[i] != 9 && i < playerTransforms.size())
 			{
 				knight = instantiate("Player", playerTransforms[i].first);
-				if (knight == nullptr || knight->transform == nullptr || knight->getComponent<PlayerController>() == nullptr) break;
+				if (!notNull(knight) || !notNull(knight->transform) || !notNull(knight->getComponent<PlayerController>())) break;
 
 				knight->transform->setRotation(playerTransforms[i].second);
 				knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
@@ -324,27 +326,29 @@ void Game::createKnights()
 			else
 			{
 				knight = instantiate("EnemyAI", playerTransforms[i].first);
-				if (knight == nullptr || knight->transform == nullptr) return;
+				if (!notNull(knight) || !notNull(knight->transform)) return;
 
 				knight->transform->setRotation(playerTransforms[i].second);
 			}
+
+			checkNullAndBreak(knight);
 			PlayerIndex* index = knight->getComponent<PlayerIndex>();
-			if(index != nullptr) index->setIndex(i + 1);
+			if(notNull(index)) index->setIndex(i + 1);
 
 			if (i < playerColours.size()) {
 				MeshRenderer* mesh = knight->getComponent<MeshRenderer>();
-				if (mesh != nullptr) {
+				if (notNull(mesh)) {
 					mesh->setDiffuse(0, playerColours[i], 1);
 					mesh->setDiffuse("sword", 0, playerColours[i], 1);
 				}
 
 				GhostManager* ghostManager = knight->getComponent<GhostManager>();
-				if (ghostManager != nullptr) ghostManager->setPlayerColour(playerColours[i]);
+				if (notNull(ghostManager)) ghostManager->setPlayerColour(playerColours[i]);
 			}
 
-			if (gameManager != nullptr) {
+			if (notNull(gameManager)) {
 				Health* health = knight->getComponent<Health>();
-				if (health != nullptr) health->setHealth(gameManager->getHealth());
+				if (notNull(health)) health->setHealth(gameManager->getHealth());
 
 				gameManager->getKnights().push_back(knight);
 			}
@@ -357,7 +361,7 @@ void Game::createSpikes()
 	for (int i = 0; i < spikesTransforms.size(); i++)
 	{
 		GameObject* spikes = instantiate("Spikes", spikesTransforms[i].first);
-		if (spikes != nullptr && spikes->transform != nullptr)
+		if (notNull(spikes) && notNull(spikes->transform))
 			spikes->transform->setRotation(spikesTransforms[i].second);
 	}
 }
@@ -367,10 +371,10 @@ void Game::createLights()
 	for (int i = 0; i < lights.size(); i++)
 	{
 		GameObject* light = instantiate("Light", lights[i].position);
-		if (light != nullptr) {
+		if (notNull(light)) {
 			Light* lightComp = light->getComponent<Light>();
 
-			if (lightComp != nullptr) {
+			if (notNull(lightComp)) {
 				if (lights[i].type == "Point")
 					lightComp->setType(Light::Point);
 				else if (lights[i].type == "Spotlight")
@@ -381,14 +385,14 @@ void Game::createLights()
 				lightComp->setIntensity(lights[i].intensity);
 				lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 			}
-			light->transform->setDirection(lights[i].direction);
+			if(light->transform) light->transform->setDirection(lights[i].direction);
 		}
 	}
 }
 
 void Game::playSong()
 {
-	if(songManager != nullptr && gameManager != nullptr)
+	if(notNull(songManager) && notNull(gameManager))
 	songManager->playSong(gameManager->getSong().first);
 }
 
@@ -432,7 +436,7 @@ void Game::configureLevelCollider(const std::string& name)
 	}
 
 	PlatformGraph* graph = levelCollider->getComponent<PlatformGraph>();
-	if (graph != nullptr && gameManager != nullptr)
+	if (notNull(graph) && notNull(gameManager))
 	{
 		if (!ia)
 			graph->setActive(false);
@@ -446,10 +450,10 @@ void Game::configureLevelCollider(const std::string& name)
 
 void Game::chooseWinner()
 {
-	if(cameraEffects != nullptr) cameraEffects->fadeOut();
+	if(notNull(cameraEffects)) cameraEffects->fadeOut();
 	end = true;
 
-	if (gameManager == nullptr) return;
+	checkNullAndBreak(gameManager);
 	std::vector<GameObject*> knights =  gameManager->getKnights();
 
 	bool tie = false;
@@ -459,10 +463,10 @@ void Game::chooseWinner()
 
 	for (int i = 0; i < knights.size(); i++)
 	{
-		if (knights[i] == nullptr) continue;
+		if (notNull(knights[i])) continue;
 
 		Health* health = knights[i]->getComponent<Health>();
-		if (health == nullptr) continue;
+		if (notNull(health)) continue;
 
 		if (health->isAlive())
 		{
@@ -497,7 +501,7 @@ void Game::chooseWinner()
 		gameManager->setWinner(majorIndex + 1);
 	}
 
-	if(songManager != nullptr) songManager->play2DSound("victory4");
+	if(notNull(songManager)) songManager->play2DSound("victory4");
 }
 
 std::pair<std::string, std::string> Game::timeToText()

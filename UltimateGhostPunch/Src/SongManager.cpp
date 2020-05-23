@@ -39,6 +39,7 @@ void SongManager::start()
 	soundEmitter = gameObject->getComponent<SoundEmitter>();
 	checkNull(gameManager);
 	checkNull(soundEmitter);
+
 	dontDestroyOnLoad(gameObject);
 }
 
@@ -49,9 +50,9 @@ void SongManager::update(float deltaTime)
 
 void SongManager::playMenuSong()
 {
-	if(soundEmitter == nullptr) soundEmitter = gameObject->getComponent<SoundEmitter>();
+	if(!notNull(soundEmitter)) soundEmitter = gameObject->getComponent<SoundEmitter>();
 
-	if (!songPlaying && soundEmitter != nullptr) {
+	if (!songPlaying && notNull(soundEmitter)) {
 		soundEmitter->playMusic(menuMusic);
 		songPlaying = true;
 	}
@@ -59,7 +60,7 @@ void SongManager::playMenuSong()
 
 void SongManager::stopMenuSong()
 {
-	if (songPlaying && soundEmitter != nullptr) {
+	if (songPlaying && notNull(soundEmitter)) {
 		soundEmitter->stop(menuMusic);
 		songPlaying = false;
 	}
@@ -77,33 +78,33 @@ void SongManager::resumeMenuSong()
 
 void SongManager::playSong(const std::string& song)
 {
-	if (soundEmitter != nullptr) soundEmitter->playMusic(song);
+	if (notNull(soundEmitter)) soundEmitter->playMusic(song);
 }
 
 void SongManager::stopSong(const std::string& song)
 {
-	if (soundEmitter != nullptr) soundEmitter->stop(song);
+	if (notNull(soundEmitter)) soundEmitter->stop(song);
 }
 
 void SongManager::pauseSong(const std::string& song)
 {
-	if (soundEmitter != nullptr) soundEmitter->pause(song);
+	if (notNull(soundEmitter)) soundEmitter->pause(song);
 }
 
 void SongManager::resumeSong(const std::string& song)
 {
-	if (soundEmitter != nullptr) soundEmitter->resume(song);
+	if (notNull(soundEmitter)) soundEmitter->resume(song);
 }
 
 void SongManager::play2DSound(const std::string& sound)
 {
-	if (soundEmitter != nullptr) soundEmitter->playSound(sound);
+	if (notNull(soundEmitter)) soundEmitter->playSound(sound);
 }
 
 void SongManager::ghostSong()
 {
-	if (gameManager != nullptr && soundEmitter != nullptr && gameManager->isAnyGhost())
+	if (notNull(soundEmitter) && notNull(gameManager) && gameManager->isAnyGhost())
 		soundEmitter->setPitch(0.65);
-	else if(soundEmitter !=nullptr)
+	else if(notNull(soundEmitter))
 		soundEmitter->setPitch(1.0);
 }

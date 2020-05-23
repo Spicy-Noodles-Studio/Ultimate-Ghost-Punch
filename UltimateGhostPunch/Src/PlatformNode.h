@@ -20,6 +20,7 @@ private:
 public:
 	State();
 	State(const std::vector<Action>& actions, int frame, float time, const Vector3& pos);
+	virtual ~State();
 
 	Vector3 getPos() const;
 	int getFrame() const;
@@ -43,6 +44,7 @@ private:
 public:
 	NavigationLink();
 	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, const Vector3& startForce, int frames, float duration, int connection, int startDirection);
+	virtual ~NavigationLink();
 
 	int getConnection() const;
 	std::vector<State> getStates() const;
@@ -71,7 +73,7 @@ public:
 	PlatformNode();
 	PlatformNode(const Vector3& iniPos, int index);
 	PlatformNode(const Vector3& iniPos, const Vector3& endPos, int index);
-	~PlatformNode();
+	virtual ~PlatformNode();
 
 	void setEnd(const Vector3& endPos);
 	void setBegining(const Vector3& iniPos);

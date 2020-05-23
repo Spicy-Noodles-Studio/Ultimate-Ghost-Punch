@@ -44,7 +44,6 @@ public:
 	virtual ~PlatformGraph();
 
 	void createNodes();
-	void createLinks();
 
 	void saveGraph();
 	bool loadGraph();

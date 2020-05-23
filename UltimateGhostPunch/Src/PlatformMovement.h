@@ -24,7 +24,7 @@ protected:
 
 public:
 	PlatformMovement(StateMachine* stateMachine);
-	~PlatformMovement();
+	virtual ~PlatformMovement();
 
 
 	void setPlatformGraph(PlatformGraph* platformGraph);

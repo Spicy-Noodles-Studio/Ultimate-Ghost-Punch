@@ -36,7 +36,7 @@ private:
 
 public:
 	Score();
-	~Score();
+	virtual ~Score();
 
 	void clearScores();
 

@@ -25,7 +25,7 @@ protected:
 public:
 	SongManager();
 	SongManager(GameObject* gameObject);
-	~SongManager();
+	virtual ~SongManager();
 
 	static SongManager* GetInstance();
 

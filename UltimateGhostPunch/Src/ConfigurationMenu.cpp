@@ -15,7 +15,7 @@ REGISTER_FACTORY(ConfigurationMenu);
 ConfigurationMenu::ConfigurationMenu(GameObject* gameObject) : Menu(gameObject), configurationLayout(nullptr), startButton(NULL), settingsPanel(NULL),
 nPlayers(0), health(4), time(60), mode(false), currentLevel(""), currentSong(""), previewTime(50), timer(0), songPreview(false)
 {
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->registerEvent("-healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(-CHANGE_HEALTH); }));
 		interfaceSystem->registerEvent("+healthButtonClick", UIEvent("ButtonClicked", [this]() {return changeHealth(+CHANGE_HEALTH); }));
 
@@ -47,7 +47,7 @@ nPlayers(0), health(4), time(60), mode(false), currentLevel(""), currentSong("")
 
 ConfigurationMenu::~ConfigurationMenu()
 {
-	if (interfaceSystem != nullptr) {
+	if (notNull(interfaceSystem)) {
 		interfaceSystem->unregisterEvent("-healthButtonClick");
 		interfaceSystem->unregisterEvent("+healthButtonClick");
 
@@ -79,26 +79,26 @@ void ConfigurationMenu::start()
 {
 	Menu::start();
 
-	if (mainCamera != nullptr)
+	if (notNull(mainCamera))
 	{
 		configurationLayout = mainCamera->getComponent<UILayout>();
 		std::vector<GameObject*> aux = mainCamera->getChildren();
 		if (aux.size() > 0) {
 			UILayout* settingsLayout = aux[0]->getComponent<UILayout>();
-			if (settingsLayout != nullptr)
+			if (notNull(settingsLayout))
 				settingsPanel = settingsLayout->getRoot();
 		}
 	}
 
-	if (configurationLayout != nullptr)
+	if (notNull(configurationLayout))
 		startButton = configurationLayout->getRoot().getChild("StartButton");
 
 	slots = std::vector<std::pair<int, UIElement>>(4, { -1, NULL });
-	std::vector<int> indexes = (gameManager != nullptr) ? gameManager->getPlayerIndexes() : std::vector<int>();
+	std::vector<int> indexes = (notNull(gameManager)) ? gameManager->getPlayerIndexes() : std::vector<int>();
 
 	for (int i = 0; i < 4; i++)
 	{
-		if (configurationLayout != nullptr)
+		if (notNull(configurationLayout))
 		{
 			if (i < indexes.size()) {
 				slots[i] = { indexes[i] , configurationLayout->getRoot().getChild("Slot" + std::to_string(i + 1)) };
@@ -117,7 +117,7 @@ void ConfigurationMenu::start()
 		}
 	}
 
-	if (gameManager != nullptr) {
+	if (notNull(gameManager)) {
 		nPlayers = gameManager->getInitialPlayers();
 		health = gameManager->getHealth();
 		mode = gameManager->getTimeMode();
@@ -160,14 +160,14 @@ void ConfigurationMenu::initNames()
 	songNames["Strength"] = "strengthOfTheTitans";
 	songNames["UGP"] = "ugpTrack1";
 
-	std::string song = (gameManager != nullptr) ? gameManager->getSong().second : "";
+	std::string song = (notNull(gameManager)) ? gameManager->getSong().second : "";
 	auto it = songNames.find(song);
 	if (it == songNames.end())
 		currentSong = "Bustin Loose";
 	else
 		currentSong = it->first;
 
-	if (configurationLayout != nullptr)
+	if (notNull(configurationLayout))
 		configurationLayout->getRoot().getChild("PreviewSongButton").setText(currentSong);
 
 
@@ -175,14 +175,14 @@ void ConfigurationMenu::initNames()
 	levelNames["Sewers"] = "level3";
 	levelNames["Volcano"] = "level5";
 
-	std::string level = (gameManager != nullptr) ? gameManager->getLevel().second : "";
+	std::string level = (notNull(gameManager)) ? gameManager->getLevel().second : "";
 	it = levelNames.find(level);
 	if (it == levelNames.end())
 		currentLevel = "Coliseum";
 	else
 		currentLevel = it->first;
 
-	if (configurationLayout != nullptr) {
+	if (notNull(configurationLayout)) {
 		configurationLayout->getRoot().getChild("Level").setText(currentLevel);
 		configurationLayout->getRoot().getChild("LevelImage").setProperty("Image", levelNames[currentLevel]);
 	}
@@ -190,7 +190,7 @@ void ConfigurationMenu::initNames()
 
 void ConfigurationMenu::checkInput()
 {
-	if (inputSystem == nullptr) return;
+	checkNullAndBreak(inputSystem);
 
 	int i = 0;
 	bool pressed = false;
@@ -366,7 +366,7 @@ bool ConfigurationMenu::changeLevel(int value)
 		it = levelNames.begin();
 
 	currentLevel = (*it).first;
-	if (configurationLayout != nullptr) {
+	if (notNull(configurationLayout)) {
 		configurationLayout->getRoot().getChild("Level").setText(currentLevel);
 		configurationLayout->getRoot().getChild("LevelImage").setProperty("Image", levelNames[currentLevel]);
 	}
@@ -395,7 +395,7 @@ bool ConfigurationMenu::changeSong(int value)
 		it = songNames.begin();
 
 	currentSong = (*it).first;
-	if (configurationLayout != nullptr)
+	if (notNull(configurationLayout))
 		configurationLayout->getRoot().getChild("PreviewSongButton").setText(currentSong);
 
 	buttonClick(buttonSound);
@@ -405,7 +405,7 @@ bool ConfigurationMenu::changeSong(int value)
 
 bool ConfigurationMenu::previewSong(bool value)
 {
-	if (value && songManager != nullptr)
+	if (value && notNull(songManager))
 	{
 		songManager->pauseMenuSong();
 		songManager->playSong(songNames[currentSong]);
@@ -420,7 +420,7 @@ bool ConfigurationMenu::previewSong(bool value)
 
 void ConfigurationMenu::stopPreview()
 {
-	if (songPreview && songManager != nullptr)
+	if (songPreview && notNull(songManager))
 	{
 		songManager->stopSong(songNames[currentSong]);
 		songManager->resumeMenuSong();
@@ -460,7 +460,9 @@ bool ConfigurationMenu::slotButtonClick(int index, std::string name)
 
 bool ConfigurationMenu::startButtonClick()
 {
-	if (songManager == nullptr || gameManager == nullptr || sceneManager == nullptr) return false;
+	checkNullAndBreak(songManager, false);
+	checkNullAndBreak(gameManager, false);
+	checkNullAndBreak(sceneManager, false);
 
 	buttonClick("fight");
 
@@ -499,7 +501,7 @@ bool ConfigurationMenu::settingsButtonClick()
 		settingsPanel.setVisible(true);
 		settingsPanel.setAlwaysOnTop(true);
 
-		if (interfaceSystem != nullptr) {
+		if (notNull(interfaceSystem)) {
 			interfaceSystem->clearControllerMenuInput();
 			interfaceSystem->initControllerMenuInput(&settingsPanel);
 		}
@@ -509,7 +511,7 @@ bool ConfigurationMenu::settingsButtonClick()
 		settingsPanel.setVisible(false);
 		settingsPanel.setAlwaysOnTop(false);
 
-		if (interfaceSystem != nullptr)
+		if (notNull(interfaceSystem))
 			interfaceSystem->clearControllerMenuInput();
 	}
 

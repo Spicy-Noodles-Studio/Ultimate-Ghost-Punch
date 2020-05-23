@@ -21,7 +21,7 @@ protected:
 
 public:
 	PlatformNavigation(StateMachine* stateMachine);
-	~PlatformNavigation();
+	virtual ~PlatformNavigation();
 
 	void setPlatformGraph(PlatformGraph* platformGraph);
 	void setCharacter(GameObject* character);

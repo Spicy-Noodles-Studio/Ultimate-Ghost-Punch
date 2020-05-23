@@ -11,12 +11,13 @@ StateMachine::~StateMachine()
 	for (auto state : stateActions)
 		delete state;
 	stateActions.clear();
+	actionInputs.clear();
 }
 
 void StateMachine::update(float deltaTime)
 {
 	//Process current state
-	if(currentState != nullptr) currentState->update(deltaTime);
+	if(notNull(currentState)) currentState->update(deltaTime);
 
 	//Process input
 	processActionInput();

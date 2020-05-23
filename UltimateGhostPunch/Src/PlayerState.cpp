@@ -73,118 +73,118 @@ void PlayerState::postUpdate(float deltaTime)
 
 bool PlayerState::canAttack() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) && (grab == nullptr || !grab->isGrabbing());
+	return (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block) || !block->isBlocking()) && (!notNull(dodge) || !dodge->isDodging()) && (!notNull(grab) || !grab->isGrabbing());
 }
 
 bool PlayerState::canBlock() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (attack == nullptr || !attack->isAttacking()) && (dodge == nullptr || !dodge->isDodging()) && (grab == nullptr || !grab->isGrabbing());
+	return (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(attack) || !attack->isAttacking()) && (!notNull(dodge) || !dodge->isDodging()) && (!notNull(grab) || !grab->isGrabbing());
 }
 
 bool PlayerState::canDodge() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (attack == nullptr || !attack->isAttacking());
+	return (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block)|| !block->isBlocking()) && (!notNull(attack) || !attack->isAttacking());
 }
 
 bool PlayerState::canGrab() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) && (attack == nullptr || !attack->isAttacking());
+	return (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block) || !block->isBlocking()) && (!notNull(dodge) || !dodge->isDodging()) && (!notNull(attack) || !attack->isAttacking());
 }
 
 bool PlayerState::canMove() const
 {
-	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) && (attack == nullptr || !attack->isAttacking());
+	return  (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block) || !block->isBlocking()) && (!notNull(dodge) || !dodge->isDodging()) && (!notNull(attack) || !attack->isAttacking());
 }
 
 bool PlayerState::canJump() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking());
+	return (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block) || !block->isBlocking());
 }
 
 bool PlayerState::canGhostMove() const
 {
-	return  (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch == nullptr || !ghostPunch->isPunching());
+	return  (notNull(ghostManager) && ghostManager->isGhost()) && (!notNull(ghostPunch) || !ghostPunch->isPunching());
 }
 
 bool PlayerState::canTaunt() const
 {
-	return  (ghostManager == nullptr || !ghostManager->isGhost()) && (block == nullptr || !block->isBlocking()) && (dodge == nullptr || !dodge->isDodging()) &&
-		(attack == nullptr || !attack->isAttacking()) && (grab == nullptr || !grab->isGrabbing()) && (jump == nullptr || jump->isGrounded());
+	return  (!notNull(ghostManager) || !ghostManager->isGhost()) && (!notNull(block) || !block->isBlocking()) && (!notNull(dodge) || !dodge->isDodging()) &&
+		(!notNull(attack) || !attack->isAttacking()) && (!notNull(grab) || !grab->isGrabbing()) && (!notNull(jump) || jump->isGrounded());
 }
 
 bool PlayerState::isMoving() const
 {
-	return movement != nullptr && movement->isMoving();
+	return notNull(movement) && movement->isMoving();
 }
 
 bool PlayerState::isJumping() const
 {
-	return jump != nullptr && jump->isJumping();
+	return notNull(jump) && jump->isJumping();
 }
 
 bool PlayerState::isGrounded() const
 {
-	return jump != nullptr && jump->isGrounded();
+	return notNull(jump) && jump->isGrounded();
 }
 
 bool PlayerState::isGrabbing() const
 {
-	return grab != nullptr && grab->isGrabbing();
+	return notNull(grab) && grab->isGrabbing();
 }
 
 bool PlayerState::isHurt() const
 {
-	return health != nullptr && health->isHurt();
+	return notNull(health) && health->isHurt();
 }
 
 bool PlayerState::isBlocking() const
 {
-	return block != nullptr && block->isBlocking();
+	return notNull(block) && block->isBlocking();
 }
 
 bool PlayerState::isStunned() const
 {
-	return grab != nullptr && grab->isStunned();
+	return notNull(grab) && grab->isStunned();
 }
 
 bool PlayerState::isDodging() const
 {
-	return dodge != nullptr && dodge->isDodging();
+	return notNull(dodge) && dodge->isDodging();
 }
 
 bool PlayerState::isHeavyAttacking() const
 {
-	return attack != nullptr && attack->isHeavyAttacking();
+	return notNull(attack) && attack->isHeavyAttacking();
 }
 
 bool PlayerState::isQuickAttacking() const
 {
-	return attack != nullptr && attack->isQuickAttacking();
+	return notNull(attack) && attack->isQuickAttacking();
 }
 
 bool PlayerState::isGhostMoving() const
 {
-	return ghostMovement != nullptr && ghostMovement->isGhostMoving();
+	return notNull(ghostMovement) && ghostMovement->isGhostMoving();
 }
 
 bool PlayerState::isPunching() const
 {
-	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->isPunching());
+	return (notNull(ghostManager) && ghostManager->isGhost()) && (notNull(ghostPunch) && ghostPunch->isPunching());
 }
 
 bool PlayerState::isAiming() const
 {
-	return (ghostManager != nullptr && ghostManager->isGhost()) && (ghostPunch != nullptr && ghostPunch->isAiming());
+	return (notNull(ghostManager) && ghostManager->isGhost()) && (notNull(ghostPunch) && ghostPunch->isAiming());
 }
 
 bool PlayerState::isGhost() const
 {
-	return (ghostManager != nullptr && ghostManager->isGhost());
+	return (notNull(ghostManager) && ghostManager->isGhost());
 }
 
 bool PlayerState::isRespawning() const
 {
-	return respawn != nullptr && respawn->isRespawning();
+	return notNull(respawn) && respawn->isRespawning();
 }
 
 bool PlayerState::isIgnoringInput() const
@@ -193,7 +193,7 @@ bool PlayerState::isIgnoringInput() const
 }
 bool PlayerState::isFalling() const
 {
-	return jump != nullptr && jump->isFalling();
+	return notNull(jump) && jump->isFalling();
 }
 
 bool PlayerState::isGrabbed() const
@@ -203,62 +203,62 @@ bool PlayerState::isGrabbed() const
 
 bool PlayerState::hasBlocked() const
 {
-	return block != nullptr && block->hasBlocked();
+	return notNull(block) && block->hasBlocked();
 }
 
 bool PlayerState::hasLanded() const
 {
-	return (ghostManager == nullptr || !ghostManager->isGhost()) && jump != nullptr && jump->hasLanded();
+	return (notNull(ghostManager) || !ghostManager->isGhost()) && notNull(jump) && jump->hasLanded();
 }
 
 bool PlayerState::hasJumped() const
 {
-	return jump != nullptr && jump->hasJumped();
+	return notNull(jump) && jump->hasJumped();
 }
 
 bool PlayerState::hasHit() const
 {
-	return attack != nullptr && attack->hasHit();
+	return notNull(attack) && attack->hasHit();
 }
 
 bool PlayerState::hasBlockedGrab() const
 {
-	return block != nullptr && block->hasBlockedGrab();
+	return notNull(block) && block->hasBlockedGrab();
 }
 
 bool PlayerState::hasDroppedGrab() const
 {
-	return grab != nullptr && grab->hasDropped();
+	return notNull(grab) && grab->hasDropped();
 }
 
 bool PlayerState::hasMissedGrab() const
 {
-	return grab != nullptr && grab->hasMissed();
+	return notNull(grab) && grab->hasMissed();
 }
 
 bool PlayerState::hasGhostSucceeded() const
 {
-	return ghostManager != nullptr && ghostManager->ghostSuccess() && !hasPunchSucceeded();
+	return notNull(ghostManager) && ghostManager->ghostSuccess() && !hasPunchSucceeded();
 }
 
 bool PlayerState::hasPunchSucceeded() const
 {
-	return ghostPunch != nullptr && ghostPunch->punchSuccess();
+	return notNull(ghostPunch) && ghostPunch->punchSuccess();
 }
 
 bool PlayerState::hasPunchFailed() const
 {
-	return ghostPunch != nullptr && ghostPunch->punchFail();
+	return notNull(ghostPunch) && ghostPunch->punchFail();
 }
 
 bool PlayerState::hasGhostDied() const
 {
-	return ghostManager != nullptr && ghostManager->ghostDeath();
+	return notNull(ghostManager) && ghostManager->ghostDeath();
 }
 
 bool PlayerState::hasKnightDied() const
 {
-	return health != nullptr && !health->isAlive();
+	return notNull(health) && !health->isAlive();
 }
 
 bool PlayerState::hasBeenThrown() const
@@ -277,27 +277,27 @@ bool PlayerState::hasTaunted() const
 
 bool PlayerState::isResurrecting() const
 {
-	return ghostManager != nullptr && ghostManager->isResurrecting();
+	return notNull(ghostManager) && ghostManager->isResurrecting();
 }
 
 bool PlayerState::isDying() const
 {
-	return ghostManager != nullptr && ghostManager->isDying();
+	return notNull(ghostManager) && ghostManager->isDying();
 }
 
 bool PlayerState::isAppearing() const
 {
-	return ghostManager != nullptr && ghostManager->isAppearing();
+	return notNull(ghostManager) && ghostManager->isAppearing();
 }
 
 bool PlayerState::isDisappearing() const
 {
-	return ghostManager != nullptr && ghostManager->isDisappearing();
+	return notNull(ghostManager) && ghostManager->isDisappearing();
 }
 
 bool PlayerState::isDead() const
 {
-	return ghostManager != nullptr && ghostManager->isDead();
+	return notNull(ghostManager) && ghostManager->isDead();
 }
 
 void PlayerState::setGrabbed()

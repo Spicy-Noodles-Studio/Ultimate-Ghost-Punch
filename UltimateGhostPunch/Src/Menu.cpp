@@ -38,14 +38,14 @@ void Menu::start()
 }
 
 void Menu::buttonClick(const std::string& sound) {
-	if (songManager != nullptr)
+	if (notNull(songManager))
 		songManager->play2DSound(sound);
 }
 
 bool Menu::backButtonClick()
 {
 	buttonClick(backSound);
-	if (sceneManager != nullptr)
+	if (notNull(sceneManager))
 		sceneManager->changeScene("MainMenu");
 	return false;
 }

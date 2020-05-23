@@ -22,13 +22,16 @@ CameraEffects::~CameraEffects()
 
 void CameraEffects::start()
 {
-	max = WindowManager::GetInstance()->getBrightness() + 0.5;
+	if (notNull(WindowManager::GetInstance()))
+		max = WindowManager::GetInstance()->getBrightness() + 0.5;
+
 	if (max == 0) max = 0.00001;
 	current = max;
 	state = IDLE;
 
 	mainCamera = gameObject->getComponent<Transform>();
 	checkNullAndBreak(mainCamera);
+
 	initialRotation = mainCamera->getRotation();
 	initialPosition = mainCamera->getPosition();
 }
@@ -44,7 +47,8 @@ void CameraEffects::update(float deltaTime)
 			state = IDLE;
 		}
 
-		RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
+		if (notNull(RenderSystem::GetInstance()))
+			RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
 	}
 	else if (state == FADEIN)
 	{
@@ -55,7 +59,8 @@ void CameraEffects::update(float deltaTime)
 			state = IDLE;
 		}
 
-		RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
+		if (notNull(RenderSystem::GetInstance()))
+			RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", current);
 	}
 	else if (state == SHAKE)
 	{
@@ -67,7 +72,7 @@ void CameraEffects::update(float deltaTime)
 		moveY = random() * vel * dirY;
 		moveZ = random() * vel * dirZ;
 
-		if (mainCamera == nullptr) return;
+		checkNullAndBreak(mainCamera);
 
 		Vector3 pos = mainCamera->getPosition();
 		mainCamera->setPosition(Vector3(pos.x + moveX * rotationDir.x, pos.y + moveY * rotationDir.y, pos.z + moveZ * rotationDir.z));
@@ -95,7 +100,7 @@ void CameraEffects::update(float deltaTime)
 
 void CameraEffects::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -127,7 +132,7 @@ void CameraEffects::fadeOut()
 		state = FADEOUT;
 	else if (state == SHAKE) {
 		state = FADEOUT;
-		if (mainCamera != nullptr) mainCamera->setRotation(initialRotation);
+		if (notNull(mainCamera)) mainCamera->setRotation(initialRotation);
 	}
 }
 
@@ -137,12 +142,14 @@ void CameraEffects::fadeIn()
 		state = FADEIN;
 	else if (state == SHAKE) {
 		state = FADEIN;
-		if (mainCamera != nullptr) mainCamera->setRotation(initialRotation);
+		if (notNull(mainCamera)) mainCamera->setRotation(initialRotation);
 	}
 }
 
 void CameraEffects::setDarkness()
 {
+	checkNullAndBreak(RenderSystem::GetInstance());
+
 	RenderSystem::GetInstance()->changeParamOfShader("Brightness", "bright", 0);
 	current = 0;
 }
@@ -158,6 +165,6 @@ void CameraEffects::shake(Vector3 rotDir)
 	{
 		state = SHAKE;
 		rotationDir = rotDir;
-		if (mainCamera != nullptr) initialPosition = mainCamera->getPosition();
+		if (notNull(mainCamera)) initialPosition = mainCamera->getPosition();
 	}
 }

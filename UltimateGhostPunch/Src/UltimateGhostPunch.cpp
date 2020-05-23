@@ -29,16 +29,16 @@ void UltimateGhostPunch::start()
 
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
+
 	checkNull(rigidBody);
 	checkNullAndBreak(ghostMovement);
-	
-	ghostSpeed = ghostMovement->getSpeed();
 
+	ghostSpeed = ghostMovement->getSpeed();
 }
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
-	if (gameObject->transform != nullptr && (state == USED || state == SUCCESS || state == FAIL))
+	if (notNull(gameObject->transform) && (state == USED || state == SUCCESS || state == FAIL))
 	{
 		Vector3 rotation = gameObject->transform->getRotation();
 		rotation.z = 0.0;
@@ -63,7 +63,7 @@ void UltimateGhostPunch::postUpdate(float deltaTime)
 
 void UltimateGhostPunch::handleData(ComponentData* data)
 {
-	if (data == nullptr) return;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -91,8 +91,8 @@ void UltimateGhostPunch::charge()
 	{
 		state = CHARGING;
 
-		if (ghostMovement != nullptr)
-			ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
+		checkNullAndBreak(ghostMovement);
+		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
 	}
 }
 
@@ -106,7 +106,7 @@ void UltimateGhostPunch::aim(double x, double y)
 	float flippedX = direction.x >= 0 ? 1.0f : -1.0f;
 	float flippedY = direction.y >= 0 ? 1.0f : -1.0f;
 
-	if (gameObject->transform != nullptr && direction.x != 0)
+	if (notNull(gameObject->transform) && direction.x != 0)
 	{
 		float angle = acos(direction.dot(Vector3::RIGHT * flippedX));
 		Vector3 finalDirection = Vector3(0.0, 90.0f * flippedX, angle * RAD_TO_DEG * flippedX * flippedY);
@@ -119,9 +119,9 @@ void UltimateGhostPunch::ghostPunch()
 {
 	if (state != CHARGING) return;
 
-	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
+	if (notNull(rigidBody)) rigidBody->addImpulse(direction * force);
 
-	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
+	if (notNull(ghostMovement)) ghostMovement->setSpeed(ghostSpeed);
 
 	state = PUNCHING;
 }

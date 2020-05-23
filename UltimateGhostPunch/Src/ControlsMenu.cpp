@@ -15,7 +15,7 @@ bool ControlsMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem != nullptr && inputSystem->getButtonPress(i, "B"))
+		if (notNull(inputSystem) && inputSystem->getButtonPress(i, "B"))
 			result = true;
 
 		i++;
@@ -28,7 +28,7 @@ ControlsMenu::ControlsMenu(GameObject* gameObject) : Menu(gameObject)
 {
 	Menu::start();
 
-	if (interfaceSystem != nullptr)
+	if (notNull(interfaceSystem))
 		interfaceSystem->registerEvent("backButtonClick", UIEvent("ButtonClicked", [this]() {return backButtonClick(); }));
 
 
@@ -41,17 +41,17 @@ ControlsMenu::ControlsMenu(GameObject* gameObject) : Menu(gameObject)
 
 ControlsMenu::~ControlsMenu()
 {
-	if (interfaceSystem != nullptr)
+	if (notNull(interfaceSystem))
 		interfaceSystem->unregisterEvent("backButtonClick");
 }
 
 void ControlsMenu::start()
 {
 	GameObject* camera = findGameObjectWithName("MainCamera");
-	if (camera != nullptr)
+	if (notNull(camera))
 	{
 		UILayout* layout = camera->getComponent<UILayout>();
-		if (layout != nullptr)
+		if (notNull(layout))
 		{
 			std::string aux1 = "";
 			std::string aux2 = "";
@@ -73,6 +73,6 @@ void ControlsMenu::start()
 
 void ControlsMenu::update(float deltaTime)
 {
-	if ((inputSystem != nullptr && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput())
+	if ((notNull(inputSystem) && inputSystem->getKeyPress("ESCAPE")) || checkControllersInput())
 		backButtonClick();
 }
