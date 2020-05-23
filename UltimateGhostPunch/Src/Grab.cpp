@@ -1,11 +1,9 @@
 #include "Grab.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
-#include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <sstream>
 
-#include "PlayerController.h"
 #include "PlayerIndex.h"
 #include "PlayerState.h"
 #include "Score.h"

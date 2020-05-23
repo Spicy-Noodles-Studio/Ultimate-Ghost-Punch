@@ -31,7 +31,7 @@ public:
 	PauseMenu(GameObject* gameObject);
 	virtual ~PauseMenu();
 
-	// opens the Pause Menu and pauses the game
+	// Opens the Pause Menu and pauses the game
 	void setPaused(bool paused);
 	bool isVisible();
 };

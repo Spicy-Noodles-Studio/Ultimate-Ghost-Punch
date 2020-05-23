@@ -1,4 +1,6 @@
 #include "PathRecorder.h"
+
+#include <ComponentRegister.h>
 #include <InputSystem.h>
 #include <GameObject.h>
 #include <RigidBody.h>
@@ -11,8 +13,6 @@
 #include "GameManager.h"
 #include "GhostManager.h"
 
-
-#include <ComponentRegister.h>
 
 REGISTER_FACTORY(PathRecorder);
 

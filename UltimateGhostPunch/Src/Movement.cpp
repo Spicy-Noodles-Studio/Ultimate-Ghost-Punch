@@ -1,11 +1,10 @@
 #include "Movement.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
 #include <sstream>
 #include <MathUtils.h>
-
-#include "PlayerState.h"
 
 #include "PlayerState.h"
 

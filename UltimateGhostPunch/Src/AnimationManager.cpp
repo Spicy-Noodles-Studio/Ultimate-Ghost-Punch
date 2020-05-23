@@ -1,4 +1,5 @@
 #include "AnimationManager.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <Animator.h>
@@ -100,7 +101,7 @@ bool AnimationManager::manageGhostAnimations()
 	bool result = false;
 	if (playerState->isGhost() || playerState->isAppearing() || playerState->isDisappearing())
 	{
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ODER MATTERS: Top ones have higher priority
 		if (result = manageChargeAnimation());
 		else if (result = managePunchingAnimation());
 		else if (result = managePunchSuccessAnimation());
@@ -173,7 +174,7 @@ bool AnimationManager::manageGroundedAnimations()
 
 	bool result = false;
 	if (playerState->isGrounded()) {
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ODER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageStunnedAnimations());
 		else if (result = manageHurtAnimation());
@@ -195,7 +196,7 @@ bool AnimationManager::manageAirAnimations()
 
 	bool result = false;
 	if (!playerState->isGrounded()) {
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ODER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageHurtAnimation());
 		else if (result = manageAirAttackAnimation());
@@ -266,7 +267,7 @@ bool AnimationManager::manageLandAnimation()
 		return true;
 	}
 
-	// Evita interrupcion de animaciones de menor prioridad
+	// Avoids the interruption of lower priority animations
 	std::string animationName = animator->getCurrentAnimation();
 	return (animationName == "Land" || animationName == "LandGrabbing") && !animator->hasEnded();
 }
@@ -297,23 +298,23 @@ bool AnimationManager::manageBlockAnimations()
 	checkNullAndBreak(animator, false);
 
 	std::string animationName = animator->getCurrentAnimation();
-	// Transicion de Empieza bloqueo -> Estar bloqueando
+	//Transition begin block -> blocking
 	if (playerState->isBlocking() || playerState->hasBlockedGrab()) {
 		bool previouslyBlocking = animationName == "BlockStart" ||
 			animationName == "BlockHold" ||
 			animationName == "BlockAttack" ||
 			animationName == "BlockGrab";
-		// ESTOS DOS SON MAS PRIORITARIOS A QUE EMPIEZE LA ANIMACION DE TRANSICION
+		// HIGHER PRIORITY THAN THE TRANSITION ANIMATION
 		if (manageBlockAttackAnimation()) return true;
 		if (manageBlockGrabAnimation()) return true;
 
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		else if (!previouslyBlocking) {
 			animator->playAnimation("BlockStart");
 			animator->setLoop(false);
 		}
 		else if (previouslyBlocking) {
-			//Si era el comienzo, esperamos a que termine
+			//If it was at the beginning, we wait until it ends
 			if (animationName == "BlockStart" && !animator->hasEnded()) return true;
 
 			animator->playAnimation("BlockHold");
@@ -322,7 +323,7 @@ bool AnimationManager::manageBlockAnimations()
 
 		return true;
 	}
-	// Si no esta bloqueando, pero lo estaba
+	// If it wasnt blocking
 	else if (animationName == "BlockStart" || animationName == "BlockHold") {
 		animator->playAnimation("BlockEnd");
 		animator->setLoop(false);
@@ -350,7 +351,7 @@ bool AnimationManager::manageBlockGrabAnimation()
 	checkNullAndBreak(playerState, false);
 	checkNullAndBreak(animator, false);
 
-	// Bloquea un agarre
+	// Blocks a grab
 	if (playerState->hasBlockedGrab()) {
 		LOG("BLOCKED GRAB");
 		animator->playAnimation("Knockback");
@@ -376,7 +377,7 @@ bool AnimationManager::manageGrabAnimations()
 		animationName == "LandGrabbing";
 
 	if (playerState->isGrabbing() || playerState->hasMissedGrab()) {
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		if (!previouslyGrabbing) {
 			if (playerState->hasMissedGrab()) {
 				animator->playAnimation("GrabFail");
@@ -393,7 +394,7 @@ bool AnimationManager::manageGrabAnimations()
 		}
 		return false;
 	}
-	// Si no esta agarrando, pero lo estaba
+	// If it wasnt grabbed
 	else if (previouslyGrabbing) {
 		animator->playAnimation("Throw");
 		animator->setLoop(false);
@@ -467,13 +468,13 @@ bool AnimationManager::manageStunnedAnimations()
 		bool previouslyStunned = animationName == "StunnedStart" ||
 			animationName == "StunnedHold" ||
 			animationName == "StunnedAttack";
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		if (!previouslyStunned) {
 			animator->playAnimation("StunnedStart");
 			animator->setLoop(false);
 		}
 		else if (previouslyStunned) {
-			//Si era el comienzo, esperamos a que termine
+			//If it was at the beginning, we wait until it ends
 			if (animationName == "StunnedStart" && !animator->hasEnded()) return true;
 
 			animator->playAnimation("StunnedHold");
@@ -482,7 +483,7 @@ bool AnimationManager::manageStunnedAnimations()
 
 		return true;
 	}
-	// Si no esta stunned, pero lo estaba
+	// If it wasnt stunned
 	else if (animationName == "StunnedStart" || animationName == "StunnedHold") {
 		animator->playAnimation("StunnedEnd");
 		animator->setLoop(false);
@@ -515,18 +516,18 @@ bool AnimationManager::manageFallAnimation()
 	if (playerState->isFalling()) {
 		if (manageGrabFallAnimation()) return true;
 
-		// Caer tras un salto (hacemos transicion)
+		// Falling after a jump -> transition
 		if (animator->getCurrentAnimation() == "JumpStart" && animator->hasEnded()) {
 			animator->playAnimation("JumpChange");
 			animator->setLoop(false);
 		}
 		else if (animator->getCurrentAnimation() == "JumpChange") {
-			if (animator->hasEnded()) {	// Que la condicion este dentro, evita que se salte la transicion
+			if (animator->hasEnded()) {	//To avoid skipping the transition
 				animator->playAnimation("Fall");
 				animator->setLoop(true);
 			}
 		}
-		// Caer sin mas (tras un dash por ejemplo)
+		// Falling without jumping
 		else {
 			animator->playAnimation("Fall");
 			animator->setLoop(true);
@@ -543,7 +544,7 @@ bool AnimationManager::manageGrabFallAnimation()
 
 	bool result = false;
 	if (playerState->isGrabbing()) {
-		// Caer tras un salto (hacemos transicion)
+		// Falling after a jump -> transition
 		if (animator->getCurrentAnimation() == "JumpStartGrabbing" && animator->hasEnded()) {
 			animator->playAnimation("JumpChangeGrabbing");
 			animator->setLoop(false);
@@ -595,7 +596,7 @@ bool AnimationManager::manageDashAnimation()
 		animator->setLoop(false);
 		return true;
 	}
-	// Evitar interrupcion de prioridades menores
+	// Avoids interruption of lower priority animations
 	std::string animationName = animator->getCurrentAnimation();
 	return (animationName == "DashFront" || animationName == "DashFrontGrabbing") && !animator->hasEnded();
 }
@@ -649,7 +650,7 @@ bool AnimationManager::manageGrabbedAnimations()
 		return true;
 	}
 
-	// Si no esta agarrado, pero lo estaba, lo ha soltado
+	//If it wasnt grabbed
 	else if (animationName == "GrabbedStart" || animationName == "GrabbedHold") {
 		animator->playAnimation("Thrown");
 		animator->setLoop(false);

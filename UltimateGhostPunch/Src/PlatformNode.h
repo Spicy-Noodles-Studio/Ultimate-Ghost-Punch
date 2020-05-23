@@ -13,7 +13,7 @@ class State
 {
 private:
 	std::vector<Action> actions;
-	int frame;//The frame of the trajectory were we�re at
+	int frame;//The frame of the trajectory where we are at
 	float time;//Time that has passed since the begining of the recording
 	Vector3 pos;
 

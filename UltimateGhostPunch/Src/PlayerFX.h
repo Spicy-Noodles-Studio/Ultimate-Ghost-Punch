@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PLAYERFX_H
-#define PLAYERFX_H
+#ifndef PLAYER_FX_H
+#define PLAYER_FX_H
 
 #include <UserComponent.h>
 

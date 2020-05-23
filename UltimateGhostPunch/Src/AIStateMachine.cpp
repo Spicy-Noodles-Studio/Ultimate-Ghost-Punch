@@ -1,4 +1,5 @@
 #include "AIStateMachine.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <MathUtils.h>
@@ -298,7 +299,6 @@ void AIStateMachine::changeTarget()
 	if (notNull(fightingState) && fightingState->isFighting() && notNull(GameManager::GetInstance()) || (notNull(currentState) && notNull(platformNavigation) && currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
 		return;
 
-	// TODO: de momento es random, cambiar si se quiere
 	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
 	int size = alive.size();
 	// Check if only the AI is alive
@@ -329,7 +329,6 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 	if (notNull(ghostNavigation)) ghostNavigation->setTarget(newTarget);
 	if (notNull(fightingState)) fightingState->setTarget(newTarget);
 
-	// TODO: cambiar el cambio de estado
 	if (notNull(platformGraph) && notNull(platformMovement) && notNull(newTarget->transform)) {
 		int index = platformGraph->getIndex(newTarget->transform->getPosition());
 		if (index < 0) return;

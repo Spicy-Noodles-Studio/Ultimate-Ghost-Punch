@@ -1,4 +1,5 @@
 #include "StateMachine.h"
+
 #include "StateAction.h"
 
 StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) , currentState(nullptr)

@@ -1,9 +1,10 @@
 #include "PlayerFX.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <MeshRenderer.h>
 #include <sstream>
 
-#include "MeshRenderer.h"
 #include "Health.h"
 #include "GhostManager.h"
 

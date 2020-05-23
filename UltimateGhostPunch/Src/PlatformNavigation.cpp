@@ -115,7 +115,7 @@ std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 			NavigationLink edge = edges[i];
 			int toIndex = edge.getConnection();
 			float toCost = edge.getDuration();
-			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x); // Coste de recorrer la plataforma
+			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x); // Cost of going through the platform
 			// If find a better cost
 			if (cost[index] + toCost + beginCost < cost[toIndex]) {
 				cost[toIndex] = cost[index] + toCost + beginCost;
@@ -143,7 +143,7 @@ void PlatformNavigation::moveToStartingPoint(const PathNode& node)
 
 	Vector3 startPos = node.platform.getEdge(node.index).getIniPos(), characterPos = character->transform->getWorldPosition();
 
-	// Si la diferencia en altura el muy grande, node no es valido
+	// If the difference in heights is too high the node is not valid
 	if (std::abs(characterPos.y - startPos.y) > 1.0f) return;
 
 	float diff = std::abs(characterPos.x - startPos.x);

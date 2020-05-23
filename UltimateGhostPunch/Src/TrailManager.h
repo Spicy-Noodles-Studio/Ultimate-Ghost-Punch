@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TRAIL_MANAGER
-#define TRAIL_MANAGER
+#ifndef TRAIL_MANAGER_H
+#define TRAIL_MANAGER_H
 #include <UserComponent.h>
 
 class Trail;
