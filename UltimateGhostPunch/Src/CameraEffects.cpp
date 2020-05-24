@@ -1,11 +1,13 @@
 #include "CameraEffects.h"
+
 #include <ComponentRegister.h>
 #include <RenderSystem.h>
-#include <InputSystem.h>
+#include <WindowManager.h>
 #include <GameObject.h>
+#include <MathUtils.h>
 #include <Camera.h>
-#include "WindowManager.h"
-#include "MathUtils.h"
+#include <sstream>
+
 
 REGISTER_FACTORY(CameraEffects);
 

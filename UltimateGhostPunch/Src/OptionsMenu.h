@@ -48,7 +48,7 @@ protected:
 
 	std::vector<std::string> resolutionNames;
 	std::vector<std::string> screenNames;
-	std::vector<std::pair<int, int>> resolutions;
+	std::vector<std::pair<unsigned int, unsigned int>> resolutions;
 
 protected:
 	bool applyButtonClick();
