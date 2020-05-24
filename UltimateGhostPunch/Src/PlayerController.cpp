@@ -250,29 +250,33 @@ bool PlayerController::getButton(const std::string& button)
 
 int PlayerController::getControllerHorizontalLeftAxis()
 {
+	checkNullAndBreak(inputSystem, 0);
 	if (controllerIndex < 4)
-		return notNull(inputSystem) && inputSystem->getLeftJoystick(controllerIndex).first;
+		return inputSystem->getLeftJoystick(controllerIndex).first;
 	else return 0;
 }
 
 int PlayerController::getControllerHorizontalRightAxis()
 {
+	checkNullAndBreak(inputSystem, 0);
 	if (controllerIndex < 4)
-		return notNull(inputSystem) && inputSystem->getRightJoystick(controllerIndex).first;
+		return inputSystem->getRightJoystick(controllerIndex).first;
 	else return 0;
 }
 
 int PlayerController::getControllerVerticalLeftAxis()
 {
+	checkNullAndBreak(inputSystem, 0);
 	if (controllerIndex < 4)
-		return notNull(inputSystem) && inputSystem->getLeftJoystick(controllerIndex).second;
+		return inputSystem->getLeftJoystick(controllerIndex).second;
 	else return 0;
 }
 
 int PlayerController::getControllerVerticalRightAxis()
 {
+	checkNullAndBreak(inputSystem, 0);
 	if (controllerIndex < 4)
-		return notNull(inputSystem) && inputSystem->getRightJoystick(controllerIndex).second;
+		return inputSystem->getRightJoystick(controllerIndex).second;
 	else return 0;
 }
 
