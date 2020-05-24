@@ -112,10 +112,8 @@ public:
 	float getInitialBrightness() const;
 
 	// Other functions
-	bool isAnyGhost() const;
 	GameObject* getAnyGhost();
-
-	std::vector<GameObject*> getAlivePlayers();
+	std::vector<GameObject*> getAlivePlayers(bool getGhosts);
 
 	void pauseAllSounds();
 	void resumeAllSound();

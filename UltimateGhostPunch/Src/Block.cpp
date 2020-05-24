@@ -24,7 +24,7 @@ Block::~Block()
 void Block::start()
 {
 	parent = gameObject->getParent();
-	if(notNull(parent)) playerFX = parent->getComponent<PlayerFX>();
+	if (notNull(parent)) playerFX = parent->getComponent<PlayerFX>();
 
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
@@ -36,7 +36,7 @@ void Block::update(float deltaTime)
 {
 	if (!grounded && blocking)
 	{
-		blocking = false;
+		unblock();
 		return;
 	}
 

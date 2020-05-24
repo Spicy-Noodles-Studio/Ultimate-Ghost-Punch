@@ -1,5 +1,4 @@
 #include "SongManager.h"
-
 #include <GameObject.h>
 #include <SoundEmitter.h>
 #include <ComponentRegister.h>
@@ -53,7 +52,7 @@ void SongManager::update(float deltaTime)
 
 void SongManager::playMenuSong()
 {
-	if(!notNull(soundEmitter)) soundEmitter = gameObject->getComponent<SoundEmitter>();
+	if (!notNull(soundEmitter)) soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	if (!songPlaying && notNull(soundEmitter)) {
 		soundEmitter->playMusic(menuMusic);
@@ -106,8 +105,8 @@ void SongManager::play2DSound(const std::string& sound)
 
 void SongManager::ghostSong()
 {
-	if (notNull(soundEmitter) && notNull(gameManager) && gameManager->isAnyGhost())
+	if (notNull(soundEmitter) && notNull(gameManager) && gameManager->getAnyGhost() != nullptr)
 		soundEmitter->setPitch(0.65);
-	else if(notNull(soundEmitter))
+	else if (notNull(soundEmitter))
 		soundEmitter->setPitch(1.0);
 }

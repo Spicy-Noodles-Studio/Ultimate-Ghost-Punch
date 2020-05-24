@@ -213,23 +213,6 @@ float GameManager::getInitialBrightness() const
 	return initialBrightness;
 }
 
-bool GameManager::isAnyGhost() const
-{
-	int i = 0;
-	bool anyGhost = false;
-	while (i < knights.size() && !anyGhost)
-	{
-		if (notNull(knights[i]))
-		{
-			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
-			anyGhost = notNull(ghostManager) && ghostManager->isGhost();
-		}
-		i++;
-	}
-
-	return anyGhost;
-}
-
 GameObject* GameManager::getAnyGhost()
 {
 	int i = 0;
@@ -243,18 +226,27 @@ GameObject* GameManager::getAnyGhost()
 		}
 		i++;
 	}
-
 	return anyGhost;
 }
 
-std::vector<GameObject*> GameManager::getAlivePlayers()
+std::vector<GameObject*> GameManager::getAlivePlayers(bool getGhosts)
 {
 	std::vector<GameObject*> alive;
-	for (GameObject* p : knights)
+	for (GameObject* player : knights)
 	{
-		if (notNull(p)) {
-			PlayerState* state = p->getComponent<PlayerState>();
-			if (notNull(state) && !state->isDead()) alive.push_back(p);
+		if (notNull(player))
+		{
+			PlayerState* state = player->getComponent<PlayerState>();
+			if (getGhosts)
+			{
+				if (notNull(state) && !state->isDead())
+					alive.push_back(player);
+			}
+			else
+			{
+				if (notNull(state) && !state->isDead() && !state->isGhost())
+					alive.push_back(player);
+			}
 		}
 	}
 	return alive;

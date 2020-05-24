@@ -314,7 +314,7 @@ void AIStateMachine::changeTarget()
 	if (notNull(fightingState) && fightingState->isFighting() && notNull(GameManager::GetInstance()) || (notNull(currentState) && notNull(platformNavigation) && currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
 		return;
 
-	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
 	int size = alive.size();
 	// Check if only the AI is alive
 	if (size <= 1) return;
