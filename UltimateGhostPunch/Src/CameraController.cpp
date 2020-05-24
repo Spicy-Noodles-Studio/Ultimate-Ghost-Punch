@@ -6,7 +6,6 @@
 #include <sstream>
 
 #include "GameManager.h"
-#include "UltimateGhostPunch.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(CameraController);
@@ -263,7 +262,7 @@ GameObject* CameraController::someonePunching()
 	int n = players.size();
 
 	int i = 0;
-	while (i < n && notNull(players[i]) && notNull(players[i]->getComponent<UltimateGhostPunch>()) && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
+	while (i < n && notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()) && !players[i]->getComponent<PlayerState>()->isPunching())
 		i++;
 
 	if (i < n) return players[i];

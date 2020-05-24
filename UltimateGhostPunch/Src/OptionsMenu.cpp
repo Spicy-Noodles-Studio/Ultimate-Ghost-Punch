@@ -39,10 +39,11 @@ bool OptionsMenu::applyButtonClick()
 
 bool OptionsMenu::restoreButtonClick()
 {
-	if (notNull(gameManager))
+	if (notNull(gameManager)) {
 		brightness = gameManager->getInitialBrightness();
-	soundVolume = 100;
-	musicVolume = 100;
+		soundVolume = gameManager->getInitialSoundVolume();
+		musicVolume = gameManager->getInitialMusicVolume();
+	}
 
 	fullscreen = false;
 	resolution = initialResolution;

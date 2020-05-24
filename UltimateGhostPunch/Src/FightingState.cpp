@@ -56,9 +56,6 @@ void FightingState::selectAction()
 {
 	checkNullAndBreak(character);
 
-	Health* health = character->getComponent<Health>();
-	if (!notNull(health) || !health->isAlive() || health->isInvencible()) return;
-
 	if (lastAction == ActionInput::DODGE && notNull(dodgeComp) && !dodgeComp->isDodging()) turnTowardsTarget(); // Turn towards target after dodge
 
 	if (notNull(blockComp) && blockComp->isBlocking())
@@ -79,10 +76,6 @@ void FightingState::selectAction()
 		stateMachine->addActionInput(ActionInput::DODGE);
 	}
 
-	// Wait til the AI lands
-	if (notNull(playerState) && !playerState->isGrounded()/* || pState->isJumping()*/)
-		return;
-
 	checkNullAndBreak(target);
 
 	Health* targetHealth = target->getComponent<Health>();
@@ -99,7 +92,6 @@ void FightingState::selectAction()
 		transitionToPlatformNav();
 		return;
 	}
-
 
 	// AIR COMBAT
 	PlayerState* targetState = target->getComponent<PlayerState>();
@@ -126,22 +118,20 @@ void FightingState::selectAction()
 			quickAttack();
 		else if (rnd < quickAttackProb_QAR + strongAttackProb_QAR)	// Action: Strong Attack
 			strongAttack();
-		else														// Action: Try to shield
-			if (blockSpamTime <= 0)
-				block();
+		else if (blockSpamTime <= 0)								// Action: Try to shield 
+			block();
 		return;
 	}
 
 	// STRONG ATTACK RANGE
 	if (enemyInStrongAttackRange())
 	{
-		if (rnd < strongAttackProb_SAR)					// Action: Strong Attack
+		if (rnd < strongAttackProb_SAR)							// Action: Strong Attack
 			strongAttack();
-		else if (rnd < strongAttackProb_SAR + seekProb_SAR)					// Action: Transition to seek
+		else if (rnd < strongAttackProb_SAR + seekProb_SAR)		// Action: Transition to seek
 			transitionToPlatformNav();
-		else											// Action: Try to shield
-			if (blockSpamTime <= 0)
-				block();
+		else if (blockSpamTime <= 0)							// Action: Try to shield
+			block();
 
 		return;
 	}

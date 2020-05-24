@@ -22,6 +22,7 @@ public:
 
 	void move(Vector3 dir);
 	void stop(); // Stops the object's physic body movement and clear its forces
+	void stopHorizontal(); // Stops the player from moving in the X axis, used for the AI
 
 	void setSpeed(float speed);
 	float getSpeed() const;

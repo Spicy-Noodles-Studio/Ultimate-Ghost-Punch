@@ -28,6 +28,8 @@ public:
 	TrailManager(GameObject* gameObject);
 	virtual ~TrailManager();
 
+	void stopAll();
+
 private:
 	// Trails creation
 	void createTrail(Trail** trail, const std::string& trailFilename);

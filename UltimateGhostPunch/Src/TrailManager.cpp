@@ -27,6 +27,15 @@ TrailManager::~TrailManager()
 	playerState = nullptr;
 }
 
+void TrailManager::stopAll()
+{
+	if (notNull(quickAttackTrail)) quickAttackTrail->stop();
+	if (notNull(heavyAttackTrail)) heavyAttackTrail->stop();
+	if (notNull(dashTrail)) dashTrail->stop();
+	if (notNull(thrownTrail)) thrownTrail->stop();
+	if (notNull(UGPTrail)) UGPTrail->stop();
+}
+
 void TrailManager::start()
 {
 	// PlayerState for info

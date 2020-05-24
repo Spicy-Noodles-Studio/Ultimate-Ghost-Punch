@@ -215,7 +215,7 @@ void AIStateMachine::processActionInput()
 			if (notNull(dodge))dodge->dodge();
 			break;
 		case ActionInput::STOP:
-			if (notNull(movement))movement->stop();
+			if (notNull(movement))movement->stopHorizontal();
 			dir = Vector3::ZERO;
 			break;
 			/*GHOST*/
@@ -357,9 +357,12 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 
 void AIStateMachine::selectPlatformState()
 {
-	if (!notNull(platformNavigation)) return;
-	if (platformNavigation->hasArrived())
+	checkNullAndBreak(platformNavigation);
+
+	if (platformNavigation->hasArrived()) {
+		LOG("ARRIVED, %s", gameObject->getName().c_str());
 		currentState = platformMovement; // Target in the current platform
+	}
 	else
 		currentState = platformNavigation; // Target in different platform
 }

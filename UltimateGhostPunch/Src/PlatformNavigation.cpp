@@ -69,7 +69,7 @@ void PlatformNavigation::setTarget(const PlatformNode& node)
 
 bool PlatformNavigation::hasArrived() const
 {
-	if (!notNull(character) || !notNull(character->transform) || notNull(platformGraph)) return false;
+	if (!notNull(character) || !notNull(character->transform) || !notNull(platformGraph)) return false;
 
 	return target.getIndex() == platformGraph->getIndex(character->transform->getWorldPosition());
 }
@@ -116,7 +116,7 @@ std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 		if (prevCost > cost[index]) continue;
 		// For each connection
 		int ghostIndex = -1;
-		if (notNull(fleeingTarget) && notNull(fleeingTarget->transform))
+		if (fleeingTarget != nullptr && notNull(fleeingTarget->transform))
 			ghostIndex = platformGraph->getClosestIndex(fleeingTarget->transform->getPosition());
 
 		auto edges = graph[index].getEdges();
@@ -126,27 +126,28 @@ std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 			float toCost = edge.getDuration();
 			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x); // Cost of going through the platform
 			float ghostCost = 0;
-			if (edge.getConnection() == ghostIndex) { ghostCost = 1000;  LOG("FANTASMA EVITADO")}
+			if (edge.getConnection() == ghostIndex)
+				ghostCost = 1000;
 
-		// If find a better cost
-		if (cost[index] + toCost + beginCost + ghostCost < cost[toIndex]) {
-			cost[toIndex] = cost[index] + toCost + beginCost + ghostCost;
-			pq.push({ cost[toIndex], toIndex });
-			route[toIndex] = { index, i };
+			// If find a better cost
+			if (cost[index] + toCost + beginCost + ghostCost < cost[toIndex]) {
+				cost[toIndex] = cost[index] + toCost + beginCost + ghostCost;
+				pq.push({ cost[toIndex], toIndex });
+				route[toIndex] = { index, i };
+			}
 		}
 	}
-}
 
-// Build path
-int index = target.getIndex();
-while (index >= 0 && index < route.size() && startIndex != index) {
-	if (route[index].first >= 0 && route[index].first < graph.size())
-		path.push_back({ graph[route[index].first], route[index].second });
+	// Build path
+	int index = target.getIndex();
+	while (index >= 0 && index < route.size() && startIndex != index) {
+		if (route[index].first >= 0 && route[index].first < graph.size())
+			path.push_back({ graph[route[index].first], route[index].second });
 
-	std::reverse(path.begin(), path.end());
-	index = route[index].first;
-}
-return path;
+		std::reverse(path.begin(), path.end());
+		index = route[index].first;
+	}
+	return path;
 }
 
 void PlatformNavigation::moveToStartingPoint(const PathNode& node)

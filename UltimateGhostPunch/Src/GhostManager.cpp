@@ -20,6 +20,7 @@
 #include "GameManager.h"
 #include "ParticleManager.h"
 #include "SoundManager.h"
+#include "TrailManager.h"
 #include "CameraEffects.h"
 
 REGISTER_FACTORY(GhostManager);
@@ -303,6 +304,11 @@ void GhostManager::deactivatePlayer()
 
 	if (notNull(soundManager))
 		soundManager->stopAll();
+
+	TrailManager* trailManager = gameObject->getComponent<TrailManager>();
+
+	if (notNull(trailManager))
+		trailManager->stopAll();
 
 	if (notNull(game))
 		game->playerDeath();

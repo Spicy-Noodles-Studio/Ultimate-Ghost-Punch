@@ -64,6 +64,12 @@ void Movement::stop()
 	}
 }
 
+void Movement::stopHorizontal()
+{
+	if (notNull(rigidBody))
+		rigidBody->setLinearVelocity({0, rigidBody->getLinearVelocity().y, 0});
+}
+
 void Movement::setSpeed(float speed)
 {
 	this->speed = speed;

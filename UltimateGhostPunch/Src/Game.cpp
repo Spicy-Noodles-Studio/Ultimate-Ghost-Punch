@@ -10,6 +10,7 @@
 #include <UILayout.h>
 #include <ParticleEmitter.h>
 #include <GaiaData.h>
+#include <Timer.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
@@ -515,6 +516,9 @@ void Game::chooseWinner()
 
 	if (notNull(songManager))
 		songManager->play2DSound("victory4");
+
+	if (notNull(Timer::GetInstance()))
+		Timer::GetInstance()->setTimeScale(1.0f);
 }
 
 std::pair<std::string, std::string> Game::timeToText()

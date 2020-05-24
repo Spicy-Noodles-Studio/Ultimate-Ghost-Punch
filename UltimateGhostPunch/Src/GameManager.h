@@ -55,6 +55,8 @@ private:
 	bool timeMode;
 
 	float initialBrightness;
+	float initialMusicVolume;
+	float initialSoundVolume;
 
 protected:
 	virtual void start();
@@ -110,6 +112,8 @@ public:
 	bool getTimeMode() const;
 
 	float getInitialBrightness() const;
+	float getInitialSoundVolume() const;
+	float getInitialMusicVolume() const;
 
 	// Other functions
 	GameObject* getAnyGhost();

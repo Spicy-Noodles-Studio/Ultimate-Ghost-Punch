@@ -4,6 +4,7 @@
 #include <SoundEmitter.h>
 #include <GameObject.h>
 #include <WindowManager.h>
+#include <SoundSystem.h>
 
 #include "PlayerState.h"
 #include "Timer.h"
@@ -19,11 +20,16 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(6), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(6), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f), initialMusicVolume(0.5f), initialSoundVolume(0.5f)
 {
 	if (instance == nullptr) {
 		instance = this;
-		WindowManager::GetInstance()->setBrightness(initialBrightness);
+		if (notNull(WindowManager::GetInstance()))
+			WindowManager::GetInstance()->setBrightness(initialBrightness);
+		if (notNull(SoundSystem::GetInstance())) {
+			SoundSystem::GetInstance()->setMusicVolume(initialMusicVolume);
+			SoundSystem::GetInstance()->setSoundEffectsVolume(initialSoundVolume);
+		}
 	}
 	else
 		destroy(gameObject);
@@ -211,6 +217,16 @@ bool GameManager::getTimeMode() const
 float GameManager::getInitialBrightness() const
 {
 	return initialBrightness;
+}
+
+float GameManager::getInitialSoundVolume() const
+{
+	return initialSoundVolume;
+}
+
+float GameManager::getInitialMusicVolume() const
+{
+	return initialMusicVolume;
 }
 
 GameObject* GameManager::getAnyGhost()
