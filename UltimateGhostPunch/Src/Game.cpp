@@ -13,6 +13,7 @@
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
+#include "PlayerState.h"
 #include "Score.h"
 #include "Health.h"
 #include "GhostManager.h"
@@ -465,6 +466,10 @@ void Game::setRanking()
 		Health* health = knights[i]->getComponent<Health>();
 		if (notNull(health))
 			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
+
+		PlayerState* state = knights[i]->getComponent<PlayerState>();
+		if (notNull(state))
+			state->setIgnoringInput(true);
 	}
 
 	std::priority_queue<ii, std::vector<ii>, Less> aux = gameManager->getRanking();
@@ -491,6 +496,8 @@ void Game::setRanking()
 		gameManager->setWinner(-1);
 	else
 		gameManager->setWinner(gameManager->getRanking().top().first);
+
+	gameManager->emptyRanking();
 }
 
 void Game::chooseWinner()

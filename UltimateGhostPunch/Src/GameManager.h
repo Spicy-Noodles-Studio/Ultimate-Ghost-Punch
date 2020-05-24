@@ -76,8 +76,10 @@ public:
 	int getPlayerRanking(int index) const;
 
 	std::priority_queue<ii, std::vector<ii>, Less>& getRanking();
+	void emptyRanking();
 
 	std::vector<Vector3>& getPlayerColours();
+
 	std::vector<GameObject*>& getKnights();
 	void emptyKnights();
 

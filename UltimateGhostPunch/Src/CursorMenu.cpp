@@ -1,5 +1,6 @@
 #include "CursorMenu.h"
 #include <InputSystem.h>
+#include <InterfaceSystem.h>
 #include <GameObject.h>
 #include <Cursor.h>
 
@@ -22,6 +23,10 @@ void CursorMenu::start()
 {
 	inputSystem = InputSystem::GetInstance();
 	cursor = gameObject->getComponent<Cursor>();
+
+	InterfaceSystem* interfaceSystem = InterfaceSystem::GetInstance();
+	if (notNull(interfaceSystem))
+		interfaceSystem->setControllerNavigation(true);
 
 	checkNull(inputSystem);
 	checkNullAndBreak(cursor);

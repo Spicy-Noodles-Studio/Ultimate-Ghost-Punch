@@ -86,6 +86,12 @@ std::priority_queue<ii, std::vector<ii>, Less>& GameManager::getRanking()
 	return ranking;
 }
 
+void GameManager::emptyRanking()
+{
+	while (!ranking.empty())
+		ranking.pop();
+}
+
 std::vector<Vector3>& GameManager::getPlayerColours()
 {
 	return playerColours;
