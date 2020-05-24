@@ -135,6 +135,11 @@ void Game::playerDeath()
 		chooseWinner();
 }
 
+float Game::getTime() const
+{
+	return timer;
+}
+
 Vector3 Game::getPlayerInitialPosition(int player)
 {
 	if (player > 0 && player <= playerTransforms.size())

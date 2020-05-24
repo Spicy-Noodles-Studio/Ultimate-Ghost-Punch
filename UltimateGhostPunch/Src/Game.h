@@ -79,6 +79,7 @@ public:
 
 	void playerDeath();
 
+	float getTime() const;
 	Vector3 getPlayerInitialPosition(int player);
 	CameraEffects* getCameraEffects();
 };

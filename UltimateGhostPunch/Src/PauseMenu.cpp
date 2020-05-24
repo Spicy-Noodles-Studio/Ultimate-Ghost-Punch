@@ -7,8 +7,9 @@
 #include <GameObject.h>
 #include <UILayout.h>
 
-#include "GameManager.h"
 #include "SongManager.h"
+#include "GameManager.h"
+#include "Game.h"
 #include "Countdown.h"
 
 REGISTER_FACTORY(PauseMenu);
@@ -96,11 +97,15 @@ void PauseMenu::start()
 	GameObject* countdownObject = findGameObjectWithName("Countdown");
 	if (notNull(countdownObject))
 		countdown = countdownObject->getComponent<Countdown>();
+
+	GameObject* object = findGameObjectWithName("Game");
+	if (notNull(object))
+		game = object->getComponent<Game>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(game) && game->getTime() > 0 && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
 		setPaused(!gameManager->isPaused());
 }
 

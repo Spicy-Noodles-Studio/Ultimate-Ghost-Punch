@@ -5,11 +5,13 @@
 #include <UIElement.h>
 #include "Menu.h"
 
+class Game;
 class Countdown;
 
 class PauseMenu : public Menu
 {
 private:
+	Game* game;
 	Countdown* countdown;
 
 	UIElement pauseMenu;

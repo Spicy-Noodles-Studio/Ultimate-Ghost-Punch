@@ -114,7 +114,10 @@ void ConfigurationMenu::start()
 				if (indexes[i] != -1)
 				{
 					if (indexes[i] == 9)
+					{
 						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("IA");
+						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Button").setText("Clear IA");
+					}
 					else
 					{
 						slots[i].second.getChild("Slot" + std::to_string(i + 1) + "Text").setText("Player " + std::to_string(i + 1));
