@@ -178,17 +178,17 @@ void AIStateMachine::startFleeingState(GameObject* fleeTarget)
 		!notNull(target->transform) || !notNull(gameObject->transform) || !notNull(fleeTarget->transform)) return;
 	// Fleeing state uses platform Navigation to move to the farthest platform away from the target
 	// and platform movement to run away in the current platform
-	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(target->transform->getPosition())];
+	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(fleeTarget->transform->getPosition())];
 	// Fleeing between platforms
 	platformNavigation->setTarget(node);
-	platformNavigation->setFleeing(true);
+	platformNavigation->setFleeing(true, fleeTarget);
 	// Fleeing in the same platform
 	platformMovement->setLimits(node.getBegining().x, node.getEnd().x);
 	Vector3 AIpos = gameObject->transform->getPosition();
 	platformMovement->setTargetPosition((fleeTarget->transform->getPosition().x <= AIpos.x) ?
-		node.getEnd() - Vector3(1, 0, 0)
-		: node.getBegining() + Vector3(1, 0, 0));
-
+		node.getEnd() - Vector3::RIGHT
+		: node.getBegining() + Vector3::RIGHT);
+	
 	selectPlatformState();
 }
 
@@ -311,9 +311,11 @@ void AIStateMachine::createFightingState()
 
 void AIStateMachine::changeTarget()
 {
-	if (notNull(fightingState) && fightingState->isFighting() && notNull(GameManager::GetInstance()) || (notNull(currentState) && notNull(platformNavigation) && currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
+	if ((notNull(fightingState) && fightingState->isFighting()) || (notNull(currentState) && notNull(ghostNavigation) && currentState == ghostNavigation) ||
+		(notNull(currentState) && notNull(platformNavigation) && currentState == platformNavigation && platformNavigation->isFleeing())) // Do not change target while fighting or fleeing
 		return;
 
+	checkNullAndBreak(GameManager::GetInstance());
 	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
 	int size = alive.size();
 	// Check if only the AI is alive
@@ -355,8 +357,8 @@ void AIStateMachine::setTarget(GameObject* newTarget)
 
 void AIStateMachine::selectPlatformState()
 {
-	if (!notNull(target) || !notNull(platformGraph) || !notNull(target->transform)) return;
-	if (platformGraph->getFurthestIndex(target->transform->getPosition()) == platformGraph->getClosestIndex(gameObject->transform->getPosition()))
+	if (!notNull(platformNavigation)) return;
+	if (platformNavigation->hasArrived())
 		currentState = platformMovement; // Target in the current platform
 	else
 		currentState = platformNavigation; // Target in different platform
@@ -370,14 +372,6 @@ void AIStateMachine::updateState()
 	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
 	if (notNull(ghostManager) && !ghostManager->isGhost() && ghost != nullptr && notNull(ghost->transform) && notNull(gameObject->transform))
 	{
-		float ghostDist = (ghost->transform->getPosition() - gameObject->transform->getPosition()).magnitude();
-		if (ghostDist <= avoidGhostDist)
-		{
-			if (notNull(jump)) jump->jump();
-			if (notNull(fightingState)) fightingState->turnBackOnTarget();
-			addActionInput(ActionInput::DODGE);
-		}
-
 		startFleeingState(ghost);
 		return;
 	}

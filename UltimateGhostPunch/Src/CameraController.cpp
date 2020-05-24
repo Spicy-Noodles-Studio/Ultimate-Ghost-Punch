@@ -152,7 +152,7 @@ float CameraController::getMaxDistBetweenPlayers()
 {
 	// Vector with every player alive
 	checkNullAndBreak(GameManager::GetInstance(), 0);
-	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(false);
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
 
 	// Number of players alive
 	int n = alive.size();
@@ -208,7 +208,7 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 	checkNullAndBreak(GameManager::GetInstance(), Vector3::ZERO);
 
 	// Vector with every player alive
-	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(false);
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
 
 	// Number of players alive
 	int n = alive.size();

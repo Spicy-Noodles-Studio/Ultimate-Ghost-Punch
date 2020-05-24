@@ -33,7 +33,7 @@ public:
 	/* Returns true if character is over target */
 	bool hasArrived() const;
 
-	void setFleeing(bool fleeing);
+	void setFleeing(bool fleeing, GameObject* fleeingTarget);
 	bool isFleeing() const;
 private:
 
@@ -49,6 +49,7 @@ private:
 	GameObject* targetObject;
 
 	GameObject* character;	// Source
+	GameObject* fleeingTarget;
 
 	bool movingThroughLink;
 	bool fleeing;

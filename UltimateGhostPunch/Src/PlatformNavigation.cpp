@@ -8,7 +8,7 @@
 #include "Movement.h"
 
 PlatformNavigation::PlatformNavigation(StateMachine* stateMachine) : StateAction(stateMachine), platformGraph(nullptr), character(nullptr), targetObject(nullptr), movingThroughLink(false), fleeing(false),
-linkInUse(NavigationLink()), time(0.0f), lastState(-1), target(PlatformNode())
+linkInUse(NavigationLink()), time(0.0f), lastState(-1), target(PlatformNode()), fleeingTarget(nullptr)
 {
 
 }
@@ -18,6 +18,8 @@ PlatformNavigation::~PlatformNavigation()
 	platformGraph = nullptr;
 	character = nullptr;
 	targetObject = nullptr;
+
+	fleeingTarget = nullptr;
 }
 
 void PlatformNavigation::setPlatformGraph(PlatformGraph* platformGraph)
@@ -72,9 +74,10 @@ bool PlatformNavigation::hasArrived() const
 	return target.getIndex() == platformGraph->getIndex(character->transform->getWorldPosition());
 }
 
-void PlatformNavigation::setFleeing(bool fleeing)
+void PlatformNavigation::setFleeing(bool fleeing, GameObject* fleeingTarget)
 {
 	this->fleeing = fleeing;
+	this->fleeingTarget = fleeingTarget;
 }
 
 bool PlatformNavigation::isFleeing() const
@@ -112,31 +115,38 @@ std::vector<PlatformNavigation::PathNode> PlatformNavigation::getShortestPath()
 
 		if (prevCost > cost[index]) continue;
 		// For each connection
+		int ghostIndex = -1;
+		if (notNull(fleeingTarget) && notNull(fleeingTarget->transform))
+			ghostIndex = platformGraph->getClosestIndex(fleeingTarget->transform->getPosition());
+
 		auto edges = graph[index].getEdges();
 		for (int i = 0; i < edges.size(); i++) {
 			NavigationLink edge = edges[i];
 			int toIndex = edge.getConnection();
 			float toCost = edge.getDuration();
 			float beginCost = std::abs(edge.getIniPos().x - character->transform->getWorldPosition().x); // Cost of going through the platform
-			// If find a better cost
-			if (cost[index] + toCost + beginCost < cost[toIndex]) {
-				cost[toIndex] = cost[index] + toCost + beginCost;
-				pq.push({ cost[toIndex], toIndex });
-				route[toIndex] = { index, i };
-			}
+			float ghostCost = 0;
+			if (edge.getConnection() == ghostIndex) { ghostCost = 1000;  LOG("FANTASMA EVITADO")}
+
+		// If find a better cost
+		if (cost[index] + toCost + beginCost + ghostCost < cost[toIndex]) {
+			cost[toIndex] = cost[index] + toCost + beginCost + ghostCost;
+			pq.push({ cost[toIndex], toIndex });
+			route[toIndex] = { index, i };
 		}
 	}
+}
 
-	// Build path
-	int index = target.getIndex();
-	while (index >= 0 && index < route.size() && startIndex != index) {
-		if (route[index].first >= 0 && route[index].first < graph.size())
-			path.push_back({ graph[route[index].first], route[index].second });
+// Build path
+int index = target.getIndex();
+while (index >= 0 && index < route.size() && startIndex != index) {
+	if (route[index].first >= 0 && route[index].first < graph.size())
+		path.push_back({ graph[route[index].first], route[index].second });
 
-		std::reverse(path.begin(), path.end());
-		index = route[index].first;
-	}
-	return path;
+	std::reverse(path.begin(), path.end());
+	index = route[index].first;
+}
+return path;
 }
 
 void PlatformNavigation::moveToStartingPoint(const PathNode& node)
@@ -227,6 +237,7 @@ void PlatformNavigation::update(float deltaTime)
 		if (fleeing)
 		{
 			fleeing = false;
+			fleeingTarget = nullptr;
 			((AIStateMachine*)stateMachine)->changeTarget();
 			((AIStateMachine*)stateMachine)->startPlatformNavigation();
 		}
