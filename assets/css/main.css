@@ -33,8 +33,9 @@
 
 	.responsive {
   		width: 100%;
-  		max-width: 100%;
+  		max-width: 150px;
   		height: auto;
+  		max-height: 150px;
 	}
 
 	.blockquote-border-right {
