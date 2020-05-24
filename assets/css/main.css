@@ -37,6 +37,17 @@
   		height: auto;
 	}
 
+	.blockquote-border-right {
+		/*border-right: 5px solid #FFFFFF40 !important;*/
+		border-right-style: solid;
+		border-right-width: 4px;
+		line-height: 1.5em;
+		border-right-color: #cdcdcd;
+		border-left-width:0px!important;
+		border-left-style:0px transparent solid!important;
+		padding-right: 30px;
+	}
+
 	ol, ul {
 		list-style: none;
 	}
