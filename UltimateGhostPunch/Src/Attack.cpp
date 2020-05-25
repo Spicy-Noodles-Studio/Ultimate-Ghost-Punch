@@ -34,7 +34,7 @@ void Attack::start()
 
 	parent = gameObject->getParent();
 	if (notNull(parent) && notNull(parent->getComponent<PlayerIndex>()))
-		id = parent->getComponent<PlayerIndex>()->getIndex();
+		id = parent->getComponent<PlayerIndex>()->getPos();
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
 	if (notNull(GameManager::GetInstance()))
@@ -165,10 +165,10 @@ void Attack::onObjectStay(GameObject* other)
 				if (notNull(otherIndex) && notNull(score))
 				{
 					score->attackHitted(id);
-					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
+					score->damageReceivedFrom(otherIndex->getPos(), id, damage);
 
 					if (!enemyHealth->isAlive())
-						score->killedBy(otherIndex->getIndex(), id);
+						score->killedBy(otherIndex->getPos(), id);
 				}
 			}
 		}

@@ -161,10 +161,10 @@ void GhostManager::onObjectStay(GameObject* other)
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
 				if (notNull(playerIndex) && notNull(otherIndex))
 				{
-					score->lifeStolenBy(otherIndex->getIndex(), playerIndex->getIndex());
+					score->lifeStolenBy(otherIndex->getPos(), playerIndex->getPos());
 
 					if (!otherHealth->isAlive())
-						score->killedBy(otherIndex->getIndex(), playerIndex->getIndex());
+						score->killedBy(otherIndex->getPos(), playerIndex->getPos());
 				}
 			}
 

@@ -484,8 +484,17 @@ bool ConfigurationMenu::startButtonClick()
 	gameManager->setInitialPlayers(nPlayers);
 
 	std::vector<int> indexes;
+	std::vector<int> aux;
+
 	for (int i = 0; i < 4; i++)
+	{
 		indexes.push_back(slots[i].first);
+
+		if (slots[i].first != -1)
+			aux.push_back(i + 1);
+	}
+
+	gameManager->getScore()->setPlayerID(aux);
 
 	gameManager->setPlayerIndexes(indexes);
 

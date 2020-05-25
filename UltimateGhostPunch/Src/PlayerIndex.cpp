@@ -6,7 +6,7 @@
 
 REGISTER_FACTORY(PlayerIndex);
 
-PlayerIndex::PlayerIndex(GameObject* gameObject) :UserComponent(gameObject), index(0)
+PlayerIndex::PlayerIndex(GameObject* gameObject) :UserComponent(gameObject), index(0), pos(0)
 {
 
 }
@@ -37,7 +37,17 @@ int PlayerIndex::getIndex()
 	return index;
 }
 
-void PlayerIndex::setIndex(int ind)
+void PlayerIndex::setIndex(int index)
 {
-	index = ind;
+	this->index = index;
+}
+
+int PlayerIndex::getPos()
+{
+	return pos;
+}
+
+void PlayerIndex::setPos(int pos)
+{
+	this->pos = pos;
 }

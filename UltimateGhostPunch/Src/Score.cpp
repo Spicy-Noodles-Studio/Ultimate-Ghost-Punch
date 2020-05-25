@@ -20,6 +20,16 @@ void Score::clearScores()
 	playerScores.clear();
 }
 
+void Score::setPlayerID(std::vector<int>& playerID)
+{
+	this->playerID = playerID;
+}
+
+std::vector<int>& Score::getPlayerID()
+{
+	return playerID;
+}
+
 void Score::initScorePlayer(ScorePlayer* player)
 {
 	player->amountOfDamageDealt = 0;
@@ -56,137 +66,137 @@ void Score::initScore(int numOfPlayers)
 
 void Score::attackDone(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->numOfTotalAttacks++;
+	playerScores[playerIndex]->numOfTotalAttacks++;
 }
 
 void Score::attackHitted(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->numOfHits++;
+	playerScores[playerIndex]->numOfHits++;
 }
 
 void Score::damageReceivedFrom(int playerIndex, int fromIndex, int amount)
 {
-	if (!correctIndex(playerIndex - 1) || !correctIndex(fromIndex - 1) || !notNull(playerScores[fromIndex - 1]) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !correctIndex(fromIndex) || !notNull(playerScores[fromIndex]) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->totalDamageTaken += amount;
-	playerScores[fromIndex - 1]->amountOfDamageDealt += amount;
+	playerScores[playerIndex]->totalDamageTaken += amount;
+	playerScores[fromIndex]->amountOfDamageDealt += amount;
 
 }
 
 void Score::damagedBySpike(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->totalDamageTaken += 2;
-	playerScores[playerIndex - 1]->amountOfDamageTakenFromSpikes += 2;
+	playerScores[playerIndex]->totalDamageTaken += 2;
+	playerScores[playerIndex]->amountOfDamageTakenFromSpikes += 2;
 }
 
 void Score::fall(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->timesFallen++;
-	playerScores[playerIndex - 1]->totalDamageTaken += 2;
+	playerScores[playerIndex]->timesFallen++;
+	playerScores[playerIndex]->totalDamageTaken += 2;
 }
 
 void Score::grabHitted(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->numOfSuccessfulGrabs++;
+	playerScores[playerIndex]->numOfSuccessfulGrabs++;
 }
 
 void Score::lifeStolenBy(int playerIndex, int fromIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !correctIndex(fromIndex - 1) || !notNull(playerScores[fromIndex - 1]) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !correctIndex(fromIndex) || !notNull(playerScores[fromIndex]) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->totalDamageTaken += 2;
-	playerScores[fromIndex - 1]->lifesStolenAsGhost = 1;
+	playerScores[playerIndex]->totalDamageTaken += 2;
+	playerScores[fromIndex]->lifesStolenAsGhost = 1;
 }
 
 void Score::killedBy(int playerIndex, int fromIndex)
 {
-	if (!correctIndex(fromIndex - 1) || !notNull(playerScores[fromIndex - 1])) return;
+	if (!correctIndex(fromIndex) || !notNull(playerScores[fromIndex])) return;
 
-	playerScores[fromIndex - 1]->numOfKills++;
-	playerScores[fromIndex - 1]->indexesFromEnemiesKilled.push_back(playerIndex);
+	playerScores[fromIndex]->numOfKills++;
+	playerScores[fromIndex]->indexesFromEnemiesKilled.push_back(playerIndex);
 }
 
 void Score::deathByEnviroment(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return;
 
-	playerScores[playerIndex - 1]->deathsByEnviroment++;
+	playerScores[playerIndex]->deathsByEnviroment++;
 }
 
 int Score::getPercentageOfHits(int playerIndex)
 {
 
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1]) || playerScores[playerIndex - 1]->numOfTotalAttacks == 0)
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex]) || playerScores[playerIndex]->numOfTotalAttacks == 0)
 		return 0;
-	return (double)playerScores[playerIndex - 1]->numOfHits / (double)playerScores[playerIndex - 1]->numOfTotalAttacks * 100;
+	return (double)playerScores[playerIndex]->numOfHits / (double)playerScores[playerIndex]->numOfTotalAttacks * 100;
 }
 
 int Score::getSuccessfulGrabs(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->numOfSuccessfulGrabs;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->numOfSuccessfulGrabs;
 }
 
 int Score::getNumberOfAttacks(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->numOfTotalAttacks;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->numOfTotalAttacks;
 }
 
 int Score::getAmountOfDamageDealt(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->amountOfDamageDealt;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->amountOfDamageDealt;
 }
 
 int Score::getLifesStolen(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->lifesStolenAsGhost;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->lifesStolenAsGhost;
 }
 
 int Score::getTimesHittedBySpikes(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->amountOfDamageTakenFromSpikes / 2;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->amountOfDamageTakenFromSpikes / 2;
 }
 
 int Score::getAmountOfFalls(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->timesFallen;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->timesFallen;
 }
 
 int Score::getTotalDamageReceived(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->totalDamageTaken;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->totalDamageTaken;
 }
 
 int Score::getNumberOfKills(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->numOfKills;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->numOfKills;
 }
 
 int Score::getEnviromentDeaths(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return 0;
-	return playerScores[playerIndex - 1]->deathsByEnviroment;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return 0;
+	return playerScores[playerIndex]->deathsByEnviroment;
 }
 
 std::vector<int> Score::getIndexOfPlayersKilled(int playerIndex)
 {
-	if (!correctIndex(playerIndex - 1) || !notNull(playerScores[playerIndex - 1])) return std::vector<int>();
-	return playerScores[playerIndex - 1]->indexesFromEnemiesKilled;
+	if (!correctIndex(playerIndex) || !notNull(playerScores[playerIndex])) return std::vector<int>();
+	return playerScores[playerIndex]->indexesFromEnemiesKilled;
 }

@@ -44,7 +44,7 @@ void Grab::start()
 	playerState = parent->getComponent<PlayerState>();
 
 	checkNullAndBreak(index);
-	id = index->getIndex();
+	id = index->getPos();
 
 }
 
