@@ -50,6 +50,8 @@ GhostManager::~GhostManager()
 
 void GhostManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	transform = gameObject->transform;
 	meshRenderer = gameObject->getComponent<MeshRenderer>();
 	rigidBody = gameObject->getComponent<RigidBody>();
@@ -79,7 +81,6 @@ void GhostManager::start()
 		if (notNull(game))
 			cameraEffects = game->getCameraEffects();
 	}
-
 	checkNull(cameraEffects);
 
 	// Store some data for player resurrection
@@ -142,6 +143,8 @@ void GhostManager::handleData(ComponentData* data)
 
 void GhostManager::onObjectEnter(GameObject* other)
 {
+	checkNullAndBreak(gameObject);
+
 	// If is in ghost mode and other is a player
 	if (mode == GHOST && notNull(other) && other->getTag() == "Player")
 	{
@@ -279,6 +282,7 @@ void GhostManager::deactivateGhost()
 	}
 
 	//Respawn the player
+	checkNullAndBreak(gameObject);
 	Respawn* respawn = gameObject->getComponent<Respawn>();
 	if (notNull(respawn))
 		respawn->spawn(deathPosition);
@@ -294,6 +298,8 @@ void GhostManager::deactivatePlayer()
 		playerUI->setVisible(false);
 		playerUI->updateHearts();
 	}
+
+	checkNullAndBreak(gameObject);
 
 	ParticleManager* particleManager = gameObject->getComponent<ParticleManager>();
 

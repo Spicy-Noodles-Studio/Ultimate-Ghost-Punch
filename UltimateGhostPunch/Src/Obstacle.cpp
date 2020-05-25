@@ -48,7 +48,7 @@ void Obstacle::onCollisionEnter(GameObject* other)
 	if (notNull(other) && other->getTag() == "Player")
 	{
 		int xDir = 0, yDir = 0;
-		if (notNull(other->transform) && notNull(gameObject->transform)) {
+		if (notNull(other->transform) && notNull(gameObject) && notNull(gameObject->transform)) {
 			xDir = other->transform->getPosition().x < gameObject->transform->getPosition().x ? -1 : 1; // PLAYER --> OBSTACLE
 			yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
 		}
@@ -58,7 +58,10 @@ void Obstacle::onCollisionEnter(GameObject* other)
 
 		health->receiveDamage(damage);
 
-		Score* score = GameManager::GetInstance()->getScore();
+		Score* score = nullptr;
+		if(notNull(GameManager::GetInstance()))
+			score = GameManager::GetInstance()->getScore();
+
 		PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
 		if (notNull(score) && notNull(playerIndex))

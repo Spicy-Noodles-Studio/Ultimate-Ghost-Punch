@@ -1,4 +1,5 @@
 #include "CursorGame.h"
+
 #include <InputSystem.h>
 #include <InterfaceSystem.h>
 #include <GameObject.h>
@@ -27,8 +28,10 @@ void CursorGame::start()
 {
 	inputSystem = InputSystem::GetInstance();
 	interfaceSystem = InterfaceSystem::GetInstance();
-	cursor = gameObject->getComponent<Cursor>();
 	gameManager = GameManager::GetInstance();
+	
+	checkNullAndBreak(gameObject);
+	cursor = gameObject->getComponent<Cursor>();
 
 	checkNull(inputSystem);
 	checkNull(gameManager);

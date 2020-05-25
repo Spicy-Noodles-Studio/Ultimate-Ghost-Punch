@@ -30,6 +30,8 @@ Grab::~Grab()
 
 void Grab::start()
 {
+	checkNullAndBreak(gameObject);
+
 	parent = gameObject->getParent();
 
 	if (notNull(GameManager::GetInstance()))
@@ -82,6 +84,7 @@ void Grab::update(float deltaTime)
 
 	else if (remain <= 0.0f && state == BLOCKED)
 	{
+		checkNullAndBreak(gameObject);
 		PlayerState* playerState = gameObject->getComponent<PlayerState>();
 		if (notNull(playerState)) playerState->setIgnoringInput(false); // Unfreeze our character
 
@@ -103,7 +106,7 @@ void Grab::onObjectStay(GameObject* other)
 	{
 		GhostManager* enemyGM = other->getComponent<GhostManager>();
 
-		if (enemyGM == nullptr || enemyGM->isGhost()) {
+		if (enemyGM != nullptr && enemyGM->isGhost()) {
 			if (enemy == other) enemy = nullptr;
 		}
 		else if (enemy == nullptr) // If it hits a player different than myself
@@ -117,7 +120,7 @@ void Grab::onObjectEnter(GameObject* other)
 	{
 		GhostManager* enemyGM = other->getComponent<GhostManager>();
 
-		if (enemyGM == nullptr || enemyGM->isGhost()) {
+		if (enemyGM == nullptr || !enemyGM->isGhost()) {
 			if (enemy == nullptr) //If it hits a player different than myself
 				enemy = other;
 		}
@@ -261,7 +264,7 @@ void Grab::grabEnemy()
 	//Check if we have been blocked
 	Block* enemyBlock = nullptr;
 	std::vector<GameObject*> groundSensorChildren = enemy->findChildrenWithTag("groundSensor");
-	if (groundSensorChildren.size() > 0) enemyBlock = groundSensorChildren[0]->getComponent<Block>();
+	if (groundSensorChildren.size() > 0 && notNull(groundSensorChildren[0])) enemyBlock = groundSensorChildren[0]->getComponent<Block>();
 
 	if (notNull(enemyBlock) && enemyBlock->canBlockGrab())
 	{
@@ -275,9 +278,10 @@ void Grab::grabEnemy()
 			state = BLOCKED;
 			remain = freezeDuration;
 
-			PlayerState* playerState = gameObject->getComponent<PlayerState>();
-			if (notNull(playerState)) playerState->setIgnoringInput(true); // Freeze our character
-
+			if (notNull(gameObject)) {
+				PlayerState* playerState = gameObject->getComponent<PlayerState>();
+				if (notNull(playerState)) playerState->setIgnoringInput(true); // Freeze our character
+			}
 			return;
 		}
 	}

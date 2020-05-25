@@ -38,6 +38,8 @@ void TrailManager::stopAll()
 
 void TrailManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	// PlayerState for info
 	playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);
@@ -71,6 +73,7 @@ void TrailManager::createTrail(Trail** trail, const std::string& trailFilename)
 
 	GameObject* trailObject = instantiate("Trail");
 	checkNullAndBreak(trailObject);
+	checkNullAndBreak(gameObject);
 
 	gameObject->addChild(trailObject);
 

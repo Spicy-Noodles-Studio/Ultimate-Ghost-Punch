@@ -7,6 +7,7 @@
 
 class InputSystem;
 class PlayerIndex;
+class SoundManager;
 class Movement;
 class Attack;
 class Dodge;
@@ -14,6 +15,7 @@ class Jump;
 class Grab;
 class Block;
 class Health;
+class PlayerState;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
@@ -25,6 +27,7 @@ private:
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
 
 	// Components
+	PlayerState* playerState;
 	PlayerIndex* playerIndex;
 	Movement* movement;
 	Attack* attack;
@@ -34,6 +37,7 @@ private:
 	Block* block;
 	Health* health;
 
+	SoundManager* soundManager;
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;

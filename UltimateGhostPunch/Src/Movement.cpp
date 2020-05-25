@@ -22,6 +22,8 @@ Movement::~Movement()
 
 void Movement::start()
 {
+	checkNullAndBreak(gameObject);
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	checkNull(rigidBody);
 }
@@ -44,6 +46,8 @@ void Movement::handleData(ComponentData* data)
 
 void Movement::move(Vector3 dir)
 {
+	checkNullAndBreak(gameObject);
+
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 	if (notNull(aux) && aux->canMove()) {
 		if (notNull(rigidBody))

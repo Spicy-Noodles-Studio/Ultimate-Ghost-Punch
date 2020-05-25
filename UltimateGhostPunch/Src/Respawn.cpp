@@ -23,6 +23,8 @@ Respawn::~Respawn()
 void Respawn::start()
 {
 	time = 0.0f;
+
+	checkNullAndBreak(gameObject);
 	playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);
 
@@ -40,6 +42,7 @@ void Respawn::update(float deltaTime)
 		respawning = false;
 	}
 
+	checkNullAndBreak(gameObject);
 	if (notNull(gameObject->transform) && gameObject->transform->getPosition().y < -20)
 		respawn();
 }
@@ -67,6 +70,8 @@ void Respawn::respawn()
 
 void Respawn::spawn(const Vector3& spawnPos)
 {
+	checkNullAndBreak(gameObject);
+
 	Movement* movement = gameObject->getComponent<Movement>();
 	if (notNull(movement))
 		movement->stop();

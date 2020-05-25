@@ -23,6 +23,8 @@ AnimationManager::~AnimationManager()
 
 void AnimationManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	animator = gameObject->getComponent<Animator>();
 	playerState = gameObject->getComponent<PlayerState>();
 	mesh = gameObject->getComponent<MeshRenderer>();

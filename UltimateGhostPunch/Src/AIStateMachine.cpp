@@ -53,6 +53,8 @@ AIStateMachine::~AIStateMachine()
 
 void AIStateMachine::start()
 {
+	checkNullAndBreak(gameObject);
+
 	/* GET GRAPH INFO */
 	GameObject* level = findGameObjectWithName("LevelCollider");
 	if (notNull(level))
@@ -61,7 +63,7 @@ void AIStateMachine::start()
 
 	/* GET COMPONENTS */
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 	{
 		jump = aux[0]->getComponent<Jump>();
 		block = aux[0]->getComponent<Block>();
@@ -70,7 +72,7 @@ void AIStateMachine::start()
 	checkNull(block);
 
 	std::vector<GameObject*> grabSensor = gameObject->findChildrenWithTag("grabSensor");
-	if (grabSensor.size() > 0)
+	if (grabSensor.size() > 0 && notNull(grabSensor[0]))
 		grab = grabSensor[0]->getComponent<Grab>();
 	checkNull(grab);
 
@@ -89,7 +91,7 @@ void AIStateMachine::start()
 	checkNull(playerState);
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		attack = aux[0]->getComponent<Attack>();
 	checkNull(attack);
 
@@ -175,7 +177,7 @@ void AIStateMachine::startFleeingState(GameObject* fleeTarget)
 {
 	if (!notNull(fleeTarget)) fleeTarget = target;
 	if (!notNull(fleeTarget) || !notNull(platformGraph) || !notNull(platformMovement) || !notNull(platformNavigation) || !notNull(target) ||
-		!notNull(target->transform) || !notNull(gameObject->transform) || !notNull(fleeTarget->transform)) return;
+		!notNull(target->transform) || !notNull(gameObject) || !notNull(gameObject->transform) || !notNull(fleeTarget->transform)) return;
 	// Fleeing state uses platform Navigation to move to the farthest platform away from the target
 	// and platform movement to run away in the current platform
 	PlatformNode node = platformGraph->getPlatforms()[platformGraph->getFurthestIndex(fleeTarget->transform->getPosition())];
@@ -359,10 +361,8 @@ void AIStateMachine::selectPlatformState()
 {
 	checkNullAndBreak(platformNavigation);
 
-	if (platformNavigation->hasArrived()) {
-		LOG("ARRIVED, %s", gameObject->getName().c_str());
+	if (platformNavigation->hasArrived()) 
 		currentState = platformMovement; // Target in the current platform
-	}
 	else
 		currentState = platformNavigation; // Target in different platform
 }
@@ -373,7 +373,7 @@ void AIStateMachine::updateState()
 	checkNullAndBreak(GameManager::GetInstance());
 
 	GameObject* ghost = GameManager::GetInstance()->getAnyGhost();
-	if (notNull(ghostManager) && !ghostManager->isGhost() && ghost != nullptr && notNull(ghost->transform) && notNull(gameObject->transform))
+	if (notNull(ghostManager) && !ghostManager->isGhost() && ghost != nullptr) //If im not a ghost and there is a ghost on the match
 	{
 		startFleeingState(ghost);
 		return;

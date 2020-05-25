@@ -21,6 +21,8 @@ Dodge::~Dodge()
 
 void Dodge::start()
 {
+	checkNullAndBreak(gameObject);
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	checkNullAndBreak(rigidBody);
 
@@ -74,6 +76,8 @@ void Dodge::handleData(ComponentData* data)
 
 void Dodge::dodge()
 {
+	checkNullAndBreak(gameObject);
+
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 
 	if (state == State::IDLE && notNull(aux) && aux->canDodge())

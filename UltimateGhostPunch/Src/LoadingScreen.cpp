@@ -50,12 +50,13 @@ void LoadingScreen::update(float deltaTime)
 	if (sceneToLoad == "NO SCENE")
 		currentDelay += deltaTime;
 
-	if (notNull(SceneManager::GetInstance()) && currentDelay > loadDelay)
+	SceneManager* sceneManager = SceneManager::GetInstance();
+	if (notNull(sceneManager) && currentDelay > loadDelay)
 	{
-		sceneToLoad = SceneManager::GetInstance()->getSceneToLoad();
+		sceneToLoad = sceneManager->getSceneToLoad();
 
 		if (sceneToLoad != "NO SCENE")
-			SceneManager::GetInstance()->changeScene(sceneToLoad);
+			sceneManager->changeScene(sceneToLoad);
 	}
 }
 

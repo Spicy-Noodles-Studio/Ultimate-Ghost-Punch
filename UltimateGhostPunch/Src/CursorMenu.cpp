@@ -21,6 +21,8 @@ CursorMenu::~CursorMenu()
 
 void CursorMenu::start()
 {
+	checkNullAndBreak(gameObject);
+
 	inputSystem = InputSystem::GetInstance();
 	cursor = gameObject->getComponent<Cursor>();
 

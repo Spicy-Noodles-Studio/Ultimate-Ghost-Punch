@@ -161,15 +161,16 @@ void GameManager::setPaused(bool setPaused)
 
 	paused = setPaused;
 
-	checkNullAndBreak(Timer::GetInstance());
+	Timer* timeManager = Timer::GetInstance();
+	checkNullAndBreak(timeManager);
 
 	if (paused) {
 		pauseAllSounds();
-		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
+		timeManager->setTimeScale(0.0f); //Pause the game
 	}
 	else {
 		resumeAllSound();
-		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
+		timeManager->setTimeScale(1.0f); //Resume the game
 	}
 }
 

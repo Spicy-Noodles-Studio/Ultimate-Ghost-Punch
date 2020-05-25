@@ -297,12 +297,12 @@ void FightingState::setCharacter(GameObject* character)
 	this->character = character;
 
 	auto aux = character->findChildrenWithTag("attackSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		attack = aux[0]->getComponent<Attack>();
 	checkNull(attack);
 
 	std::vector<GameObject*> ground = character->findChildrenWithTag("groundSensor");
-	if (ground.size() > 0)
+	if (ground.size() > 0  && notNull(ground[0]))
 	{
 		jump = ground[0]->getComponent<Jump>();
 		blockComp = ground[0]->getComponent<Block>();
@@ -311,7 +311,7 @@ void FightingState::setCharacter(GameObject* character)
 	checkNull(blockComp);
 
 	std::vector<GameObject*> grabSensor = character->findChildrenWithTag("grabSensor");
-	if (grabSensor.size() > 0)
+	if (grabSensor.size() > 0 && notNull(grabSensor[0]))
 		grabComp = grabSensor[0]->getComponent<Grab>();
 	checkNull(grabComp);
 

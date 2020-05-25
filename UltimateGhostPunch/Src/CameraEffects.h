@@ -14,7 +14,7 @@ private:
 	enum State { IDLE, FADEIN, FADEOUT, SHAKE };
 
 	State state;
-	Transform* mainCamera;
+	Transform* mainCameraTransform;
 
 	Vector3 shakeDir;
 	Vector3 rotationDir;

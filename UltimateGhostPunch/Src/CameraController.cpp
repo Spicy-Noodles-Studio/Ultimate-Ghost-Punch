@@ -132,6 +132,7 @@ void CameraController::setMaxY(float maxY)
 
 void CameraController::smoothMove()
 {
+	checkNullAndBreak(gameObject);
 	checkNullAndBreak(gameObject->transform);
 
 	Vector3 lerpDest = gameObject->transform->getPosition();
@@ -226,7 +227,8 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 void CameraController::getMidPointAdjusted(Vector3* midPoint, float zoom)
 {
 	float zoomMargin = (((zoom - minZ) * (15 - (0))) / (maxZ - minZ)) + 0;
-
+	
+	checkNullAndBreak(midPoint);
 	if (midPoint->x < (minX + zoomMargin)) midPoint->x = minX + zoomMargin;
 	if (midPoint->x > (maxX - zoomMargin)) midPoint->x = maxX - zoomMargin;
 	if (midPoint->y < (minY + zoomMargin)) midPoint->y = minY + zoomMargin;

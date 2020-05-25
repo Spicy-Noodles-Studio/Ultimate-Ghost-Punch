@@ -28,6 +28,8 @@ PlayerUI::~PlayerUI()
 
 void PlayerUI::start()
 {
+	checkNullAndBreak(gameObject);
+
 	// Initialize name to search through layout
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
 	if (notNull(playerIndex))
@@ -136,6 +138,7 @@ void PlayerUI::updateGhost()
 void PlayerUI::updateIndicator()
 {
 	checkNullAndBreak(mainCamera);
+	checkNullAndBreak(gameObject);
 	checkNullAndBreak(gameObject->transform);
 
 	Vector3 pos = mainCamera->worldToScreen(gameObject->transform->getPosition());

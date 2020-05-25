@@ -27,6 +27,8 @@ UltimateGhostPunch::~UltimateGhostPunch()
 
 void UltimateGhostPunch::start()
 {
+	checkNullAndBreak(gameObject);
+
 	state = AVAILABLE;
 
 	rigidBody = gameObject->getComponent<RigidBody>();
@@ -40,6 +42,8 @@ void UltimateGhostPunch::start()
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
+	checkNullAndBreak(gameObject);
+
 	if (notNull(gameObject->transform) && (state == USED || state == SUCCESS || state == FAIL))
 	{
 		Vector3 rotation = gameObject->transform->getRotation();
@@ -100,6 +104,7 @@ void UltimateGhostPunch::charge()
 
 void UltimateGhostPunch::aim(double x, double y)
 {
+	checkNullAndBreak(gameObject);
 	if (x == 0 && y == 0 || state != CHARGING) return;
 
 	direction = { x, y, 0.0 };

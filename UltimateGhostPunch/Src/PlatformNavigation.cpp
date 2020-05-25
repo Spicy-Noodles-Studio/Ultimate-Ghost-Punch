@@ -33,7 +33,7 @@ void PlatformNavigation::setCharacter(GameObject* character)
 	checkNullAndBreak(character);
 
 	std::vector<GameObject*> gameObjects = character->findChildrenWithTag("groundSensor");
-	if (!gameObjects.size()) return;
+	if (!gameObjects.size() || !notNull(gameObjects[0])) return;
 	this->character = gameObjects[0];
 
 	// Inicial target should be current platform
@@ -77,6 +77,8 @@ bool PlatformNavigation::hasArrived() const
 void PlatformNavigation::setFleeing(bool fleeing, GameObject* fleeingTarget)
 {
 	this->fleeing = fleeing;
+
+	checkNullAndBreak(fleeingTarget);
 	this->fleeingTarget = fleeingTarget;
 }
 

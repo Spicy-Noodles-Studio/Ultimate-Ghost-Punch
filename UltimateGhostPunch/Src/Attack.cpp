@@ -30,6 +30,8 @@ Attack::~Attack()
 
 void Attack::start()
 {
+	checkNullAndBreak(gameObject);
+
 	parent = gameObject->getParent();
 	if (notNull(parent) && notNull(parent->getComponent<PlayerIndex>()))
 		id = parent->getComponent<PlayerIndex>()->getIndex();
@@ -147,7 +149,7 @@ void Attack::onObjectStay(GameObject* other)
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 		Block* enemyBlock = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0 && aux[0] != nullptr)
 			enemyBlock = aux[0]->getComponent<Block>();
 
 		if (!notNull(enemyBlock) || !notNull(parent->transform) || !enemyBlock->blockAttack(parent->transform->getPosition()))
@@ -160,7 +162,7 @@ void Attack::onObjectStay(GameObject* other)
 				hit = 2;
 
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-				if (notNull(otherIndex) && score != nullptr)
+				if (notNull(otherIndex) && notNull(score))
 				{
 					score->attackHitted(id);
 					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
@@ -194,18 +196,20 @@ void Attack::attack()
 void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
 	checkNullAndBreak(attackTrigger);
+	checkNullAndBreak(attackTrigger->gameObject);
 
 	Transform* attackTransform = attackTrigger->gameObject->transform;
+	checkNullAndBreak(attackTransform);
 
 	// Scale trigger
 	Vector3 scaleRatio = scale;
 	Vector3 currentScale = Vector3::ZERO;
-	if (notNull(attackTransform)) currentScale = attackTransform->getScale();
+	currentScale = attackTransform->getScale();
 	attackTrigger->multiplyScale(scaleRatio);
 	scaleRatio *= currentScale;
 
 	// Move an offset
-	if (notNull(attackTransform)) attackTransform->setPosition(offset);
+	attackTransform->setPosition(offset);
 }
 
 bool Attack::attackOnCD() const
@@ -271,6 +275,7 @@ bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale) const
 		return false; // If not, return false
 
 	checkNullAndBreak(attackTrigger, false);
+	checkNullAndBreak(attackTrigger->gameObject, false);
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// trigger Scale

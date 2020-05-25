@@ -28,6 +28,8 @@ PlayerFX::~PlayerFX()
 
 void PlayerFX::start()
 {
+	checkNullAndBreak(gameObject);
+
 	mesh = gameObject->getComponent<MeshRenderer>();
 	health = gameObject->getComponent<Health>();
 	ghost = gameObject->getComponent<GhostManager>();
@@ -39,7 +41,7 @@ void PlayerFX::start()
 			diffuses.push_back(mesh->getDiffuse(i));
 
 	std::vector<GameObject*> shieldObject = gameObject->findChildrenWithTag("shield");
-	if (shieldObject.size() > 0)
+	if (shieldObject.size() > 0 && notNull(shieldObject[0]))
 		shieldMesh = shieldObject[0]->getComponent<MeshRenderer>();
 	checkNullAndBreak(shieldMesh);
 
@@ -213,7 +215,7 @@ void PlayerFX::updateShield(float blockTime, float maxBlockTime)
 {
 	checkNullAndBreak(shieldMesh);
 	// Shield scale reduction
-	if (notNull(shieldMesh->gameObject->transform))
+	if (notNull(shieldMesh->gameObject) && notNull(shieldMesh->gameObject->transform))
 		shieldMesh->gameObject->transform->setScale(Vector3::IDENTITY * blockTime + Vector3(4, 4, 4));
 	// Shield alpha
 	shieldMesh->setFpParam(0, "alpha", blockTime / maxBlockTime);

@@ -49,6 +49,7 @@ loadFilename(saveFilename)
 PlatformGraph::~PlatformGraph()
 {
 	physicsSystem = nullptr;
+
 	platforms.clear();
 	lastPlatforms.clear();
 }
@@ -111,7 +112,7 @@ void PlatformGraph::createNodes()
 
 		for (RaycastHit hit : hits)
 		{
-			if (notNull(hit.transform) && hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
+			if (notNull(hit.transform) && notNull(hit.transform->gameObject) && hit.transform->gameObject->getTag() == "suelo" && hit.normal == Vector3(0, 1, 0))
 			{
 				auto it = lastPlatforms.find(hit.point.y);
 

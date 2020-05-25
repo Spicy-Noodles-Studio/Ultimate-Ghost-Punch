@@ -53,15 +53,15 @@ void PathRecorder::start()
 	inputSystem = InputSystem::GetInstance();
 	checkNull(inputSystem);
 
-	// TODO: devolver a como estaba antes, esto petaba
-	controllerIndex = 4; // gameObject->getParent()->getComponent<PlayerController>()->getControllerIndex();
+	controllerIndex = 4;
 
+	checkNullAndBreak(gameObject);
 	parent = gameObject->getParent();
 	checkNullAndBreak(parent);
 
 	jump = gameObject->getComponent<Jump>();
-	health = parent->getComponent<Health>();
 	ghostManager = parent->getComponent<GhostManager>();
+	health = parent->getComponent<Health>();
 	checkNull(jump);
 	checkNull(health);
 	checkNull(ghostManager);
@@ -69,7 +69,6 @@ void PathRecorder::start()
 
 void PathRecorder::update(float deltaTime)
 {
-	checkNullAndBreak(graph);
 	checkNullAndBreak(inputSystem);
 
 	if (controllerIndex == 4)
@@ -92,6 +91,7 @@ void PathRecorder::update(float deltaTime)
 		if (recording && actions.size() != 0)
 			saveState(actions);
 
+		checkNullAndBreak(graph);
 		//Saves the graph
 		if (inputSystem->getKeyPress("O"))
 			graph->saveGraph();
@@ -136,7 +136,7 @@ void PathRecorder::onObjectEnter(GameObject* other)
 {
 	if (controllerIndex == 4 && notNull(other) && other->getTag() == "suelo" && recording)
 	{
-		Vector3 endPos = notNull(gameObject->transform) ? gameObject->transform->getWorldPosition() : Vector3::ZERO;
+		Vector3 endPos = notNull(gameObject) && notNull(gameObject->transform) ? gameObject->transform->getWorldPosition() : Vector3::ZERO;
 
 		if (currentPlatform != -1)
 			lastPlatform.push(currentPlatform);
@@ -165,7 +165,7 @@ void PathRecorder::onObjectExit(GameObject* other)
 
 void PathRecorder::saveState(const std::vector<Action>& actions)
 {
-	if (notNull(gameObject->transform)) return;
+	if (notNull(gameObject) && notNull(gameObject->transform)) return;
 	states.push_back(State(actions, frame, time, gameObject->transform->getWorldPosition()));
 	this->actions.clear();
 }
@@ -180,6 +180,7 @@ void PathRecorder::stopRecording()
 
 void PathRecorder::startRecording()
 {
+	checkNullAndBreak(gameObject);
 	checkNullAndBreak(gameObject->transform);
 
 	iniPos = gameObject->transform->getWorldPosition();

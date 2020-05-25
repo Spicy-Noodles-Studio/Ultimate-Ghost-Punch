@@ -38,8 +38,10 @@ SongManager* SongManager::GetInstance()
 void SongManager::start()
 {
 	gameManager = GameManager::GetInstance();
-	soundEmitter = gameObject->getComponent<SoundEmitter>();
 	checkNull(gameManager);
+	
+	checkNullAndBreak(gameObject);
+	soundEmitter = gameObject->getComponent<SoundEmitter>();
 	checkNull(soundEmitter);
 
 	dontDestroyOnLoad(gameObject);
@@ -52,7 +54,7 @@ void SongManager::update(float deltaTime)
 
 void SongManager::playMenuSong()
 {
-	if (!notNull(soundEmitter)) soundEmitter = gameObject->getComponent<SoundEmitter>();
+	if (!notNull(soundEmitter) && notNull(gameObject)) soundEmitter = gameObject->getComponent<SoundEmitter>();
 
 	if (!songPlaying && notNull(soundEmitter)) {
 		soundEmitter->playMusic(menuMusic);

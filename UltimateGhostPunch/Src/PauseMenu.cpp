@@ -98,9 +98,9 @@ void PauseMenu::start()
 	if (notNull(countdownObject))
 		countdown = countdownObject->getComponent<Countdown>();
 
-	GameObject* object = findGameObjectWithName("Game");
-	if (notNull(object))
-		game = object->getComponent<Game>();
+	GameObject* gameObject = findGameObjectWithName("Game");
+	if (notNull(gameObject))
+		game = gameObject->getComponent<Game>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)

@@ -91,7 +91,7 @@ void ConfigurationMenu::start()
 	{
 		configurationLayout = mainCamera->getComponent<UILayout>();
 		std::vector<GameObject*> aux = mainCamera->getChildren();
-		if (aux.size() > 0) {
+		if (aux.size() > 0 && notNull(aux[0])) {
 			UILayout* settingsLayout = aux[0]->getComponent<UILayout>();
 			if (notNull(settingsLayout))
 				settingsPanel = settingsLayout->getRoot();

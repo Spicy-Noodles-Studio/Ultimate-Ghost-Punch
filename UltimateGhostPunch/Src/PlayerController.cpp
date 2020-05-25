@@ -23,7 +23,7 @@
 REGISTER_FACTORY(PlayerController);
 
 PlayerController::PlayerController(GameObject* gameObject) : UserComponent(gameObject), inputSystem(nullptr), playerIndex(nullptr), movement(nullptr), attack(nullptr), dodge(nullptr),
-jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr),
+jump(nullptr), grab(nullptr), block(nullptr), health(nullptr), ghostManager(nullptr), ghostMovement(nullptr), ghostPunch(nullptr), soundManager(nullptr), playerState(nullptr),
 direction(Vector3::ZERO), controllerIndex(1)
 {
 
@@ -33,6 +33,7 @@ PlayerController::~PlayerController()
 {
 	inputSystem = nullptr;
 	playerIndex = nullptr;
+	playerState = nullptr;
 	movement = nullptr;
 	attack = nullptr;
 	dodge = nullptr;
@@ -41,6 +42,7 @@ PlayerController::~PlayerController()
 	block = nullptr;
 	health = nullptr;
 	ghostPunch = nullptr;
+	soundManager = nullptr;
 	ghostManager = nullptr;
 	ghostMovement = nullptr;
 }
@@ -50,9 +52,15 @@ void PlayerController::start()
 	inputSystem = InputSystem::GetInstance();
 	checkNull(inputSystem);
 
+	checkNullAndBreak(gameObject);
+
+	soundManager = gameObject->getComponent<SoundManager>();
+	playerState = gameObject->getComponent<PlayerState>();
 	movement = gameObject->getComponent<Movement>();
 	health = gameObject->getComponent<Health>();
 	dodge = gameObject->getComponent<Dodge>();
+	checkNull(soundManager);
+	checkNull(playerState);
 	checkNull(movement);
 	checkNull(health);
 	checkNull(dodge);
@@ -65,28 +73,28 @@ void PlayerController::start()
 	checkNull(ghostPunch);
 
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		jump = aux[0]->getComponent<Jump>();
 	checkNull(jump);
 
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		block = aux[0]->getComponent<Block>();
 	checkNull(block);
 
 	aux = gameObject->findChildrenWithTag("attackSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		attack = aux[0]->getComponent<Attack>();
 	checkNull(attack);
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		grab = aux[0]->getComponent<Grab>();
 	checkNull(grab);
 }
 
 void PlayerController::update(float deltaTime)
 {
-	if (notNull(gameObject->getComponent<PlayerState>()) && gameObject->getComponent<PlayerState>()->isIgnoringInput())
+	if (notNull(playerState) && playerState->isIgnoringInput())
 	{
 		direction = Vector3::ZERO;
 		return;
@@ -173,8 +181,8 @@ void PlayerController::checkInput()
 
 		//Taunt
 		if (getKeyDown("T") || getButtonDown("BACK")) {
-			if (notNull(gameObject->getComponent<SoundManager>()))
-				gameObject->getComponent<SoundManager>()->playTaunt();
+			if (notNull(soundManager))
+				soundManager->playTaunt();
 		}
 	}
 
@@ -303,10 +311,17 @@ int PlayerController::getVerticalAxis()
 void PlayerController::ghostPunchMouseAim()
 {
 	checkNullAndBreak(inputSystem);
+	checkNullAndBreak(gameObject);
 
 	std::pair<int, int> mousePos = inputSystem->getMousePosition();
-	if (notNull(gameObject->getScene()) && notNull(gameObject->getScene()->getMainCamera()) && notNull(gameObject->transform) && notNull(ghostPunch)) {
-		Vector3* thisOnScreen = &gameObject->getScene()->getMainCamera()->worldToScreenPixel(gameObject->transform->getPosition());
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	checkNullAndBreak(mainCamera);
+
+	Camera* camera = mainCamera->getComponent<Camera>();
+	checkNullAndBreak(camera);
+
+	if (notNull(gameObject->transform) && notNull(ghostPunch)) {
+		Vector3* thisOnScreen = &camera->worldToScreenPixel(gameObject->transform->getPosition());
 		ghostPunch->aim(mousePos.first - thisOnScreen->x, thisOnScreen->y - mousePos.second);
 	}
 }

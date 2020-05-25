@@ -52,6 +52,8 @@ SoundManager::~SoundManager()
 
 void SoundManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	// PlayerState for info
 	playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);

@@ -40,13 +40,15 @@ PlayerState::~PlayerState()
 
 void PlayerState::start()
 {
+	checkNullAndBreak(gameObject);
+
 	std::vector<GameObject*> aux = gameObject->findChildrenWithTag("attackSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		attack = aux[0]->getComponent<Attack>();
 	checkNull(attack);
 
 	aux = gameObject->findChildrenWithTag("groundSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 	{
 		block = aux[0]->getComponent<Block>();
 		jump = aux[0]->getComponent<Jump>();
@@ -55,7 +57,7 @@ void PlayerState::start()
 	checkNull(jump);
 
 	aux = gameObject->findChildrenWithTag("grabSensor");
-	if (aux.size() > 0)
+	if (aux.size() > 0 && notNull(aux[0]))
 		grab = aux[0]->getComponent<Grab>();
 	checkNull(grab);
 

@@ -58,7 +58,8 @@ void ParticleManager::stopAll()
 void ParticleManager::start()
 {
 	// PlayerState for info
-	playerState = gameObject->getComponent<PlayerState>();
+	if (notNull(gameObject))
+		playerState = gameObject->getComponent<PlayerState>();
 	checkNull(playerState);
 
 	/* FLOOR DUST */
@@ -122,7 +123,8 @@ void ParticleManager::createParticle(ParticleEmitter** emitter, const std::strin
 	checkNullAndBreak(particlesObject);
 
 	// Add child
-	gameObject->addChild(particlesObject);
+	if (notNull(gameObject))
+		gameObject->addChild(particlesObject);
 
 	*emitter = particlesObject->getComponent<ParticleEmitter>();
 	checkNullAndBreak(*emitter);

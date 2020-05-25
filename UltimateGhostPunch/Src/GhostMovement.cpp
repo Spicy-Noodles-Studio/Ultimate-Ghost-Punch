@@ -20,6 +20,8 @@ GhostMovement::~GhostMovement()
 
 void GhostMovement::start()
 {
+	checkNullAndBreak(gameObject);
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	checkNull(rigidBody);
 }
@@ -42,6 +44,8 @@ void GhostMovement::handleData(ComponentData* data)
 
 void GhostMovement::move(Vector3 dir)
 {
+	checkNullAndBreak(gameObject);
+
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 	if (notNull(aux) && aux->canGhostMove())
 	{

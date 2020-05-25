@@ -23,13 +23,14 @@ Block::~Block()
 
 void Block::start()
 {
+	checkNullAndBreak(gameObject);
+
 	parent = gameObject->getParent();
 	if (notNull(parent)) playerFX = parent->getComponent<PlayerFX>();
+	checkNull(playerFX)
 
 	blockTime = maxBlockTime;
 	timeElapsed = 0;
-
-	checkNull(playerFX)
 }
 
 void Block::update(float deltaTime)
@@ -130,8 +131,6 @@ void Block::unblock()
 	if (!blocking) return;
 
 	blocking = false;
-
-	checkNullAndBreak(parent);
 
 	if (notNull(playerFX)) playerFX->deactivateShield();
 }

@@ -23,6 +23,8 @@ Jump::~Jump()
 
 void Jump::start()
 {
+	checkNullAndBreak(gameObject);
+
 	landed = false;
 	parent = gameObject->getParent();
 	checkNullAndBreak(parent);
@@ -119,7 +121,7 @@ void Jump::jump()
 
 	// Cancel vertical velocity so impulse doesnt lose strenght
 	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
-	rigidBody->addImpulse(Vector3(0.0, 1.0, 0.0) * jumpForce);
+	rigidBody->addImpulse(Vector3::UP * jumpForce);
 	jumping = true;
 	jumped = 2;
 	coyoteTimer = 0.0f;

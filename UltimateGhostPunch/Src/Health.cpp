@@ -86,10 +86,12 @@ void Health::receiveDamage(int damage)
 {
 	if (alive && !invencible)
 	{
+		checkNullAndBreak(gameObject);
+
 		std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 		Block* block = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0  && notNull(aux[0]))
 		{
 			block = aux[0]->getComponent<Block>();
 			if (notNull(block) && block->isBlocking())
@@ -99,7 +101,7 @@ void Health::receiveDamage(int damage)
 		aux = gameObject->findChildrenWithTag("attackSensor");
 		Attack* attack = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0 && notNull(aux[0]))
 		{
 			attack = aux[0]->getComponent<Attack>();
 			if (notNull(attack) && attack->isAttacking())
@@ -109,7 +111,7 @@ void Health::receiveDamage(int damage)
 		aux = gameObject->findChildrenWithTag("grabSensor");
 		Grab* grab = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0 && notNull(aux[0]))
 		{
 			grab = aux[0]->getComponent<Grab>();
 			if (notNull(grab) && grab->isGrabbing())

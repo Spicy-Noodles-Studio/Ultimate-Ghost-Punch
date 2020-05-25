@@ -156,7 +156,7 @@ CameraEffects* Game::getCameraEffects()
 
 void Game::setCameraLimits(GameObject* mainCamera)
 {
-	if (notNull(mainCamera) || notNull(gameManager)) return;
+	if (!notNull(mainCamera) || !notNull(gameManager)) return;
 
 	CameraController* camController = mainCamera->getComponent<CameraController>();
 	checkNullAndBreak(camController);
@@ -399,7 +399,7 @@ void Game::createLights()
 				lightComp->setIntensity(lights[i].intensity);
 				lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
 			}
-			if (light->transform) light->transform->setDirection(lights[i].direction);
+			if (notNull(light->transform)) light->transform->setDirection(lights[i].direction);
 		}
 	}
 }
@@ -443,11 +443,7 @@ void Game::configureLevelCollider(const std::string& name)
 	int i = 0;
 	bool ia = false;
 	while (i < playerIndexes.size() && !ia)
-	{
-		if (playerIndexes[i] == 9)
-			ia = true;
-		i++;
-	}
+		ia = playerIndexes[i++] == 9;
 
 	PlatformGraph* graph = levelCollider->getComponent<PlatformGraph>();
 	if (notNull(graph) && notNull(gameManager))
@@ -469,6 +465,8 @@ void Game::setRanking()
 
 	for (int i = 0; i < knights.size(); i++)
 	{
+		checkNullAndBreak(knights[i]);
+
 		Health* health = knights[i]->getComponent<Health>();
 		if (notNull(health))
 			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
