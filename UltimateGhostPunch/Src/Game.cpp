@@ -322,6 +322,7 @@ void Game::createKnights()
 {
 	if (notNull(gameManager)) gameManager->emptyKnights();
 
+	int position = 0;
 	for (int i = 0; i < playerIndexes.size(); i++)
 	{
 		if (playerIndexes[i] != -1)
@@ -347,7 +348,12 @@ void Game::createKnights()
 
 			checkNullAndBreak(knight);
 			PlayerIndex* index = knight->getComponent<PlayerIndex>();
-			if (notNull(index)) index->setIndex(i + 1);
+			if (notNull(index))
+			{
+				index->setIndex(i + 1);
+				index->setPos(position);
+				position++;
+			}
 
 			if (i < playerColours.size()) {
 				MeshRenderer* mesh = knight->getComponent<MeshRenderer>();

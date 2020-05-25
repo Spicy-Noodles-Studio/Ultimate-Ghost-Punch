@@ -8,6 +8,7 @@ class PlayerIndex : public UserComponent
 {
 private:
 	int index;
+	int pos;
 
 protected:
 	virtual void handleData(ComponentData* data);
@@ -17,7 +18,10 @@ public:
 	virtual ~PlayerIndex();
 
 	int getIndex();
-	void setIndex(int ind);
+	void setIndex(int index);
+
+	int getPos();
+	void setPos(int pos);
 };
 
 #endif

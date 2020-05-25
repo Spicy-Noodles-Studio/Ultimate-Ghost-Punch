@@ -42,7 +42,7 @@ void Grab::start()
 	PlayerIndex* index = parent->getComponent<PlayerIndex>();
 
 	checkNullAndBreak(index);
-	id = index->getIndex();
+	id = index->getPos();
 
 }
 

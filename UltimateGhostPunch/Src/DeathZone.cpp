@@ -54,7 +54,7 @@ void DeathZone::onObjectEnter(GameObject* other)
 			PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
 			if (notNull(score) && notNull(playerIndex))
-				score->fall(playerIndex->getIndex());
+				score->fall(playerIndex->getPos());
 
 			if (!health->isAlive())
 			{
@@ -71,7 +71,7 @@ void DeathZone::onObjectEnter(GameObject* other)
 				{
 					ghostManager->setDeathPosition(initialPosition);
 					if (notNull(score) && notNull(playerIndex))
-						score->deathByEnviroment(playerIndex->getIndex());
+						score->deathByEnviroment(playerIndex->getPos());
 				}
 			}
 			else

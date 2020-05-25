@@ -65,7 +65,7 @@ void Obstacle::onCollisionEnter(GameObject* other)
 		PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
 
 		if (notNull(score) && notNull(playerIndex))
-			score->damagedBySpike(playerIndex->getIndex());
+			score->damagedBySpike(playerIndex->getPos());
 
 		if (!health->isAlive())
 		{
@@ -82,7 +82,7 @@ void Obstacle::onCollisionEnter(GameObject* other)
 			{
 				ghostManager->setDeathPosition(initialPosition);
 				if (notNull(score) && notNull(playerIndex))
-					score->deathByEnviroment(playerIndex->getIndex());
+					score->deathByEnviroment(playerIndex->getPos());
 			}
 		}
 		else
