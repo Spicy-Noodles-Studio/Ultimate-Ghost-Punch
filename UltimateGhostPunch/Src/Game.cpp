@@ -132,7 +132,7 @@ void Game::playerDeath()
 {
 	players--;
 
-	if (players <= 1)
+	if (players <= 1 && !end)
 		chooseWinner();
 }
 
@@ -474,26 +474,27 @@ void Game::setRanking()
 		checkNullAndBreak(knights[i]);
 
 		Health* health = knights[i]->getComponent<Health>();
-		if (notNull(health))
-			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
-
 		PlayerState* state = knights[i]->getComponent<PlayerState>();
-		if (notNull(state))
+
+		if (notNull(health) && notNull(state) && (health->getHealth() != 0 || state->isGhost() && health->getHealth() == 0))
+		{
+			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
 			state->setIgnoringInput(true);
+		}
 	}
 
 	std::priority_queue<ii, std::vector<ii>, Less> aux = gameManager->getRanking();
 
 	int cont = 0;
 	bool tie = false;
-	ii last = ii(0, 0);
+	ii last = ii(-1, -1);
 
 	while (!aux.empty())
 	{
 		ii info = aux.top();
 		aux.pop();
 
-		if (info.second != 0 && info.second == last.second)
+		if (info.second == last.second && cont < 1)
 			tie = true;
 		else
 			cont++;

@@ -318,6 +318,11 @@ void GhostManager::deactivatePlayer()
 	if (notNull(trailManager))
 		trailManager->stopAll();
 
+	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
+
+	if (notNull(playerIndex) && notNull(GameManager::GetInstance()))
+		GameManager::GetInstance()->getRanking().push(ii(playerIndex->getIndex(), 0));
+
 	if (notNull(game))
 		game->playerDeath();
 
