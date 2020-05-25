@@ -7,21 +7,24 @@
 But beware, **the arenas** are full of dangers, and whenever a fighter dies in battle, he returns temporarily as **a ghost with the ability to steal other player's lives**, as a last-minute chance to avoid losing for good. With their lives in danger, players have fight while avoiding the ghosts in a frantic and hilarious experience **ideal for playing with friends**. So get your sword ready, and prepare for the fight that awaits you in Ultimate Ghost Punch.
 
 # About the game
-UGP is a game made for the 'Proyecto III' subject as part of the bachelor's degree in Video Game Design and Development from the 'Universidad Complutense de Madrid', year 2019-2020.
-This game has been created from scratch in just a three month span using [Gaia(c)](https://spicy-noodles-studio.github.io/Gaia/) as the engine. 
-UGP has been designed and created by Spicy Noodles(c), all rights reserved.
+
+![UGP screenshot1](Other/screenshot01.png)
+
+Ultimate Ghost Punch is a game made for the 'Proyecto III' subject as part of the bachelor's degree in Video Game Design and Development from the **'Universidad Complutense de Madrid'**, year 2019-2020.
+
+This game has been created from scratch in just a three month span using [Gaia(c)](https://spicy-noodles-studio.github.io/Gaia/) as the engine, in combination with another game: [4-Pong Arena](https://spicy-noodles-studio.github.io/4-Pong-Arena/). You can **download Ultimate Ghost Punch** and watch it's gameplay trailer from the [official website](https://spicy-noodles-studio.github.io/Ultimate-Ghost-Punch/)of the game.
 
 # Lore
 
 The entire kingdom gathers to watch the Ghost Games!
 
-Years ago, a curse was casted upon the kingdom and condemned the dead to return as ghosts. The King ordered to lock all those affected in the castle dungeons and gradually the curse dissapeared from the kingdom.
+Years ago, **a curse** was casted upon the kingdom and condemned the dead **to return as ghosts**. The King ordered to lock all those affected **in the castle dungeons** and gradually the curse dissapeared from the kingdom.
 
-Despite knowing the cure, the King has taken the opportunity to create a show that attracts tourists from other kingdoms.
+Despite knowing the cure, the King has taken this opportunity to create **a show that attracts tourists, money and fame** from the other kingdoms.
 
-The king created a tournament where soldiers who were affected by the curse, and have not been treated, face each other in a battle to the death. The victor gains his freedom and the cure to the curse.
+The king created a tournament where the soldiers who were **affected by the curse**, and were not treated yet, have to face each other in **a battle of eternal death**. The victor gains his freedom and the cure to the curse.
 
-You are one of those soldiers and you must show your skill and cunning in combat against the rest.
+You are one of those soldiers and you must **show your skill and cunning in combat** against the rest.
 
 # Controls
 
@@ -49,6 +52,9 @@ You are one of those soldiers and you must show your skill and cunning in combat
 		- CANCEL: WHILE HOLDING RT / R2, PRESS B / Circle
 
 # Acknowledgments
+
+![UGP screenshot2](Other/screenshot02.png)
+
 MUSIC:
 Most of the music of UGP has been created by other artists outside of Spicy Noodles(c) with free use licenses: 
 
@@ -69,3 +75,8 @@ Most of the music of UGP has been created by other artists outside of Spicy Nood
 - TV Drama Version2 <a href="https://audionautix.com/">Creative Commons Music by Jason Shaw on Audionautix.com</a>
 
 - Epic Battle by Twin Musicom (http://twinmusicom.org)
+
+# License
+![Spicy Noodles Logo](Other/spicyNoodlesLogoWithText.png)
+
+Ultimate Ghost Punch has been designed and created **by Spicy Noodles(c)**, all rights reserved.
