@@ -105,7 +105,7 @@ void PauseMenu::start()
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(game) && game->getTime() > 0 && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(game) && game->getTime() != 0 && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
 		setPaused(!gameManager->isPaused());
 }
 
