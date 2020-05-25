@@ -105,7 +105,7 @@ bool AnimationManager::manageGhostAnimations()
 	bool result = false;
 	if (playerState->isGhost() || playerState->isAppearing() || playerState->isDisappearing())
 	{
-		//ODER MATTERS: Top ones have higher priority
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageChargeAnimation());
 		else if (result = managePunchingAnimation());
 		else if (result = managePunchSuccessAnimation());
@@ -178,13 +178,13 @@ bool AnimationManager::manageGroundedAnimations()
 
 	bool result = false;
 	if (playerState->isGrounded()) {
-		//ODER MATTERS: Top ones have higher priority
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageStunnedAnimations());
 		else if (result = manageHurtAnimation());
-		else if (result = manageBlockAnimations());
 		else if (result = manageGroundedAttackAnimation());
 		else if (result = manageGrabAnimations());
+		else if (result = manageBlockAnimations());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
 		else if (result = manageIdleAnimation());
@@ -200,11 +200,12 @@ bool AnimationManager::manageAirAnimations()
 
 	bool result = false;
 	if (!playerState->isGrounded()) {
-		//ODER MATTERS: Top ones have higher priority
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageHurtAnimation());
 		else if (result = manageAirAttackAnimation());
 		else if (result = manageDashAnimation());
+		else if (result = manageGrabAnimations());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
 		else if (result = manageFallAnimation());

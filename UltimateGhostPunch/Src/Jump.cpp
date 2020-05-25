@@ -42,8 +42,9 @@ void Jump::update(float deltaTime)
 
 void Jump::postUpdate(float deltaTime)
 {
-	if (landed > 0)landed--;;
-	if (jumped > 0)jumped--;
+	if (landed > 0) landed--;;
+	if (jumped > 0) jumped--;
+	if (grounded) jumping = false;
 }
 
 void Jump::onObjectEnter(GameObject* other)
