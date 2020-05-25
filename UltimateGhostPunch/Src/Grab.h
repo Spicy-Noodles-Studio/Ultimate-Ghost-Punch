@@ -6,6 +6,7 @@
 
 class GameObject;
 class RigidBody;
+class PlayerState;
 class Score;
 
 class Grab : public UserComponent
@@ -37,6 +38,7 @@ private:
 	GameObject* enemy;
 
 	Score* score;
+	PlayerState* playerState;
 
 	Vector3 enemyDiff;
 	bool enemyFollowing;

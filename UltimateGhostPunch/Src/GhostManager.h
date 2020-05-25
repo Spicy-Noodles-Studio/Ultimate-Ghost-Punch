@@ -66,7 +66,7 @@ protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
-	virtual void onObjectEnter(GameObject* other);
+	virtual void onObjectStay(GameObject* other);
 
 public:
 	GhostManager(GameObject* gameObject);

@@ -8,6 +8,7 @@
 #include "PlayerState.h"
 #include "Score.h"
 #include "Block.h"
+#include "Attack.h"
 #include "Health.h"
 #include "GhostManager.h"
 #include "GameManager.h"
@@ -15,7 +16,7 @@
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
-grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), enemy(nullptr), score(nullptr), enemyDiff(Vector3::ZERO), enemyFollowing(false),
+grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), enemy(nullptr), score(nullptr), playerState(nullptr), enemyDiff(Vector3::ZERO), enemyFollowing(false),
 grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), missed(0), dropped(0)
 {
 
@@ -40,6 +41,7 @@ void Grab::start()
 
 	checkNullAndBreak(parent);
 	PlayerIndex* index = parent->getComponent<PlayerIndex>();
+	playerState = parent->getComponent<PlayerState>();
 
 	checkNullAndBreak(index);
 	id = index->getIndex();
@@ -84,10 +86,7 @@ void Grab::update(float deltaTime)
 
 	else if (remain <= 0.0f && state == BLOCKED)
 	{
-		checkNullAndBreak(gameObject);
-		PlayerState* playerState = gameObject->getComponent<PlayerState>();
 		if (notNull(playerState)) playerState->setIgnoringInput(false); // Unfreeze our character
-
 		state = IDLE;
 	}
 
@@ -104,12 +103,12 @@ void Grab::onObjectStay(GameObject* other)
 {
 	if (notNull(other) && parent != nullptr && other->getTag() == "Player" && other != parent)
 	{
-		GhostManager* enemyGM = other->getComponent<GhostManager>();
+		GhostManager* otherGM = other->getComponent<GhostManager>();
 
-		if (enemyGM != nullptr && enemyGM->isGhost()) {
+		if (otherGM != nullptr && otherGM->isGhost()) {
 			if (enemy == other) enemy = nullptr;
 		}
-		else if (enemy == nullptr) // If it hits a player different than myself
+		else if (enemy == nullptr && otherGM != nullptr && !otherGM->isGhost()) //If I dont already have a target and we hit an enemy
 			enemy = other;
 	}
 }
@@ -118,10 +117,10 @@ void Grab::onObjectEnter(GameObject* other)
 {
 	if (notNull(other) && parent != nullptr && other->getTag() == "Player" && other != parent)
 	{
-		GhostManager* enemyGM = other->getComponent<GhostManager>();
+		GhostManager* otherGM = other->getComponent<GhostManager>();
 
-		if (enemyGM == nullptr || !enemyGM->isGhost()) {
-			if (enemy == nullptr) //If it hits a player different than myself
+		if (otherGM == nullptr || !otherGM->isGhost()) {
+			if (enemy == nullptr) //If I dont already have a target
 				enemy = other;
 		}
 	}
@@ -163,13 +162,17 @@ void Grab::handleData(ComponentData* data)
 
 void Grab::grab()
 {
-	checkNullAndBreak(parent);
-	PlayerState* aux = parent->getComponent<PlayerState>();
-
-	if (state == IDLE && grabTimer <= 0 && notNull(aux) && aux->canGrab())
+	if (state == IDLE && grabTimer <= 0 && notNull(playerState) && playerState->canGrab() && !playerState->isGrabbed())
 	{
-		if (notNull(enemy) && (!notNull(enemy->getComponent<PlayerState>()) || !enemy->getComponent<PlayerState>()->isGrabbed()) &&
-			(!notNull(enemy->getComponent<Health>()) || !enemy->getComponent<Health>()->isInvencible()))
+		bool grabSucces = false;
+		if (notNull(enemy)) {
+			PlayerState* enemyState = enemy->getComponent<PlayerState>();
+			Health* enemyHealth = enemy->getComponent<Health>();
+			if (notNull(enemyHealth) && notNull(enemyState))
+				grabSucces = enemyHealth->isAlive() && !enemyHealth->isInvencible() && !enemyState->isGrabbed();
+		}
+
+		if (grabSucces)
 			grabEnemy();
 		else
 			grabMissed();
@@ -240,10 +243,7 @@ void Grab::resetEnemy()
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
 
 	if (notNull(enemyRB))
-	{
-		enemyRB->setTrigger(false);
 		enemyRB->setActive(true);
-	}
 
 	PlayerState* enemyState = enemy->getComponent<PlayerState>();
 	if (notNull(enemyState))
@@ -278,10 +278,8 @@ void Grab::grabEnemy()
 			state = BLOCKED;
 			remain = freezeDuration;
 
-			if (notNull(gameObject)) {
-				PlayerState* playerState = gameObject->getComponent<PlayerState>();
-				if (notNull(playerState)) playerState->setIgnoringInput(true); // Freeze our character
-			}
+			if (notNull(playerState)) playerState->setIgnoringInput(true); // Freeze our character
+
 			return;
 		}
 	}
@@ -290,6 +288,11 @@ void Grab::grabEnemy()
 	if (notNull(score)) score->grabHitted(id);
 
 	if (notNull(enemyBlock) && enemyBlock->isBlocking()) enemyBlock->unblock();
+
+	Attack* enemyAttack = nullptr;
+	std::vector<GameObject*> enemyAttackSensor = enemy->findChildrenWithTag("attackSensor");
+	if (enemyAttackSensor.size() > 0 && notNull(enemyAttackSensor[0])) enemyAttack = enemyAttackSensor[0]->getComponent<Attack>();
+	if (notNull(enemyAttack) && enemyAttack->isAttacking()) enemyAttack->stop();
 
 	state = GRABBED;
 	remain = grabDuration;
@@ -307,8 +310,5 @@ void Grab::grabEnemy()
 
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
 	if (notNull(enemyRB))
-	{
-		enemyRB->setTrigger(true);
 		enemyRB->setActive(false);
-	}
 }

@@ -141,7 +141,7 @@ void GhostManager::handleData(ComponentData* data)
 	}
 }
 
-void GhostManager::onObjectEnter(GameObject* other)
+void GhostManager::onObjectStay(GameObject* other)
 {
 	checkNullAndBreak(gameObject);
 
@@ -265,8 +265,10 @@ void GhostManager::deactivateGhost()
 	}
 
 	// Change scale
-	if (notNull(transform))
+	if (notNull(transform)) {
 		transform->setScale(aliveScale);
+		transform->setRotation(0, transform->getRotation().y, 0);
+	}
 
 	//Set the player alive
 	if (notNull(health))
