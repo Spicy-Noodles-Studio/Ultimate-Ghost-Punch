@@ -53,7 +53,7 @@ GameManager* GameManager::GetInstance()
 
 void GameManager::start()
 {
-	playerColours = { {0,0,1}, {0,1,0}, {1,1,0}, {0,0,0} };
+	playerColours = { {1,0,0}, {0,0,1}, {0,1,0}, {1,1,0} };
 
 	dontDestroyOnLoad(gameObject);
 }
