@@ -11,7 +11,7 @@ material StunSparks
 
 			texture_unit
 			{
-				texture pluma.png
+				texture feather.png
 				tex_address_mode clamp
 			}
 		}

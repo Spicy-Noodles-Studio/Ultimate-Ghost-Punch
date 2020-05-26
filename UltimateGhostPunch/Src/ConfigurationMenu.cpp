@@ -183,9 +183,9 @@ void ConfigurationMenu::initNames()
 		configurationLayout->getRoot().getChild("PreviewSongButton").setText(currentSong);
 
 
-	levelNames["Coliseum"] = "level4";
-	levelNames["Sewers"] = "level3";
-	levelNames["Volcano"] = "level5";
+	levelNames["Sewers"] = "level1";
+	levelNames["Coliseum"] = "level2";
+	levelNames["Volcano"] = "level3";
 
 	std::string level = (notNull(gameManager)) ? gameManager->getLevel().second : "";
 	it = levelNames.find(level);

@@ -1,11 +1,11 @@
 {
-    "RenderMesh" : "Level4Render.mesh",
-    "ColliderMesh" : "Level4.mesh",
+    "RenderMesh" : "Level2Render.mesh",
+    "ColliderMesh" : "Level2.mesh",
     "PlayerTransforms":[
-        ["-17 6 0", "0 90 0"],
-        ["17 6 0", "0 -90 0"],
-        ["-10 6 0", "0 90 0"],
-        ["10 6 0", "0 -90 0"]
+        ["-17 2 0", "0 90 0"],
+        ["17 2 0", "0 -90 0"],
+        ["-10 2 0", "0 90 0"],
+        ["10 2 0", "0 -90 0"]
     ],
     "Lights":[
         ["Directional", "0 0 0", "3", "0 0 1", "0 -1 0"],
