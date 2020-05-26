@@ -164,7 +164,7 @@ void PlayerController::checkInput()
 		if (notNull(grab))
 		{
 			if (getKey("E") || getButton("LB"))
-				grab->grab();
+				grab->chargeGrab();
 			else if (getKeyUp("E") || getButtonUp("LB"))
 				grab->drop();
 		}

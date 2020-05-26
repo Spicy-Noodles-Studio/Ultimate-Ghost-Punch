@@ -247,7 +247,7 @@ void AIStateMachine::processActionInput()
 			break;
 		case ActionInput::GRAB:
 			if (notNull(grab))
-				grab->grab();
+				grab->chargeGrab();
 			break;
 		case ActionInput::DROP:
 			if (notNull(grab))

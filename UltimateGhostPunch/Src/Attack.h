@@ -82,6 +82,8 @@ public:
 	bool isQuickAttacking() const;
 	bool isHeavyAttacking() const;
 
+	bool isChargingAttack() const;
+
 	bool hasHit() const;
 };
 

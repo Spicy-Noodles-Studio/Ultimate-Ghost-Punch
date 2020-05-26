@@ -12,7 +12,7 @@ class Score;
 class Grab : public UserComponent
 {
 private:
-	enum State { IDLE, GRABBED, BLOCKED };
+	enum State { IDLE, CHARGE, GRABBED, BLOCKED };
 
 	int id;
 
@@ -27,6 +27,8 @@ private:
 
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
+
+	int charging;
 
 	int dropped;
 	int missed;
@@ -64,12 +66,13 @@ public:
 	Grab(GameObject* gameObject);
 	virtual ~Grab();
 
-
+	void chargeGrab();
 	void grab();
 	void drop();
 	void grabMissed();
 
 	bool isGrabbing() const;
+	bool isCharging() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
 

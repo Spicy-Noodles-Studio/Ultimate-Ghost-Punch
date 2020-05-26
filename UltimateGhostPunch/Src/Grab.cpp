@@ -97,6 +97,11 @@ void Grab::postUpdate(float deltaTime)
 {
 	if (missed > 0)missed--;
 	if (dropped > 0)dropped--;
+	if (charging > 0) {
+		charging--;
+		if (charging == 0)
+			grab();
+	}
 }
 
 void Grab::onObjectStay(GameObject* other)
@@ -160,9 +165,18 @@ void Grab::handleData(ComponentData* data)
 	}
 }
 
+void Grab::chargeGrab()
+{
+	if (state == IDLE && grabTimer <= 0 && notNull(playerState) && playerState->canGrab() && !playerState->isGrabbed()) {
+		charging = 7;
+		state = CHARGE;
+		grabTimer = cooldown;
+	}
+}
+
 void Grab::grab()
 {
-	if (state == IDLE && grabTimer <= 0 && notNull(playerState) && playerState->canGrab() && !playerState->isGrabbed())
+	if (state == CHARGE)
 	{
 		bool grabSucces = false;
 		if (notNull(enemy)) {
@@ -176,14 +190,12 @@ void Grab::grab()
 			grabEnemy();
 		else
 			grabMissed();
-
-		grabTimer = cooldown;
 	}
 }
 
 void Grab::drop()
 {
-	if (state != GRABBED || !notNull(enemy) || !notNull(parent) ||
+	if ((state != GRABBED) || !notNull(enemy) || !notNull(parent) ||
 		!notNull(parent->transform) || !notNull(enemy->transform)) return;
 
 	resetEnemy();
@@ -199,6 +211,7 @@ void Grab::drop()
 	//Reset state
 	enemy = nullptr;
 	state = IDLE;
+	charging = 0;
 	grabTimer = cooldown;
 
 	dropped = 2;
@@ -213,6 +226,11 @@ void Grab::grabMissed()
 bool Grab::isGrabbing() const
 {
 	return state == GRABBED;
+}
+
+bool Grab::isCharging() const
+{
+	return state == CHARGE;
 }
 
 bool Grab::isOnCooldown() const

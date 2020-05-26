@@ -16,8 +16,8 @@
 #include "PlayerState.h"
 
 FightingState::FightingState(StateMachine* stateMachine) : StateAction(stateMachine), quickAttackProb_QAR(50), strongAttackProb_QAR(45), blockProb_QAR(5), strongAttackProb_SAR(60), seekProb_SAR(38),
-blockProb_SAR(2), blockSpamTimeMAX(10), grabProb(2), maxQuickAttacks(3), quickAttackCounter(0), lastAction(ActionInput::STOP), dodgeProb(5), maxDistForJump(2), blockSpamTime(0), unblockTime(0), target(nullptr),
-attack(nullptr), blockComp(nullptr), character(nullptr), dodgeComp(nullptr), fighting(false), grabComp(nullptr), jump(nullptr), movement(nullptr), playerState(nullptr)
+blockProb_SAR(2), blockSpamTimeMAX(2), grabProb(2), maxQuickAttacks(3), quickAttackCounter(0), lastAction(ActionInput::STOP), dodgeProb(5), maxDistForJump(2), blockSpamTime(0), unblockTime(0), avoidBlockProb(3.5), target(nullptr),
+attack(nullptr), blockComp(nullptr), character(nullptr), dodgeComp(nullptr), fighting(false), grabComp(nullptr), jump(nullptr), movement(nullptr), playerState(nullptr), avoidBlockTime(0.0f)
 {
 }
 
@@ -38,6 +38,15 @@ void FightingState::update(float deltaTime)
 {
 	if (blockSpamTime > 0) blockSpamTime -= deltaTime;
 	if (unblockTime > 0) unblockTime -= deltaTime;
+	if (avoidBlockTime > 0) {
+		avoidBlockTime -= deltaTime;
+		turnTowardsTarget();
+		if (avoidBlockTime <= 0) {
+			if (notNull(stateMachine))
+				stateMachine->addActionInput(ActionInput::DODGE);
+			turnTowardsTarget();
+		}
+	}
 	selectAction();
 }
 
@@ -77,7 +86,6 @@ void FightingState::selectAction()
 	}
 
 	checkNullAndBreak(target);
-
 	Health* targetHealth = target->getComponent<Health>();
 	GhostManager* targetGhostManager = target->getComponent<GhostManager>();
 
@@ -93,8 +101,41 @@ void FightingState::selectAction()
 		return;
 	}
 
-	// AIR COMBAT
+	int rnd = rand() % 100;
 	PlayerState* targetState = target->getComponent<PlayerState>();
+	if (notNull(targetState) && targetState->isBlocking() && rnd < avoidBlockProb && avoidBlockTime <= 0) {
+		avoidBlock();
+		return;
+	}
+
+	if (notNull(targetHealth) && targetHealth->isInvencible()) return; //If target is invencible we wait until it is not
+
+	// QUICK ATTACK RANGE
+	if (enemyInQuickAttackRange())
+	{
+		if (notNull(targetState) && (targetState->isChargingGrab() || targetState->isChargingAttack()) && blockSpamTime <= 0)		// Action: Try to shield 
+			block();
+		else if (rnd < quickAttackProb_QAR)							// Action: Quick Attack
+			quickAttack();
+		else if (rnd < quickAttackProb_QAR + strongAttackProb_QAR)	// Action: Strong Attack
+			strongAttack();
+		return;
+	}
+
+	// STRONG ATTACK RANGE
+	if (enemyInStrongAttackRange())
+	{
+		if (notNull(targetState) && (targetState->isChargingGrab() || targetState->isChargingAttack()) && blockSpamTime <= 0)		// Action: Try to shield 
+			block();
+		if (rnd < strongAttackProb_SAR)							// Action: Strong Attack
+			strongAttack();
+		else if (blockSpamTime <= 0)							// Action: Try to shield
+			block();
+
+		return;
+	}
+
+	// AIR COMBAT
 
 	if (notNull(targetState) && !targetState->isGrounded() && notNull(target->transform) && notNull(character->transform)) // Check if target is jumping
 	{
@@ -108,32 +149,6 @@ void FightingState::selectAction()
 			lastAction = action;
 			return;
 		}
-	}
-
-	int rnd = rand() % 100;
-	// QUICK ATTACK RANGE
-	if (enemyInQuickAttackRange())
-	{
-		if (rnd < quickAttackProb_QAR)								// Action: Quick Attack
-			quickAttack();
-		else if (rnd < quickAttackProb_QAR + strongAttackProb_QAR)	// Action: Strong Attack
-			strongAttack();
-		else if (blockSpamTime <= 0)								// Action: Try to shield 
-			block();
-		return;
-	}
-
-	// STRONG ATTACK RANGE
-	if (enemyInStrongAttackRange())
-	{
-		if (rnd < strongAttackProb_SAR)							// Action: Strong Attack
-			strongAttack();
-		else if (rnd < strongAttackProb_SAR + seekProb_SAR)		// Action: Transition to seek
-			transitionToPlatformNav();
-		else if (blockSpamTime <= 0)							// Action: Try to shield
-			block();
-
-		return;
 	}
 
 	// NOT IN RANGE OF ATTACK
@@ -187,6 +202,13 @@ void FightingState::strongAttack()
 			dodge();
 		}
 	}
+}
+
+void FightingState::avoidBlock()
+{
+	stateMachine->addActionInput(ActionInput::JUMP);
+	turnTowardsTarget();
+	avoidBlockTime = 0.35;
 }
 
 void FightingState::block()
@@ -302,7 +324,7 @@ void FightingState::setCharacter(GameObject* character)
 	checkNull(attack);
 
 	std::vector<GameObject*> ground = character->findChildrenWithTag("groundSensor");
-	if (ground.size() > 0  && notNull(ground[0]))
+	if (ground.size() > 0 && notNull(ground[0]))
 	{
 		jump = ground[0]->getComponent<Jump>();
 		blockComp = ground[0]->getComponent<Block>();

@@ -140,6 +140,11 @@ bool PlayerState::isGrounded() const
 	return notNull(jump) && jump->isGrounded();
 }
 
+bool PlayerState::isChargingGrab() const
+{
+	return notNull(grab) && grab->isCharging();
+}
+
 bool PlayerState::isGrabbing() const
 {
 	return notNull(grab) && grab->isGrabbing();
@@ -173,6 +178,11 @@ bool PlayerState::isHeavyAttacking() const
 bool PlayerState::isQuickAttacking() const
 {
 	return notNull(attack) && attack->isQuickAttacking();
+}
+
+bool PlayerState::isChargingAttack() const
+{
+	return notNull(attack) &&  attack->isChargingAttack();
 }
 
 bool PlayerState::isGhostMoving() const

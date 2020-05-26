@@ -46,6 +46,8 @@ private:
 	int seekProb_SAR;
 	int blockProb_SAR;
 
+	int avoidBlockProb;
+
 	// Grab probability
 	int grabProb;
 	// Dodge probability
@@ -54,6 +56,7 @@ private:
 	float blockSpamTimeMAX; // Time until the AI can block again
 	float blockSpamTime;
 	float unblockTime; // Time until unblock
+	float avoidBlockTime;
 
 	float maxDistForJump; // Max distance to target for jump attack
 
@@ -65,6 +68,7 @@ private:
 	void selectAction();
 	void quickAttack();
 	void strongAttack();
+	void avoidBlock();
 	void block();
 	void unblock();
 	void transitionToPlatformNav();

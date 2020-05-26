@@ -312,6 +312,11 @@ bool Attack::isHeavyAttacking() const
 	return isAttacking() && currentAttack == STRONG;
 }
 
+bool Attack::isChargingAttack() const
+{
+	return state == CHARGING;
+}
+
 bool Attack::hasHit() const
 {
 	return hit > 0;
