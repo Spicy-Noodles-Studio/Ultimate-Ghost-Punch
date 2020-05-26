@@ -1,0 +1,12 @@
+ {
+    "ObjectType": "BLUEPRINT",
+    "ObjectName": "PlayerAI",
+    "Tag": "Player",
+    "BlueprintPath": "Knight",
+    "Components":
+    [
+        {
+            "ComponentName": "AIStateMachine"
+        }
+    ]
+}

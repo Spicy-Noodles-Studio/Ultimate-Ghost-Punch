@@ -4,15 +4,16 @@
 #include <RigidBody.h>
 #include <sstream>
 
+#include "PlayerIndex.h"
 #include "Health.h"
 #include "Score.h"
-#include "PlayerIndex.h"
-#include "GhostManager.h"
+#include "Game.h"
 #include "GameManager.h"
+#include "GhostManager.h"
 
 REGISTER_FACTORY(Obstacle);
 
-Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(1), pushStrength(40.0f), respawnOffset(5.0, 0.0, 0.0)
+Obstacle::Obstacle(GameObject* gameObject) : UserComponent(gameObject), damage(1), pushStrength(40.0f), initialPosition(Vector3::ZERO)
 {
 
 }
@@ -24,6 +25,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -36,10 +38,6 @@ void Obstacle::handleData(ComponentData* data)
 		{
 			setFloat(pushStrength);
 		}
-		else if (prop.first == "respawnOffset")
-		{
-			setVector3(respawnOffset);
-		}
 		else
 			LOG("OBSTACLE: Invalid property name \"%s\"", prop.first.c_str());
 	}
@@ -47,34 +45,44 @@ void Obstacle::handleData(ComponentData* data)
 
 void Obstacle::onCollisionEnter(GameObject* other)
 {
-	if (other->getTag() == "Player")
+	if (notNull(other) && other->getTag() == "Player")
 	{
-		int xDir = other->transform->getPosition().x < gameObject->transform->getPosition().x ? -1 : 1; // PLAYER --> OBSTACLE
-		int yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
-
+		int xDir = 0, yDir = 0;
+		if (notNull(other->transform) && notNull(gameObject) && notNull(gameObject->transform)) {
+			xDir = other->transform->getPosition().x < gameObject->transform->getPosition().x ? -1 : 1; // PLAYER --> OBSTACLE
+			yDir = other->transform->getPosition().y < gameObject->transform->getPosition().y ? -1 : 1; // OBSTACLE is over PLAYER
+		}
 		// The player receives damage
-		Score* score = GameManager::GetInstance()->getScore();
-		int otherId = other->getComponent<PlayerIndex>()->getIndex();
 		Health* health = other->getComponent<Health>();
+		checkNullAndBreak(health);
 
-		if (health == nullptr) return;
-
-		int h = health->getHealth();
 		health->receiveDamage(damage);
 
-		if (h != health->getHealth()&&score!=nullptr)
-			score->damagedBySpike(otherId);
+		Score* score = nullptr;
+		if(notNull(GameManager::GetInstance()))
+			score = GameManager::GetInstance()->getScore();
 
-		// If the player has died, add an offset to the respawn position, in case it resurrects
+		PlayerIndex* playerIndex = other->getComponent<PlayerIndex>();
+
+		if (notNull(score) && notNull(playerIndex))
+			score->damagedBySpike(playerIndex->getPos());
+
 		if (!health->isAlive())
 		{
-			GhostManager* ghostManager = other->getComponent<GhostManager>();
-			if (ghostManager != nullptr)
+			GameObject* aux = findGameObjectWithName("Game");
+			if (notNull(aux))
 			{
-				respawnOffset.x *= xDir;
-				ghostManager->setDeathPosition(other->transform->getPosition() + respawnOffset);
-				if(score!=nullptr)
-				score->deathByEnviromentHazard(otherId);
+				Game* game = aux->getComponent<Game>();
+				if (notNull(game) && notNull(playerIndex))
+					initialPosition = game->getPlayerInitialPosition(playerIndex->getIndex());
+			}
+
+			GhostManager* ghostManager = other->getComponent<GhostManager>();
+			if (notNull(ghostManager))
+			{
+				ghostManager->setDeathPosition(initialPosition);
+				if (notNull(score) && notNull(playerIndex))
+					score->deathByEnviroment(playerIndex->getPos());
 			}
 		}
 		else
@@ -84,7 +92,7 @@ void Obstacle::onCollisionEnter(GameObject* other)
 			pushDir.normalize();
 
 			RigidBody* rb = other->getComponent<RigidBody>();
-			if (rb != nullptr)
+			if (notNull(rb))
 				rb->addImpulse(pushDir * pushStrength);
 		}
 	}

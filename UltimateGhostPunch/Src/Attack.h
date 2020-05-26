@@ -26,7 +26,7 @@ private:
 	float attackDuration; // The time that the attack remains active
 	float activeTime;
 
-	bool hit;
+	int hit;
 
 	enum AttackType
 	{
@@ -41,37 +41,48 @@ private:
 	AttackType currentAttack;
 	AttackState state;
 
+	GameObject* parent;
 	RigidBody* attackTrigger;
 	Score* score;
 
 	Vector3 quickAttackScale;
 	Vector3 strongAttackScale;
+
 	Vector3 quickAttackOffset;
 	Vector3 strongAttackOffset;
-
-	GameObject* parent;
 
 	void charge(float newCooldown, float newChargeTime);
 	void attack();
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
+	bool isAttackOnRange(GameObject* obj, const Vector3& scale) const;
 
-public:
-	Attack(GameObject* gameObject);
-	virtual ~Attack();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
 
+public:
+	Attack(GameObject* gameObject);
+	virtual ~Attack();
+
+
 	void quickAttack();
 	void strongAttack();
+	void stop();
+
+	bool isQuickAttackOnRange(GameObject* obj) const;
+	bool isStrongAttackOnRange(GameObject* obj) const;
+
+	bool attackOnCD() const;
 
 	bool isAttacking() const;
-	bool isHeavyAttacking() const;
 	bool isQuickAttacking() const;
+	bool isHeavyAttacking() const;
+
+	bool isChargingAttack() const;
 
 	bool hasHit() const;
 };

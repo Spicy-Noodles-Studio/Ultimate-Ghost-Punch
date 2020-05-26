@@ -11,18 +11,19 @@ class GhostManager;
 
 class PlayerUI : public UserComponent
 {
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	PlayerUI(GameObject* gameObject);
 	virtual ~PlayerUI();
 
-	virtual void start();
-	virtual void update(float deltaTime);
-
 	void setVisible(bool visible);
+	void updateHearts();
 
 private:
 	void createHearts();
-	void updateHearts();
 
 	void createGhost();
 	void updateGhost();

@@ -1,13 +1,9 @@
 #include "Countdown.h"
 #include <ComponentRegister.h>
-#include <InterfaceSystem.h>
-#include <RenderSystem.h>
-#include <SceneManager.h>
-#include <WindowManager.h>
 #include <GameObject.h>
 #include <UILayout.h>
 
-#include "PlayerController.h"
+#include "PlayerState.h"
 #include "CameraController.h"
 #include "GameManager.h"
 #include "DebugUtils.h"
@@ -22,23 +18,27 @@ Countdown::Countdown(GameObject* gameObject) : UserComponent(gameObject), panel(
 
 Countdown::~Countdown()
 {
-	
+	cameraControl = nullptr;
+	players.clear();
 }
 
 void Countdown::start()
 {
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
 
-	if (mainCamera != nullptr)
+	if (notNull(mainCamera))
 	{
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
 		cameraControl = mainCamera->getComponent<CameraController>();
-		
-		if (cameraLayout != nullptr)
+
+		if (notNull(cameraLayout))
 			panel = cameraLayout->getRoot().getChild("CountdownBackground");
 	}
 
-	players = GameManager::GetInstance()->getKnights();
+	if (notNull(GameManager::GetInstance()))
+		players = GameManager::GetInstance()->getKnights();
+
+	checkNull(cameraControl);
 }
 
 void Countdown::update(float deltaTime)
@@ -46,35 +46,44 @@ void Countdown::update(float deltaTime)
 	if (!startCounting)
 	{
 		for (int i = 0; i < players.size(); i++)
-			players[i]->getComponent<PlayerController>()->setActive(false);
+			if (notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()))
+				players[i]->getComponent<PlayerState>()->setIgnoringInput(true);
 
-		cameraControl->setActive(false);
+		if (notNull(cameraControl))
+			cameraControl->setActive(false);
 
 		startCounting = true;
 		countingDown = true;
+
 		panel.setVisible(true);
+		panel.setAlwaysOnTop(true);
 
 		last = std::chrono::steady_clock::now();
 
-		SongManager::GetInstance()->play2DSound("countdown");
+		if (notNull(SongManager::GetInstance()))
+			SongManager::GetInstance()->play2DSound("countdown");
 	}
 
 	if (countingDown)
 	{
-		if (time >= 1)
-			panel.getChild("Countdown").setText(std::to_string((int)time));
+		if (time + 1 >= 1)
+			panel.getChild("Countdown").setText(std::to_string((int)time + 1));
 		else
 			panel.getChild("Countdown").setText("FIGHT!");
 
-		if (time < 0)
+		if (time + 1 < 0)
 		{
 			for (int i = 0; i < players.size(); i++)
-				players[i]->getComponent<PlayerController>()->setActive(true);
+				if (notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()))
+					players[i]->getComponent<PlayerState>()->setIgnoringInput(false);
 
-			cameraControl->setActive(true);
+			if (notNull(cameraControl))
+				cameraControl->setActive(true);
 
 			countingDown = false;
+
 			panel.setVisible(false);
+			panel.setAlwaysOnTop(false);
 		}
 
 		std::chrono::steady_clock::time_point current = std::chrono::steady_clock::now();
@@ -87,6 +96,7 @@ void Countdown::update(float deltaTime)
 
 void Countdown::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -100,7 +110,17 @@ void Countdown::handleData(ComponentData* data)
 	}
 }
 
+bool Countdown::hasStarted() const
+{
+	return startCounting;
+}
+
 bool Countdown::isCounting() const
 {
 	return countingDown;
+}
+
+float Countdown::getRemainingTime() const
+{
+	return time;
 }

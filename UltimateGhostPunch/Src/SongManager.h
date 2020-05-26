@@ -1,6 +1,6 @@
 #pragma once
-#ifndef SONGMANAGER_H
-#define SONGMANAGER_H
+#ifndef SONG_MANAGER_H
+#define SONG_MANAGER_H
 
 #include <UserComponent.h>
 
@@ -18,15 +18,17 @@ private:
 	bool songPlaying;
 	std::string menuMusic = "cycles";
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	SongManager();
 	SongManager(GameObject* gameObject);
-	~SongManager();
+	virtual ~SongManager();
 
 	static SongManager* GetInstance();
 
-	virtual void start();
-	virtual void update(float deltaTime);
 	void playMenuSong();
 	void stopMenuSong();
 	void pauseMenuSong();

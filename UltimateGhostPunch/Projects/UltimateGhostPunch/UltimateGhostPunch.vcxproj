@@ -43,12 +43,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
+    <ClCompile Include="..\..\Src\ControlsMenu.cpp" />
+    <ClCompile Include="..\..\Src\Credits.cpp" />
+    <ClCompile Include="..\..\Src\FightingState.cpp" />
+    <ClCompile Include="..\..\Src\GhostNavigation.cpp" />
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
     <ClCompile Include="..\..\Src\Countdown.cpp" />
+    <ClCompile Include="..\..\Src\CursorGame.cpp" />
+    <ClCompile Include="..\..\Src\CursorMenu.cpp" />
     <ClCompile Include="..\..\Src\DeathZone.cpp" />
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
+    <ClCompile Include="..\..\Src\LogoScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
     <ClCompile Include="..\..\Src\Menu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
@@ -61,7 +69,9 @@
     <ClCompile Include="..\..\Src\ParticleManager.cpp" />
     <ClCompile Include="..\..\Src\PathRecorder.cpp" />
     <ClCompile Include="..\..\Src\PauseMenu.cpp" />
-    <ClCompile Include="..\..\Src\PlayerAnimController.cpp" />
+    <ClCompile Include="..\..\Src\PlatformMovement.cpp" />
+    <ClCompile Include="..\..\Src\PlatformNavigation.cpp" />
+    <ClCompile Include="..\..\Src\AnimationManager.cpp" />
     <ClCompile Include="..\..\Src\PlayerFX.cpp" />
     <ClCompile Include="..\..\Src\PlayerIndex.cpp" />
     <ClCompile Include="..\..\Src\PlatformGraph.cpp" />
@@ -79,20 +89,31 @@
     <ClCompile Include="..\..\Src\Jump.cpp" />
     <ClCompile Include="..\..\Src\Respawn.cpp" />
     <ClCompile Include="..\..\Src\Score.cpp" />
+    <ClCompile Include="..\..\Src\StateAction.cpp" />
+    <ClCompile Include="..\..\Src\StateMachine.cpp" />
     <ClCompile Include="..\..\Src\StatsMenu.cpp" />
     <ClCompile Include="..\..\Src\SongManager.cpp" />
     <ClCompile Include="..\..\Src\SoundManager.cpp" />
+    <ClCompile Include="..\..\Src\TrailManager.cpp" />
     <ClCompile Include="..\..\Src\UltimateGhostPunch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Src\AIStateMachine.h" />
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
+    <ClInclude Include="..\..\Src\ControlsMenu.h" />
     <ClInclude Include="..\..\Src\Countdown.h" />
+    <ClInclude Include="..\..\Src\Credits.h" />
+    <ClInclude Include="..\..\Src\CursorGame.h" />
+    <ClInclude Include="..\..\Src\CursorMenu.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
     <ClInclude Include="..\..\Src\Block.h" />
+    <ClInclude Include="..\..\Src\FightingState.h" />
+    <ClInclude Include="..\..\Src\GhostNavigation.h" />
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\LoadingScreen.h" />
+    <ClInclude Include="..\..\Src\LogoScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
     <ClInclude Include="..\..\Src\Menu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />
@@ -105,7 +126,9 @@
     <ClInclude Include="..\..\Src\ParticleManager.h" />
     <ClInclude Include="..\..\Src\PathRecorder.h" />
     <ClInclude Include="..\..\Src\PauseMenu.h" />
-    <ClInclude Include="..\..\Src\PlayerAnimController.h" />
+    <ClInclude Include="..\..\Src\PlatformMovement.h" />
+    <ClInclude Include="..\..\Src\PlatformNavigation.h" />
+    <ClInclude Include="..\..\Src\AnimationManager.h" />
     <ClInclude Include="..\..\Src\PlayerFX.h" />
     <ClInclude Include="..\..\Src\PlayerIndex.h" />
     <ClInclude Include="..\..\Src\PlatformGraph.h" />
@@ -116,9 +139,12 @@
     <ClInclude Include="..\..\Src\GhostMovement.h" />
     <ClInclude Include="..\..\Src\Respawn.h" />
     <ClInclude Include="..\..\Src\Score.h" />
+    <ClInclude Include="..\..\Src\StateAction.h" />
+    <ClInclude Include="..\..\Src\StateMachine.h" />
     <ClInclude Include="..\..\Src\StatsMenu.h" />
     <ClInclude Include="..\..\Src\SongManager.h" />
     <ClInclude Include="..\..\Src\SoundManager.h" />
+    <ClInclude Include="..\..\Src\TrailManager.h" />
     <ClInclude Include="..\..\Src\UltimateGhostPunch.h" />
     <ClInclude Include="..\..\Src\Movement.h" />
     <ClInclude Include="..\..\Src\PlayerController.h" />

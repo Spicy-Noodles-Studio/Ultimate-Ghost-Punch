@@ -1,37 +1,44 @@
 #include "Health.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
+#include <Camera.h>
+#include <Scene.h>
 #include <sstream>
 
-#include "PlayerAnimController.h"
 #include "Block.h"
+#include "Attack.h"
 #include "Grab.h"
+#include "CameraEffects.h"
 
 REGISTER_FACTORY(Health);
 
-Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleDamageTime(0.5f), alive(true), invencible(false), hurt(false)
+Health::Health(GameObject* gameObject) : UserComponent(gameObject), maxHealth(4), health(4), time(0.0f), invencibleTime(0.5f), alive(true), invencible(false), hurt(false), cameraEffects(nullptr)
 {
 
 }
 
 Health::~Health()
 {
-
+	cameraEffects = nullptr;
 }
 
 void Health::start()
 {
 	maxHealth = health;
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	checkNullAndBreak(mainCamera);
+
+	cameraEffects = mainCamera->getComponent<CameraEffects>();
+	checkNull(cameraEffects);
 }
 
 void Health::update(float deltaTime)
 {
 	if (invencible)
 	{
-		if (time > 0.0f)
-			time -= deltaTime;
-		else
-			invencible = false;
+		if (time > 0.0f) time -= deltaTime;
+		else invencible = false;
 	}
 }
 
@@ -42,6 +49,7 @@ void Health::postUpdate(float deltaTime)
 
 void Health::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -52,7 +60,7 @@ void Health::handleData(ComponentData* data)
 		}
 		else if (prop.first == "invDamTime")
 		{
-			setFloat(invencibleDamageTime);
+			setFloat(invencibleTime);
 		}
 		else
 			LOG("HEALTH: Invalid property name \"%s\"", prop.first.c_str());
@@ -78,25 +86,35 @@ void Health::receiveDamage(int damage)
 {
 	if (alive && !invencible)
 	{
+		checkNullAndBreak(gameObject);
+
 		std::vector<GameObject*> aux = gameObject->findChildrenWithTag("groundSensor");
 		Block* block = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0  && notNull(aux[0]))
 		{
 			block = aux[0]->getComponent<Block>();
-
-			if (block != nullptr && block->isBlocking())
+			if (notNull(block) && block->isBlocking())
 				block->unblock();
+		}
+
+		aux = gameObject->findChildrenWithTag("attackSensor");
+		Attack* attack = nullptr;
+
+		if (aux.size() > 0 && notNull(aux[0]))
+		{
+			attack = aux[0]->getComponent<Attack>();
+			if (notNull(attack) && attack->isAttacking())
+				attack->stop();
 		}
 
 		aux = gameObject->findChildrenWithTag("grabSensor");
 		Grab* grab = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0 && notNull(aux[0]))
 		{
 			grab = aux[0]->getComponent<Grab>();
-
-			if (grab != nullptr && grab->isGrabbing())
+			if (notNull(grab) && grab->isGrabbing())
 				grab->drop();
 		}
 
@@ -106,26 +124,18 @@ void Health::receiveDamage(int damage)
 			health = 0;
 
 		if (health == 0)
+		{
 			alive = false;
+			if (notNull(cameraEffects)) cameraEffects->shake(Vector3(1, 1, 0));
+		}
 		else
 		{
 			invencible = true;
-			time = invencibleDamageTime;
+			time = invencibleTime;
 		}
 
 		hurt = true;
-		gameObject->getComponent<PlayerAnimController>()->hurtAnimation();
 	}
-}
-
-float Health::getTime()
-{
-	return time;
-}
-
-float Health::getInvDamTime()
-{
-	return invencibleDamageTime;
 }
 
 void Health::setTime(float time)

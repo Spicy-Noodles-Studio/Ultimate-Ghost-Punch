@@ -14,7 +14,7 @@ private:
 	};
 
 	CameraState state;
-	float minZ, maxZ;
+	float minX, maxX, minY, maxY, minZ, maxZ;
 
 	// Cam's Z pos = max dist between players * zoomFactor
 	float zoomFactor;
@@ -31,13 +31,21 @@ private:
 
 	GameObject* playerPunching;
 
-public:
-	CameraController(GameObject* gameObject);
-	virtual ~CameraController();
-
+protected:
 	virtual void preUpdate(float deltaTime);
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	CameraController(GameObject* gameObject);
+	virtual ~CameraController();
+	void setMinZ(float minZ);
+	void setMaxZ(float maxZ);
+	void setMinX(float minX);
+	void setMaxX(float maxX);
+	void setMinY(float minY);
+	void setMaxY(float maxY);
+
 
 private:
 	void smoothMove();
@@ -48,6 +56,9 @@ private:
 
 	// Returns the mid-point between every character on screen
 	Vector3 getMidPointBetweenPlayers();
+
+	// Adjusts mid-point to boundaries and zoom
+	void getMidPointAdjusted(Vector3* midPoint, float zoom);
 
 	// Set the target position specified by the players' mid-point and distance
 	void setTargetToMidPointPlayers();
@@ -63,8 +74,7 @@ private:
 
 	// Returns the first player punching
 	GameObject* someonePunching();
-	// Returns a vector with the player currently active
-	std::vector<GameObject*> getAlivePlayers();
+	
 };
 
 #endif

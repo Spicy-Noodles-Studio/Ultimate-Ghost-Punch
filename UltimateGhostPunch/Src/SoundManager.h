@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PARTICLE_MANAGER
-#define PARTICLE_MANAGER
+#ifndef SOUND_MANAGER_H
+#define SOUND_MANAGER_H
 
 #include <UserComponent.h>
 
@@ -9,8 +9,6 @@ class PlayerState;
 
 class SoundManager : public UserComponent
 {
-public:
-
 private:
 	/* PARTICLE SYSTEMS */
 	SoundEmitter* soundEmitter;
@@ -18,7 +16,18 @@ private:
 	/* COMPONENTS TO GET INFO */
 	PlayerState* playerState;
 
-	bool attackStarted, aimStarted, ghostStarted, grabStarted, blockGrabStarted, respawnStarted, punchStarted, dodgeStarted, ghostSuccess, deathStarted, punchSuccess, jumpStarted;
+	bool attackStarted;
+	bool aimStarted;
+	bool ghostStarted;
+	bool grabStarted;
+	bool blockGrabStarted;
+	bool respawnStarted;
+	bool punchStarted;
+	bool dodgeStarted;
+	bool ghostSuccess;
+	bool deathStarted;
+	bool punchSuccess;
+	bool jumpStarted;
 
 	std::vector<std::string> hurtSounds;
 	std::vector<std::string> hitSounds;
@@ -26,15 +35,17 @@ private:
 	std::vector<std::string> jumpSounds;
 	std::vector<std::string> throwSounds;
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	SoundManager(GameObject* gameObject);
 	virtual ~SoundManager();
 
-	virtual void start();
-	virtual void update(float deltaTime);
-
 	void playTaunt();
-	
+	void stopAll();
+
 private:
 	void playSound(const std::string& sound);
 	void stopSound(const std::string& sound);

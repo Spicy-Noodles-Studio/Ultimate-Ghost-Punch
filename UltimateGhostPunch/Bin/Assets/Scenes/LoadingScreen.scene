@@ -1,6 +1,20 @@
 {
     "SceneName": "LoadingScreen",
-    "SceneObjects": [
+    "SceneObjects": [        
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "Cursor",
+            "Tag": "cursor",
+            "Components" : [
+                {
+                    "ComponentName" : "Cursor",
+                    "ComponentProperties" : [
+                        ["visible", "0"],
+                        ["spriteVisible", "0"]
+                    ]
+                }
+            ]
+        },
         {
             "ObjectType": "GAMEOBJECT",
             "ObjectName": "LoadingScreen",

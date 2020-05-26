@@ -1,0 +1,13 @@
+material Billboard
+ {
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend add
+			depth_write off
+			//diffuse vertexcolour
+		}
+	}
+ }

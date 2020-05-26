@@ -1,9 +1,7 @@
 #include "GhostMovement.h"
 #include <ComponentRegister.h>
-#include <InputSystem.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerState.h"
@@ -17,15 +15,20 @@ GhostMovement::GhostMovement(GameObject* gameObject) :UserComponent(gameObject),
 
 GhostMovement::~GhostMovement()
 {
+	rigidBody = nullptr;
 }
 
 void GhostMovement::start()
 {
+	checkNullAndBreak(gameObject);
+
 	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNull(rigidBody);
 }
 
 void GhostMovement::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -41,16 +44,29 @@ void GhostMovement::handleData(ComponentData* data)
 
 void GhostMovement::move(Vector3 dir)
 {
+	checkNullAndBreak(gameObject);
+
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
-	if (aux != nullptr && aux->canGhostMove()) {
+	if (notNull(aux) && aux->canGhostMove())
+	{
 		//Character rotation
 		if (dir.x != 0)
-			gameObject->transform->setRotation({ 0,90 * dir.x,0 });
+		{
+			double flippedY = (dir.x > 0) ? 1 : -1;
+			if(notNull(gameObject->transform)) gameObject->transform->setRotation({ 0,90 * flippedY,0 });
+		}
 
 		dir *= maxSpeed;
-		if (rigidBody != nullptr)
-			rigidBody->setLinearVelocity(dir);
+		if (notNull(rigidBody)) rigidBody->setLinearVelocity(dir);
 	}
+}
+
+void GhostMovement::stop()
+{
+	checkNullAndBreak(rigidBody);
+
+	rigidBody->setLinearVelocity(Vector3::ZERO);
+	rigidBody->clearForces();
 }
 
 void GhostMovement::setSpeed(float speed)
@@ -61,4 +77,10 @@ void GhostMovement::setSpeed(float speed)
 float GhostMovement::getSpeed() const
 {
 	return maxSpeed;
+}
+
+bool GhostMovement::isGhostMoving() const
+{
+	checkNullAndBreak(rigidBody, false);
+	return std::abs(rigidBody->getLinearVelocity().x) > 0.3f || std::abs(rigidBody->getLinearVelocity().y) > 0.3f;
 }

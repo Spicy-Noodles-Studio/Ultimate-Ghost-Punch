@@ -4,9 +4,21 @@
 
 #include <UserComponent.h>
 #include <vector>
+#include <queue>
 #include <string>
 
 #include "Score.h"
+
+typedef std::pair<int, int> ii;
+
+class Less
+{
+public:
+	bool operator()(const ii& a, const ii& b)
+	{
+		return a.second < b.second;
+	}
+};
 
 class GameObject;
 
@@ -19,6 +31,7 @@ private:
 
 	std::vector<int> playerIndexes;
 	std::vector<int> playerRanking;
+	std::priority_queue<ii, std::vector<ii>, Less> ranking;
 
 	std::vector<Vector3> playerColours;
 	std::vector<GameObject*> knights;
@@ -30,7 +43,6 @@ private:
 	std::string songName;
 
 	int initialPlayers;
-	int playersAlive;
 	int winner;
 
 	bool paused;
@@ -42,6 +54,13 @@ private:
 	int initialTime;
 	bool timeMode;
 
+	float initialBrightness;
+	float initialMusicVolume;
+	float initialSoundVolume;
+
+protected:
+	virtual void start();
+
 public:
 	GameManager();
 	GameManager(GameObject* gameObject);
@@ -50,26 +69,20 @@ public:
 
 	static GameManager* GetInstance();
 
-	virtual void start();
-
-	void setPaused(bool setPaused);
-	bool isPaused() const;
-
 	Score* getScore();
 
 	void setPlayerIndexes(std::vector<int>& playerIndexes);
 	std::vector<int>& getPlayerIndexes();
 
-	void initPlayerRanking(int tam);
 	void setPlayerRanking(int index, int rank);
 	int getPlayerRanking(int index) const;
 
-	void setInitialPlayers(int players);
-	int getInitialPlayers() const;
+	std::priority_queue<ii, std::vector<ii>, Less>& getRanking();
+	void emptyRanking();
 
 	std::vector<Vector3>& getPlayerColours();
-	std::vector<GameObject*>& getKnights();
 
+	std::vector<GameObject*>& getKnights();
 	void emptyKnights();
 
 	void setLevel(std::string level, std::string name);
@@ -78,6 +91,16 @@ public:
 	void setSong(std::string song, std::string name);
 	std::pair<std::string, std::string> getSong() const;
 
+	void setInitialPlayers(int players);
+	int getInitialPlayers() const;
+
+	void setWinner(int winner);
+	int getWinner() const;
+
+	void setPaused(bool setPaused);
+	bool isPaused() const;
+
+	// Remember Configuration Menu's information
 	void setHealth(int health);
 	int getHealth() const;
 
@@ -88,16 +111,18 @@ public:
 	void setTimeMode(bool mode);
 	bool getTimeMode() const;
 
-	void setPlayersAlive(int players);
-	int getPlayersAlive() const;
+	float getInitialBrightness() const;
+	float getInitialSoundVolume() const;
+	float getInitialMusicVolume() const;
 
-	void setWinner(int winner);
-	int getWinner() const;
-
-	bool isAnyGhost() const;
+	// Other functions
+	GameObject* getAnyGhost();
+	std::vector<GameObject*> getAlivePlayers(bool getGhosts);
 
 	void pauseAllSounds();
 	void resumeAllSound();
+
+	bool playerUsingKeyboard() const;
 };
 
 #endif

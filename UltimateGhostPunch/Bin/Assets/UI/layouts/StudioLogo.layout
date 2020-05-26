@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="StudioLogo" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        # BACKGROUND
+        <Window type="TaharezLook/StaticImage" name="Background" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Property name="Image" value="background"/>
+            <Property name="FrameEnabled" Value="False" />
+            <Property name="BackgroundEnabled" Value="False" />
+            # LOGO IMAGE
+            <Window type="TaharezLook/StaticImage" name="LogoImage" >
+                <Property name="Area" value="{{0.3,0},{0.2,0},{0.7,0},{0.8,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Image" value="noodles"/>
+                <Property name="FrameEnabled" Value="False" />
+                <Property name="BackgroundEnabled" Value="False" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>

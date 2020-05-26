@@ -5,11 +5,13 @@
 #include <UIElement.h>
 #include "Menu.h"
 
+class Game;
 class Countdown;
 
 class PauseMenu : public Menu
 {
 private:
+	Game* game;
 	Countdown* countdown;
 
 	UIElement pauseMenu;
@@ -23,14 +25,15 @@ private:
 
 	bool checkControllersInput();
 	
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	PauseMenu(GameObject* gameObject);
 	virtual ~PauseMenu();
 
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
-
-	// opens the Pause Menu and pauses the game
+	// Opens the Pause Menu and pauses the game
 	void setPaused(bool paused);
 	bool isVisible();
 };

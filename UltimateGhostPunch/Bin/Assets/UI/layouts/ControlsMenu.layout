@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout version="4" >
+    <Window type="DefaultWindow" name="ControlsMenu" >
+        <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+        <Property name="MaxSize" value="{{1,0},{1,0}}" />
+        # BACKGROUND
+        <Window type="TaharezLook/StaticImage" name="Background" >
+            <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            # BACK BUTTON
+            <Window type="TaharezLook/Button" name="BackButton" >
+                <Property name="Area" value="{{0.05,0},{0.05,0},{0.15,0},{0.15,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Text" value="Back" />
+			    <Property name="UpButton" value="BackButton" />
+			    <Property name="DownButton" value="BackButton" />
+			    <Property name="LeftButton" value="BackButton" />
+			    <Property name="RightButton" value="BackButton" />
+                <Property name="Font" value="Sans" />
+            </Window>
+            # CONTROLS
+            <Window type="TaharezLook/StaticText" name="Controls" >
+                <Property name="Area" value="{{0.2,0},{0,0},{0.8,0},{0.2,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="CONTROLS" />
+                <Property name="Font" value="Sans32" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+            # ACTIONS
+            <Window type="TaharezLook/StaticText" name="Actions" >
+                <Property name="Area" value="{{0.1,0},{0.15,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="ACTIONS" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="LeftAligned" />
+            </Window>
+            # KEYBOARD
+            <Window type="TaharezLook/StaticText" name="Keyboard" >
+                <Property name="Area" value="{{0.35,0},{0.15,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="KEYBOARD" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="LeftAligned" />
+            </Window>
+            # CONTROLLER
+            <Window type="TaharezLook/StaticText" name="Controller" >
+                <Property name="Area" value="{{0.7,0},{0.15,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="CONTROLLER" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="LeftAligned" />
+            </Window>
+        </Window>
+    </Window>
+</GUILayout>

@@ -4,25 +4,26 @@
 
 #include <UserComponent.h>
 
+class CameraEffects;
+
 class Health : public UserComponent
 {
-public:
-	Health(GameObject* gameObject);
-	virtual ~Health();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	Health(GameObject* gameObject);
+	virtual ~Health();
+
 
 	int getMaxHealth();
 	int getHealth();
 
 	void setHealth(int health);
 	void receiveDamage(int damage);
-
-	float getTime();
-	float getInvDamTime();
 
 	void setTime(float time);
 
@@ -39,12 +40,14 @@ private:
 	int health; // 1 life = 2 health points
 
 	float time;
-	float invencibleDamageTime;
+	float invencibleTime;
 
 	bool alive;
 	bool invencible;
 
 	bool hurt; // So we can know if it is being damaged
+
+	CameraEffects* cameraEffects;
 };
 
 #endif

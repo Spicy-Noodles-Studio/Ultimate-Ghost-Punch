@@ -1,6 +1,6 @@
 #pragma once
-#ifndef PLAYERFX_H
-#define PLAYERFX_H
+#ifndef PLAYER_FX_H
+#define PLAYER_FX_H
 
 #include <UserComponent.h>
 
@@ -39,13 +39,14 @@ private:
 	void updateInvencibleFX(float deltaTime);
 	void updateGhostFX(float deltaTime);
 
-public:
-	PlayerFX(GameObject* gameObject);
-	virtual ~PlayerFX();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	PlayerFX(GameObject* gameObject);
+	virtual ~PlayerFX();
 
 	void activateHurt();
 	void deactivateHurt();
@@ -57,6 +58,7 @@ public:
 	void deactivateGhostFX();
 
 	void activateShield();
+	void updateShield(float blockTime, float maxBlockTime);
 	void deactivateShield();
 };
 

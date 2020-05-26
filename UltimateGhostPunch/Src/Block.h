@@ -4,10 +4,13 @@
 
 #include <UserComponent.h>
 
+class PlayerFX;
+
 class Block : public UserComponent
 {
 private:
 	GameObject* parent;
+	PlayerFX* playerFX;
 
 	float maxBlockTime; //Duration of block when started
 	float blockTime; //Remaining time of blocking
@@ -18,14 +21,13 @@ private:
 
 	bool grounded;
 	bool blocking;
-	bool blocked;
 
-	float blockDirection;
+	int blocked;
+	int blockedGrab;
 
-public:
-	Block(GameObject* gameObject);
-	virtual ~Block();
+	int blockDirection;
 
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
@@ -33,17 +35,25 @@ public:
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
+public:
+	Block(GameObject* gameObject);
+	virtual ~Block();
+
+
 	void block();
 	void unblock();
-	bool blockAttack(float damage, Vector3 otherPosition);
+	bool blockAttack(Vector3 otherPosition);
 
 	void setMaxBlockTime(float time) { maxBlockTime = time; }
+	float getMaxBlockTime() const;
 	void setBlockRegenTime(int time) { blockRegenTime = time; }
+	void grabBlocked();
 
-	bool canBlockGrab() const;
+	bool wasGrabBlocked() const;
 	bool isBlocking() const;
-	// Return if it has just blocked an attack (only true during current frame)
-	bool hasBlocked() const;
+	bool canBlockGrab() const;
+	bool hasBlocked() const; // Return if it has just blocked an attack (only true during current frame)
+	bool hasBlockedGrab() const; // Return if it has just blocked a grab attack (only true during current frame)
 };
 
 #endif

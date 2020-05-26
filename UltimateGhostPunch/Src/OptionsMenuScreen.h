@@ -14,12 +14,13 @@ private:
 
 	bool backToMenuButtonClick();
 
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	OptionsMenuScreen(GameObject* gameObject);
 	virtual ~OptionsMenuScreen();
-
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
 };
 
 #endif

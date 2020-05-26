@@ -1,11 +1,8 @@
 #include "LoadingScreen.h"
+
 #include <ComponentRegister.h>
-#include <InterfaceSystem.h>
 #include <SceneManager.h>
-#include <WindowManager.h>
 #include <GameObject.h>
-#include <RigidBody.h>
-#include <Camera.h>
 #include <UILayout.h>
 #include <time.h>
 
@@ -30,7 +27,7 @@ LoadingScreen::LoadingScreen(GameObject* gameObject) : UserComponent(gameObject)
 
 LoadingScreen::~LoadingScreen()
 {
-
+	tipsVector.clear();
 }
 
 void LoadingScreen::start()
@@ -38,31 +35,35 @@ void LoadingScreen::start()
 	sceneToLoad = "NO SCENE";
 	loadDelay = 1.0f;
 	currentDelay = 0;
+	GameObject* mainCamera = findGameObjectWithName("MainCamera");
+	if (notNull(mainCamera) && notNull(mainCamera->getComponent<UILayout>())) {
+		UIElement root = mainCamera->getComponent<UILayout>()->getRoot();
+		UIElement tipsText = root.getChild("Tips");
 
-	UIElement root = findGameObjectWithName("MainCamera")->getComponent<UILayout>()->getRoot();
-	UIElement tipsText = root.getChild("Tips");
-
-	tipsText.setText(getRandomTip());
-	tipsText.setProperty("HorzFormatting", "WordWrapCentred");
+		tipsText.setText(getRandomTip());
+		tipsText.setProperty("HorzFormatting", "WordWrapCentred");
+	}
 }
 
 void LoadingScreen::update(float deltaTime)
 {
-	if(sceneToLoad == "NO SCENE")
+	if (sceneToLoad == "NO SCENE")
 		currentDelay += deltaTime;
 
-	if (currentDelay > loadDelay)
+	SceneManager* sceneManager = SceneManager::GetInstance();
+	if (notNull(sceneManager) && currentDelay > loadDelay)
 	{
-		sceneToLoad = SceneManager::GetInstance()->getSceneToLoad();
+		sceneToLoad = sceneManager->getSceneToLoad();
 
 		if (sceneToLoad != "NO SCENE")
-			SceneManager::GetInstance()->changeScene(sceneToLoad);
+			sceneManager->changeScene(sceneToLoad);
 	}
 }
 
 void LoadingScreen::handleData(ComponentData* data)
 {
 	int i = 1;
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);

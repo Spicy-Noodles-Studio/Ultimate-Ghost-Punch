@@ -1,6 +1,10 @@
+.//Assets//Scenes//EngineLogo.scene
+.//Assets//Scenes//StudioLogo.scene
 .//Assets//Scenes//MainMenu.scene
 .//Assets//Scenes//OptionsMenu.scene
 .//Assets//Scenes//ConfigurationMenu.scene
 .//Assets//Scenes//Game.scene
 .//Assets//Scenes//StatsMenu.scene
 .//Assets//Scenes//LoadingScreen.scene
+.//Assets//Scenes//ControlsMenu.scene
+.//Assets//Scenes//Credits.scene

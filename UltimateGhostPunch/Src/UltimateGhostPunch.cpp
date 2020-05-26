@@ -1,4 +1,5 @@
 #include "UltimateGhostPunch.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
@@ -9,36 +10,41 @@
 
 #include "Health.h"
 #include "GhostMovement.h"
-#include "PlayerAnimController.h"
 
 REGISTER_FACTORY(UltimateGhostPunch);
 
-UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr), anim(nullptr),
-direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghostSpeed(0.0f), chargeSpeedMult(0.0f)
+UltimateGhostPunch::UltimateGhostPunch(GameObject* gameObject) : UserComponent(gameObject), rigidBody(nullptr), ghostMovement(nullptr),
+direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghostSpeed(0.0f), chargeSpeed(0.0f)
 {
 
 }
 
 UltimateGhostPunch::~UltimateGhostPunch()
 {
-
+	rigidBody = nullptr;
+	ghostMovement = nullptr;
 }
 
 void UltimateGhostPunch::start()
 {
+	checkNullAndBreak(gameObject);
+
+	state = AVAILABLE;
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
-	anim = gameObject->getComponent<PlayerAnimController>();
 
-	if (ghostMovement != nullptr)
-		ghostSpeed = ghostMovement->getSpeed();
+	checkNull(rigidBody);
+	checkNullAndBreak(ghostMovement);
 
-	state = State::AVAILABLE;
+	ghostSpeed = ghostMovement->getSpeed();
 }
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
-	if (state == State::SUCCESS || state == State::USED)
+	checkNullAndBreak(gameObject);
+
+	if (notNull(gameObject->transform) && (state == USED || state == SUCCESS || state == FAIL))
 	{
 		Vector3 rotation = gameObject->transform->getRotation();
 		rotation.z = 0.0;
@@ -47,17 +53,23 @@ void UltimateGhostPunch::preUpdate(float deltaTime)
 	}
 
 	// Update the cooldown
-	if (duration > 0.0f && state == State::PUNCHING)
+	if (duration > 0 && state == PUNCHING)
 		duration -= deltaTime;
-	else if (state != State::USED && duration <= 0.0f)
+	else if (duration <= 0)
 	{
-		state = State::USED;
-		if (anim != nullptr)  anim->notLoopAnimation("UGPFail");
+		state = FAIL;
 	}
+}
+
+void UltimateGhostPunch::postUpdate(float deltaTime)
+{
+	if (state == SUCCESS || state == FAIL)
+		state = USED;
 }
 
 void UltimateGhostPunch::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -72,7 +84,7 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 		}
 		else if (prop.first == "chargeSpeedMult")
 		{
-			setFloat(chargeSpeedMult);
+			setFloat(chargeSpeed);
 		}
 		else
 			LOG("ULTIMATE GHOST PUNCH: Invalid property name \"%s\"", prop.first.c_str());
@@ -81,19 +93,19 @@ void UltimateGhostPunch::handleData(ComponentData* data)
 
 void UltimateGhostPunch::charge()
 {
-	if (state == State::AVAILABLE)
-		state = State::CHARGING;
-	if (ghostMovement != nullptr)
-		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeedMult);
+	if (state == AVAILABLE)
+	{
+		state = CHARGING;
 
-	if (anim != nullptr)
-		anim->chargingGhostAnimation();
+		checkNullAndBreak(ghostMovement);
+		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
+	}
 }
 
 void UltimateGhostPunch::aim(double x, double y)
 {
-	if (x == 0 && y == 0) return;
-	if (state != State::CHARGING) return;
+	checkNullAndBreak(gameObject);
+	if (x == 0 && y == 0 || state != CHARGING) return;
 
 	direction = { x, y, 0.0 };
 	direction.normalize();
@@ -101,51 +113,51 @@ void UltimateGhostPunch::aim(double x, double y)
 	float flippedX = direction.x >= 0 ? 1.0f : -1.0f;
 	float flippedY = direction.y >= 0 ? 1.0f : -1.0f;
 
-	if (direction.x != 0)
+	if (notNull(gameObject->transform) && direction.x != 0)
 	{
 		float angle = acos(direction.dot(Vector3::RIGHT * flippedX));
 		Vector3 finalDirection = Vector3(0.0, 90.0f * flippedX, angle * RAD_TO_DEG * flippedX * flippedY);
+
 		gameObject->transform->setRotation(finalDirection);
 	}
 }
 
 void UltimateGhostPunch::ghostPunch()
 {
-	if (state != State::CHARGING) return;
+	if (state != CHARGING) return;
 
-	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
+	if (notNull(rigidBody)) rigidBody->addImpulse(direction * force);
 
-	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
+	if (notNull(ghostMovement)) ghostMovement->setSpeed(ghostSpeed);
 
-	state = State::PUNCHING;
-	if (anim != nullptr) anim->punchingGhostAnimation();
-}
-
-const UltimateGhostPunch::State& UltimateGhostPunch::getState()
-{
-	return state;
-}
-
-const Vector3& UltimateGhostPunch::getDirection()
-{
-	return direction;
-}
-
-bool UltimateGhostPunch::isPunching() const
-{
-	return state == State::PUNCHING;
-}
-
-bool UltimateGhostPunch::isAiming() const
-{
-	return state == State::CHARGING;
-}
-bool UltimateGhostPunch::punchSuccess() const
-{
-	return state == State::SUCCESS;
+	state = PUNCHING;
 }
 
 void UltimateGhostPunch::punchSucceeded()
 {
-	state = State::SUCCESS;
+	state = SUCCESS;
+}
+
+bool UltimateGhostPunch::isUsed() const
+{
+	return state == USED;
+}
+
+bool UltimateGhostPunch::isAiming() const
+{
+	return state == CHARGING;
+}
+
+bool UltimateGhostPunch::isPunching() const
+{
+	return state == PUNCHING;
+}
+bool UltimateGhostPunch::punchSuccess() const
+{
+	return state == SUCCESS;
+}
+
+bool UltimateGhostPunch::punchFail() const
+{
+	return state == FAIL;
 }

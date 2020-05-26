@@ -5,22 +5,29 @@
 #include <Vector3.h>
 #include <vector>
 
-enum class Action { Dash, Jump, MoveLeft, MoveRight, None };
+enum class Action { MoveRight, MoveLeft, Jump, CancelJump, Dash, None };
 
 class GaiaData;
 
 class State
 {
 private:
-	Action action;
+	std::vector<Action> actions;
+	int frame;//The frame of the trajectory where we are at
+	float time;//Time that has passed since the begining of the recording
 	Vector3 pos;
-	int frame; //The frame of the trajectory were we´re at
 
 public:
 	State();
-	State(Action action, int frame, const Vector3& pos);
+	State(const std::vector<Action>& actions, int frame, float time, const Vector3& pos);
+	virtual ~State();
 
-	Vector3 getPos();
+	Vector3 getPos() const;
+	int getFrame() const;
+	float getTime();
+	std::vector<Action> getActions();
+
+	void addAction(Action action);
 
 	GaiaData saveState();
 	void loadState(const GaiaData& data);
@@ -30,20 +37,24 @@ class NavigationLink
 {
 private:
 	std::vector<State> linkStates;
-	Vector3 iniPos;
-	Vector3 endPos;
-	int connection;
-	int frames;
+	Vector3 iniPos, endPos, startVelocity, startForce;
+	int connection, frames, startDirection;
+	float duration;
 
 public:
 	NavigationLink();
-	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, int frames, int connection);
+	NavigationLink(const std::vector<State>& states, const Vector3& iniPos, const Vector3& endPos, const Vector3& startVelocity, const Vector3& startForce, int frames, float duration, int connection, int startDirection);
+	virtual ~NavigationLink();
 
 	int getConnection() const;
 	std::vector<State> getStates() const;
 	Vector3 getIniPos() const;
 	Vector3 getEndPos() const;
+	Vector3 getStartVelocity() const;
+	Vector3 getStartForce() const;
 	int getFrames() const;
+	int getDirection() const;
+	float getDuration() const;
 
 	GaiaData saveLink();
 	void loadLink(const GaiaData& data);
@@ -62,7 +73,7 @@ public:
 	PlatformNode();
 	PlatformNode(const Vector3& iniPos, int index);
 	PlatformNode(const Vector3& iniPos, const Vector3& endPos, int index);
-	~PlatformNode();
+	virtual ~PlatformNode();
 
 	void setEnd(const Vector3& endPos);
 	void setBegining(const Vector3& iniPos);
@@ -71,6 +82,8 @@ public:
 	Vector3 getEnd() const;
 	Vector3 getMiddle() const;
 	int getIndex() const;
+	std::vector<NavigationLink> getEdges() const;
+	NavigationLink getEdge(int index) const;
 
 	void addEdge(const NavigationLink& link);
 	void removeLastEdge();
@@ -79,7 +92,7 @@ public:
 	GaiaData savePlatform();
 	void loadPlatform(const GaiaData& data);
 
-	std::vector<NavigationLink> getEdges();
+	std::vector<NavigationLink>& getEdges();
 };
 
 #endif

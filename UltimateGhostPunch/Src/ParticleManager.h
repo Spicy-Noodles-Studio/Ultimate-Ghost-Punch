@@ -1,6 +1,7 @@
 #pragma once
-#ifndef PARTICLE_MANAGER
-#define PARTICLE_MANAGER
+#ifndef PARTICLE_MANAGER_H
+#define PARTICLE_MANAGER_H
+
 #include <UserComponent.h>
 
 class ParticleEmitter;
@@ -8,8 +9,6 @@ class PlayerState;
 
 class ParticleManager : public UserComponent
 {
-public:
-
 private:
 	/* PARTICLE SYSTEMS */
 	ParticleEmitter* floorDust;
@@ -28,12 +27,15 @@ private:
 	float stunDelay;
 	float stunTimer;
 
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	ParticleManager(GameObject* gameObject);
 	virtual ~ParticleManager();
 
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
+	void stopAll();
 
 private:
 	/* CREATE CHILDREN */

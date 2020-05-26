@@ -21,13 +21,14 @@ private:
 
 	std::string getRandomTip();
 
-public:
-	LoadingScreen(GameObject* gameObject);
-	virtual ~LoadingScreen();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	LoadingScreen(GameObject* gameObject);
+	virtual ~LoadingScreen();
 };
 
 #endif

@@ -20,12 +20,10 @@ private:
 	int playersBelow;	// Used as a boolean, count number of players the sensor is colliding with
 	bool grounded;		// Only true when sensor detects collision with floor
 	bool jumping;
-	bool landed;
+	int landed;
+	int jumped;
 
-public:
-	Jump(GameObject* gameObject);
-	virtual ~Jump();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
@@ -33,17 +31,24 @@ public:
 	virtual void onObjectExit(GameObject* other);
 	virtual void handleData(ComponentData* data);
 
+public:
+	Jump(GameObject* gameObject);
+	virtual ~Jump();
+
 	void jump();
 	void cancelJump();
 
 	void setJumpForce(float force);
 	void setCoyoteTime(float time);
 
-	bool isGrounded();
-	bool isJumping();
-	bool canJump();
+	bool isAbovePlayer() const;
+	bool isGrounded() const;
+	bool isJumping() const;
+	bool isFalling() const;
+	bool canJump() const;
 
 	bool hasLanded() const;
+	bool hasJumped() const;
 };
 
 #endif

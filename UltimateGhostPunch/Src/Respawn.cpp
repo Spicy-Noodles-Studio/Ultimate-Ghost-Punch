@@ -1,48 +1,55 @@
 #include "Respawn.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
-#include "PlayerController.h"
-#include "PlayerAnimController.h"
-#include "PlayerFX.h"
 #include "Movement.h"
+#include "PlayerState.h"
 #include "Health.h"
 
 REGISTER_FACTORY(Respawn);
 
-Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerController(nullptr), initialPos(Vector3::ZERO), respawning(false), respawnTime(1.0f), time(0.0f)
+Respawn::Respawn(GameObject* gameObject) : UserComponent(gameObject), playerState(nullptr), initialPos(Vector3::ZERO), respawning(false), respawnTime(1.0f), time(0.0f)
 {
 
 }
 
 Respawn::~Respawn()
 {
-
+	playerState = nullptr;
 }
 
 void Respawn::start()
 {
-	playerController = gameObject->getComponent<PlayerController>();
-
-	initialPos = gameObject->transform->getPosition();
 	time = 0.0f;
+
+	checkNullAndBreak(gameObject);
+	playerState = gameObject->getComponent<PlayerState>();
+	checkNull(playerState);
+
+	checkNullAndBreak(gameObject->transform);
+	initialPos = gameObject->transform->getPosition();
 }
 
 void Respawn::update(float deltaTime)
 {
 	if (time > 0)
 		time -= deltaTime;
-	else if (playerController != nullptr && respawning)
+	else if (respawning)
 	{
-		playerController->setActive(true);
+		if (notNull(playerState)) playerState->setIgnoringInput(false);
 		respawning = false;
 	}
+
+	checkNullAndBreak(gameObject);
+	if (notNull(playerState) && !playerState->isGhost() && notNull(gameObject->transform) && gameObject->transform->getPosition().y < -20)
+		respawn();
 }
 
 void Respawn::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -56,11 +63,6 @@ void Respawn::handleData(ComponentData* data)
 	}
 }
 
-float Respawn::getRespawnTime()
-{
-	return respawnTime;
-}
-
 void Respawn::respawn()
 {
 	spawn(initialPos);
@@ -68,33 +70,30 @@ void Respawn::respawn()
 
 void Respawn::spawn(const Vector3& spawnPos)
 {
-	Movement* movement = gameObject->getComponent<Movement>();
-	Health* health = gameObject->getComponent<Health>();
-	PlayerAnimController* anim = gameObject->getComponent<PlayerAnimController>();
+	checkNullAndBreak(gameObject);
 
-	if (movement != nullptr)
+	Movement* movement = gameObject->getComponent<Movement>();
+	if (notNull(movement))
 		movement->stop();
 
-	if (health != nullptr)
+	if (notNull(playerState))
+		playerState->setIgnoringInput(true);
+
+	Health* health = gameObject->getComponent<Health>();
+	if (notNull(health))
 	{
 		health->setInvencible(true);
 		health->setTime(respawnTime);
 	}
 
-	if (playerController != nullptr)
-		playerController->setActive(false);
+	if (notNull(gameObject->transform))
+		gameObject->transform->setPosition(spawnPos);
 
-	gameObject->getComponent<PlayerFX>()->activateInvencible();
-
-	gameObject->transform->setPosition(spawnPos);
 	time = respawnTime;
 	respawning = true;
-
-	if (anim != nullptr)
-		anim->resurrectAnimation();
 }
 
-bool Respawn::isRespawning()
+bool Respawn::isRespawning() const
 {
 	return respawning;
 }

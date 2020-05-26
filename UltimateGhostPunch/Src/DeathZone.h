@@ -9,12 +9,15 @@ class DeathZone : public UserComponent
 private:
 	int fallDamage;
 
+	Vector3 initialPosition;
+
+protected:
+	virtual void handleData(ComponentData* data);
+	virtual void onObjectEnter(GameObject* other);
+
 public:
 	DeathZone(GameObject* gameObject);
 	virtual ~DeathZone();
-
-	virtual void handleData(ComponentData* data);
-	virtual void onObjectEnter(GameObject* other);
 };
 
 #endif

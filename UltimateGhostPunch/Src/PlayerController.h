@@ -7,6 +7,7 @@
 
 class InputSystem;
 class PlayerIndex;
+class SoundManager;
 class Movement;
 class Attack;
 class Dodge;
@@ -14,19 +15,19 @@ class Jump;
 class Grab;
 class Block;
 class Health;
+class PlayerState;
 class GhostManager;
 class GhostMovement;
 class UltimateGhostPunch;
-class PlayerAnimController;
 
 class PlayerController : public UserComponent
 {
 private:
 	Vector3 direction;
 	int controllerIndex; //From 0 to 3 included for controllers, 4 for keyboard
-	bool grabed; // Cambiar de sitio
 
 	// Components
+	PlayerState* playerState;
 	PlayerIndex* playerIndex;
 	Movement* movement;
 	Attack* attack;
@@ -36,10 +37,10 @@ private:
 	Block* block;
 	Health* health;
 
+	SoundManager* soundManager;
 	GhostManager* ghostManager;
 	GhostMovement* ghostMovement;
 	UltimateGhostPunch* ghostPunch;
-	PlayerAnimController* animController;
 
 	// Input
 	InputSystem* inputSystem;
@@ -66,23 +67,22 @@ private:
 
 	void ghostPunchMouseAim();
 
-public:
-	PlayerController(GameObject* gameObject);
-	virtual ~PlayerController();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void fixedUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	PlayerController(GameObject* gameObject);
+	virtual ~PlayerController();
+
 
 	// Manages player's input and generates a movement direction
 	void checkInput();
 
 	int getControllerIndex()const;
 	void setControllerIndex(int index);
-
-	bool isGrabed();
-	void setGrabed(bool grabed);
 };
 
 #endif

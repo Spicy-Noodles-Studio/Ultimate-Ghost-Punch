@@ -17,6 +17,7 @@ enum class Action;
 class PathRecorder : public UserComponent
 {
 private:
+	bool recording;
 	InputSystem* inputSystem;
 	PlatformGraph* graph;
 
@@ -24,32 +25,34 @@ private:
 	Jump* jump;
 	GhostManager* ghostManager;
 
+	GameObject* parent;
+
 	std::vector<State> states;
 	std::stack<int> lastPlatform;
 
-	bool recording;
-	int controllerIndex;
-	int frame;
-	int currentPlatform;
+	int controllerIndex, frame, currentPlatform, startDirection;
+	float time;
 
-	Vector3 iniPos;
+	Vector3 iniPos, startVelocity, startForce;
+	std::vector<Action> actions;
 
 	void eraseLastLink();
 	void eraseRecordedLinks();
 
-public:
-	PathRecorder(GameObject* gameObject);
-	virtual ~PathRecorder();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 
-	void saveState(Action action);
+public:
+	PathRecorder(GameObject* gameObject);
+	virtual ~PathRecorder();
 
-	void startRecording();
+	void saveState(const std::vector<Action>& actions);
+	
 	void stopRecording();
+	void startRecording();
 };
 
 #endif
