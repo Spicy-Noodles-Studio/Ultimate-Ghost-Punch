@@ -21,8 +21,10 @@ void PlatformGraph::drawLinks()
 			std::vector<State> states = n.getStates();
 
 			if (notNull(physicsSystem)) {
-				for (int i = 0; i < states.size() - 1; i++)
+				int size = states.size() - 1;
+				for (int i = 0; i < size; i++) {
 					physicsSystem->drawLine(states[i].getPos(), states[i + 1].getPos(), { 0,1,0 });
+				}
 
 				if (states.size() > 0)
 					physicsSystem->drawLine(states[states.size() - 1].getPos(), n.getEndPos(), { 0,0,1 });

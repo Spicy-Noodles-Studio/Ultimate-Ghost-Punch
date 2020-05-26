@@ -78,7 +78,7 @@ void PathRecorder::update(float deltaTime)
 			startRecording();
 			actions.push_back(Action::Jump);
 		}
-		else if (inputSystem->getKeyRelease("Space") && (!notNull(jump) || jump->isJumping()))
+		else if (inputSystem->getKeyRelease("Space"))
 			actions.push_back(Action::CancelJump);
 
 		if (recording && inputSystem->getKeyPress("LEFT SHIFT"))
@@ -165,7 +165,7 @@ void PathRecorder::onObjectExit(GameObject* other)
 
 void PathRecorder::saveState(const std::vector<Action>& actions)
 {
-	if (notNull(gameObject) && notNull(gameObject->transform)) return;
+	if (!notNull(gameObject) && !notNull(gameObject->transform)) return;
 	states.push_back(State(actions, frame, time, gameObject->transform->getWorldPosition()));
 	this->actions.clear();
 }

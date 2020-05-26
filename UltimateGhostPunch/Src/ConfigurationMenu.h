@@ -17,7 +17,11 @@ const int MIN_HEALTH = 1;
 const int MAX_HEALTH = 5;
 const int CHANGE_HEALTH = 1;
 
+#ifdef RECORD_PATH
+const int MIN_PLAYERS = 1;
+#else
 const int MIN_PLAYERS = 2;
+#endif
 
 class InputSystem;
 class UILayout;

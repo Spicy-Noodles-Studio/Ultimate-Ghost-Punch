@@ -453,6 +453,10 @@ void Game::configureLevelCollider(const std::string& name)
 
 	int i = 0;
 	bool ia = false;
+#ifdef RECORD_PATH
+	ia = true;
+#endif
+
 	while (i < playerIndexes.size() && !ia)
 		ia = playerIndexes[i++] == 9;
 
