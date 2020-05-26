@@ -15,15 +15,19 @@ class GhostNavigation : public StateAction
 {
 public:
 	GhostNavigation(StateMachine* stateMachine);
-	~GhostNavigation();
+	virtual ~GhostNavigation();
 
 	void setTarget(GameObject* target);
 	void setCharacter(GameObject* charcacter);
 
 	Vector3 getDirection() const;
 	UltimateGhostPunch* punch;
+
 protected:
 	virtual void update(float deltaTime);
+	
+private:
+	void selectTarget();
 
 private:
 	GameObject* target;
@@ -33,6 +37,9 @@ private:
 	float punchChargeDist;
 	// Random charge time
 	float chargeTime;
+	//Target change time
+	float changeTime;
+	float timer;
 	// Punch Fail Factor
 	int punchFailFactor;
 

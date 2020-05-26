@@ -16,9 +16,12 @@ public:
 		int index;
 	};
 
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	PlatformNavigation(StateMachine* stateMachine);
-	~PlatformNavigation();
+	virtual ~PlatformNavigation();
 
 	void setPlatformGraph(PlatformGraph* platformGraph);
 	void setCharacter(GameObject* character);
@@ -30,7 +33,7 @@ public:
 	/* Returns true if character is over target */
 	bool hasArrived() const;
 
-	void setFleeing(bool fleeing);
+	void setFleeing(bool fleeing, GameObject* fleeingTarget);
 	bool isFleeing() const;
 private:
 
@@ -39,9 +42,6 @@ private:
 	void moveToStartingPoint(const PathNode& node);
 	void moveToPlatform();
 
-protected:
-	virtual void update(float deltaTime);
-
 private:
 	/* GRAPH INFO */
 	PlatformGraph* platformGraph;
@@ -49,6 +49,7 @@ private:
 	GameObject* targetObject;
 
 	GameObject* character;	// Source
+	GameObject* fleeingTarget;
 
 	bool movingThroughLink;
 	bool fleeing;

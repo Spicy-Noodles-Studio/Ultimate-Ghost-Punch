@@ -1,4 +1,5 @@
 #include "PlatformNode.h"
+
 #include <GaiaData.h>
 #include <sstream>
 
@@ -136,6 +137,11 @@ State::State(const std::vector<Action>& actions, int frame, float time, const Ve
 
 }
 
+State::~State()
+{
+	actions.clear();
+}
+
 Vector3 State::getPos() const
 {
 	return pos;
@@ -207,6 +213,11 @@ NavigationLink::NavigationLink(const std::vector<State>& states, const Vector3& 
 							   linkStates(states), connection(connection), iniPos(iniPos), endPos(endPos), frames(frames), duration(duration), startVelocity(startVelocity), startForce(startForce), startDirection(startDirection)
 {
 
+}
+
+NavigationLink::~NavigationLink()
+{
+	linkStates.clear();
 }
 
 int NavigationLink::getConnection() const

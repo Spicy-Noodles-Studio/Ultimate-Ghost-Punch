@@ -14,16 +14,18 @@ class PlatformMovement : public StateAction
 {
 private:
 	PlatformGraph* platformGraph;
-	GameObject* character;	// Object been controlled
+	GameObject* character;	// Object being controlled
 	Vector3 targetPosition;	// Considering only X axis
 	float leftLimit;
 	float rightLimit;
 
+protected:
+	virtual void update(float deltaTime);
+
 public:
 	PlatformMovement(StateMachine* stateMachine);
-	~PlatformMovement();
+	virtual ~PlatformMovement();
 
-	virtual void update(float deltaTime);
 
 	void setPlatformGraph(PlatformGraph* platformGraph);
 	void setCharacter(GameObject* character);

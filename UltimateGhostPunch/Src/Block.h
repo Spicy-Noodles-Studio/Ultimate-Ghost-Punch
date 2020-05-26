@@ -27,16 +27,18 @@ private:
 
 	int blockDirection;
 
-public:
-	Block(GameObject* gameObject);
-	virtual ~Block();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
+
+public:
+	Block(GameObject* gameObject);
+	virtual ~Block();
+
 
 	void block();
 	void unblock();

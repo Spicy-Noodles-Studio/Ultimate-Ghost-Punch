@@ -36,12 +36,13 @@ private:
 	int taunt;
 	bool grabbed;
 
+protected:
+	virtual void start();
+	virtual void postUpdate(float deltaTime);
+
 public:
 	PlayerState(GameObject* gameObject);
 	virtual ~PlayerState();
-
-	virtual void start();
-	virtual void postUpdate(float deltaTime);
 
 	bool canAttack() const;
 	bool canBlock() const;
@@ -55,6 +56,7 @@ public:
 	bool isMoving() const;
 	bool isJumping() const;
 	bool isGrounded() const;
+	bool isChargingGrab() const;
 	bool isGrabbing() const;
 	bool isHurt() const;
 	bool isBlocking() const;
@@ -62,6 +64,7 @@ public:
 	bool isDodging() const;
 	bool isHeavyAttacking() const;
 	bool isQuickAttacking() const;
+	bool isChargingAttack() const;
 	bool isGhostMoving() const;
 	bool isPunching() const;
 	bool isAiming() const;

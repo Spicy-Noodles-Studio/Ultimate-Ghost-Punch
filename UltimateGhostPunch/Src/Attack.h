@@ -55,29 +55,34 @@ private:
 	void attack();
 
 	void setUpTriggerAttack(const Vector3& scale, const Vector3& offset);
-	bool isAttackOnRange(GameObject* obj, const Vector3& scale);
-	
+	bool isAttackOnRange(GameObject* obj, const Vector3& scale) const;
 
-public:
-	Attack(GameObject* gameObject);
-	virtual ~Attack();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
 	virtual void onObjectStay(GameObject* other);
 
+public:
+	Attack(GameObject* gameObject);
+	virtual ~Attack();
+
+
 	void quickAttack();
 	void strongAttack();
-	bool isQuickAttackOnRange(GameObject* obj);
-	bool isStrongAttackOnRange(GameObject* obj);
+	void stop();
 
-	bool attackOnCD();
+	bool isQuickAttackOnRange(GameObject* obj) const;
+	bool isStrongAttackOnRange(GameObject* obj) const;
+
+	bool attackOnCD() const;
 
 	bool isAttacking() const;
 	bool isQuickAttacking() const;
 	bool isHeavyAttacking() const;
+
+	bool isChargingAttack() const;
 
 	bool hasHit() const;
 };

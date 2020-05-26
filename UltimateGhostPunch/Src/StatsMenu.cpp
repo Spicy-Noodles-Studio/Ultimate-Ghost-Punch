@@ -1,4 +1,5 @@
 #include "StatsMenu.h"
+
 #include <ComponentRegister.h>
 #include <InputSystem.h>
 #include <InterfaceSystem.h>
@@ -13,46 +14,57 @@
 
 REGISTER_FACTORY(StatsMenu);
 
-StatsMenu::StatsMenu(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), texts(), panels()
+StatsMenu::StatsMenu(GameObject* gameObject) : Menu(gameObject), texts(), panels(), score(nullptr)
 {
 
 }
 
 StatsMenu::~StatsMenu()
 {
+	score = nullptr;
 
+	texts.clear();
+	panels.clear();
 }
 
 void StatsMenu::start()
 {
-	gameManager = GameManager::GetInstance();
+	Menu::start();
 
-	GameObject* camera = findGameObjectWithName("MainCamera");
 	UILayout* layout = nullptr;
 	UIElement root = NULL;
 
-	if (camera != nullptr)
+	if (notNull(mainCamera))
 	{
-		layout = camera->getComponent<UILayout>();
+		layout = mainCamera->getComponent<UILayout>();
 
-		if (layout != nullptr)
+		if (notNull(layout))
 			root = layout->getRoot();
 	}
 
-	for (int i = 0; i < 4; i++)
+	checkNullAndBreak(gameManager);
+
+	score = gameManager->getScore();
+
+	positions = score->getPlayerID();
+
+	for (int i = 0; i < positions.size(); i++)
 	{
-		std::string name = "P" + std::to_string(i + 1);
+		std::string name = "P" + std::to_string(positions[i]);
 		texts.push_back(root.getChild(name));
-		root.getChild(name).setText("Player " + std::to_string(i + 1) + ": " + std::to_string(gameManager->getPlayerRanking(i + 1)) + "º");
+		root.getChild(name).setText("Player " + std::to_string(positions[i]) + ": " + std::to_string(gameManager->getPlayerRanking(positions[i])) + "º");
 
 		name = name + "Background";
 		panels.push_back(root.getChild(name));
 	}
 
 	if (gameManager->getWinner() != -1)
-		root.getChild("Result").setText("WINNER: PLAYER " + std::to_string(gameManager->getWinner()));
+		root.getChild("Result").setText("WINNER: PLAYER " + std::to_string(positions[gameManager->getWinner() - 1]));
 	else
 		root.getChild("Result").setText("TIE");
+
+	score = gameManager->getScore();
+	checkNull(score);
 
 	reposition(gameManager->getInitialPlayers());
 	initStatistics(gameManager->getInitialPlayers());
@@ -60,8 +72,8 @@ void StatsMenu::start()
 
 void StatsMenu::update(float deltaTime)
 {
-	if (InputSystem::GetInstance()->getKeyPress("ESCAPE") || checkControllersInput())
-		SceneManager::GetInstance()->changeScene("ConfigurationMenu");
+	if (notNull(inputSystem) && notNull(sceneManager) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()))
+		sceneManager->changeScene("ConfigurationMenu");
 }
 
 bool StatsMenu::checkControllersInput()
@@ -71,7 +83,7 @@ bool StatsMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (InputSystem::GetInstance()->getButtonPress(i, "B") || InputSystem::GetInstance()->getButtonPress(i, "A"))
+		if (notNull(inputSystem) && (inputSystem->getButtonPress(i, "B") || inputSystem->getButtonPress(i, "A")))
 			result = true;
 
 		i++;
@@ -104,90 +116,83 @@ void StatsMenu::initStatistics(int numOfPlayers)
 {
 	for (int i = 0; i < numOfPlayers; i++)
 	{
-		setPlayersKilled(i + 1);
+		setPlayersKilled(i);
 
-		setDamageDealt(i + 1);
-		setDamageReceived(i + 1);
-		setAccuracy(i + 1);
+		setDamageDealt(i);
+		setDamageReceived(i);
+		setAccuracy(i);
 
-		setTimesFallen(i + 1);
+		setTimesFallen(i);
 
-		setHitsByEnviroment(i + 1);
-		setDeathsByEnviroment(i + 1);
+		setHitsByEnviroment(i);
+		setDeathsByEnviroment(i);
 	}
 }
 
 void StatsMenu::setPlayersKilled(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "Kills";
 
 	std::string text = "Players killed:";
 
-	for (int i = 0; i < score->getIndexOfPlayersKilled(playerIndex).size(); i++)
-		text += " P" + std::to_string(score->getIndexOfPlayersKilled(playerIndex).at(i));
+	if (notNull(score))
+		for (int i = 0; i < score->getIndexOfPlayersKilled(playerIndex).size(); i++)
+			text += " P" + std::to_string(positions[score->getIndexOfPlayersKilled(playerIndex).at(i)]);
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText(text);
+	panels.at(playerIndex).getChild(name).setText(text);
 }
 
 void StatsMenu::setDamageDealt(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "DamageDealt";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Damage dealt: " + std::to_string(score->getAmountOfDamageDealt(playerIndex)));
 }
 
 void StatsMenu::setDamageReceived(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "DamageReceived";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageReceived(playerIndex)));
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Damage received: " + std::to_string(score->getTotalDamageReceived(playerIndex)));
 }
 
 void StatsMenu::setAccuracy(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "AccuracyPercentage";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Accuracy: " + std::to_string(score->getPercentageOfHits(playerIndex)) + "%");
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Accuracy: " + std::to_string(score->getPercentageOfHits(playerIndex)) + "%");
 }
 
 void StatsMenu::setTimesFallen(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "TimesFallen";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Times fallen: " + std::to_string(score->getAmountOfFalls(playerIndex)));
 }
 
 void StatsMenu::setHitsByEnviroment(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "HitsByEnviroment";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Hits by spikes: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Hits by spikes: " + std::to_string(score->getTimesHittedBySpikes(playerIndex)));
 }
 
 void StatsMenu::setDeathsByEnviroment(int playerIndex)
 {
-	Score* score = gameManager->getScore();
-	std::string name = "P" + std::to_string(playerIndex);
+	std::string name = "P" + std::to_string(positions[playerIndex]);
 	name = name + "DeathsByEnviroment";
 
-	if (playerIndex > 0)
-		panels.at(playerIndex - 1).getChild(name).setText("Deaths by\nspikes and falls: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
+	if (notNull(score))
+		panels.at(playerIndex).getChild(name).setText("Deaths by\nspikes and falls: " + std::to_string(score->getEnviromentDeaths(playerIndex)));
 }

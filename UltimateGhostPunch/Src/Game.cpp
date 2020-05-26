@@ -1,4 +1,5 @@
 #include "Game.h"
+
 #include <ComponentRegister.h>
 #include <SceneManager.h>
 #include <GameObject.h>
@@ -9,9 +10,11 @@
 #include <UILayout.h>
 #include <ParticleEmitter.h>
 #include <GaiaData.h>
+#include <Timer.h>
 
 #include "PlayerController.h"
 #include "PlayerIndex.h"
+#include "PlayerState.h"
 #include "Score.h"
 #include "Health.h"
 #include "GhostManager.h"
@@ -25,36 +28,57 @@
 REGISTER_FACTORY(Game);
 
 Game::Game(GameObject* gameObject) : UserComponent(gameObject), gameManager(nullptr), songManager(nullptr), gameLayout(nullptr), countdown(nullptr), cameraEffects(nullptr),
-timePanel(NULL), nLights(0), nSpikes(0), winner(-1), timer(-1.0f), fadeIn(true), darkness(false), end(false)
+timePanel(NULL), players(0), winner(-1), timer(-1.0f), fadeIn(true), darkness(false), end(false)
 {
 
 }
 
 Game::~Game()
 {
+	gameManager = nullptr;
+	songManager = nullptr;
+	gameLayout = nullptr;
+	countdown = nullptr;
+	cameraEffects = nullptr;
 
+	playerColours.clear();
+	playerIndexes.clear();
+	lights.clear();
+	playerTransforms.clear();
+	spikesTransforms.clear();
 }
 
 void Game::start()
 {
 	gameManager = GameManager::GetInstance();
 	songManager = SongManager::GetInstance();
+	checkNull(gameManager);
+	checkNull(songManager);
 
 	GameObject* mainCamera = findGameObjectWithName("MainCamera");
-	if (mainCamera != nullptr) {
-		gameLayout = mainCamera->getComponent<UILayout>();
+	if (notNull(mainCamera)) {
 		setCameraLimits(mainCamera);
+		cameraEffects = mainCamera->getComponent<CameraEffects>();
+		gameLayout = mainCamera->getComponent<UILayout>();
+		if (notNull(gameLayout))
+			timePanel = gameLayout->getRoot().getChild("TimeBackground");
 	}
+	checkNull(cameraEffects);
 
-	if (gameLayout != nullptr)
-		timePanel = gameLayout->getRoot().getChild("TimeBackground");
+	GameObject* countdownObject = findGameObjectWithName("Countdown");
+	if (notNull(countdownObject)) countdown = countdownObject->getComponent<Countdown>();
+	checkNull(countdown);
 
-	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
+	if (notNull(gameManager)) {
+		playerIndexes = gameManager->getPlayerIndexes();
+		playerColours = gameManager->getPlayerColours();
 
-	cameraEffects = mainCamera->getComponent<CameraEffects>();
+		Score* score = gameManager->getScore();
+		if (notNull(score)) score->initScore(gameManager->getInitialPlayers());
 
-	playerIndexes = gameManager->getPlayerIndexes();
-	playerColours = gameManager->getPlayerColours();
+		timer = gameManager->getTime();
+		gameManager->setPaused(false);
+	}
 
 	// create game
 	createLevel();
@@ -62,17 +86,12 @@ void Game::start()
 	createKnights();
 	createLights();
 
-	gameManager->getScore()->initScore(gameManager->getInitialPlayers());
-
-	timer = gameManager->getTime();
-	gameManager->setPaused(false);
-
 	playSong();
 }
 
 void Game::update(float deltaTime)
 {
-	if (!countdown->isCounting() && timer > 0)
+	if (notNull(countdown) && !countdown->isCounting() && timer > 0)
 	{
 		if (!timePanel.isVisible())
 			timePanel.setVisible(true);
@@ -86,43 +105,50 @@ void Game::update(float deltaTime)
 	else if (timer == 0 && !end) // If its negative it means match its not timed
 		chooseWinner();
 
-
 	if (!darkness)
 	{
-		cameraEffects->setDarkness();
+		if (notNull(cameraEffects)) cameraEffects->setDarkness();
 		darkness = true;
 	}
-	else if (fadeIn && countdown->getRemainingTime() < 2.6)
+	else if (fadeIn && notNull(countdown) && countdown->getRemainingTime() < 2.6)
 	{
-		cameraEffects->fadeIn();
+		if (notNull(cameraEffects)) cameraEffects->fadeIn();
 		fadeIn = false;
 	}
 
-	if (end && !cameraEffects->isFading())
+	if (end && notNull(cameraEffects) && !cameraEffects->isFading())
 	{
-		gameManager->pauseAllSounds();
-		songManager->pauseSong(gameManager->getSong().first);
-		gameManager->emptyKnights();
-		SceneManager::GetInstance()->changeScene("StatsMenu");
+		if (notNull(gameManager)) {
+			if (notNull(songManager)) songManager->pauseSong(gameManager->getSong().first);
+			gameManager->pauseAllSounds();
+			gameManager->emptyKnights();
+		}
+		if (notNull(SceneManager::GetInstance()))
+			SceneManager::GetInstance()->changeScene("StatsMenu");
 	}
 }
 
-void Game::playerDie(int index)
+void Game::playerDeath()
 {
-	int nPlayers = gameManager->getPlayersAlive();
-	gameManager->setPlayerRanking(index, nPlayers);
+	players--;
 
-	nPlayers--;
-
-	if (nPlayers <= 1)
+	if (players <= 1 && !end)
 		chooseWinner();
-	else
-		gameManager->setPlayersAlive(nPlayers);
+}
+
+int Game::getPlayers() const
+{
+	return players;
+}
+
+float Game::getTime() const
+{
+	return timer;
 }
 
 Vector3 Game::getPlayerInitialPosition(int player)
 {
-	if (player > 0 && player < playerTransforms.size())
+	if (player > 0 && player <= playerTransforms.size())
 		return playerTransforms[player - 1].first;
 
 	return Vector3::ZERO;
@@ -135,7 +161,11 @@ CameraEffects* Game::getCameraEffects()
 
 void Game::setCameraLimits(GameObject* mainCamera)
 {
+	if (!notNull(mainCamera) || !notNull(gameManager)) return;
+
 	CameraController* camController = mainCamera->getComponent<CameraController>();
+	checkNullAndBreak(camController);
+
 	if (gameManager->getLevel().first == "level2")
 	{
 		camController->setMaxZ(60); // Increase max zoom away for largest level
@@ -152,68 +182,74 @@ void Game::setCameraLimits(GameObject* mainCamera)
 
 void Game::createLevel()
 {
+	checkNullAndBreak(gameManager);
+
 	GaiaData levelData;
 	levelData.load("./Assets/Levels/" + gameManager->getLevel().first + ".level");
 
 	std::string renderName = levelData.find("RenderMesh").getValue();
 	std::string colliderName = levelData.find("ColliderMesh").getValue();
 
-	// Configuramos el mesh visual
+	// Configuration of the visual mesh
 	configureLevelRender(renderName);
 
-	// Configuramos el mesh de colision
+	//  Configuration of the collision mesh
 	configureLevelCollider(colliderName);
 
-	// read player initial transforms
+	// Read player initial transforms
 	GaiaData playerData = levelData.find("PlayerTransforms");
 	for (int i = 0; i < playerData.size(); i++)
 	{
+		if (playerData[i].size() < 2) continue;
+
 		std::stringstream ss(playerData[i][0].getValue());
-		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ))
+		Vector3 pos = Vector3::ZERO;
+		if (!(ss >> pos.x >> pos.y >> pos.z))
 		{
 			LOG_ERROR("GAME", "invalid player position \"%s\"", playerData[i][0].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(playerData[i][1].getValue());
-		double rotX, rotY, rotZ;
-		if (!(ss >> rotX >> rotY >> rotZ))
+		Vector3 rot = Vector3::ZERO;
+		if (!(ss >> rot.x >> rot.y >> rot.z))
 		{
 			LOG_ERROR("GAME", "invalid player rotation \"%s\"", playerData[i][1].getValue().c_str());
 			continue;
 		}
-		playerTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
+		playerTransforms.push_back({ pos, rot });
 	}
 
-	// read spikes transforms
+	// Read spikes transforms
 	GaiaData spikesData = levelData.find("SpikesTransforms");
-	nSpikes = spikesData.size();
-	for (int i = 0; i < nSpikes; i++)
+	for (int i = 0; i < spikesData.size(); i++)
 	{
+		if (spikesData[i].size() < 2) continue;
+
 		std::stringstream ss(spikesData[i][0].getValue());
-		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ))
+		Vector3 pos = Vector3::ZERO;
+		if (!(ss >> pos.x >> pos.y >> pos.z))
 		{
 			LOG_ERROR("GAME", "invalid spikes position \"%s\"", spikesData[i][0].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(spikesData[i][1].getValue());
-		double rotX, rotY, rotZ;
-		if (!(ss >> rotX >> rotY >> rotZ))
+		Vector3 rot = Vector3::ZERO;
+		if (!(ss >> rot.x >> rot.y >> rot.z))
 		{
 			LOG_ERROR("GAME", "invalid spikes rotation \"%s\"", spikesData[i][1].getValue().c_str());
 			continue;
 		}
-		spikesTransforms.push_back({ { posX, posY, posZ }, { rotX, rotY, rotZ } });
+		spikesTransforms.push_back({ pos, rot });
 	}
 
-	// read lights data
+	// Read lights data
 	GaiaData lightsData = levelData.find("Lights");
-	nLights = lightsData.size();
-	for (int i = 0; i < nLights; i++)
+	for (int i = 0; i < lightsData.size(); i++)
 	{
+		if (lightsData[i].size() < 5) continue;
+
 		std::stringstream ss(lightsData[i][0].getValue());
 		std::string type;
 		if (!(ss >> type))
@@ -223,8 +259,8 @@ void Game::createLevel()
 		}
 
 		ss = std::stringstream(lightsData[i][1].getValue());
-		double posX, posY, posZ;
-		if (!(ss >> posX >> posY >> posZ))
+		Vector3 pos = Vector3::ZERO;
+		if (!(ss >> pos.x >> pos.y >> pos.z))
 		{
 			LOG_ERROR("GAME", "invalid light position \"%s\"", lightsData[i][1].getValue().c_str());
 			continue;
@@ -239,32 +275,28 @@ void Game::createLevel()
 		}
 
 		ss = std::stringstream(lightsData[i][3].getValue());
-		double colX, colY, colZ;
-		if (!(ss >> colX >> colY >> colZ))
+		Vector3 color = Vector3::ZERO;
+		if (!(ss >> color.x >> color.y >> color.z))
 		{
 			LOG_ERROR("GAME", "invalid light colour \"%s\"", lightsData[i][3].getValue().c_str());
 			continue;
 		}
 
 		ss = std::stringstream(lightsData[i][4].getValue());
-		double dirX, dirY, dirZ;
-		if (!(ss >> dirX >> dirY >> dirZ))
+		Vector3 dir = Vector3::ZERO;
+		if (!(ss >> dir.x >> dir.y >> dir.z))
 		{
 			LOG_ERROR("GAME", "invalid light direction \"%s\"", lightsData[i][4].getValue().c_str());
 			continue;
 		}
 
-		lights.push_back({ type, { posX, posY, posZ }, intensity, { colX, colY, colZ }, { dirX, dirY, dirZ } });
+		lights.push_back({ type, pos, intensity, color, dir });
 	}
 
 	// Read Particles
 	GaiaData particlesData = levelData.find("Particles");
 	GameObject* levelParticles = findGameObjectWithName("LevelParticles");
-	if (levelParticles == nullptr)
-	{
-		LOG("LevelParticles not found");
-		return;
-	}
+	checkNullAndBreak(levelParticles);
 
 	// Create Particles
 	for (int i = 0; i < particlesData.size(); i++)
@@ -278,13 +310,13 @@ void Game::createLevel()
 
 		// Create Particle Emitter through blueprint
 		GameObject* particlesObject = instantiate("ParticleEmitter");
-		if (particlesObject == nullptr) continue;
+		if (!notNull(particlesObject) || !notNull(particlesObject->transform)) continue;
 
 		levelParticles->addChild(particlesObject);
 		particlesObject->transform->setPosition(position);
 
 		ParticleEmitter* particleEmitter = particlesObject->getComponent<ParticleEmitter>();
-		if (particleEmitter == nullptr) continue;
+		if (!notNull(particleEmitter)) continue;
 
 		particleEmitter->newEmitter(name);
 		particleEmitter->start();
@@ -293,18 +325,20 @@ void Game::createLevel()
 
 void Game::createKnights()
 {
-	gameManager->emptyKnights();
+	if (notNull(gameManager)) gameManager->emptyKnights();
 
+	int position = 0;
 	for (int i = 0; i < playerIndexes.size(); i++)
 	{
 		if (playerIndexes[i] != -1)
 		{
+			players++;
 			GameObject* knight = nullptr;
 
-			if (playerIndexes[i] != 9)
+			if (playerIndexes[i] != 9 && i < playerTransforms.size())
 			{
 				knight = instantiate("Player", playerTransforms[i].first);
-				if (knight == nullptr) break;
+				if (!notNull(knight) || !notNull(knight->transform) || !notNull(knight->getComponent<PlayerController>())) break;
 
 				knight->transform->setRotation(playerTransforms[i].second);
 				knight->getComponent<PlayerController>()->setControllerIndex(playerIndexes[i]);
@@ -312,72 +346,88 @@ void Game::createKnights()
 			else
 			{
 				knight = instantiate("EnemyAI", playerTransforms[i].first);
-				if (knight == nullptr) return;
+				if (!notNull(knight) || !notNull(knight->transform)) return;
 
 				knight->transform->setRotation(playerTransforms[i].second);
 			}
-			knight->getComponent<PlayerIndex>()->setIndex(i + 1);
 
-			knight->getComponent<MeshRenderer>()->setDiffuse(0, playerColours[i], 1);
-			knight->getComponent<MeshRenderer>()->setDiffuse("sword", 0, playerColours[i], 1);
+			checkNullAndBreak(knight);
+			PlayerIndex* index = knight->getComponent<PlayerIndex>();
+			if (notNull(index))
+			{
+				index->setIndex(i + 1);
+				index->setPos(position);
+				position++;
+			}
 
-			knight->getComponent<Health>()->setHealth(gameManager->getHealth());
+			if (i < playerColours.size()) {
+				MeshRenderer* mesh = knight->getComponent<MeshRenderer>();
+				if (notNull(mesh)) {
+					mesh->setDiffuse(0, playerColours[i], 1);
+					mesh->setDiffuse("sword", 0, playerColours[i], 1);
+				}
 
-			knight->getComponent<GhostManager>()->setPlayerColour(playerColours[i]);
+				GhostManager* ghostManager = knight->getComponent<GhostManager>();
+				if (notNull(ghostManager)) ghostManager->setPlayerColour(playerColours[i]);
+			}
 
-			gameManager->getKnights().push_back(knight);
+			if (notNull(gameManager)) {
+				Health* health = knight->getComponent<Health>();
+				if (notNull(health)) health->setHealth(gameManager->getHealth());
+
+				gameManager->getKnights().push_back(knight);
+			}
 		}
 	}
 }
 
 void Game::createSpikes()
 {
-	for (int i = 0; i < nSpikes; i++)
+	for (int i = 0; i < spikesTransforms.size(); i++)
 	{
 		GameObject* spikes = instantiate("Spikes", spikesTransforms[i].first);
-		spikes->transform->setRotation(spikesTransforms[i].second);
+		if (notNull(spikes) && notNull(spikes->transform))
+			spikes->transform->setRotation(spikesTransforms[i].second);
 	}
 }
 
 void Game::createLights()
 {
-	for (int i = 0; i < nLights; i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
 		GameObject* light = instantiate("Light", lights[i].position);
-		Light* lightComp = light->getComponent<Light>();
+		if (notNull(light)) {
+			Light* lightComp = light->getComponent<Light>();
 
-		if (lights[i].type == "Point")
-			lightComp->setType(Light::Point);
-		else if (lights[i].type == "Spotlight")
-			lightComp->setType(Light::Spotlight);
-		else if (lights[i].type == "Directional")
-			lightComp->setType(Light::Directional);
+			if (notNull(lightComp)) {
+				if (lights[i].type == "Point")
+					lightComp->setType(Light::Point);
+				else if (lights[i].type == "Spotlight")
+					lightComp->setType(Light::Spotlight);
+				else if (lights[i].type == "Directional")
+					lightComp->setType(Light::Directional);
 
-		lightComp->setIntensity(lights[i].intensity);
-		lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
-		light->transform->setDirection(lights[i].direction);
+				lightComp->setIntensity(lights[i].intensity);
+				lightComp->setColour(lights[i].colour.x, lights[i].colour.y, lights[i].colour.z);
+			}
+			if (notNull(light->transform)) light->transform->setDirection(lights[i].direction);
+		}
 	}
 }
 
 void Game::playSong()
 {
-	songManager->playSong(gameManager->getSong().first);
+	if (notNull(songManager) && notNull(gameManager))
+		songManager->playSong(gameManager->getSong().first);
 }
 
 void Game::configureLevelRender(const std::string& name)
 {
 	GameObject* levelRender = findGameObjectWithName("LevelRender");
-	if (levelRender == nullptr)
-	{
-		LOG_ERROR("GAME", "LevelRender object not found on scene");
-		return;
-	}
+	checkNullAndBreak(levelRender);
 
 	MeshRenderer* meshRenderer = levelRender->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
-	{
-		LOG_ERROR("GAME", "MeshRenderer not found"); return;
-	}
+	checkNullAndBreak(meshRenderer);
 
 	meshRenderer->setMesh("levelRender", name);
 	meshRenderer->attachEntityToNode("levelRender");
@@ -386,22 +436,13 @@ void Game::configureLevelRender(const std::string& name)
 void Game::configureLevelCollider(const std::string& name)
 {
 	GameObject* levelCollider = findGameObjectWithName("LevelCollider");
-	if (levelCollider == nullptr)
-	{
-		LOG_ERROR("GAME", "LevelCollider object not found on scene"); return;
-	}
+	checkNullAndBreak(levelCollider);
 
 	MeshRenderer* meshRenderer = levelCollider->getComponent<MeshRenderer>();
-	if (meshRenderer == nullptr)
-	{
-		LOG_ERROR("GAME", "MeshRenderer not found"); return;
-	}
+	checkNullAndBreak(meshRenderer);
 
 	Strider* strider = levelCollider->getComponent<Strider>();
-	if (strider == nullptr)
-	{
-		LOG_ERROR("GAME", "Strider not found"); return;
-	}
+	checkNullAndBreak(strider);
 
 	meshRenderer->setMesh("levelCollider", name);
 	meshRenderer->attachEntityToNode("levelCollider");
@@ -412,78 +453,91 @@ void Game::configureLevelCollider(const std::string& name)
 
 	int i = 0;
 	bool ia = false;
+#ifdef RECORD_PATH
+	ia = true;
+#endif
+
 	while (i < playerIndexes.size() && !ia)
-	{
-		if (playerIndexes[i] == 9)
-			ia = true;
-		i++;
-	}
+		ia = playerIndexes[i++] == 9;
 
 	PlatformGraph* graph = levelCollider->getComponent<PlatformGraph>();
-	if (graph != nullptr)
+	if (notNull(graph) && notNull(gameManager))
 	{
 		if (!ia)
 			graph->setActive(false);
 		else
 		{
-			graph->setLoadFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
-			graph->setSaveFileName(GameManager::GetInstance()->getLevel().second + "Graph.graph");
+			graph->setLoadFileName(gameManager->getLevel().second + "Graph.graph");
+			graph->setSaveFileName(gameManager->getLevel().second + "Graph.graph");
 		}
 	}
 }
 
-void Game::chooseWinner()
+void Game::setRanking()
 {
-	cameraEffects->fadeOut();
-	end = true;
-
-	std::vector<GameObject*> knights = gameManager->getKnights();
-
-	bool tie = false;
-	int majorHealth = 0;
-	int majorIndex = 0;
-	int tieIndex = 0;
+	checkNullAndBreak(gameManager);
+	std::vector<GameObject*> knights = gameManager->getAlivePlayers(true);
 
 	for (int i = 0; i < knights.size(); i++)
 	{
-		Health* health = knights[i]->getComponent<Health>();
-		if (health == nullptr)
-			continue;
+		checkNullAndBreak(knights[i]);
 
-		if (health->isAlive())
+		Health* health = knights[i]->getComponent<Health>();
+		PlayerIndex* index = knights[i]->getComponent<PlayerIndex>();
+		PlayerState* state = knights[i]->getComponent<PlayerState>();
+
+		if (notNull(health) && notNull(index) && notNull(state))
 		{
-			if (health->getHealth() > majorHealth)
-			{
-				majorHealth = health->getHealth();
-				majorIndex = i;
-				tie = false;
-			}
-			else if (health->getHealth() == majorHealth)
-			{
-				tieIndex = i;
-				tie = true;
-			}
+			gameManager->getRanking().push(ii(index->getIndex(), health->getHealth()));
+			state->setIgnoringInput(true);
 		}
+	}
+
+	std::priority_queue<ii, std::vector<ii>, Less> aux = gameManager->getRanking();
+	std::vector<bool> alreadyInRanking(4, false);
+
+	int cont = 0;
+	bool tie = false;
+	ii last = ii(-1e9, -1e9);
+
+	while (!aux.empty())
+	{
+		ii info = aux.top();
+		aux.pop();
+
+		if (info.first > 0 && alreadyInRanking[info.first - 1]) continue;
+
+		if (info.second == last.second)
+			tie = tie || cont <= 1;
+		else
+			cont++;
+
+		gameManager->setPlayerRanking(info.first, cont);
+		alreadyInRanking[info.first - 1] = true;
+		last = info;
 	}
 
 	if (tie)
-	{
-		for (int i = 0; i < knights.size(); i++)
-		{
-			if (i == majorIndex || i == tieIndex)
-				gameManager->setPlayerRanking(i + 1, 1);
-			else
-				gameManager->setPlayerRanking(i + 1, gameManager->getPlayerRanking(i + 1) - 1);
-		}
 		gameManager->setWinner(-1);
-	}
 	else
-	{
-		gameManager->setPlayerRanking(majorIndex + 1, 1);
-		gameManager->setWinner(majorIndex + 1);
-	}
+		gameManager->setWinner(gameManager->getRanking().top().first);
 
-	songManager->play2DSound("victory4");
+	gameManager->emptyRanking();
+}
+
+void Game::chooseWinner()
+{
+	end = true;
+	setRanking();
+
+	if (notNull(cameraEffects))
+		cameraEffects->fadeOut();
+
+	if (notNull(songManager))
+		songManager->play2DSound("victory");
+
+	if (notNull(Timer::GetInstance()))
+		Timer::GetInstance()->setTimeScale(1.0f);
 }
 
 std::pair<std::string, std::string> Game::timeToText()

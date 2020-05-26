@@ -1,0 +1,22 @@
+{
+    "RenderMesh" : "Level1Render.mesh",
+    "ColliderMesh" : "Level1.mesh",
+    "PlayerTransforms":[
+        ["-20 12.5 0", "0 90 0"],
+        ["20 12.5 0", "0 -90 0"],
+        ["-17 2.5 0", "0 90 0"],
+        ["17 2.5 0", "0 -90 0"]
+    ],
+    "SpikesTransforms":[
+        ["-36 18 0", "0 0 -90"],
+        ["36 18 0", "0 0 90"],
+        ["-28 3 0", "0 0 -90"],
+        ["28 3 0", "0 0 90"]
+    ],
+    "Lights":[
+        ["Directional", "0 0 0", "3", "0 0 1", "0 -1 0"]
+    ],
+    "Particles" : [
+        ["WaterLeaks", "0 50 0"]
+    ]
+}

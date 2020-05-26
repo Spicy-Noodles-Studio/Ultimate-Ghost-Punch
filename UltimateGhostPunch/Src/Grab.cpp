@@ -1,15 +1,14 @@
 #include "Grab.h"
 #include <ComponentRegister.h>
 #include <GameObject.h>
-#include <MeshRenderer.h>
 #include <RigidBody.h>
 #include <sstream>
 
-#include "PlayerController.h"
 #include "PlayerIndex.h"
 #include "PlayerState.h"
 #include "Score.h"
 #include "Block.h"
+#include "Attack.h"
 #include "Health.h"
 #include "GhostManager.h"
 #include "GameManager.h"
@@ -17,28 +16,36 @@
 REGISTER_FACTORY(Grab);
 
 Grab::Grab(GameObject* gameObject) : UserComponent(gameObject), id(0), grabDuration(1.5f), freezeDuration(1.0f), throwForce(15.0f), remain(0.0f), cooldown(2.00f), grabTimer(0.0f),
-									 grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), controller(nullptr), enemy(nullptr), enemyController(nullptr),
-									 enemyDiff(Vector3::ZERO), enemyFollowing(false), grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), score(nullptr), missed(0), dropped(0)
+grabVerticalOffset(3.0f), dropHorizontalOffset(0.50f), state(IDLE), parent(nullptr), enemy(nullptr), score(nullptr), playerState(nullptr), enemyDiff(Vector3::ZERO), enemyFollowing(false),
+grabbedPosition(Vector3::ZERO), prevOrientation(1), enemyFollowingThreshold(0.3f), missed(0), dropped(0)
 {
 
 }
 
 Grab::~Grab()
 {
-
+	parent = nullptr;
+	enemy = nullptr;
+	score = nullptr;
 }
 
 void Grab::start()
 {
+	checkNullAndBreak(gameObject);
+
 	parent = gameObject->getParent();
 
-	if (parent != nullptr)
-	{
-		id = parent->getComponent<PlayerIndex>()->getIndex();
-		controller = parent->getComponent<PlayerController>();	 
-	}
+	if (notNull(GameManager::GetInstance()))
+		score = GameManager::GetInstance()->getScore();
+	checkNull(score);
 
-	score = GameManager::GetInstance()->getScore();
+	checkNullAndBreak(parent);
+	PlayerIndex* index = parent->getComponent<PlayerIndex>();
+	playerState = parent->getComponent<PlayerState>();
+
+	checkNullAndBreak(index);
+	id = index->getPos();
+
 }
 
 void Grab::update(float deltaTime)
@@ -46,12 +53,13 @@ void Grab::update(float deltaTime)
 	if (remain > 0.0f) remain -= deltaTime;
 	if (grabTimer > 0.0f) grabTimer -= deltaTime;
 
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
+	checkNullAndBreak(parent->transform);
 	int newOrientation = (parent->transform->getRotation().y >= 0) ? 1 : -1;
 
 	if (state == GRABBED)
 	{
-		if (enemy != nullptr)
+		if (notNull(enemy) && notNull(enemy->transform))
 		{
 			Vector3 objPos;
 			float dist = (grabbedPosition - enemy->transform->getPosition()).magnitude();
@@ -78,10 +86,7 @@ void Grab::update(float deltaTime)
 
 	else if (remain <= 0.0f && state == BLOCKED)
 	{
-		PlayerState* playerState = gameObject->getComponent<PlayerState>();
-		if (playerState != nullptr)
-			playerState->setIgnoringInput(false); // Unfreeze our character
-
+		if (notNull(playerState)) playerState->setIgnoringInput(false); // Unfreeze our character
 		state = IDLE;
 	}
 
@@ -92,44 +97,49 @@ void Grab::postUpdate(float deltaTime)
 {
 	if (missed > 0)missed--;
 	if (dropped > 0)dropped--;
+	if (charging > 0) {
+		charging--;
+		if (charging == 0)
+			grab();
+	}
 }
 
 void Grab::onObjectStay(GameObject* other)
 {
-	if (other->getTag() == "Player")
+	if (notNull(other) && parent != nullptr && other->getTag() == "Player" && other != parent)
 	{
-		GhostManager* enemyGM = other->getComponent<GhostManager>();
+		GhostManager* otherGM = other->getComponent<GhostManager>();
 
-		if (enemyGM == nullptr || enemyGM->isGhost())
-		{
-			if (enemy == other)
-				enemy = nullptr;
+		if (otherGM != nullptr && otherGM->isGhost()) {
+			if (enemy == other) enemy = nullptr;
 		}
-		else if (enemy == nullptr && parent != nullptr && other != parent) // If it hits a player different than myself
+		else if (enemy == nullptr && otherGM != nullptr && !otherGM->isGhost()) //If I dont already have a target and we hit an enemy
 			enemy = other;
 	}
 }
 
 void Grab::onObjectEnter(GameObject* other)
 {
-	if (other->getTag() == "Player")
+	if (notNull(other) && parent != nullptr && other->getTag() == "Player" && other != parent)
 	{
-		GhostManager* enemyGM = other->getComponent<GhostManager>();
+		GhostManager* otherGM = other->getComponent<GhostManager>();
 
-		if (enemyGM == nullptr || !enemyGM->isGhost())
-			if (parent != nullptr && other != parent) //If it hits a player different than myself
+		if (otherGM == nullptr || !otherGM->isGhost()) {
+			if (enemy == nullptr) //If I dont already have a target
 				enemy = other;
+		}
 	}
 }
 
 void Grab::onObjectExit(GameObject* other)
 {
-	if (other == enemy && state != GRABBED)
+	if (notNull(other) && other == enemy && state != GRABBED)
 		enemy = nullptr;
 }
 
 void Grab::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -148,50 +158,60 @@ void Grab::handleData(ComponentData* data)
 		}
 		else if (prop.first == "cooldown")
 		{
-			if (!(ss >> cooldown))
-				LOG("GRAB: Invalid value for property %s", prop.first.c_str());
+			setFloat(cooldown);
 		}
 		else
 			LOG("GRAB: Invalid property name %s", prop.first.c_str());
 	}
 }
 
+void Grab::chargeGrab()
+{
+	if (state == IDLE && grabTimer <= 0 && notNull(playerState) && playerState->canGrab() && !playerState->isGrabbed()) {
+		charging = 7;
+		state = CHARGE;
+		grabTimer = cooldown;
+	}
+}
+
 void Grab::grab()
 {
-	if (parent == nullptr) return;
-	PlayerState* aux = parent->getComponent<PlayerState>();
-
-	if (state == IDLE && grabTimer <= 0 && aux->canGrab())
+	if (state == CHARGE)
 	{
-		if (enemy != nullptr && !enemy->getComponent<PlayerState>()->isGrabbed() && !enemy->getComponent<Health>()->isInvencible())
+		bool grabSucces = false;
+		if (notNull(enemy)) {
+			PlayerState* enemyState = enemy->getComponent<PlayerState>();
+			Health* enemyHealth = enemy->getComponent<Health>();
+			if (notNull(enemyHealth) && notNull(enemyState))
+				grabSucces = enemyHealth->isAlive() && !enemyHealth->isInvencible() && !enemyState->isGrabbed();
+		}
+
+		if (grabSucces)
 			grabEnemy();
 		else
 			grabMissed();
-
-		grabTimer = cooldown;
 	}
 }
 
 void Grab::drop()
 {
-	if (state != GRABBED || enemy == nullptr || parent == nullptr)
-		return;
+	if ((state != GRABBED) || !notNull(enemy) || !notNull(parent) ||
+		!notNull(parent->transform) || !notNull(enemy->transform)) return;
 
 	resetEnemy();
 
 	//Throw enemy
-	Vector3 dir = Vector3(0, 0, 0);
+	Vector3 dir = Vector3::ZERO;
 	dir.x = (parent->transform->getRotation().y >= 0) ? 1 : -1;
 	enemy->transform->setPosition(parent->transform->getPosition() + Vector3((parent->transform->getScale().x / 2) + (dropHorizontalOffset * dir.x), enemy->transform->getPosition().y - parent->transform->getPosition().y, 0));
 
 	RigidBody* enemyRb = enemy->getComponent<RigidBody>();
-	if (enemyRb != nullptr)
-		enemyRb->addImpulse(dir * throwForce);
+	if (notNull(enemyRb)) enemyRb->addImpulse(dir * throwForce);
 
 	//Reset state
-	enemyController = nullptr;
 	enemy = nullptr;
 	state = IDLE;
+	charging = 0;
 	grabTimer = cooldown;
 
 	dropped = 2;
@@ -203,19 +223,14 @@ void Grab::grabMissed()
 	missed = 2;
 }
 
-void Grab::setGrabbed(bool grabbed)
-{
-	beingGrabbed = grabbed;
-}
-
 bool Grab::isGrabbing() const
 {
 	return state == GRABBED;
 }
 
-bool Grab::isGrabbed() const
+bool Grab::isCharging() const
 {
-	return beingGrabbed;
+	return state == CHARGE;
 }
 
 bool Grab::isOnCooldown() const
@@ -240,53 +255,36 @@ bool Grab::hasDropped() const
 
 void Grab::resetEnemy()
 {
-	if (enemy == nullptr)
-		return;
+	checkNullAndBreak(enemy);
 
 	//Reactivate enemy's RigidBody
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
-	Grab* enemyGrab = nullptr;
-	std::vector<GameObject*> aux = enemy->findChildrenWithTag("grabSensor");
-	if (aux.size() > 0)
-		enemyGrab = aux[0]->getComponent<Grab>();
 
-	if (enemyRB != nullptr)
-	{
-		enemyRB->setTrigger(false);
+	if (notNull(enemyRB))
 		enemyRB->setActive(true);
-	}
 
 	PlayerState* enemyState = enemy->getComponent<PlayerState>();
-	if (enemyState != nullptr)
+	if (notNull(enemyState))
 	{
-		enemyState->setThrown();
 		//Return control to the enemy
 		enemyState->setIgnoringInput(false);
+		enemyState->setThrown();
 	}
 
-	
-
-
-	grabbedPosition = Vector3();
+	grabbedPosition = Vector3::ZERO;
 }
 
 void Grab::grabEnemy()
 {
-	if (enemy == nullptr || parent == nullptr)
-		return;
+	if (!notNull(enemy) || !notNull(parent) ||
+		!notNull(parent->transform) || !notNull(enemy->transform)) return;
 
 	//Check if we have been blocked
-	std::vector<GameObject*> aux = enemy->findChildrenWithTag("groundSensor");
 	Block* enemyBlock = nullptr;
-	if (aux.size() > 0)
-		enemyBlock = aux[0]->getComponent<Block>();
-	std::vector<GameObject*> grabSensorChildren = enemy->findChildrenWithTag("grabSensor");
-	Grab* enemyGrab = nullptr;
-	if (grabSensorChildren.size() > 0)
-		enemyGrab = grabSensorChildren[0]->getComponent<Grab>();
+	std::vector<GameObject*> groundSensorChildren = enemy->findChildrenWithTag("groundSensor");
+	if (groundSensorChildren.size() > 0 && notNull(groundSensorChildren[0])) enemyBlock = groundSensorChildren[0]->getComponent<Block>();
 
-
-	if (enemyBlock != nullptr && enemyBlock->canBlockGrab())
+	if (notNull(enemyBlock) && enemyBlock->canBlockGrab())
 	{
 		int dir = (parent->transform->getRotation().y >= 0) ? 1 : -1;
 		int enemyDir = (enemy->transform->getRotation().y >= 0) ? 1 : -1;
@@ -297,44 +295,38 @@ void Grab::grabEnemy()
 			enemyBlock->grabBlocked();
 			state = BLOCKED;
 			remain = freezeDuration;
-			PlayerState* playerState = gameObject->getComponent<PlayerState>();
-			if (playerState != nullptr)
-				playerState->setIgnoringInput(true); // Freeze our character
+
+			if (notNull(playerState)) playerState->setIgnoringInput(true); // Freeze our character
 
 			return;
 		}
 	}
 
 	//Grab the enemy
-	if (score != nullptr)
-		score->grabHitted(id);
+	if (notNull(score)) score->grabHitted(id);
 
-	if (enemyBlock != nullptr && enemyBlock->isBlocking())
-		enemyBlock->unblock();
+	if (notNull(enemyBlock) && enemyBlock->isBlocking()) enemyBlock->unblock();
+
+	Attack* enemyAttack = nullptr;
+	std::vector<GameObject*> enemyAttackSensor = enemy->findChildrenWithTag("attackSensor");
+	if (enemyAttackSensor.size() > 0 && notNull(enemyAttackSensor[0])) enemyAttack = enemyAttackSensor[0]->getComponent<Attack>();
+	if (notNull(enemyAttack) && enemyAttack->isAttacking()) enemyAttack->stop();
 
 	state = GRABBED;
 	remain = grabDuration;
-	
+
+	//Freeze the enemy while grabbing
 	PlayerState* enemyState = enemy->getComponent<PlayerState>();
-	if (enemyState != nullptr)
+	if (notNull(enemyState))
 	{
 		enemyState->setGrabbed();
 		enemyState->setIgnoringInput(true);
 	}
 
-	
 	enemyDiff = enemy->transform->getPosition() - parent->transform->getPosition();
-
-	//Freeze the enemy while grabbing
-	if (enemyGrab != nullptr) enemyGrab->setGrabbed(true);
-	if (enemyState != nullptr) enemyState->setIgnoringInput(true);
-
 	grabbedPosition = parent->transform->getPosition() + Vector3(0, parent->transform->getScale().y * grabVerticalOffset, 0);
 
 	RigidBody* enemyRB = enemy->getComponent<RigidBody>();
-	if (enemyRB != nullptr)
-	{
-		enemyRB->setTrigger(true);
+	if (notNull(enemyRB))
 		enemyRB->setActive(false);
-	}
 }

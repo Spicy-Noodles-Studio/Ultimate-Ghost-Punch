@@ -1,9 +1,12 @@
 #include "GameManager.h"
+
 #include <ComponentRegister.h>
 #include <SoundEmitter.h>
 #include <GameObject.h>
 #include <WindowManager.h>
+#include <SoundSystem.h>
 
+#include "PlayerState.h"
 #include "Timer.h"
 #include "GhostManager.h"
 #include "Health.h"
@@ -17,23 +20,31 @@ GameManager::GameManager() : UserComponent(nullptr)
 
 }
 
-GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(4), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f)
+GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), level(""), song(""), health(6), time(60), initialTime(time), timeMode(false), paused(false), initialBrightness(0.5f), initialMusicVolume(0.5f), initialSoundVolume(0.5f)
 {
 	if (instance == nullptr) {
 		instance = this;
-		WindowManager::GetInstance()->setBrightness(initialBrightness);
+		if (notNull(WindowManager::GetInstance()))
+			WindowManager::GetInstance()->setBrightness(initialBrightness);
+		if (notNull(SoundSystem::GetInstance())) {
+			SoundSystem::GetInstance()->setMusicVolume(initialMusicVolume);
+			SoundSystem::GetInstance()->setSoundEffectsVolume(initialSoundVolume);
+		}
 	}
 	else
 		destroy(gameObject);
 
 	playerIndexes = std::vector<int>(4, -1);
-
+	playerRanking = std::vector<int>(4, 0);
+	ranking = std::priority_queue<ii, std::vector<ii>, Less>();
 }
 
 GameManager::~GameManager()
 {
 	if (instance == this)
 		instance = nullptr;
+
+	knights.clear();
 }
 
 GameManager* GameManager::GetInstance()
@@ -43,30 +54,9 @@ GameManager* GameManager::GetInstance()
 
 void GameManager::start()
 {
-	playerColours = { {0,0,1}, {0,1,0}, {1,1,0}, {0,0,0} };
+	playerColours = { {1,0,0}, {0,0,1}, {1,1,0}, {0,1,0} };
 
 	dontDestroyOnLoad(gameObject);
-}
-
-void GameManager::setPaused(bool setPaused)
-{
-	if (paused == setPaused) return;
-
-	paused = setPaused;
-
-	if (paused) {
-		pauseAllSounds();
-		Timer::GetInstance()->setTimeScale(0.0f); //Pause the game
-	}
-	else {
-		resumeAllSound();
-		Timer::GetInstance()->setTimeScale(1.0f); //Resume the game
-	}
-}
-
-bool GameManager::isPaused() const
-{
-	return paused;
 }
 
 Score* GameManager::getScore()
@@ -77,23 +67,11 @@ Score* GameManager::getScore()
 void GameManager::setPlayerIndexes(std::vector<int>& playerIndexes)
 {
 	this->playerIndexes = playerIndexes;
-
-	initialPlayers = 0;
-	for (int i = 0; i < playerIndexes.size(); i++)
-	{
-		if (playerIndexes[i] != -1)
-			initialPlayers++;
-	}
 }
 
 std::vector<int>& GameManager::getPlayerIndexes()
 {
 	return playerIndexes;
-}
-
-void GameManager::initPlayerRanking(int tam)
-{
-	playerRanking = std::vector<int>(tam, 0);
 }
 
 void GameManager::setPlayerRanking(int index, int rank)
@@ -110,14 +88,15 @@ int GameManager::getPlayerRanking(int index) const
 	return -1;
 }
 
-void GameManager::setInitialPlayers(int players)
+std::priority_queue<ii, std::vector<ii>, Less>& GameManager::getRanking()
 {
-	initialPlayers = players;
+	return ranking;
 }
 
-int GameManager::getInitialPlayers() const
+void GameManager::emptyRanking()
 {
-	return initialPlayers;
+	while (!ranking.empty())
+		ranking.pop();
 }
 
 std::vector<Vector3>& GameManager::getPlayerColours()
@@ -128,16 +107,6 @@ std::vector<Vector3>& GameManager::getPlayerColours()
 std::vector<GameObject*>& GameManager::getKnights()
 {
 	return knights;
-}
-
-
-std::vector<GameObject*> GameManager::getAlivePlayers()
-{
-	std::vector<GameObject*> alive;
-	for (GameObject* p : knights) {
-		if (p->getComponent<Health>()->isAlive() || p->getComponent<GhostManager>()->isGhost()) alive.push_back(p);
-	}
-	return alive;
 }
 
 void GameManager::emptyKnights()
@@ -165,6 +134,50 @@ void GameManager::setSong(std::string song, std::string name)
 std::pair<std::string, std::string> GameManager::getSong() const
 {
 	return std::pair<std::string, std::string>(song, songName);
+}
+
+void GameManager::setInitialPlayers(int players)
+{
+	initialPlayers = players;
+}
+
+int GameManager::getInitialPlayers() const
+{
+	return initialPlayers;
+}
+
+void GameManager::setWinner(int winner)
+{
+	this->winner = winner;
+}
+
+int GameManager::getWinner() const
+{
+	return winner;
+}
+
+void GameManager::setPaused(bool setPaused)
+{
+	if (paused == setPaused) return;
+
+	paused = setPaused;
+
+	Timer* timeManager = Timer::GetInstance();
+	checkNullAndBreak(timeManager);
+
+	if (paused) {
+		pauseAllSounds();
+		timeManager->setTimeScale(0.0f); //Pause the game
+	}
+	else {
+		resumeAllSound();
+		timeManager->setTimeScale(1.0f); //Resume the game
+	}
+}
+
+bool GameManager::isPaused() const
+{
+	return paused;
 }
 
 void GameManager::setHealth(int health)
@@ -203,41 +216,19 @@ bool GameManager::getTimeMode() const
 	return timeMode;
 }
 
-void GameManager::setPlayersAlive(int players)
+float GameManager::getInitialBrightness() const
 {
-	playersAlive = players;
+	return initialBrightness;
 }
 
-int GameManager::getPlayersAlive() const
+float GameManager::getInitialSoundVolume() const
 {
-	return playersAlive;
+	return initialSoundVolume;
 }
 
-void GameManager::setWinner(int winner)
+float GameManager::getInitialMusicVolume() const
 {
-	this->winner = winner;
-}
-
-int GameManager::getWinner() const
-{
-	return winner;
-}
-
-bool GameManager::isAnyGhost() const
-{
-	int i = 0;
-	bool anyGhost = false;
-	while (i < knights.size() && !anyGhost)
-	{
-		if (knights[i] != nullptr)
-		{
-			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
-			anyGhost = ghostManager != nullptr && ghostManager->isGhost();
-		}
-		i++;
-	}
-
-	return anyGhost;
+	return initialMusicVolume;
 }
 
 GameObject* GameManager::getAnyGhost()
@@ -246,23 +237,47 @@ GameObject* GameManager::getAnyGhost()
 	GameObject* anyGhost = nullptr;
 	while (i < knights.size() && anyGhost == nullptr)
 	{
-		if (knights[i] != nullptr)
+		if (notNull(knights[i]))
 		{
 			GhostManager* ghostManager = knights[i]->getComponent<GhostManager>();
-			anyGhost = (ghostManager != nullptr && ghostManager->isGhost()) ? knights[i] : nullptr;
+			anyGhost = (notNull(ghostManager) && ghostManager->isGhost()) ? knights[i] : nullptr;
 		}
 		i++;
 	}
-
 	return anyGhost;
+}
+
+std::vector<GameObject*> GameManager::getAlivePlayers(bool getGhosts)
+{
+	std::vector<GameObject*> alive;
+	for (GameObject* player : knights)
+	{
+		if (notNull(player))
+		{
+			PlayerState* state = player->getComponent<PlayerState>();
+			if (getGhosts)
+			{
+				if (notNull(state) && !state->isDead())
+					alive.push_back(player);
+			}
+			else
+			{
+				if (notNull(state) && !state->isDead() && !state->isGhost())
+					alive.push_back(player);
+			}
+		}
+	}
+	return alive;
 }
 
 void GameManager::pauseAllSounds()
 {
 	for (GameObject* knight : knights)
 	{
-		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-		if (emitter != nullptr) emitter->pauseAll();
+		if (notNull(knight)) {
+			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+			if (notNull(emitter)) emitter->pauseAll();
+		}
 	}
 }
 
@@ -270,21 +285,18 @@ void GameManager::resumeAllSound()
 {
 	for (GameObject* knight : knights)
 	{
-		SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
-		if (emitter != nullptr) emitter->resumeAll();
+		if (notNull(knight)) {
+			SoundEmitter* emitter = knight->getComponent<SoundEmitter>();
+			if (notNull(emitter)) emitter->resumeAll();
+		}
 	}
 }
 
 bool GameManager::playerUsingKeyboard() const
 {
-	for (int a : playerIndexes) { 
-		if (a == 4) 
-			return true; 
+	for (int a : playerIndexes) {
+		if (a == 4)
+			return true;
 	}
 	return false;
-}
-
-float GameManager::getInitialBrightness() const
-{
-	return initialBrightness;
 }

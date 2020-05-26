@@ -38,6 +38,32 @@
 			<Property name="RightButton" value="+SongButton" />
             <Property name="Font" value="Sans" />
         </Window>
+        # IA CONTROLLER INFO 1
+        <Window type="TaharezLook/StaticImage" name="IAControllerInfo1" >
+            <Property name="Area" value="{{0.84,0},{0.54,0},{0.98,0},{0.6,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="IAText1" >
+                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="Press RB +IA" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+        </Window>
+        # IA CONTROLLER INFO 2
+        <Window type="TaharezLook/StaticImage" name="IAControllerInfo2" >
+            <Property name="Area" value="{{0.84,0},{0.6,0},{0.98,0},{0.66,0}}" />
+            <Property name="MaxSize" value="{{1,0},{1,0}}" />
+            <Window type="TaharezLook/StaticText" name="IAText2" >
+                <Property name="Area" value="{{0,0},{0,0},{1,0},{1,0}}" />
+                <Property name="MaxSize" value="{{1,0},{1,0}}" />
+                <Property name="Disabled" value="true" />
+                <Property name="Text" value="Press LB -IA" />
+                <Property name="Font" value="Sans" />
+                <Property name="HorzFormatting" value="CentreAligned" />
+            </Window>
+        </Window>
         # -LEVEL BUTTON
         <Window type="TaharezLook/Button" name="-LevelButton" >
             <Property name="Area" value="{{0.15,0},{0.25,0},{0.2,0},{0.3,0}}" />
@@ -63,7 +89,7 @@
             <Property name="Area" value="{{0.25,0},{0.15,0},{0.75,0},{0.45,0}}" />
             <Property name="MaxSize" value="{{1,0},{1,0}}" />
             <Property name="Disabled" value="true" />
-            <Property name="Image" value="level3"/>
+            <Property name="Image" value="level1"/>
             <Property name="FrameEnabled" Value="False" />
             <Property name="BackgroundEnabled" Value="False" />
         </Window>

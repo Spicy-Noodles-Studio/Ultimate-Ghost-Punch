@@ -16,23 +16,24 @@ Dodge::Dodge(GameObject* gameObject) : UserComponent(gameObject), rigidBody(null
 
 Dodge::~Dodge()
 {
-
+	rigidBody = nullptr;
 }
 
 void Dodge::start()
 {
-	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNullAndBreak(gameObject);
 
-	if (rigidBody != nullptr)
-		playerGravity = rigidBody->getGravity();
+	rigidBody = gameObject->getComponent<RigidBody>();
+	checkNullAndBreak(rigidBody);
+
+	playerGravity = rigidBody->getGravity();
 }
 
 void Dodge::update(float deltaTime)
 {
 	if (state != State::IDLE)
 	{
-		if (time > 0.0f)
-			time -= deltaTime;
+		if (time > 0.0f) time -= deltaTime;
 
 		if (time <= 0.0f)
 		{
@@ -47,29 +48,26 @@ void Dodge::update(float deltaTime)
 
 void Dodge::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
 
 		if (prop.first == "force")
 		{
-			if (!(ss >> force))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(force);
 		}
 		else if (prop.first == "cooldown")
 		{
-			if (!(ss >> cooldown))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(cooldown);
 		}
 		else if (prop.first == "duration")
 		{
-			if (!(ss >> duration))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(duration);
 		}
 		else if (prop.first == "atenuation")
 		{
-			if (!(ss >> atenuation))
-				LOG("DODGE: Invalid value for property %s", prop.first.c_str());
+			setFloat(atenuation);
 		}
 		else
 			LOG("DODGE: Invalid property name %s", prop.first.c_str());
@@ -78,14 +76,16 @@ void Dodge::handleData(ComponentData* data)
 
 void Dodge::dodge()
 {
+	checkNullAndBreak(gameObject);
+
 	PlayerState* aux = gameObject->getComponent<PlayerState>();
 
-	if (state == State::IDLE && aux->canDodge())
+	if (state == State::IDLE && notNull(aux) && aux->canDodge())
 	{
 		Vector3 dir = Vector3::ZERO;
-		dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
+		if (notNull(gameObject->transform)) dir.x = (gameObject->transform->getRotation().y > 0) ? 1 : -1;
 
-		if (rigidBody != nullptr)
+		if (notNull(rigidBody))
 		{
 			rigidBody->setGravity({ 0,0,0 });
 			rigidBody->setLinearVelocity({ 0,0,0 });
@@ -102,7 +102,7 @@ void Dodge::endDodge()
 	state = State::CD;
 	time = cooldown;
 
-	if (rigidBody != nullptr)
+	if (notNull(rigidBody))
 	{
 		rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * atenuation);
 		rigidBody->setGravity(playerGravity);

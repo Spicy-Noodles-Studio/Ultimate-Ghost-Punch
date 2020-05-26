@@ -34,16 +34,16 @@ private:
 
 	float getDistance(const Vector3& pos, const PlatformNode& node);
 
-public:
-	PlatformGraph(GameObject* gameObject);
-	virtual ~PlatformGraph();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+public:
+	PlatformGraph(GameObject* gameObject);
+	virtual ~PlatformGraph();
+
 	void createNodes();
-	void createLinks();
 
 	void saveGraph();
 	bool loadGraph();

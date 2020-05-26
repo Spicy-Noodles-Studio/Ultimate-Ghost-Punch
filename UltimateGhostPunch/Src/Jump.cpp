@@ -1,8 +1,8 @@
 #include "Jump.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
-#include <SoundEmitter.h>
 #include <sstream>
 
 #include "PlayerState.h"
@@ -10,21 +10,27 @@
 REGISTER_FACTORY(Jump);
 
 Jump::Jump(GameObject* gameObject) : UserComponent(gameObject), jumpForce(0), jumpDecay(0), coyoteTime(0.5f), coyoteTimer(0.0f),
-									 playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr), landed(0), jumped(0)
+playersBelow(0), grounded(false), jumping(false), rigidBody(nullptr), parent(nullptr), landed(0), jumped(0)
 {
 
 }
 
 Jump::~Jump()
 {
-
+	rigidBody = nullptr;
+	parent = nullptr;
 }
 
 void Jump::start()
 {
-	parent = gameObject->getParent();
-	if (parent != nullptr) rigidBody = parent->getComponent<RigidBody>();
+	checkNullAndBreak(gameObject);
+
 	landed = false;
+	parent = gameObject->getParent();
+	checkNullAndBreak(parent);
+
+	rigidBody = parent->getComponent<RigidBody>();
+	checkNull(rigidBody);
 }
 
 void Jump::update(float deltaTime)
@@ -36,12 +42,15 @@ void Jump::update(float deltaTime)
 
 void Jump::postUpdate(float deltaTime)
 {
-	if (landed > 0)landed--;;
-	if (jumped > 0)jumped--;
+	if (landed > 0) landed--;;
+	if (jumped > 0) jumped--;
+	if (grounded) jumping = false;
 }
 
 void Jump::onObjectEnter(GameObject* other)
 {
+	checkNullAndBreak(other);
+
 	bool isFloor = other->getTag() == "suelo";
 	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
 
@@ -64,8 +73,10 @@ void Jump::onObjectEnter(GameObject* other)
 
 void Jump::onObjectExit(GameObject* other)
 {
+	checkNullAndBreak(other);
+
 	bool isFloor = other->getTag() == "suelo";
-	bool isPlayer = other->getTag() == "Player" && parent != nullptr && other != parent;
+	bool isPlayer = other->getTag() == "Player" && notNull(parent) && other != parent;
 
 	if (isFloor || isPlayer)
 	{
@@ -76,12 +87,17 @@ void Jump::onObjectExit(GameObject* other)
 			coyoteTimer = coyoteTime;
 
 		if (isPlayer)
+		{
 			playersBelow--;
+			if (playersBelow < 0)
+				playersBelow = 0;
+		}
 	}
 }
 
 void Jump::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -103,14 +119,14 @@ void Jump::handleData(ComponentData* data)
 
 void Jump::jump()
 {
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 	PlayerState* aux = parent->getComponent<PlayerState>();
 
-	if (jumping || !canJump() || (aux != nullptr && !aux->canJump())) return;
+	if (jumping || !canJump() || !notNull(rigidBody) || (notNull(aux) && !aux->canJump())) return;
 
 	// Cancel vertical velocity so impulse doesnt lose strenght
 	rigidBody->setLinearVelocity(rigidBody->getLinearVelocity() * Vector3(1.0, 0.0, 1.0));
-	rigidBody->addImpulse(Vector3(0.0, 1.0, 0.0) * jumpForce);
+	rigidBody->addImpulse(Vector3::UP * jumpForce);
 	jumping = true;
 	jumped = 2;
 	coyoteTimer = 0.0f;
@@ -118,7 +134,7 @@ void Jump::jump()
 
 void Jump::cancelJump()
 {
-	if (!jumping) return;
+	if (!jumping || !notNull(rigidBody)) return;
 	Vector3 velocity = rigidBody->getLinearVelocity();
 
 	if (velocity.y < 0.0) return; // Is falling
@@ -155,7 +171,7 @@ bool Jump::isJumping() const
 
 bool Jump::isFalling() const
 {
-	return rigidBody->getLinearVelocity().y <= -1.0f;
+	return notNull(rigidBody) && rigidBody->getLinearVelocity().y <= -1.0f;
 }
 
 bool Jump::canJump() const

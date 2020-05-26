@@ -1,6 +1,6 @@
 #pragma once
-#ifndef TRAIL_MANAGER
-#define TRAIL_MANAGER
+#ifndef TRAIL_MANAGER_H
+#define TRAIL_MANAGER_H
 #include <UserComponent.h>
 
 class Trail;
@@ -20,12 +20,16 @@ private:
 	float time;
 	float thrownTime;
 
+protected:
+	virtual void start();
+	virtual void preUpdate(float deltaTime);
+
 public:
 	TrailManager(GameObject* gameObject);
 	virtual ~TrailManager();
 
-	virtual void start();
-	virtual void preUpdate(float deltaTime);
+	void stopAll();
+	void reconfigureAttackTrails();
 
 private:
 	// Trails creation

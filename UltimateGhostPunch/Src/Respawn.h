@@ -18,14 +18,14 @@ private:
 
 	bool respawning;
 
-public:
-	Respawn(GameObject* gameObject);
-	~Respawn();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+public:
+	Respawn(GameObject* gameObject);
+	virtual ~Respawn();
 	void respawn(); //Spawns in the original position
 	void spawn(const Vector3& spawnPos);
 

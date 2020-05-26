@@ -1,0 +1,37 @@
+{
+    "SceneName": "StudioLogo",
+    "SceneObjects": [
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "CursorMenu",
+            "Tag": "cursorMenu",
+            "BlueprintPath": "CursorMenu"
+        },
+        {
+            "ObjectType": "GAMEOBJECT",
+            "ObjectName": "MainMenu",
+            "Tag": "mainMenu",
+            "Components":
+            [
+                {
+                    "ComponentName": "LogoScreen"
+                }
+            ]
+        },
+        {
+            "ObjectType": "BLUEPRINT",
+            "ObjectName": "MainCamera",
+            "Tag": "mainCamera",
+            "BlueprintPath": "Camera",
+            "Components":
+            [
+                {
+                    "ComponentName": "UILayout",
+                    "ComponentProperties": [
+                        ["layout" , "StudioLogo.layout"]
+                    ]
+                }
+            ]
+        }
+    ]
+}

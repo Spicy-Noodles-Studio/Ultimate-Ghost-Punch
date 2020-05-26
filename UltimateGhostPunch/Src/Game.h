@@ -49,10 +49,8 @@ private:
 	std::vector<std::pair<Vector3, Vector3>> spikesTransforms;
 	std::vector<LightData> lights; // position, intensity, colour, direction
 
-	int nSpikes;
-	int nLights;
+	int players;
 	int winner;
-
 	float timer; // If time is -1, then infinite
 
 	void setCameraLimits(GameObject* mainCamera);
@@ -66,18 +64,23 @@ private:
 	void configureLevelRender(const std::string& name);
 	void configureLevelCollider(const std::string& name);
 
+	void setRanking();
 	void chooseWinner();
 
 	std::pair<std::string, std::string> timeToText();
+
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
 
 public:
 	Game(GameObject* gameObject);
 	virtual ~Game();
 
-	virtual void start();
-	virtual void update(float deltaTime);
+	void playerDeath();
 
-	void playerDie(int index);
+	int getPlayers() const;
+	float getTime() const;
 
 	Vector3 getPlayerInitialPosition(int player);
 	CameraEffects* getCameraEffects();

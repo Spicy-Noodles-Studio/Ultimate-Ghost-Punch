@@ -1,4 +1,5 @@
 #include "PauseMenu.h"
+
 #include <ComponentRegister.h>
 #include <InputSystem.h>
 #include <InterfaceSystem.h>
@@ -6,8 +7,9 @@
 #include <GameObject.h>
 #include <UILayout.h>
 
-#include "GameManager.h"
 #include "SongManager.h"
+#include "GameManager.h"
+#include "Game.h"
 #include "Countdown.h"
 
 REGISTER_FACTORY(PauseMenu);
@@ -28,8 +30,10 @@ bool PauseMenu::optionsButtonClick()
 	optionsMenu.setAlwaysOnTop(true);
 	optionsMenu.setEnabled(true);
 
-	interfaceSystem->clearControllerMenuInput();
-	interfaceSystem->initControllerMenuInput(&optionsMenu);
+	if (notNull(interfaceSystem)) {
+		interfaceSystem->clearControllerMenuInput();
+		interfaceSystem->initControllerMenuInput(&optionsMenu);
+	}
 
 	buttonClick(buttonSound);
 
@@ -38,37 +42,45 @@ bool PauseMenu::optionsButtonClick()
 
 bool PauseMenu::exitButtonClick()
 {
-	gameManager->setPaused(false);
-	gameManager->pauseAllSounds();
-	gameManager->emptyKnights();
-
-	songManager->stopSong(gameManager->getSong().first);
+	if (notNull(gameManager)) {
+		gameManager->setPaused(false);
+		gameManager->pauseAllSounds();
+		gameManager->emptyKnights();
+		if (notNull(songManager))
+			songManager->stopSong(gameManager->getSong().first);
+	}
 
 	return Menu::backButtonClick();
 }
 
 PauseMenu::PauseMenu(GameObject* gameObject) : Menu(gameObject), countdown(nullptr), pauseMenu(NULL), pausePanel(NULL), optionsMenu(NULL)
 {
-	interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
-	interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
-	interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	if (notNull(interfaceSystem)) {
+		interfaceSystem->registerEvent("resumeButtonClick", UIEvent("ButtonClicked", [this]() {setPaused(false); return false; }));
+		interfaceSystem->registerEvent("pauseOptionsButtonClick", UIEvent("ButtonClicked", [this]() {optionsButtonClick(); return false; }));
+		interfaceSystem->registerEvent("pauseExitButtonClick", UIEvent("ButtonClicked", [this]() {return exitButtonClick(); }));
+	}
 }
 
 PauseMenu::~PauseMenu()
 {
-	interfaceSystem->unregisterEvent("resumeButtonClick");
-	interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
-	interfaceSystem->unregisterEvent("pauseExitButtonClick");
+	if (notNull(interfaceSystem)) {
+		interfaceSystem->unregisterEvent("resumeButtonClick");
+		interfaceSystem->unregisterEvent("pauseOptionsButtonClick");
+		interfaceSystem->unregisterEvent("pauseExitButtonClick");
+	}
+
+	countdown = nullptr;
 }
 
 void PauseMenu::start()
 {
 	Menu::start();
 
-	if (mainCamera != nullptr)
+	if (notNull(mainCamera))
 	{
 		UILayout* cameraLayout = mainCamera->getComponent<UILayout>();
-		if (cameraLayout != nullptr)
+		if (notNull(cameraLayout))
 		{
 			pauseMenu = cameraLayout->getRoot().getChild("PauseBackground");
 			pausePanel = cameraLayout->getRoot().getChild("Pause");
@@ -76,16 +88,25 @@ void PauseMenu::start()
 	}
 
 	GameObject* options = findGameObjectWithName("OptionsMenuScreen");
-	if (options != nullptr)
-		optionsMenu = options->getComponent<UILayout>()->getRoot();
+	if (notNull(options)) {
+		UILayout* optionsLayout = options->getComponent<UILayout>();
+		if (notNull(optionsLayout))
+			optionsMenu = optionsLayout->getRoot();
+	}
 
-	countdown = findGameObjectWithName("Countdown")->getComponent<Countdown>();
+	GameObject* countdownObject = findGameObjectWithName("Countdown");
+	if (notNull(countdownObject))
+		countdown = countdownObject->getComponent<Countdown>();
+
+	GameObject* gameObject = findGameObjectWithName("Game");
+	if (notNull(gameObject))
+		game = gameObject->getComponent<Game>();
 }
 
 void PauseMenu::preUpdate(float deltaTime)
 {
-	if (!countdown->isCounting() && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
-		setPaused(!GameManager::GetInstance()->isPaused());
+	if (notNull(countdown) && countdown->hasStarted() && !countdown->isCounting() && notNull(game) && game->getTime() != 0 && notNull(gameManager) && notNull(inputSystem) && (inputSystem->getKeyPress("ESCAPE") || checkControllersInput()) && !optionsMenu.isVisible())
+		setPaused(!gameManager->isPaused());
 }
 
 bool PauseMenu::checkControllersInput()
@@ -95,7 +116,7 @@ bool PauseMenu::checkControllersInput()
 	int i = 0;
 	while (i < 4 && !result)
 	{
-		if (inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
+		if (notNull(inputSystem) && inputSystem->getButtonPress(i, "START") || (inputSystem->getButtonPress(i, "B") && pauseMenu.isVisible()))
 			result = true;
 
 		i++;
@@ -106,6 +127,9 @@ bool PauseMenu::checkControllersInput()
 
 void PauseMenu::setPaused(bool paused)
 {
+	checkNullAndBreak(gameManager);
+	checkNullAndBreak(songManager);
+
 	if (paused == gameManager->isPaused()) return;
 
 	if (paused)	songManager->pauseSong(gameManager->getSong().first);

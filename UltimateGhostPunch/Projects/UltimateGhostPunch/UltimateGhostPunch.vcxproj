@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\AIStateMachine.cpp" />
+    <ClCompile Include="..\..\Src\ControlsMenu.cpp" />
+    <ClCompile Include="..\..\Src\Credits.cpp" />
     <ClCompile Include="..\..\Src\FightingState.cpp" />
     <ClCompile Include="..\..\Src\GhostNavigation.cpp" />
     <ClCompile Include="..\..\Src\CameraEffects.cpp" />
@@ -54,6 +56,7 @@
     <ClCompile Include="..\..\Src\Block.cpp" />
     <ClCompile Include="..\..\Src\Dodge.cpp" />
     <ClCompile Include="..\..\Src\LoadingScreen.cpp" />
+    <ClCompile Include="..\..\Src\LogoScreen.cpp" />
     <ClCompile Include="..\..\Src\MainMenu.cpp" />
     <ClCompile Include="..\..\Src\Menu.cpp" />
     <ClCompile Include="..\..\Src\Obstacle.cpp" />
@@ -98,7 +101,9 @@
     <ClInclude Include="..\..\Src\AIStateMachine.h" />
     <ClInclude Include="..\..\Src\Attack.h" />
     <ClInclude Include="..\..\Src\CameraEffects.h" />
+    <ClInclude Include="..\..\Src\ControlsMenu.h" />
     <ClInclude Include="..\..\Src\Countdown.h" />
+    <ClInclude Include="..\..\Src\Credits.h" />
     <ClInclude Include="..\..\Src\CursorGame.h" />
     <ClInclude Include="..\..\Src\CursorMenu.h" />
     <ClInclude Include="..\..\Src\DeathZone.h" />
@@ -108,6 +113,7 @@
     <ClInclude Include="..\..\Src\Grab.h" />
     <ClInclude Include="..\..\Src\Dodge.h" />
     <ClInclude Include="..\..\Src\LoadingScreen.h" />
+    <ClInclude Include="..\..\Src\LogoScreen.h" />
     <ClInclude Include="..\..\Src\MainMenu.h" />
     <ClInclude Include="..\..\Src\Menu.h" />
     <ClInclude Include="..\..\Src\Obstacle.h" />

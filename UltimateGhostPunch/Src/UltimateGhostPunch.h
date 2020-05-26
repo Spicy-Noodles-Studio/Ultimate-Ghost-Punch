@@ -25,14 +25,15 @@ private:
 	// Speed multiplayer for punch charging speed (from 0.0 to 1.0)
 	float chargeSpeed;
 
-public:
-	UltimateGhostPunch(GameObject* gameObject);
-	virtual ~UltimateGhostPunch();
-
+protected:
 	virtual void start();
 	virtual void preUpdate(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	UltimateGhostPunch(GameObject* gameObject);
+	virtual ~UltimateGhostPunch();
 
 	void charge();
 	void aim(double x, double y);

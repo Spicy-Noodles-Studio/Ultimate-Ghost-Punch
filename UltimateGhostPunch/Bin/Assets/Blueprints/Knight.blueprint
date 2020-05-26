@@ -16,7 +16,7 @@
             "ComponentName": "MeshRenderer",
             "ComponentProperties": [
                [ "mesh", "player Knight.mesh"],
-               [ "attachToBone", "sword Espada.mesh player Mano.L"]
+               [ "attachToBone", "sword Sword.mesh player Mano.L"]
             ]
         },
         {
@@ -148,8 +148,8 @@
                 {
                     "ComponentName": "Attack",
                     "ComponentProperties":[
-                        ["quickCooldown", "0.5"],
-                        ["strongCooldown", "2"],
+                        ["quickCooldown", "0.75"],
+                        ["strongCooldown", "1"],
                         ["quickDamage", "1"],
                         ["strongDamage", "2"],
                         ["attackDuration", "0.2"],

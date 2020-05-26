@@ -48,7 +48,6 @@ private:
 	GhostMovement* ghostMovement;
 	Health* health;
 	PlayerUI* playerUI;
-	PlayerController* control;
 	PlayerState* playerState;
 
 	Camera* cam;
@@ -63,14 +62,15 @@ private:
 
 	GhostMode mode;
 
-public:
-	GhostManager(GameObject* gameObject);
-	virtual ~GhostManager();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
-	virtual void onObjectEnter(GameObject* other);
+	virtual void onObjectStay(GameObject* other);
+
+public:
+	GhostManager(GameObject* gameObject);
+	virtual ~GhostManager();
 
 	bool isGhost() const;
 

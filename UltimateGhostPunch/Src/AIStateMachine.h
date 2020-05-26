@@ -28,8 +28,7 @@ class AIStateMachine :	public StateMachine
 {
 public:
 private:
-	std::vector<GameObject*>* knights;
-	/* Knight it would be focused */
+	/* Knight it will be focused on */
 	GameObject* target;
 
 	/* GRAPH INFO */
@@ -59,14 +58,15 @@ private:
 	float timerTargetChange;
 	float avoidGhostDist;
 
-public:
-	AIStateMachine(GameObject* gameObject);
-	virtual ~AIStateMachine();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void fixedUpdate(float deltaTime);
 	virtual void onCollisionEnter(GameObject* other);
+
+public:
+	AIStateMachine(GameObject* gameObject);
+	virtual ~AIStateMachine();
 
 	void startPlatformNavigation();
 	void startPlatformMovement();

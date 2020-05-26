@@ -31,14 +31,14 @@ private:
 
 	GameObject* playerPunching;
 
-public:
-	CameraController(GameObject* gameObject);
-	virtual ~CameraController();
-
+protected:
 	virtual void preUpdate(float deltaTime);
 	virtual void update(float deltaTime);
 	virtual void handleData(ComponentData* data);
 
+public:
+	CameraController(GameObject* gameObject);
+	virtual ~CameraController();
 	void setMinZ(float minZ);
 	void setMaxZ(float maxZ);
 	void setMinX(float minX);

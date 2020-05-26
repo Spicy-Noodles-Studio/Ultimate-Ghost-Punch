@@ -23,16 +23,17 @@ private:
 	int landed;
 	int jumped;
 
-public:
-	Jump(GameObject* gameObject);
-	virtual ~Jump();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void onObjectEnter(GameObject* other);
 	virtual void onObjectExit(GameObject* other);
 	virtual void handleData(ComponentData* data);
+
+public:
+	Jump(GameObject* gameObject);
+	virtual ~Jump();
 
 	void jump();
 	void cancelJump();

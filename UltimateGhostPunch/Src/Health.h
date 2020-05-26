@@ -8,14 +8,16 @@ class CameraEffects;
 
 class Health : public UserComponent
 {
-public:
-	Health(GameObject* gameObject);
-	virtual ~Health();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
 	virtual void handleData(ComponentData* data);
+
+public:
+	Health(GameObject* gameObject);
+	virtual ~Health();
+
 
 	int getMaxHealth();
 	int getHealth();

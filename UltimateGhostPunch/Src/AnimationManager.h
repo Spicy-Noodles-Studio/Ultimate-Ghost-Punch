@@ -23,12 +23,13 @@ private:
 	// Indicates the current position of the sword
 	SwordState swordState;
 
+protected:
+	virtual void start();
+	virtual void postUpdate(float deltaTime);
+
 public:
 	AnimationManager(GameObject* gameObject);
 	virtual ~AnimationManager();
-
-	virtual void start();
-	virtual void postUpdate(float deltaTime);
 
 private:
 	void manageAnimations();
@@ -82,7 +83,6 @@ private:
 	// GHOST ANIMATION
 	bool manageChargeAnimation();
 	bool managePunchingAnimation();
-	bool managePunchSuccessAnimation();
 	bool managePunchFailAnimation();
 	bool manageGhostMoveAnimation();
 	bool manageGhostIdleAnimation();

@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef FIGHTING_STATE_H
+#define FIGHTING_STATE_H
+
 #include "StateAction.h"
 #include "AIStateMachine.h"
 
@@ -15,7 +19,7 @@ class FightingState :
 	public StateAction
 {
 private:
-	GameObject* target; // Object attacking
+	GameObject* target; // Object the character attacks
 	GameObject* character;	// Object being controlled
 	Attack* attack;
 	Block* blockComp;
@@ -23,7 +27,7 @@ private:
 	Grab* grabComp;
 	Dodge* dodgeComp;
 	Movement* movement;
-	PlayerState* pState;
+	PlayerState* playerState;
 
 	ActionInput lastAction;
 
@@ -42,6 +46,8 @@ private:
 	int seekProb_SAR;
 	int blockProb_SAR;
 
+	int avoidBlockProb;
+
 	// Grab probability
 	int grabProb;
 	// Dodge probability
@@ -50,6 +56,7 @@ private:
 	float blockSpamTimeMAX; // Time until the AI can block again
 	float blockSpamTime;
 	float unblockTime; // Time until unblock
+	float avoidBlockTime;
 
 	float maxDistForJump; // Max distance to target for jump attack
 
@@ -61,6 +68,7 @@ private:
 	void selectAction();
 	void quickAttack();
 	void strongAttack();
+	void avoidBlock();
 	void block();
 	void unblock();
 	void transitionToPlatformNav();
@@ -68,6 +76,9 @@ private:
 	void grab();
 	void drop();
 	void dodge();
+
+protected:
+	virtual void update(float deltaTime);
 
 public:
 	FightingState(StateMachine* stateMachine);
@@ -80,7 +91,6 @@ public:
 	bool isFighting() const;
 	void turnTowardsTarget();
 	void turnBackOnTarget();
-protected:
-	virtual void update(float deltaTime);
 };
 
+#endif 

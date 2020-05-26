@@ -1,4 +1,5 @@
 #include "TrailManager.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <Trail.h>
@@ -10,7 +11,7 @@
 
 REGISTER_FACTORY(TrailManager);
 
-TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), quickAttackTrail(nullptr), heavyAttackTrail(nullptr),
+TrailManager::TrailManager(GameObject* gameObject) : UserComponent(gameObject), quickAttackTrail(nullptr), heavyAttackTrail(nullptr), dashTrail(nullptr), thrownTrail(nullptr), UGPTrail(nullptr), playerState(nullptr),
 time(0), thrownTime(1)
 {
 
@@ -18,22 +19,51 @@ time(0), thrownTime(1)
 
 TrailManager::~TrailManager()
 {
+	quickAttackTrail = nullptr;
+	heavyAttackTrail = nullptr;
+	dashTrail = nullptr;
+	thrownTrail = nullptr;
+	UGPTrail = nullptr;
+	playerState = nullptr;
+}
 
+void TrailManager::stopAll()
+{
+	if (notNull(quickAttackTrail)) quickAttackTrail->stop();
+	if (notNull(heavyAttackTrail)) heavyAttackTrail->stop();
+	if (notNull(dashTrail)) dashTrail->stop();
+	if (notNull(thrownTrail)) thrownTrail->stop();
+	if (notNull(UGPTrail)) UGPTrail->stop();
+}
+
+void TrailManager::reconfigureAttackTrails()
+{
+	if (notNull(quickAttackTrail))
+		quickAttackTrail->configureTrail("./Assets/Trails/quickAttackTrail.trail");
+
+	if (notNull(heavyAttackTrail))
+		heavyAttackTrail->configureTrail("./Assets/Trails/heavyAttackTrail.trail");
 }
 
 void TrailManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	// PlayerState for info
 	playerState = gameObject->getComponent<PlayerState>();
-	if (playerState == nullptr)
-		LOG_ERROR("TRAIL MANAGER", "PlayerState component not found");
+	checkNull(playerState);
+
+	MeshRenderer* mesh = gameObject->getComponent<MeshRenderer>();
+	Vector3 diffuse = (notNull(mesh)) ? mesh->getDiffuse(0) : Vector3::ZERO;
 
 	createTrail(&heavyAttackTrail, "heavyAttackTrail");
 	createTrail(&quickAttackTrail, "quickAttackTrail");
 	createTrail(&dashTrail, "dashTrail");
-	dashTrail->setColour(gameObject->getComponent<MeshRenderer>()->getDiffuse(0), 1);
+	if (notNull(dashTrail)) dashTrail->setColour(diffuse, 1);
+
 	createTrail(&thrownTrail, "thrownTrail");
-	thrownTrail->setColour(gameObject->getComponent<MeshRenderer>()->getDiffuse(0), 1);
+	if (notNull(thrownTrail))thrownTrail->setColour(diffuse, 1);
+
 	createTrail(&UGPTrail, "UGPTrail");
 }
 
@@ -51,24 +81,25 @@ void TrailManager::createTrail(Trail** trail, const std::string& trailFilename)
 	if (*trail != nullptr) return;
 
 	GameObject* trailObject = instantiate("Trail");
-	if (trailObject == nullptr)
-		return;
+	checkNullAndBreak(trailObject);
+	checkNullAndBreak(gameObject);
 
 	gameObject->addChild(trailObject);
 
 	*trail = trailObject->getComponent<Trail>();
-	if (*trail == nullptr)
-		return;
+	checkNullAndBreak(*trail);
 
 	// Set parameters from file
 	MeshRenderer* mesh = gameObject->getComponent<MeshRenderer>();
-	(*trail)->setMeshRenderer(mesh);
+	if (notNull(mesh))
+		(*trail)->setMeshRenderer(mesh);
 	(*trail)->configureTrail("./Assets/Trails/" + trailFilename + ".trail");
 }
 
 void TrailManager::manageQuickAttackTrail()
 {
-	if (quickAttackTrail == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(quickAttackTrail);
 
 	if (playerState->isQuickAttacking())
 		quickAttackTrail->start();
@@ -78,31 +109,32 @@ void TrailManager::manageQuickAttackTrail()
 
 void TrailManager::manageHeavyAttackTrail()
 {
-	if (heavyAttackTrail == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(heavyAttackTrail);
 
 	if (playerState->isHeavyAttacking()) {
 		if (!heavyAttackTrail->started()) heavyAttackTrail->start();
 	}
-	else {
+	else
 		if (heavyAttackTrail->started()) heavyAttackTrail->stop();
-	}
 }
 
 void TrailManager::manageDashTrail()
 {
-	if (dashTrail == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(dashTrail);
 
 	if (playerState->isDodging()) {
 		if (!dashTrail->started()) dashTrail->start();
 	}
-	else {
+	else
 		if (dashTrail->started()) dashTrail->stop();
-	}
 }
 
 void TrailManager::manageThrownTrail(float deltaTime)
 {
-	if (thrownTrail == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(thrownTrail);
 
 	if (playerState->hasBeenThrown()) {
 		time = thrownTime;
@@ -110,129 +142,20 @@ void TrailManager::manageThrownTrail(float deltaTime)
 	}
 
 	if (time > 0)
-	{
 		time -= deltaTime;
-	}
+
 	else if (time <= 0)
-	{
 		if (thrownTrail->started()) thrownTrail->stop();
-	}
 }
 
 void TrailManager::manageUGPTrail()
 {
-	if (UGPTrail == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(UGPTrail);
 
 	if (playerState->isPunching()) {
 		if (!UGPTrail->started()) UGPTrail->start();
 	}
-	else {
+	else
 		if (UGPTrail->started()) UGPTrail->stop();
-	}
 }
-
-/*
-void ParticleManager::createParticle(ParticleEmitter** emitter, const std::string& particleName, const Vector3& position)
-{
-	if (*emitter != nullptr) return;
-
-	GameObject* particlesObject = instantiate("ParticleEmitter");
-	if (particlesObject == nullptr)
-		return;
-
-	// Add child
-	gameObject->addChild(particlesObject);
-
-	*emitter = particlesObject->getComponent<ParticleEmitter>();
-	if (*emitter == nullptr)
-		return;
-
-	particlesObject->transform->setPosition(position);
-	(*emitter)->newEmitter(particleName);
-}
-
-void ParticleManager::manageFloorDust()
-{
-	if (floorDust == nullptr) return;
-
-	if (playerState->isGrounded() && playerState->isMoving() && playerState->canMove())
-		floorDust->start();
-	else
-		floorDust->stop();
-}
-
-void ParticleManager::manageJumpDust()
-{
-	if (jumpDust == nullptr) return;
-
-	if (playerState->isGrounded() && playerState->isJumping())
-		jumpDust->start();
-	else
-		jumpDust->stop();
-}
-
-void ParticleManager::manageLandDust()
-{
-	if (landDust == nullptr) return;
-
-	if (playerState->hasLanded() && playerState->canMove())
-		landDust->start();
-	else
-		landDust->stop();
-}
-
-void ParticleManager::manageBloodSplash()
-{
-	if (bloodSplash == nullptr) return;
-
-	if (playerState->isHurt())
-		bloodSplash->start();
-	else
-		bloodSplash->stop();
-}
-
-void ParticleManager::manageBlockSparks()
-{
-	if (blockSparks == nullptr) return;
-
-	if (playerState->isBlocking() && playerState->hasBlocked())
-		blockSparks->start();
-	else
-		blockSparks->stop();
-}
-
-void ParticleManager::manageStunSparks(float deltaTime)
-{
-	if (stunSparks == nullptr) return;
-
-	if (playerState->isStunned()) {
-		stunTimer -= deltaTime;
-		if(stunTimer <= 0.0f)
-			stunSparks->start();
-	}
-	else {
-		stunSparks->stop();
-		stunTimer = stunDelay;
-	}
-}
-
-void ParticleManager::manageSpectre()
-{
-	if (spectre == nullptr) return;
-
-	if (playerState->canGhostMove())
-		spectre->start();
-	else
-		spectre->stop();
-}
-
-void ParticleManager::manageSpectreSplash()
-{
-	if (spectreSplash == nullptr) return;
-
-	if (playerState->punchHasSucceeded())
-		spectreSplash->start();
-	else
-		spectreSplash->stop();
-}
-*/

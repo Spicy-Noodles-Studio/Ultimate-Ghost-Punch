@@ -18,7 +18,7 @@ class Score
 		int amountOfDamageDealt;
 		int lifesStolenAsGhost;
 
-		int amountOfDamageTakenFromSpikes;	
+		int amountOfDamageTakenFromSpikes;
 		int timesFallen;
 		int totalDamageTaken;
 		int deathsByEnviroment;
@@ -30,23 +30,28 @@ class Score
 private:
 	int numPlayers;
 	std::vector<ScorePlayer*> playerScores;
+	std::vector<int> playerID;
 
 	void initScorePlayer(ScorePlayer* player);
+	bool correctIndex(int index);
 
 public:
 	Score();
-	~Score();
+	virtual ~Score();
 
 	void clearScores();
+
+	void setPlayerID(std::vector<int>& playerID);
+	std::vector<int>& getPlayerID();
 
 	void initScore(int numOfPlayers);
 	void attackDone(int playerIndex);
 	void attackHitted(int playerIndex);
-	void damageReceivedFrom(int playerIndex, int fromIndex,int amount);
+	void damageReceivedFrom(int playerIndex, int fromIndex, int amount);
 	void damagedBySpike(int playerIndex);
 	void fall(int playerIndex);
 	void grabHitted(int playerIndex);
-	void lifeStolenBy(int playerIndex,int fromIndex);
+	void lifeStolenBy(int playerIndex, int fromIndex);
 	void killedBy(int playerIndex, int fromIndex);
 	void deathByEnviroment(int playerIndex);
 

@@ -6,12 +6,11 @@
 #include <sstream>
 
 #include "GameManager.h"
-#include "UltimateGhostPunch.h"
 #include "PlayerState.h"
 
 REGISTER_FACTORY(CameraController);
 
-CameraController::CameraController(GameObject* gameObject) : UserComponent(gameObject), minZ(20), maxZ(100), minX(20), maxX(100), minY(20), maxY(100), 
+CameraController::CameraController(GameObject* gameObject) : UserComponent(gameObject), minZ(20), maxZ(100), minX(20), maxX(100), minY(20), maxY(100),
 smoothFactor(0.125f), zoomFactor(1.0f), time(0.0f), slowMoTime(0.3f), slowMoDistance(5.0f), slowMoTimeScale(0.3f), slowMoZ(15.0f), state(MIDPOINT), playerPunching(nullptr)
 {
 
@@ -19,7 +18,7 @@ smoothFactor(0.125f), zoomFactor(1.0f), time(0.0f), slowMoTime(0.3f), slowMoDist
 
 CameraController::~CameraController()
 {
-
+	playerPunching = nullptr;
 }
 
 void CameraController::preUpdate(float deltaTime)
@@ -43,6 +42,7 @@ void CameraController::update(float deltaTime)
 
 void CameraController::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -132,6 +132,9 @@ void CameraController::setMaxY(float maxY)
 
 void CameraController::smoothMove()
 {
+	checkNullAndBreak(gameObject);
+	checkNullAndBreak(gameObject->transform);
+
 	Vector3 lerpDest = gameObject->transform->getPosition();
 	lerpDest.lerp(target, smoothFactor);
 	gameObject->transform->setPosition(lerpDest);
@@ -148,14 +151,15 @@ void CameraController::handleState()
 float CameraController::getMaxDistBetweenPlayers()
 {
 	// Vector with every player alive
-	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
+	checkNullAndBreak(GameManager::GetInstance(), 0);
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
 
-	// number of players alive
+	// Number of players alive
 	int n = alive.size();
 	float maxDist = -1;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
-			if (i != j) {
+			if (i != j && notNull(alive[i]) && notNull(alive[i]->transform) && notNull(alive[j]) && notNull(alive[j]->transform)) {
 				float d = (alive[i]->transform->getPosition() - alive[j]->transform->getPosition()).magnitude();
 				if (d > maxDist) maxDist = d;
 			}
@@ -167,8 +171,8 @@ float CameraController::getMaxDistBetweenPlayers()
 
 void CameraController::setTargetToSlowMo()
 {
-	if (playerPunching == nullptr)
-		return;
+	checkNullAndBreak(playerPunching);
+	checkNullAndBreak(playerPunching->transform);
 
 	Vector3 playerPunchingPos = playerPunching->transform->getPosition();
 	target = { playerPunchingPos.x, playerPunchingPos.y, slowMoZ };
@@ -184,6 +188,8 @@ void CameraController::checkSlowMo()
 
 void CameraController::activateSlowMo()
 {
+	checkNullAndBreak(Timer::GetInstance());
+
 	Timer::GetInstance()->setTimeScale(slowMoTimeScale);
 	time = slowMoTime;
 	state = SLOWMO;
@@ -191,22 +197,28 @@ void CameraController::activateSlowMo()
 
 void CameraController::deactivateSlowMo()
 {
+	checkNullAndBreak(Timer::GetInstance());
+
 	Timer::GetInstance()->setTimeScale(1.0f);
 	state = MIDPOINT;
 }
 
 Vector3 CameraController::getMidPointBetweenPlayers()
 {
-	// Vector with every player alive
-	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers();
+	checkNullAndBreak(GameManager::GetInstance(), Vector3::ZERO);
 
-	// number of players alive
+	// Vector with every player alive
+	std::vector<GameObject*> alive = GameManager::GetInstance()->getAlivePlayers(true);
+
+	// Number of players alive
 	int n = alive.size();
 	float midX = 0.0f, midY = 0.0f;
 
 	for (auto a : alive) {
-		midX += a->transform->getPosition().x / n;
-		midY += a->transform->getPosition().y / n;
+		if (notNull(a) && notNull(a->transform)) {
+			midX += a->transform->getPosition().x / n;
+			midY += a->transform->getPosition().y / n;
+		}
 	}
 
 	return Vector3(midX, midY, 0.0f);
@@ -215,7 +227,8 @@ Vector3 CameraController::getMidPointBetweenPlayers()
 void CameraController::getMidPointAdjusted(Vector3* midPoint, float zoom)
 {
 	float zoomMargin = (((zoom - minZ) * (15 - (0))) / (maxZ - minZ)) + 0;
-
+	
+	checkNullAndBreak(midPoint);
 	if (midPoint->x < (minX + zoomMargin)) midPoint->x = minX + zoomMargin;
 	if (midPoint->x > (maxX - zoomMargin)) midPoint->x = maxX - zoomMargin;
 	if (midPoint->y < (minY + zoomMargin)) midPoint->y = minY + zoomMargin;
@@ -230,7 +243,7 @@ void CameraController::setTargetToMidPointPlayers()
 	// Zoom in/out
 	float dist = getMaxDistBetweenPlayers();
 
-	//clamp between minZ and maxZ
+	//Clamp between minZ and maxZ
 	dist *= zoomFactor;
 	dist = std::min(maxZ, std::max(dist, minZ));
 
@@ -243,15 +256,18 @@ void CameraController::setTargetToMidPointPlayers()
 GameObject* CameraController::someonePunching()
 {
 	// Vector with every player
+	checkNullAndBreak(GameManager::GetInstance(), nullptr);
+
 	std::vector<GameObject*> players = GameManager::GetInstance()->getKnights();
 
-	// number of players
+	// Number of players
 	int n = players.size();
 
 	int i = 0;
-	while (i < n && !players[i]->getComponent<UltimateGhostPunch>()->isPunching())
+	while (i < n && notNull(players[i]) && notNull(players[i]->getComponent<PlayerState>()) && !players[i]->getComponent<PlayerState>()->isPunching())
 		i++;
 
 	if (i < n) return players[i];
+
 	return nullptr;
 }

@@ -1,4 +1,5 @@
 #include "UltimateGhostPunch.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <RigidBody.h>
@@ -20,23 +21,30 @@ direction(Vector3::ZERO), state(State::NONE), duration(0.0f), force(0.0f), ghost
 
 UltimateGhostPunch::~UltimateGhostPunch()
 {
-
+	rigidBody = nullptr;
+	ghostMovement = nullptr;
 }
 
 void UltimateGhostPunch::start()
 {
+	checkNullAndBreak(gameObject);
+
+	state = AVAILABLE;
+
 	rigidBody = gameObject->getComponent<RigidBody>();
 	ghostMovement = gameObject->getComponent<GhostMovement>();
 
-	if (ghostMovement != nullptr)
-		ghostSpeed = ghostMovement->getSpeed();
+	checkNull(rigidBody);
+	checkNullAndBreak(ghostMovement);
 
-	state = AVAILABLE;
+	ghostSpeed = ghostMovement->getSpeed();
 }
 
 void UltimateGhostPunch::preUpdate(float deltaTime)
 {
-	if (state == USED || state == SUCCESS || state == FAIL)
+	checkNullAndBreak(gameObject);
+
+	if (notNull(gameObject->transform) && (state == USED || state == SUCCESS || state == FAIL))
 	{
 		Vector3 rotation = gameObject->transform->getRotation();
 		rotation.z = 0.0;
@@ -61,6 +69,7 @@ void UltimateGhostPunch::postUpdate(float deltaTime)
 
 void UltimateGhostPunch::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -88,13 +97,14 @@ void UltimateGhostPunch::charge()
 	{
 		state = CHARGING;
 
-		if (ghostMovement != nullptr)
-			ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
+		checkNullAndBreak(ghostMovement);
+		ghostMovement->setSpeed(ghostMovement->getSpeed() * chargeSpeed);
 	}
 }
 
 void UltimateGhostPunch::aim(double x, double y)
 {
+	checkNullAndBreak(gameObject);
 	if (x == 0 && y == 0 || state != CHARGING) return;
 
 	direction = { x, y, 0.0 };
@@ -103,7 +113,7 @@ void UltimateGhostPunch::aim(double x, double y)
 	float flippedX = direction.x >= 0 ? 1.0f : -1.0f;
 	float flippedY = direction.y >= 0 ? 1.0f : -1.0f;
 
-	if (direction.x != 0)
+	if (notNull(gameObject->transform) && direction.x != 0)
 	{
 		float angle = acos(direction.dot(Vector3::RIGHT * flippedX));
 		Vector3 finalDirection = Vector3(0.0, 90.0f * flippedX, angle * RAD_TO_DEG * flippedX * flippedY);
@@ -116,9 +126,9 @@ void UltimateGhostPunch::ghostPunch()
 {
 	if (state != CHARGING) return;
 
-	if (rigidBody != nullptr) rigidBody->addImpulse(direction * force);
+	if (notNull(rigidBody)) rigidBody->addImpulse(direction * force);
 
-	if (ghostMovement != nullptr) ghostMovement->setSpeed(ghostSpeed);
+	if (notNull(ghostMovement)) ghostMovement->setSpeed(ghostSpeed);
 
 	state = PUNCHING;
 }

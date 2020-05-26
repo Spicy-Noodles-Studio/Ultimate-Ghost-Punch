@@ -164,9 +164,6 @@
     <ClCompile Include="..\..\Src\OptionsMenu.cpp">
       <Filter>Archivos de origen\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\AnimationManager.cpp">
-      <Filter>Archivos de origen\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\TrailManager.cpp">
       <Filter>Archivos de origen\Managers</Filter>
     </ClCompile>
@@ -199,6 +196,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\StateMachine.cpp">
       <Filter>Archivos de origen\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Credits.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\ControlsMenu.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\LogoScreen.cpp">
+      <Filter>Archivos de origen\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\AnimationManager.cpp">
+      <Filter>Archivos de origen\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,9 +337,6 @@
     <ClInclude Include="..\..\Src\StatsMenu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\AnimationManager.h">
-      <Filter>Archivos de encabezado\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\TrailManager.h">
       <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
@@ -363,6 +369,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\StateMachine.h">
       <Filter>Archivos de encabezado\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Credits.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\ControlsMenu.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\LogoScreen.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\AnimationManager.h">
+      <Filter>Archivos de encabezado\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

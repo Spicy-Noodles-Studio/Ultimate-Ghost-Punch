@@ -12,12 +12,14 @@ private:
 	RigidBody* rigidBody;
 	float maxSpeed;
 
+protected:
+	virtual void start();
+	virtual void handleData(ComponentData* data);
+
 public:
 	GhostMovement(GameObject* gameObject);
 	virtual ~GhostMovement();
 
-	virtual void start();
-	virtual void handleData(ComponentData* data);
 
 	void move(Vector3 dir);
 	void stop();

@@ -6,13 +6,13 @@
 
 class GameObject;
 class RigidBody;
+class PlayerState;
 class Score;
-class PlayerController;
 
 class Grab : public UserComponent
 {
 private:
-	enum State { IDLE, GRABBED, BLOCKED };
+	enum State { IDLE, CHARGE, GRABBED, BLOCKED };
 
 	int id;
 
@@ -28,19 +28,19 @@ private:
 	float grabVerticalOffset;
 	float dropHorizontalOffset;
 
-	bool beingGrabbed;
+	int charging;
+
 	int dropped;
 	int missed;
 
 	State state;
 
 	GameObject* parent;
-	PlayerController* controller;
 
 	GameObject* enemy;
-	PlayerController* enemyController;
 
 	Score* score;
+	PlayerState* playerState;
 
 	Vector3 enemyDiff;
 	bool enemyFollowing;
@@ -52,10 +52,7 @@ private:
 	void resetEnemy();
 	void grabEnemy();
 
-public:
-	Grab(GameObject* gameObject);
-	virtual ~Grab();
-
+protected:
 	virtual void start();
 	virtual void update(float deltaTime);
 	virtual void postUpdate(float deltaTime);
@@ -65,13 +62,17 @@ public:
 	virtual void onObjectExit(GameObject* other);
 	virtual void handleData(ComponentData* data);
 
+public:
+	Grab(GameObject* gameObject);
+	virtual ~Grab();
+
+	void chargeGrab();
 	void grab();
 	void drop();
 	void grabMissed();
-	void setGrabbed(bool grabbed);
 
 	bool isGrabbing() const;
-	bool isGrabbed() const;
+	bool isCharging() const;
 	bool isOnCooldown() const;
 	bool isStunned() const;
 

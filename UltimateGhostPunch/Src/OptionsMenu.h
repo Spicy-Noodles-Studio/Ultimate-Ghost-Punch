@@ -48,7 +48,7 @@ protected:
 
 	std::vector<std::string> resolutionNames;
 	std::vector<std::string> screenNames;
-	std::vector<std::pair<int, int>> resolutions;
+	std::vector<std::pair<unsigned int, unsigned int>> resolutions;
 
 protected:
 	bool applyButtonClick();
@@ -63,12 +63,12 @@ protected:
 
 	bool checkControllersInput();
 
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	OptionsMenu(GameObject* gameObject);
 	virtual ~OptionsMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

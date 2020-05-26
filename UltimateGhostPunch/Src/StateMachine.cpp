@@ -1,7 +1,8 @@
 #include "StateMachine.h"
+
 #include "StateAction.h"
 
-StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) , currentState(nullptr)
+StateMachine::StateMachine(GameObject* gameObject) : UserComponent(gameObject) , currentState(nullptr),stateActions(), actionInputs()
 {
 
 }
@@ -11,12 +12,15 @@ StateMachine::~StateMachine()
 	for (auto state : stateActions)
 		delete state;
 	stateActions.clear();
+	actionInputs.clear();
+	
+	currentState = nullptr;
 }
 
 void StateMachine::update(float deltaTime)
 {
 	//Process current state
-	if(currentState != nullptr) currentState->update(deltaTime);
+	if(notNull(currentState)) currentState->update(deltaTime);
 
 	//Process input
 	processActionInput();

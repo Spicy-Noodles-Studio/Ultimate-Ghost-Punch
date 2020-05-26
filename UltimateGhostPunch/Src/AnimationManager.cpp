@@ -1,4 +1,5 @@
 #include "AnimationManager.h"
+
 #include <ComponentRegister.h>
 #include <GameObject.h>
 #include <Animator.h>
@@ -15,23 +16,32 @@ AnimationManager::AnimationManager(GameObject* gameObject) : UserComponent(gameO
 
 AnimationManager::~AnimationManager()
 {
-
+	animator = nullptr;
+	playerState = nullptr;
+	mesh = nullptr;
 }
 
 void AnimationManager::start()
 {
+	checkNullAndBreak(gameObject);
+
 	animator = gameObject->getComponent<Animator>();
 	playerState = gameObject->getComponent<PlayerState>();
 	mesh = gameObject->getComponent<MeshRenderer>();
+
+	checkNull(animator);
+	checkNull(playerState);
+	checkNull(mesh);
 }
 
 void AnimationManager::postUpdate(float deltaTime)
 {
-	if (playerState == nullptr) return;
-	if (animator == nullptr) return;
+	checkNullAndBreak(playerState);
+	checkNullAndBreak(animator);
 
 	manageAnimations();
 
+	// Update sword position if necessary
 	manageSword();
 }
 
@@ -44,7 +54,8 @@ void AnimationManager::manageAnimations()
 
 void AnimationManager::manageSword()
 {
-	// Update sword position if necessary
+	checkNullAndBreak(mesh);
+
 	if (swordState != HAND && !swordInBack())
 	{
 		// Move sword back to hand
@@ -60,7 +71,7 @@ void AnimationManager::manageSword()
 
 bool AnimationManager::swordInBack() const
 {
-	std::string currentAnimation = animator != nullptr ? animator->getCurrentAnimation() : "";
+	std::string currentAnimation = notNull(animator) ? animator->getCurrentAnimation() : "";
 	return currentAnimation == "GrabFail" || currentAnimation == "GrabHold" || currentAnimation == "GrabStart" || currentAnimation == "Throw" ||
 		currentAnimation == "RunGrabbing" || currentAnimation == "DashFrontGrabbing" || currentAnimation == "FallGrabbing" ||
 		currentAnimation == "JumpStartGrabbing" || currentAnimation == "JumpChangeGrabbing" || currentAnimation == "LandGrabbing";
@@ -78,6 +89,8 @@ bool AnimationManager::manageTransitionAnimations()
 
 bool AnimationManager::manageKnightAnimations()
 {
+	checkNullAndBreak(playerState, false);
+
 	bool result = false;
 	if (playerState->isResurrecting() || playerState->isDying() || !playerState->isGhost())
 		if (result = manageGroundedAnimations());
@@ -87,13 +100,14 @@ bool AnimationManager::manageKnightAnimations()
 
 bool AnimationManager::manageGhostAnimations()
 {
+	checkNullAndBreak(playerState, false);
+
 	bool result = false;
 	if (playerState->isGhost() || playerState->isAppearing() || playerState->isDisappearing())
 	{
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageChargeAnimation());
 		else if (result = managePunchingAnimation());
-		else if (result = managePunchSuccessAnimation());
 		else if (result = managePunchFailAnimation());
 		else if (result = manageGhostIdleAnimation());
 		else if (result = manageGhostMoveAnimation());
@@ -103,6 +117,9 @@ bool AnimationManager::manageGhostAnimations()
 
 bool AnimationManager::manageKnightResurrect()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isResurrecting() || playerState->isRespawning()) {
 		animator->playAnimation("Resurrect");
 		animator->setLoop(false);
@@ -114,6 +131,9 @@ bool AnimationManager::manageKnightResurrect()
 
 bool AnimationManager::manageKnightDeath()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isDying()) {
 		animator->playAnimation("Die");
 		animator->setLoop(false);
@@ -125,6 +145,9 @@ bool AnimationManager::manageKnightDeath()
 
 bool AnimationManager::manageGhostAppear()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isAppearing()) {
 		animator->playAnimation("Appear");
 		animator->setLoop(false);
@@ -136,8 +159,13 @@ bool AnimationManager::manageGhostAppear()
 
 bool AnimationManager::manageGhostDisappear()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isDisappearing()) {
-		animator->playAnimation("Disappear");
+		std::string aux = playerState->hasGhostSucceeded() || playerState->hasPunchSucceeded() ? "UGPSuccess" : "Disappear";
+		if (animator->getCurrentAnimation() == "UGPSuccess" || animator->getCurrentAnimation() == "Disappear") return true;
+		animator->playAnimation(aux);
 		animator->setLoop(false);
 		return true;
 	}
@@ -147,15 +175,17 @@ bool AnimationManager::manageGhostDisappear()
 
 bool AnimationManager::manageGroundedAnimations()
 {
+	checkNullAndBreak(playerState, false);
+
 	bool result = false;
 	if (playerState->isGrounded()) {
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageStunnedAnimations());
 		else if (result = manageHurtAnimation());
-		else if (result = manageBlockAnimations());
 		else if (result = manageGroundedAttackAnimation());
 		else if (result = manageGrabAnimations());
+		else if (result = manageBlockAnimations());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
 		else if (result = manageIdleAnimation());
@@ -167,13 +197,16 @@ bool AnimationManager::manageGroundedAnimations()
 
 bool AnimationManager::manageAirAnimations()
 {
+	checkNullAndBreak(playerState, false);
+
 	bool result = false;
 	if (!playerState->isGrounded()) {
-		// El ORDEN IMPORTA, las de mas arriba son mas prioritarias
+		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageGrabbedAnimations());
 		else if (result = manageHurtAnimation());
 		else if (result = manageAirAttackAnimation());
 		else if (result = manageDashAnimation());
+		else if (result = manageGrabAnimations());
 		else if (result = manageJumpAnimation());
 		else if (result = manageLandAnimation());
 		else if (result = manageFallAnimation());
@@ -183,6 +216,9 @@ bool AnimationManager::manageAirAnimations()
 
 bool AnimationManager::manageJumpAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if ((playerState->isGrounded() && playerState->isJumping()) || playerState->hasJumped()) {
 		if (manageGrabJumpAnimation()) return true;
 
@@ -195,6 +231,9 @@ bool AnimationManager::manageJumpAnimation()
 
 bool AnimationManager::manageRunAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isMoving() && playerState->canMove()) {
 		if (manageGrabRunAnimation()) return true;
 
@@ -207,6 +246,9 @@ bool AnimationManager::manageRunAnimation()
 
 bool AnimationManager::manageIdleAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (!playerState->isMoving() && playerState->canMove()) {
 		if (manageGrabIdleAnimation()) return true;
 		if (manageTauntAnimation()) return true;
@@ -220,6 +262,9 @@ bool AnimationManager::manageIdleAnimation()
 
 bool AnimationManager::manageLandAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->hasLanded()) {
 		if (manageGrabLandAnimation()) return true;
 
@@ -228,13 +273,16 @@ bool AnimationManager::manageLandAnimation()
 		return true;
 	}
 
-	// Evita interrupcion de animaciones de menor prioridad
+	// Avoids the interruption of lower priority animations
 	std::string animationName = animator->getCurrentAnimation();
 	return (animationName == "Land" || animationName == "LandGrabbing") && !animator->hasEnded();
 }
 
 bool AnimationManager::manageGroundedAttackAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isQuickAttacking()) {
 		animator->playAnimation("AttackA");
 		animator->setLoop(false);
@@ -252,24 +300,27 @@ bool AnimationManager::manageGroundedAttackAnimation()
 
 bool AnimationManager::manageBlockAnimations()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	std::string animationName = animator->getCurrentAnimation();
-	// Transicion de Empieza bloqueo -> Estar bloqueando
+	//Transition begin block -> blocking
 	if (playerState->isBlocking() || playerState->hasBlockedGrab()) {
 		bool previouslyBlocking = animationName == "BlockStart" ||
 			animationName == "BlockHold" ||
 			animationName == "BlockAttack" ||
 			animationName == "BlockGrab";
-		// ESTOS DOS SON MAS PRIORITARIOS A QUE EMPIEZE LA ANIMACION DE TRANSICION
+		// HIGHER PRIORITY THAN THE TRANSITION ANIMATION
 		if (manageBlockAttackAnimation()) return true;
 		if (manageBlockGrabAnimation()) return true;
 
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		else if (!previouslyBlocking) {
 			animator->playAnimation("BlockStart");
 			animator->setLoop(false);
 		}
 		else if (previouslyBlocking) {
-			//Si era el comienzo, esperamos a que termine
+			//If it was at the beginning, we wait until it ends
 			if (animationName == "BlockStart" && !animator->hasEnded()) return true;
 
 			animator->playAnimation("BlockHold");
@@ -278,7 +329,7 @@ bool AnimationManager::manageBlockAnimations()
 
 		return true;
 	}
-	// Si no esta bloqueando, pero lo estaba
+	// If it wasnt blocking
 	else if (animationName == "BlockStart" || animationName == "BlockHold") {
 		animator->playAnimation("BlockEnd");
 		animator->setLoop(false);
@@ -290,6 +341,9 @@ bool AnimationManager::manageBlockAnimations()
 
 bool AnimationManager::manageBlockAttackAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->hasBlocked()) {
 		animator->playAnimation("BlockAttack");
 		animator->setLoop(false);
@@ -300,7 +354,10 @@ bool AnimationManager::manageBlockAttackAnimation()
 
 bool AnimationManager::manageBlockGrabAnimation()
 {
-	// Bloquea un agarre
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
+	// Blocks a grab
 	if (playerState->hasBlockedGrab()) {
 		LOG("BLOCKED GRAB");
 		animator->playAnimation("Knockback");
@@ -312,6 +369,9 @@ bool AnimationManager::manageBlockGrabAnimation()
 
 bool AnimationManager::manageGrabAnimations()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	std::string animationName = animator->getCurrentAnimation();
 
 	bool previouslyGrabbing = animationName == "GrabHold" ||
@@ -323,7 +383,7 @@ bool AnimationManager::manageGrabAnimations()
 		animationName == "LandGrabbing";
 
 	if (playerState->isGrabbing() || playerState->hasMissedGrab()) {
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		if (!previouslyGrabbing) {
 			if (playerState->hasMissedGrab()) {
 				animator->playAnimation("GrabFail");
@@ -340,7 +400,7 @@ bool AnimationManager::manageGrabAnimations()
 		}
 		return false;
 	}
-	// Si no esta agarrando, pero lo estaba
+	// If it wasnt grabbed
 	else if (previouslyGrabbing) {
 		animator->playAnimation("Throw");
 		animator->setLoop(false);
@@ -352,6 +412,9 @@ bool AnimationManager::manageGrabAnimations()
 
 bool AnimationManager::manageGrabIdleAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGrabbing()) {
 		animator->playAnimation("GrabHold");
 		animator->setLoop(true);
@@ -362,6 +425,9 @@ bool AnimationManager::manageGrabIdleAnimation()
 
 bool AnimationManager::manageGrabRunAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGrabbing()) {
 		animator->playAnimation("RunGrabbing");
 		animator->setLoop(true);
@@ -372,6 +438,9 @@ bool AnimationManager::manageGrabRunAnimation()
 
 bool AnimationManager::manageGrabJumpAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGrabbing()) {
 		animator->playAnimation("JumpStartGrabbing");
 		animator->setLoop(false);
@@ -382,6 +451,9 @@ bool AnimationManager::manageGrabJumpAnimation()
 
 bool AnimationManager::manageGrabLandAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGrabbing()) {
 		animator->playAnimation("LandGrabbing");
 		animator->setLoop(false);
@@ -393,19 +465,22 @@ bool AnimationManager::manageGrabLandAnimation()
 
 bool AnimationManager::manageStunnedAnimations()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	std::string animationName = animator->getCurrentAnimation();
 
 	if (playerState->isStunned()) {
 		bool previouslyStunned = animationName == "StunnedStart" ||
 			animationName == "StunnedHold" ||
 			animationName == "StunnedAttack";
-		// TRANSICIONES NORMALES
+		// NORMAL TRANSITIONS
 		if (!previouslyStunned) {
 			animator->playAnimation("StunnedStart");
 			animator->setLoop(false);
 		}
 		else if (previouslyStunned) {
-			//Si era el comienzo, esperamos a que termine
+			//If it was at the beginning, we wait until it ends
 			if (animationName == "StunnedStart" && !animator->hasEnded()) return true;
 
 			animator->playAnimation("StunnedHold");
@@ -414,7 +489,7 @@ bool AnimationManager::manageStunnedAnimations()
 
 		return true;
 	}
-	// Si no esta stunned, pero lo estaba
+	// If it wasnt stunned
 	else if (animationName == "StunnedStart" || animationName == "StunnedHold") {
 		animator->playAnimation("StunnedEnd");
 		animator->setLoop(false);
@@ -426,6 +501,9 @@ bool AnimationManager::manageStunnedAnimations()
 
 bool AnimationManager::manageTauntAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->hasTaunted()) {
 		animator->playAnimation("Taunt");
 		animator->setLoop(false);
@@ -437,22 +515,25 @@ bool AnimationManager::manageTauntAnimation()
 
 bool AnimationManager::manageFallAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	bool result = false;
 	if (playerState->isFalling()) {
 		if (manageGrabFallAnimation()) return true;
 
-		// Caer tras un salto (hacemos transicion)
+		// Falling after a jump -> transition
 		if (animator->getCurrentAnimation() == "JumpStart" && animator->hasEnded()) {
 			animator->playAnimation("JumpChange");
 			animator->setLoop(false);
 		}
 		else if (animator->getCurrentAnimation() == "JumpChange") {
-			if (animator->hasEnded()) {	// Que la condicion este dentro, evita que se salte la transicion
+			if (animator->hasEnded()) {	//To avoid skipping the transition
 				animator->playAnimation("Fall");
 				animator->setLoop(true);
 			}
 		}
-		// Caer sin mas (tras un dash por ejemplo)
+		// Falling without jumping
 		else {
 			animator->playAnimation("Fall");
 			animator->setLoop(true);
@@ -464,9 +545,12 @@ bool AnimationManager::manageFallAnimation()
 
 bool AnimationManager::manageGrabFallAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	bool result = false;
 	if (playerState->isGrabbing()) {
-		// Caer tras un salto (hacemos transicion)
+		// Falling after a jump -> transition
 		if (animator->getCurrentAnimation() == "JumpStartGrabbing" && animator->hasEnded()) {
 			animator->playAnimation("JumpChangeGrabbing");
 			animator->setLoop(false);
@@ -488,6 +572,9 @@ bool AnimationManager::manageGrabFallAnimation()
 
 bool AnimationManager::manageAirAttackAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isQuickAttacking()) {
 		animator->playAnimation("AttackAAir");
 		animator->setLoop(false);
@@ -505,6 +592,9 @@ bool AnimationManager::manageAirAttackAnimation()
 
 bool AnimationManager::manageDashAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isDodging()) {
 		if (manageGrabDashAnimation()) return true;
 
@@ -512,13 +602,16 @@ bool AnimationManager::manageDashAnimation()
 		animator->setLoop(false);
 		return true;
 	}
-	// Evitar interrupcion de prioridades menores
+	// Avoids interruption of lower priority animations
 	std::string animationName = animator->getCurrentAnimation();
 	return (animationName == "DashFront" || animationName == "DashFrontGrabbing") && !animator->hasEnded();
 }
 
 bool AnimationManager::manageGrabDashAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGrabbing()) {
 		animator->playAnimation("DashFrontGrabbing");
 		animator->setLoop(false);
@@ -529,6 +622,9 @@ bool AnimationManager::manageGrabDashAnimation()
 
 bool AnimationManager::manageHurtAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isHurt()) {
 		animator->playAnimation("Hurt");
 		animator->setLoop(false);
@@ -539,6 +635,9 @@ bool AnimationManager::manageHurtAnimation()
 
 bool AnimationManager::manageGrabbedAnimations()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	std::string animationName = animator->getCurrentAnimation();
 	if (playerState->isGrabbed()) {
 		bool previouslyGrabbed = animationName == "GrabbedStart" ||
@@ -557,7 +656,7 @@ bool AnimationManager::manageGrabbedAnimations()
 		return true;
 	}
 
-	// Si no esta agarrado, pero lo estaba, lo ha soltado
+	//If it wasnt grabbed
 	else if (animationName == "GrabbedStart" || animationName == "GrabbedHold") {
 		animator->playAnimation("Thrown");
 		animator->setLoop(false);
@@ -569,6 +668,9 @@ bool AnimationManager::manageGrabbedAnimations()
 
 bool AnimationManager::manageChargeAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isAiming()) {
 		animator->playAnimation("ChargeUGP");
 		animator->setLoop(true);
@@ -579,6 +681,9 @@ bool AnimationManager::manageChargeAnimation()
 
 bool AnimationManager::managePunchingAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isPunching()) {
 		animator->playAnimation("UGP");
 		animator->setLoop(true);
@@ -587,18 +692,11 @@ bool AnimationManager::managePunchingAnimation()
 	return false;
 }
 
-bool AnimationManager::managePunchSuccessAnimation()
-{
-	if (playerState->hasPunchSucceeded()) {
-		animator->playAnimation("UGPSuccess");
-		animator->setLoop(false);
-		return true;
-	}
-	return animator->getCurrentAnimation() == "UGPSuccess" && !animator->hasEnded();
-}
-
 bool AnimationManager::managePunchFailAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->hasPunchFailed()) {
 		animator->playAnimation("UGPFail");
 		animator->setLoop(false);
@@ -609,6 +707,9 @@ bool AnimationManager::managePunchFailAnimation()
 
 bool AnimationManager::manageGhostMoveAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (playerState->isGhostMoving() && playerState->canGhostMove()) {
 		animator->playAnimation("Move");
 		animator->setLoop(true);
@@ -619,6 +720,9 @@ bool AnimationManager::manageGhostMoveAnimation()
 
 bool AnimationManager::manageGhostIdleAnimation()
 {
+	checkNullAndBreak(playerState, false);
+	checkNullAndBreak(animator, false);
+
 	if (!playerState->isGhostMoving() && playerState->canGhostMove()) {
 		animator->playAnimation("Idle");
 		animator->setLoop(true);

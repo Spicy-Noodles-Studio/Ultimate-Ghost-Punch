@@ -13,11 +13,15 @@ const int MIN_TIME = 60;
 const int MAX_TIME = 300;
 const int CHANGE_TIME = 10;
 
-const int MIN_HEALTH = 2;
-const int MAX_HEALTH = 10;
+const int MIN_HEALTH = 1;
+const int MAX_HEALTH = 5;
 const int CHANGE_HEALTH = 1;
 
+#ifdef RECORD_PATH
 const int MIN_PLAYERS = 1;
+#else
+const int MIN_PLAYERS = 2;
+#endif
 
 class InputSystem;
 class UILayout;
@@ -77,12 +81,13 @@ private:
 	bool settingsButtonClick();
 	virtual bool backButtonClick();
 
+protected:
+	virtual void start();
+	virtual void update(float deltaTime);
+
 public:
 	ConfigurationMenu(GameObject* gameObject);
 	virtual ~ConfigurationMenu();
-
-	virtual void start();
-	virtual void update(float deltaTime);
 };
 
 #endif

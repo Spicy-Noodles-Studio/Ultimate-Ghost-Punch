@@ -14,28 +14,37 @@
 REGISTER_FACTORY(Attack);
 
 Attack::Attack(GameObject* gameObject) : UserComponent(gameObject), currentAttack(AttackType::NONE), state(AttackState::NOT_ATTACKING), activeTime(0.0f), attackDuration(0.5f),
-										 strongAttackDamage(2), quickAttackDamage(1), strongChargeTime(0.75f), quickChargeTime(0.5f), chargeTime(0), strongAttackCooldown(2.0f),
-										 quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY), 
-										 quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), attackTrigger(nullptr), score(nullptr), hit(0)
+strongAttackDamage(2), quickAttackDamage(1), strongChargeTime(0.75f), quickChargeTime(0.5f), chargeTime(0), strongAttackCooldown(2.0f),
+quickAttackCooldown(0.5f), cooldown(0.0f), quickAttackScale(Vector3::IDENTITY), strongAttackScale(Vector3::IDENTITY),
+quickAttackOffset(Vector3::ZERO), strongAttackOffset(Vector3::ZERO), id(0), parent(nullptr), attackTrigger(nullptr), score(nullptr), hit(0)
 {
 
 }
 
 Attack::~Attack()
 {
-
+	parent = nullptr;
+	attackTrigger = nullptr;
+	score = nullptr;
 }
 
 void Attack::start()
 {
+	checkNullAndBreak(gameObject);
+
 	parent = gameObject->getParent();
-	if (parent != nullptr) id = parent->getComponent<PlayerIndex>()->getIndex();
+	if (notNull(parent) && notNull(parent->getComponent<PlayerIndex>()))
+		id = parent->getComponent<PlayerIndex>()->getPos();
 
 	attackTrigger = gameObject->getComponent<RigidBody>();
-	score = GameManager::GetInstance()->getScore();
+	if (notNull(GameManager::GetInstance()))
+		score = GameManager::GetInstance()->getScore();
+
+	checkNull(score);
+	checkNullAndBreak(attackTrigger);
 
 	// Deactivate the trigger until the attack is used
-	if (attackTrigger != nullptr) attackTrigger->setActive(false);
+	attackTrigger->setActive(false);
 }
 
 void Attack::update(float deltaTime)
@@ -54,13 +63,7 @@ void Attack::update(float deltaTime)
 	if (activeTime > 0.0f)
 		activeTime -= deltaTime;
 	else if (state == ATTACKING)
-	{
-		// Deactivate the trigger until the next attack is used
-		attackTrigger->setActive(false);
-
-		// Reset the current attack state
-		state = NOT_ATTACKING;
-	}
+		stop();
 }
 
 void Attack::postUpdate(float deltaTime)
@@ -70,6 +73,7 @@ void Attack::postUpdate(float deltaTime)
 
 void Attack::handleData(ComponentData* data)
 {
+	checkNullAndBreak(data);
 	for (auto prop : data->getProperties())
 	{
 		std::stringstream ss(prop.second);
@@ -125,6 +129,8 @@ void Attack::handleData(ComponentData* data)
 
 void Attack::onObjectStay(GameObject* other)
 {
+	checkNullAndBreak(other);
+
 	if (other->getTag() == "Player" && parent != nullptr && other != parent && state == ATTACKING) // If it hits a player different than myself
 	{
 		LOG("You hit player %s!\n", other->getName().c_str());
@@ -143,33 +149,30 @@ void Attack::onObjectStay(GameObject* other)
 		std::vector<GameObject*> aux = other->findChildrenWithTag("groundSensor");
 		Block* enemyBlock = nullptr;
 
-		if (aux.size() > 0)
+		if (aux.size() > 0 && aux[0] != nullptr)
 			enemyBlock = aux[0]->getComponent<Block>();
 
-		if (enemyBlock == nullptr || (parent != nullptr && !enemyBlock->blockAttack(parent->transform->getPosition())))
+		if (!notNull(enemyBlock) || !notNull(parent->transform) || !enemyBlock->blockAttack(parent->transform->getPosition()))
 		{
 			Health* enemyHealth = other->getComponent<Health>();
-			if (enemyHealth != nullptr && !enemyHealth->isInvencible())
+
+			if (notNull(enemyHealth) && !enemyHealth->isInvencible())
 			{
 				enemyHealth->receiveDamage(damage);
 				hit = 2;
 
 				PlayerIndex* otherIndex = other->getComponent<PlayerIndex>();
-				if (otherIndex != nullptr)
+				if (notNull(otherIndex) && notNull(score))
 				{
 					score->attackHitted(id);
-					score->damageReceivedFrom(otherIndex->getIndex(), id, damage);
+					score->damageReceivedFrom(otherIndex->getPos(), id, damage);
 
 					if (!enemyHealth->isAlive())
-						score->killedBy(otherIndex->getIndex(), id);
+						score->killedBy(otherIndex->getPos(), id);
 				}
 			}
 		}
-		// Deactivate the trigger until the next attack is used
-		attackTrigger->setActive(false);
-
-		// Reset the current attack state
-		state = NOT_ATTACKING;
+		stop();
 	}
 }
 
@@ -185,18 +188,23 @@ void Attack::attack()
 {
 	state = ATTACKING;
 	activeTime = attackDuration;
-	attackTrigger->setActive(true);
-	score->attackDone(id);
+	if (notNull(attackTrigger)) attackTrigger->setActive(true);
+	if (notNull(score)) score->attackDone(id);
 	LOG("Attack!\n");
 }
 
 void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 {
+	checkNullAndBreak(attackTrigger);
+	checkNullAndBreak(attackTrigger->gameObject);
+
 	Transform* attackTransform = attackTrigger->gameObject->transform;
+	checkNullAndBreak(attackTransform);
 
 	// Scale trigger
 	Vector3 scaleRatio = scale;
-	Vector3 currentScale = attackTransform->getScale();
+	Vector3 currentScale = Vector3::ZERO;
+	currentScale = attackTransform->getScale();
 	attackTrigger->multiplyScale(scaleRatio);
 	scaleRatio *= currentScale;
 
@@ -204,17 +212,17 @@ void Attack::setUpTriggerAttack(const Vector3& scale, const Vector3& offset)
 	attackTransform->setPosition(offset);
 }
 
-bool Attack::attackOnCD()
+bool Attack::attackOnCD() const
 {
 	return (cooldown > 0);
 }
 
 void Attack::quickAttack()
 {
-	if (parent == nullptr) return;
-	
+	checkNullAndBreak(parent);
+
 	PlayerState* aux = parent->getComponent<PlayerState>();
-	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
+	if (cooldown <= 0.0f && notNull(aux) && aux->canAttack())
 	{
 		currentAttack = QUICK;
 		setUpTriggerAttack(quickAttackScale, quickAttackOffset);
@@ -226,10 +234,10 @@ void Attack::quickAttack()
 
 void Attack::strongAttack()
 {
-	if (parent == nullptr) return;
+	checkNullAndBreak(parent);
 
 	PlayerState* aux = parent->getComponent<PlayerState>();
-	if (cooldown <= 0.0f && aux != nullptr && aux->canAttack())
+	if (cooldown <= 0.0f && notNull(aux) && aux->canAttack())
 	{
 		currentAttack = STRONG;
 		setUpTriggerAttack(strongAttackScale, strongAttackOffset);
@@ -239,21 +247,39 @@ void Attack::strongAttack()
 		LOG("Attack on CD...\n");
 }
 
+void Attack::stop()
+{
+	// Deactivate the trigger until the next attack is used
+	if (notNull(attackTrigger)) attackTrigger->setActive(false);
+
+	// Reset the current attack state
+	state = NOT_ATTACKING;
+}
+
 bool Attack::isAttacking() const
 {
 	return state == ATTACKING || state == CHARGING;
 }
 
-bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale)
+bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale) const
 {
-	Transform* target = obj->transform, * attacker = parent->transform;
+	Transform* target = nullptr;
+	Transform* attacker = nullptr;
+	if (notNull(obj)) target = obj->transform;
+	if (notNull(parent)) attacker = parent->transform;
+
 	// Target is in the direction of attack?
+	checkNullAndBreak(target, false);
+	checkNullAndBreak(attacker, false);
 	if (!(attacker->getRotation().y < 0 && target->getPosition().x < attacker->getPosition().x) && !(attacker->getRotation().y > 0 && target->getPosition().x > attacker->getPosition().x))
 		return false; // If not, return false
 
+	checkNullAndBreak(attackTrigger, false);
+	checkNullAndBreak(attackTrigger->gameObject, false);
 	Transform* attackTransform = attackTrigger->gameObject->transform;
 
 	// trigger Scale
+	checkNullAndBreak(attackTransform, false);
 	Vector3 triggerScale = scale * attackTransform->getScale();
 	// Distance between attacker and target
 	float distX = abs(target->getPosition().x - attacker->getPosition().x);
@@ -266,12 +292,12 @@ bool Attack::isAttackOnRange(GameObject* obj, const Vector3& scale)
 	return inside;
 }
 
-bool Attack::isQuickAttackOnRange(GameObject* obj)
-{	
+bool Attack::isQuickAttackOnRange(GameObject* obj) const
+{
 	return isAttackOnRange(obj, quickAttackScale);
 }
 
-bool Attack::isStrongAttackOnRange(GameObject* obj)
+bool Attack::isStrongAttackOnRange(GameObject* obj) const
 {
 	return isAttackOnRange(obj, strongAttackScale);
 }
@@ -284,6 +310,11 @@ bool Attack::isQuickAttacking() const
 bool Attack::isHeavyAttacking() const
 {
 	return isAttacking() && currentAttack == STRONG;
+}
+
+bool Attack::isChargingAttack() const
+{
+	return state == CHARGING;
 }
 
 bool Attack::hasHit() const
