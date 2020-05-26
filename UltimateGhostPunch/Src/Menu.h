@@ -15,7 +15,7 @@ class Menu : public UserComponent
 {
 protected:
 	std::string backSound = "back";
-	std::string buttonSound = "button4";
+	std::string buttonSound = "button";
 
 	GameObject* mainCamera;
 	GameManager* gameManager;

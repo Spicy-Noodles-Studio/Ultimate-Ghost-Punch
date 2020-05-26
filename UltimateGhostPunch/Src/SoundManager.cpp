@@ -217,9 +217,9 @@ void SoundManager::stopSound(const std::string& sound)
 
 void SoundManager::initSounds()
 {
-	hurtSounds = { "hurt1", "hurt2" ,"hurt3" ,"hurt4" };
+	hurtSounds = { "hurt1", "hurt2" ,"hurt3" };
 	tauntSounds = { "taunt1", "taunt2", "taunt3" };
-	jumpSounds = { "jump1", "jump2" ,"jump3" };
+	jumpSounds = { "jump1", "jump2" };
 	throwSounds = { "throw1", "throw2" ,"throw3" };
 	hitSounds = { "hit1", "hit2" ,"hit3" };
 }

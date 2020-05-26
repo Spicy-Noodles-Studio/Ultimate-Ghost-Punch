@@ -166,11 +166,10 @@ void ConfigurationMenu::initNames()
 	songNames["District Four"] = "districtFour";
 	songNames["Drama"] = "tvDrama";
 	songNames["Epic Battle"] = "epicBattle";
-	songNames["Fight"] = "fightScene";
 	songNames["Green Daze"] = "greenDaze";
 	songNames["Opus One"] = "opusOne";
 	songNames["Strength"] = "strengthOfTheTitans";
-	songNames["UGP"] = "ugpTrack1";
+	songNames["UGP"] = "ugp";
 
 	std::string song = (notNull(gameManager)) ? gameManager->getSong().second : "";
 	auto it = songNames.find(song);

@@ -534,7 +534,7 @@ void Game::chooseWinner()
 		cameraEffects->fadeOut();
 
 	if (notNull(songManager))
-		songManager->play2DSound("victory4");
+		songManager->play2DSound("victory");
 
 	if (notNull(Timer::GetInstance()))
 		Timer::GetInstance()->setTimeScale(1.0f);

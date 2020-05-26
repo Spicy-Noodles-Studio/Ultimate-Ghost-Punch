@@ -6,28 +6,21 @@ MUSIC
 .//Assets//Songs//Cycles.mp3 cycles 2D true
 .//Assets//Songs//DistrictFour.mp3 districtFour 2D true
 .//Assets//Songs//EpicBattle.mp3 epicBattle 2D true
-.//Assets//Songs//FightScene.mp3 fightScene 2D true
 .//Assets//Songs//GreenDaze.mp3 greenDaze 2D true
 .//Assets//Songs//OpusOne.mp3 opusOne 2D true
 .//Assets//Songs//StrengthOfTheTitans.mp3 strengthOfTheTitans 2D true
 .//Assets//Songs//TVDrama.mp3 tvDrama 2D true
-.//Assets//Songs//UGP_-_track1.mp3 ugpTrack1 2D true
+.//Assets//Songs//UGP.mp3 ugp 2D true
 
 SOUND EFFECTS
-.//Assets//Sounds//BackButton1.wav back 2D false
+.//Assets//Sounds//BackButton.wav back 2D false
 .//Assets//Sounds//Button.wav button 2D false
-.//Assets//Sounds//Button1.wav button1 2D false
-.//Assets//Sounds//Button2.wav button2 2D false
-.//Assets//Sounds//Button3.wav button3 2D false
-.//Assets//Sounds//Button4.wav button4 2D false
-.//Assets//Sounds//Button5.mp3 button5 2D false
 .//Assets//Sounds//CountDown.wav countdown 2D false
 .//Assets//Sounds//Block.wav block 3D false
 .//Assets//Sounds//Dash.wav dash 3D false
 .//Assets//Sounds//Death.wav death 3D false
 .//Assets//Sounds//Fight.wav fight 2D false
 .//Assets//Sounds//Ghost.mp3 ghost 3D false
-.//Assets//Sounds//Ghost2.mp3 ghost2 3D false
 .//Assets//Sounds//GhostISeeYou.mp3 ghostSee 3D false
 .//Assets//Sounds//GhostLaugh.mp3 ghostLaugh 3D false
 .//Assets//Sounds//Grab.mp3 grab 3D false
@@ -39,10 +32,8 @@ SOUND EFFECTS
 .//Assets//Sounds//Hurt1.wav hurt1 3D false
 .//Assets//Sounds//Hurt2.wav hurt2 3D false
 .//Assets//Sounds//Hurt3.wav hurt3 3D false
-.//Assets//Sounds//Hurt4.wav hurt4 3D false
 .//Assets//Sounds//Jump1.wav jump1 3D false
 .//Assets//Sounds//Jump2.wav jump2 3D false
-.//Assets//Sounds//Jump3.wav jump3 3D false
 .//Assets//Sounds//Land.mp3 land 3D false
 .//Assets//Sounds//Punch.mp3 punch 3D false
 .//Assets//Sounds//Noo.mp3 noo 3D false
@@ -51,7 +42,7 @@ SOUND EFFECTS
 .//Assets//Sounds//Shield.mp3 shield 3D false
 .//Assets//Sounds//Stun.mp3 stun 3D false
 .//Assets//Sounds//Swipe.mp3 swipe 3D false
-.//Assets//Sounds//SwordOnShield2.mp3 swordOnShield 3D false
+.//Assets//Sounds//SwordOnShield.mp3 swordOnShield 3D false
 .//Assets//Sounds//Throw1.wav throw1 3D false
 .//Assets//Sounds//Throw2.wav throw2 3D false
 .//Assets//Sounds//Throw3.wav throw3 3D false
@@ -60,6 +51,3 @@ SOUND EFFECTS
 .//Assets//Sounds//Taunt3.mp3 taunt3 3D false
 .//Assets//Sounds//UGP.wav ugp 3D false
 .//Assets//Sounds//Victory.wav victory 2D false
-.//Assets//Sounds//Victory2.wav victory2 2D false
-.//Assets//Sounds//Victory3.wav victory3 2D false
-.//Assets//Sounds//Victory4.wav victory4 2D false
