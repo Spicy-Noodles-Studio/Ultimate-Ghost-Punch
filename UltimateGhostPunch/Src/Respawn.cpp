@@ -43,7 +43,7 @@ void Respawn::update(float deltaTime)
 	}
 
 	checkNullAndBreak(gameObject);
-	if (notNull(gameObject->transform) && gameObject->transform->getPosition().y < -20)
+	if (notNull(playerState) && !playerState->isGhost() && notNull(gameObject->transform) && gameObject->transform->getPosition().y < -20)
 		respawn();
 }
 

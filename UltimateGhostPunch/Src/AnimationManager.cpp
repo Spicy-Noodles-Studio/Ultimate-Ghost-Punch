@@ -108,7 +108,6 @@ bool AnimationManager::manageGhostAnimations()
 		//ORDER MATTERS: Top ones have higher priority
 		if (result = manageChargeAnimation());
 		else if (result = managePunchingAnimation());
-		else if (result = managePunchSuccessAnimation());
 		else if (result = managePunchFailAnimation());
 		else if (result = manageGhostIdleAnimation());
 		else if (result = manageGhostMoveAnimation());
@@ -164,7 +163,9 @@ bool AnimationManager::manageGhostDisappear()
 	checkNullAndBreak(animator, false);
 
 	if (playerState->isDisappearing()) {
-		animator->playAnimation("Disappear");
+		std::string aux = playerState->hasGhostSucceeded() || playerState->hasPunchSucceeded() ? "UGPSuccess" : "Disappear";
+		if (animator->getCurrentAnimation() == "UGPSuccess" || animator->getCurrentAnimation() == "Disappear") return true;
+		animator->playAnimation(aux);
 		animator->setLoop(false);
 		return true;
 	}
@@ -689,19 +690,6 @@ bool AnimationManager::managePunchingAnimation()
 		return true;
 	}
 	return false;
-}
-
-bool AnimationManager::managePunchSuccessAnimation()
-{
-	checkNullAndBreak(playerState, false);
-	checkNullAndBreak(animator, false);
-
-	if (playerState->hasPunchSucceeded()) {
-		animator->playAnimation("UGPSuccess");
-		animator->setLoop(false);
-		return true;
-	}
-	return animator->getCurrentAnimation() == "UGPSuccess" && !animator->hasEnded();
 }
 
 bool AnimationManager::managePunchFailAnimation()

@@ -36,6 +36,15 @@ void TrailManager::stopAll()
 	if (notNull(UGPTrail)) UGPTrail->stop();
 }
 
+void TrailManager::reconfigureAttackTrails()
+{
+	if (notNull(quickAttackTrail))
+		quickAttackTrail->configureTrail("./Assets/Trails/quickAttackTrail.trail");
+
+	if (notNull(heavyAttackTrail))
+		heavyAttackTrail->configureTrail("./Assets/Trails/heavyAttackTrail.trail");
+}
+
 void TrailManager::start()
 {
 	checkNullAndBreak(gameObject);
@@ -68,7 +77,7 @@ void TrailManager::preUpdate(float deltaTime)
 }
 
 void TrailManager::createTrail(Trail** trail, const std::string& trailFilename)
-{	
+{
 	if (*trail != nullptr) return;
 
 	GameObject* trailObject = instantiate("Trail");

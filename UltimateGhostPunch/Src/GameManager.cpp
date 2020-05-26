@@ -36,6 +36,7 @@ GameManager::GameManager(GameObject* gameObject) : UserComponent(gameObject), le
 
 	playerIndexes = std::vector<int>(4, -1);
 	playerRanking = std::vector<int>(4, 0);
+	ranking = std::priority_queue<ii, std::vector<ii>, Less>();
 }
 
 GameManager::~GameManager()

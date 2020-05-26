@@ -83,7 +83,6 @@ private:
 	// GHOST ANIMATION
 	bool manageChargeAnimation();
 	bool managePunchingAnimation();
-	bool managePunchSuccessAnimation();
 	bool managePunchFailAnimation();
 	bool manageGhostMoveAnimation();
 	bool manageGhostIdleAnimation();

@@ -265,7 +265,8 @@ void GhostManager::deactivateGhost()
 	}
 
 	// Change scale
-	if (notNull(transform)) {
+	if (notNull(transform))
+	{
 		transform->setScale(aliveScale);
 		transform->setRotation(0, transform->getRotation().y, 0);
 	}
@@ -283,8 +284,13 @@ void GhostManager::deactivateGhost()
 		meshRenderer->attachEntityToBone("player", "Mano.L", "sword");
 	}
 
-	//Respawn the player
 	checkNullAndBreak(gameObject);
+
+	TrailManager* trailManager = gameObject->getComponent<TrailManager>();
+	if (notNull(trailManager))
+		trailManager->reconfigureAttackTrails();
+
+	//Respawn the player
 	Respawn* respawn = gameObject->getComponent<Respawn>();
 	if (notNull(respawn))
 		respawn->spawn(deathPosition);
@@ -320,11 +326,11 @@ void GhostManager::deactivatePlayer()
 
 	PlayerIndex* playerIndex = gameObject->getComponent<PlayerIndex>();
 
-	if (notNull(playerIndex) && notNull(GameManager::GetInstance()))
-		GameManager::GetInstance()->getRanking().push(ii(playerIndex->getIndex(), 0));
-
-	if (notNull(game))
+	if (notNull(playerIndex) && notNull(game) && notNull(GameManager::GetInstance()))
+	{
+		GameManager::GetInstance()->getRanking().push(ii(playerIndex->getIndex(), 0 - game->getPlayers()));
 		game->playerDeath();
+	}
 
 	gameObject->setActive(false);
 }
@@ -358,12 +364,7 @@ void GhostManager::handleStates(float deltaTime)
 {
 	GhostMode aux = mode;
 	if (health != nullptr && !health->isAlive() && mode == ALIVE)
-	{
-		if (!used)
-			mode = DYING;
-		else
-			mode = DEAD;
-	}
+		mode = DYING;
 
 	if (mode == RESURRECT)
 	{

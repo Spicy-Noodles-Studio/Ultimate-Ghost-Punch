@@ -29,6 +29,7 @@ public:
 	virtual ~TrailManager();
 
 	void stopAll();
+	void reconfigureAttackTrails();
 
 private:
 	// Trails creation

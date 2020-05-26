@@ -87,7 +87,11 @@ void Jump::onObjectExit(GameObject* other)
 			coyoteTimer = coyoteTime;
 
 		if (isPlayer)
+		{
 			playersBelow--;
+			if (playersBelow < 0)
+				playersBelow = 0;
+		}
 	}
 }
 

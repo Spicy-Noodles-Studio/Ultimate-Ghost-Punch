@@ -136,6 +136,11 @@ void Game::playerDeath()
 		chooseWinner();
 }
 
+int Game::getPlayers() const
+{
+	return players;
+}
+
 float Game::getTime() const
 {
 	return timer;
@@ -467,39 +472,44 @@ void Game::configureLevelCollider(const std::string& name)
 void Game::setRanking()
 {
 	checkNullAndBreak(gameManager);
-	std::vector<GameObject*> knights = gameManager->getKnights();
+	std::vector<GameObject*> knights = gameManager->getAlivePlayers(true);
 
 	for (int i = 0; i < knights.size(); i++)
 	{
 		checkNullAndBreak(knights[i]);
 
 		Health* health = knights[i]->getComponent<Health>();
+		PlayerIndex* index = knights[i]->getComponent<PlayerIndex>();
 		PlayerState* state = knights[i]->getComponent<PlayerState>();
 
-		if (notNull(health) && notNull(state) && (health->getHealth() != 0 || state->isGhost() && health->getHealth() == 0))
+		if (notNull(health) && notNull(index) && notNull(state))
 		{
-			gameManager->getRanking().push(ii(i + 1, health->getHealth()));
+			gameManager->getRanking().push(ii(index->getIndex(), health->getHealth()));
 			state->setIgnoringInput(true);
 		}
 	}
 
 	std::priority_queue<ii, std::vector<ii>, Less> aux = gameManager->getRanking();
+	std::vector<bool> alreadyInRanking(4, false);
 
 	int cont = 0;
 	bool tie = false;
-	ii last = ii(-1, -1);
+	ii last = ii(-1e9, -1e9);
 
 	while (!aux.empty())
 	{
 		ii info = aux.top();
 		aux.pop();
 
-		if (info.second == last.second && cont < 1)
-			tie = true;
+		if (info.first > 0 && alreadyInRanking[info.first - 1]) continue;
+
+		if (info.second == last.second)
+			tie = tie || cont <= 1;
 		else
 			cont++;
 
 		gameManager->setPlayerRanking(info.first, cont);
+		alreadyInRanking[info.first - 1] = true;
 		last = info;
 	}
 

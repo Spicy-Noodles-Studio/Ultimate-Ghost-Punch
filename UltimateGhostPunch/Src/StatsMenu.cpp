@@ -52,7 +52,7 @@ void StatsMenu::start()
 	{
 		std::string name = "P" + std::to_string(positions[i]);
 		texts.push_back(root.getChild(name));
-		root.getChild(name).setText("Player " + std::to_string(positions[i]) + ": " + std::to_string(gameManager->getPlayerRanking(i + 1)) + "º");
+		root.getChild(name).setText("Player " + std::to_string(positions[i]) + ": " + std::to_string(gameManager->getPlayerRanking(positions[i])) + "º");
 
 		name = name + "Background";
 		panels.push_back(root.getChild(name));
