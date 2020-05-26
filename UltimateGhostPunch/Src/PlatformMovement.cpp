@@ -33,7 +33,6 @@ void PlatformMovement::update(float deltaTime)
 	float diff = abs(targetPosition.x - currentPosition.x);
 	if (diff < targetOffset) {
 		stateMachine->addActionInput(ActionInput::STOP);
-		LOG("PUTO");
 		((AIStateMachine*)stateMachine)->startFightingState();	// Change to fighting state
 		return;
 	}
