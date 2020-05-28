@@ -171,7 +171,7 @@ void ConfigurationMenu::initNames()
 	songNames["Green Daze"] = "greenDaze";
 	songNames["Opus One"] = "opusOne";
 	songNames["Strength"] = "strengthOfTheTitans";
-	songNames["UGP"] = "ugp";
+	songNames["UGP"] = "ugpSong";
 
 	std::string song = (notNull(gameManager)) ? gameManager->getSong().second : "";
 	auto it = songNames.find(song);
