@@ -10,7 +10,7 @@ MUSIC
 .//Assets//Songs//OpusOne.mp3 opusOne 2D true
 .//Assets//Songs//StrengthOfTheTitans.mp3 strengthOfTheTitans 2D true
 .//Assets//Songs//TVDrama.mp3 tvDrama 2D true
-.//Assets//Songs//UGP.mp3 ugp 2D true
+.//Assets//Songs//UGP.mp3 ugpSong 2D true
 
 SOUND EFFECTS
 .//Assets//Sounds//BackButton.wav back 2D false
